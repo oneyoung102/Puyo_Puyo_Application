@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build SFML",
+      "type": "shell",
+      "command": "/usr/bin/clang++",
+      "args": [
+        "-std=c++17",
+
+        "src/puyoMain.cpp",
+        "src/puyoBoard.cpp",
+        "src/puyoPuyo.cpp",
+        "src/puyoPlayer.cpp",
+        "src/puyoLet.cpp",
+
+        "src/puyoResources/puyoPrinting.cpp",
+        "src/puyoResources/puyoFileSystem.cpp",
+
+        "src/puyoPuyo/puyoPuyoAct.cpp",
+        "src/puyoPuyo/puyoPuyoLeft.cpp",
+        "src/puyoPuyo/puyoPuyoRight.cpp",
+        "src/puyoPuyo/puyoPuyoUp.cpp",
+        "src/puyoPuyo/puyoPuyoDown.cpp",
+        "src/puyoPuyo/puyoPuyoTurn.cpp",
+        "src/puyoPuyo/puyoPuyoDrop.cpp",
+        "src/puyoPuyo/puyoPuyoFall.cpp",
+
+        "-o",
+        "${workspaceFolder}/bin/puyo_puyo",
+        "-I/opt/homebrew/include",
+        "-L/opt/homebrew/lib",
+        "-lsfml-graphics",
+        "-lsfml-window",
+        "-lsfml-system"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
