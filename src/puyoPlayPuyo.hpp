@@ -1,11 +1,11 @@
 #pragma once
 
-#include "puyoBoard.hpp"
-
 #include <tuple>
 #include <utility>
 #include <cmath>
 #include <functional>
+
+#include "puyoPhase/puyoTempPuyo.hpp"
 
 
 using namespace std;
@@ -18,8 +18,16 @@ class puyoPuyoDown;
 class puyoPuyoDrop;
 class puyoPuyoTurn;
 class puyoPuyoFall;
+class puyoPuyoStay;
 
-class puyoPuyo//플레이어가 움직이는 뿌요
+class puyoBoard;
+
+struct future_puyo
+{
+    int x, y, color;
+};
+
+class puyoPlayPuyo//플레이어가 움직이는 뿌요
 {
     private :
         float x1, y1, x2, y2; // 1이 중심 뿌요
@@ -35,14 +43,16 @@ class puyoPuyo//플레이어가 움직이는 뿌요
         puyoPuyoFall* fall;
 
         puyoPuyoAct* action; //명령이 들어온 행동
+        puyoPuyoStay* stay;
 
     public :
-        puyoPuyo(float spawn_x1, float spawn_y1, int c1, int c2);
+        puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color);
 
-        void act_let(puyoBoard& board);
-        void act_fall(puyoBoard& board);
+        bool act_let(puyoBoard& board);
+        bool act_fall(puyoBoard& board);
+        bool is_holding();
 
-        void deploy_puyo(puyoBoard& board);
+        vector<puyoTempPuyo> to_temp_puyo();
 
         bool puyo_touched(puyoBoard& board, int ix, int iy);
 
@@ -56,4 +66,6 @@ class puyoPuyo//플레이어가 움직이는 뿌요
         //function<void()> get_let_up();
         function<void()> get_let_turn();
         function<void()> get_let_drop();
+
+        vector<future_puyo> get_future_puyo(puyoBoard& board); 
 };

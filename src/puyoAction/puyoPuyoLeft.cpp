@@ -1,19 +1,21 @@
-#include "puyoPuyoAct.hpp"
 #include "../puyoBoard.hpp"
-#include "../puyoPuyo.hpp"
+#include "../puyoPlayPuyo.hpp"
 #include "puyoPuyoLeft.hpp"
+
+#include <cmath>
 
 using namespace std;
 
-bool puyoPuyoLeft::test_act(puyoBoard& board, puyoPuyo& puyo)
+bool puyoPuyoLeft::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
-    return !puyo.puyo_touched(board,x1-dist,y1) && !puyo.puyo_touched(board,x2-dist,y2);
+    return !puyo.puyo_touched(board,x1-dist,floor(y1)) && !puyo.puyo_touched(board,x2-dist,floor(y2)) && 
+            !puyo.puyo_touched(board,x1-dist,ceil(y1)) && !puyo.puyo_touched(board,x2-dist,ceil(y2));
 }
 
 puyoPuyoLeft::puyoPuyoLeft(int amount, float d) : puyoPuyoAct(amount){dist = d;}
 
-void puyoPuyoLeft::act_puyo(puyoPuyo& puyo)
+void puyoPuyoLeft::act_puyo(puyoPlayPuyo& puyo)
 {
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
     if(act_count == act_count_constant)

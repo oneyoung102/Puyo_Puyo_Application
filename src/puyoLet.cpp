@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 
-#include "puyoPuyo.hpp"
 #include "puyoLet.hpp"
 
 #include <optional>

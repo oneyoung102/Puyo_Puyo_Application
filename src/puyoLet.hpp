@@ -2,8 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "puyoPuyo.hpp"
-
 #include <optional>
 #include <functional>
 #include <vector>

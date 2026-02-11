@@ -1,16 +1,17 @@
 #include "puyoPuyoAct.hpp"
+#include "../puyoPlayPuyo.hpp"
 
 #include <tuple>
 #include <cmath>
 
 bool puyoPuyoAct::is_acting(){return act_count != -1;}
 puyoPuyoAct::puyoPuyoAct(int amount) : act_count_constant(amount){act_count = -1;}
-void puyoPuyoAct::arrive(puyoPuyo& puyo, float x1,float y1,float x2,float y2)
+void puyoPuyoAct::arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y2)
 {
-    puyo.move_puyo(round(x1),start_y1+round(y1-start_y1),
-                    round(x2),start_y2+round(y2-start_y2));
+    puyo.move_puyo(round(x1),y1,
+                    round(x2),y2);
 }
-bool puyoPuyoAct::decline_act(puyoBoard& board,puyoPuyo& puyo)
+bool puyoPuyoAct::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
 {
     if(act_count == 0)
     {

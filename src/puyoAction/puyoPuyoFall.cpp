@@ -1,6 +1,5 @@
-#include "puyoPuyoAct.hpp"
 #include "../puyoBoard.hpp"
-#include "../puyoPuyo.hpp"
+#include "../puyoPlayPuyo.hpp"
 #include "puyoPuyoFall.hpp"
 
 using namespace std;
@@ -11,12 +10,18 @@ puyoPuyoFall::puyoPuyoFall(int amount, float d): puyoPuyoAct(amount)
     act_count = 0;
 }
 
-bool puyoPuyoFall::test_act(puyoBoard& board, puyoPuyo& puyo)
+void puyoPuyoFall::arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y2)
+{
+    puyo.move_puyo(round(x1),round(y1),
+                    round(x2),round(y2));
+}
+
+bool puyoPuyoFall::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
     return !puyo.puyo_touched(board,x1,y1+1) && !puyo.puyo_touched(board,x2,y2+1);
 }
-bool puyoPuyoFall::decline_act(puyoBoard& board, puyoPuyo& puyo)
+bool puyoPuyoFall::decline_act(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
     if(test_act(board, puyo))
@@ -36,7 +41,7 @@ bool puyoPuyoFall::decline_act(puyoBoard& board, puyoPuyo& puyo)
     }
     return false;
 }
-void puyoPuyoFall::act_puyo(puyoPuyo& puyo)
+void puyoPuyoFall::act_puyo(puyoPlayPuyo& puyo)
 {
     if(act_count == act_count_constant)
         act_count = 0;
