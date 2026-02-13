@@ -1,60 +1,168 @@
 #include "puyoPhasing.hpp"
-#include "puyoTempPuyo.hpp"
+#include "puyoTempPuyo/puyoGravityPuyo.hpp"
+#include "puyoTempPuyo/puyoVanishPuyo.hpp"
+#include "puyoPlayPuyo/puyoPlayPuyo.hpp"
+#include "puyoTempPuyo/puyoAction/puyoPuyoGravity_temp.hpp"
+#include "puyoTempPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
 #include "../puyoResources/puyoPrinting.hpp"
 
-#include "../puyoBoard.hpp"
+#include "puyoBoard.hpp"
 
 #include <vector>
 #include <algorithm>
-#include <random>
+#include <memory>
+#include <queue>
 
 using namespace std;
 
-void puyoPhasing::push_temp_puyo(puyoTempPuyo&& ptp)
+puyoPhasing::puyoPhasing()
 {
-    temp_puyos.push_back(ptp);
-    temp_puyo_did_existed = true;
-}
-void puyoPhasing::push_temp_puyo(vector<puyoTempPuyo>&& ptp_v)
-{
-    for(auto ptp : ptp_v)
-        temp_puyos.push_back(ptp);
-    temp_puyo_did_existed = true;
+    dir = {
+        {1,0},{-1,0},{0,1},{0,-1}
+    };
+    gravity_value = 450;
+    vanish_value = 510;
+    game_end = false;
+    delay_time = 0;
 }
 
-bool puyoPhasing::gravity_temp_puyos(puyoBoard& board)
+
+void puyoPhasing::set_condition_for_vanish(int amount){condition_for_vanish = amount;}
+int puyoPhasing::get_condition_for_vanish(){return condition_for_vanish;}
+
+void puyoPhasing::act_play_puyo(puyoBoard& board, puyoPlayPuyo& puyo)
 {
-    for(auto it = temp_puyos.begin(); it != temp_puyos.end(); )
-        if(!it->act_gravity(board))
+    puyo.gravity_let(board);
+    puyo.act_let(board);
+}
+
+void puyoPhasing::gravity_gravity_puyos(puyoBoard& board)
+{
+    auto& gravity_puyos = board.get_gravity_puyos();
+    for(auto it = gravity_puyos.begin(); it != gravity_puyos.end(); )//삭제 수정
+        if(it->gravity_stopped())
         {
             if(!it->deploy_puyo(board))
-                return false;
-            it = temp_puyos.erase(it);
+            {
+                end_game(); //배치할 뿌요가 범위를 나감
+                return;
+            }
+            it = gravity_puyos.erase(it);
         }
         else
+        {
+            it->gravity_let(board);
             ++it;
-    return true;
+        } 
 }
-
-bool puyoPhasing::not_existed_temp_puyo(){return temp_puyos.empty();}
-bool puyoPhasing::all_puyo_deployed()
+void puyoPhasing::find_gravity_puyo(puyoBoard& board)
 {
-    if(temp_puyo_did_existed && not_existed_temp_puyo())
+    const auto [board_r,board_c] = board.get_board_size();
+    for(int i = 0 ; i < board_c ; ++i)
     {
-        temp_puyo_did_existed = false;
-        return true;
+        bool push = false;
+        for(int j = board_r-1 ; j >= 0 ; --j)//아래에 있는 뿌요가 먼저 오게
+        {
+            const int puyo = board.get_puyo(j,i);
+            if(puyo != -1)
+            {
+                if(push)
+                {
+                    board.push_gravity_puyo(std::move(puyoGravityPuyo(i,j,puyo,gravity_value)));
+                    board.remove_puyo(j,i);
+                    continue;
+                }
+            }
+            else
+                push = true;
+        }
+
     }
-    return false;
 }
 
-vector<puyoTempPuyo>& puyoPhasing::get_temp_puyos(){return temp_puyos;}
 
-pair<int,int> puyoPhasing::get_new_puyo_color()
+
+void puyoPhasing::vanish_vanish_puyo(puyoBoard& board)
+{
+    auto& temp_puyos = board.get_vanish_puyos();
+    for(auto it = temp_puyos.begin(); it != temp_puyos.end(); ++it)
+        if(it->vanish_stopped())
+        {
+            temp_puyos.clear();
+            return;
+        }
+        else
+            it->vanish_let(board);
+}
+void puyoPhasing::find_vanish_puyo(puyoBoard& board)
+{
+    const auto [board_r,board_c] = board.get_board_size();
+    vector<vector<bool>> visited(board_r,vector<bool>(board_c,false));
+    for(int i = 0 ; i < board_r ; ++i)
+        for(int j = 0 ; j < board_c ; ++j)
+        {
+            const int puyo = board.get_puyo(i,j);
+            if(puyo == -1 || visited[i][j])
+                continue;
+            vector<pair<int,int>> stored_coords;
+            queue<pair<int,int>> coords;
+            coords.push(make_pair(i,j));
+            while(!coords.empty())
+            {
+                const auto [r,c] = coords.front();
+                coords.pop();
+                if(visited[r][c])
+                    continue;
+                stored_coords.push_back(make_pair(r,c));
+                visited[r][c] = true;
+                for(const auto [dr,dc] : dir)
+                {
+                    const int nr = r+dr, nc = c+dc;
+                    if(board.is_in_board(nr,nc) && board.get_puyo(nr,nc) == puyo && !visited[nr][nc])
+                        coords.push(make_pair(nr,nc));
+                }
+            }
+            if(stored_coords.size() >= condition_for_vanish)
+                for(const auto [r,c] : stored_coords)
+                {
+                    board.push_vanish_puyo(std::move(puyoVanishPuyo(c,r,puyo,vanish_value)));
+                    board.remove_puyo(r,c);
+                }
+        }
+    
+}
+
+void puyoPhasing::delay(int time){delay_time = time;}
+void puyoPhasing::wait(){delay_time = max(delay_time-1,0);}
+bool puyoPhasing::is_delayed(){return delay_time > 0;}
+
+
+pair<int,int> puyoPhasing::get_new_puyo_color(int count)
 {
     random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dist1(0, MAX_PUYO_COLOR-1);
-    uniform_int_distribution<> dist2(0, MAX_PUYO_COLOR-1);
-    return make_pair(dist1(gen),dist2(gen));
+    mt19937 gen(rd());//랜덤
+    while(new_colors.size() < count)
+    {
+        uniform_int_distribution<> dist1(0, MAX_PUYO_COLOR-1);
+        uniform_int_distribution<> dist2(0, MAX_PUYO_COLOR-1);
+        new_colors.push_back(make_pair(dist1(gen),dist2(gen)));
+    }
+    return new_colors[count-1];
 }
 
+
+
+
+bool puyoPhasing::game_ended(){return game_end;}
+void puyoPhasing::end_game(){game_end = true;}
+void puyoPhasing::proceed_game()
+{
+}
+
+void puyoPhasing::set_game()
+{
+
+}
+
+int puyoPhasing::get_player_count(){return (int)players.size();}
+vector<unique_ptr<puyoPlayer>>&& puyoPhasing::get_players(){return std::move(players);}

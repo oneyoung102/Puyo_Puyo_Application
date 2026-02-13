@@ -1,24 +1,60 @@
 #pragma once
 
 #include <vector>
+#include <random>
+#include <memory>
+
+#include "puyoPlayer.hpp"
 
 using namespace std;
 
+class puyoPlayPuyo;
 class puyoTempPuyo;
 class puyoBoard;
 
 class puyoPhasing
 {
     private :
-        bool temp_puyo_did_existed = false;
-        vector<puyoTempPuyo> temp_puyos;
-    public :
-        void push_temp_puyo(puyoTempPuyo&& ptp);
-        void push_temp_puyo(vector<puyoTempPuyo>&& ptp_v);
-        bool gravity_temp_puyos(puyoBoard& board);
+        vector<unique_ptr<puyoPlayer>> players;
+        vector<pair<int,int>> new_colors;
 
-        bool all_puyo_deployed();
-        bool not_existed_temp_puyo();
-        vector<puyoTempPuyo>& get_temp_puyos();
-        pair<int,int> get_new_puyo_color();
+        vector<pair<int,int>> dir; //queue를 위해
+        int condition_for_vanish;
+
+        bool game_end;
+
+        int gravity_value, vanish_value;
+        int delay_time;
+
+        bool is_play_time(puyoBoard& board);
+        bool is_gravity_time(puyoBoard& board);
+        bool is_vanish_time(puyoBoard& board);
+
+    public :
+        puyoPhasing();
+
+
+        void act_play_puyo(puyoBoard& board, puyoPlayPuyo& puyo);///
+        void gravity_gravity_puyos(puyoBoard& board);
+        void vanish_vanish_puyo(puyoBoard& board);
+        void find_gravity_puyo(puyoBoard& board);
+        void find_vanish_puyo(puyoBoard& board);
+
+        void delay(int time);
+        void wait();
+        bool is_delayed();
+
+        void end_game();////
+
+        pair<int,int> get_new_puyo_color(int count);
+
+        void set_condition_for_vanish(int amount);
+        int get_condition_for_vanish();
+
+        void set_game();
+        void proceed_game();
+        bool game_ended();
+
+        int get_player_count();
+        vector<unique_ptr<puyoPlayer>>&& get_players();
 };

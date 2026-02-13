@@ -1,4 +1,4 @@
-#include "../puyoBoard.hpp"
+#include "../../puyoBoard.hpp"
 #include "../puyoPlayPuyo.hpp"
 #include "puyoPuyoUp.hpp"
 

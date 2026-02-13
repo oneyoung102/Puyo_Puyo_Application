@@ -1,7 +1,6 @@
-#include "../puyoBoard.hpp"
+#include "../../puyoBoard.hpp"
 #include "../puyoPlayPuyo.hpp"
 #include "puyoPuyoStay.hpp"
-#include "puyoPuyoFall.hpp"
 
 using namespace std;
 

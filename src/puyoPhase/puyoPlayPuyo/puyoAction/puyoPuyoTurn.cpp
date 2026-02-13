@@ -1,4 +1,4 @@
-#include "../puyoBoard.hpp"
+#include "../../puyoBoard.hpp"
 #include "../puyoPlayPuyo.hpp"
 #include "puyoPuyoTurn.hpp"
 
@@ -50,13 +50,13 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
                     {
                         left.let_act();
                         if(left.decline_act(board,puyo))
-                            sub_act = new puyoPuyoLeft(act_count_constant,left_gap);
+                            sub_act = new puyoPuyoLeft(act_count_constant*0.9,left_gap);
                     }
                     else if(y1 < y2)
                     {
                         right.let_act();
                         if(right.decline_act(board,puyo))
-                            sub_act = new puyoPuyoRight(act_count_constant,right_gap);
+                            sub_act = new puyoPuyoRight(act_count_constant*0.9,right_gap);
                     }
                 }
                 else if(round(y1) == round(y2))
@@ -68,7 +68,7 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
                     {
                         up.let_act();
                         if(up.decline_act(board,puyo))
-                            sub_act = new puyoPuyoUp(act_count_constant,up_gap);
+                            sub_act = new puyoPuyoUp(act_count_constant*0.9,up_gap);
                     }
                 }
             if(sub_act != nullptr) 

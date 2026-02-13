@@ -14,6 +14,7 @@ class puyoPuyoAct
         virtual void arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y2);
     public :
         puyoPuyoAct(int amount);
+        virtual ~puyoPuyoAct() = default;
         virtual bool decline_act(puyoBoard& board,puyoPlayPuyo& puyo);
         virtual void act_puyo(puyoPlayPuyo& puyo) = 0;
         bool is_acting();
