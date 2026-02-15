@@ -38,9 +38,9 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
         if(!test_act(board,puyo))
         {
             const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
-            const float left_gap = (x1 == floor(x1)) ? 1 : x1-floor(x1),
-                        right_gap = (ceil(x1) == x1) ? 1 : ceil(x1)-x1,
-                        up_gap = (y1 == floor(y1)) ? 1 : y1-floor(y1);
+            const float left_gap = (round(x1) == floor(x1)) ? 1 : round(x1)-floor(x1),
+                        right_gap = (round(x1) == ceil(x1)) ? 1 : ceil(x1)-round(x1),
+                        up_gap = (round(y1) == floor(y1)) ? 1 : round(y1)-floor(y1);
             puyoPuyoLeft left(act_count_constant,left_gap);
             puyoPuyoRight right(act_count_constant,right_gap);
             puyoPuyoUp up(act_count_constant,up_gap);
@@ -50,13 +50,13 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
                     {
                         left.let_act();
                         if(left.decline_act(board,puyo))
-                            sub_act = new puyoPuyoLeft(act_count_constant*0.9,left_gap);
+                            sub_act = new puyoPuyoLeft(act_count_constant,left_gap);
                     }
                     else if(y1 < y2)
                     {
                         right.let_act();
                         if(right.decline_act(board,puyo))
-                            sub_act = new puyoPuyoRight(act_count_constant*0.9,right_gap);
+                            sub_act = new puyoPuyoRight(act_count_constant,right_gap);
                     }
                 }
                 else if(round(y1) == round(y2))
@@ -68,7 +68,7 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
                     {
                         up.let_act();
                         if(up.decline_act(board,puyo))
-                            sub_act = new puyoPuyoUp(act_count_constant*0.9,up_gap);
+                            sub_act = new puyoPuyoUp(act_count_constant,up_gap);
                     }
                 }
             if(sub_act != nullptr) 

@@ -15,46 +15,35 @@ class puyoBoard;
 class puyoPhasing
 {
     private :
+        enum class Phase{
+            play,
+            gravity,
+            vanish
+        };
         vector<unique_ptr<puyoPlayer>> players;
+        vector<int> delay_times;
         vector<pair<int,int>> new_colors;
 
-        vector<pair<int,int>> dir; //queue를 위해
-        int condition_for_vanish;
-
         bool game_end;
+        Phase what_phase(puyoBoard& board);
 
-        int gravity_value, vanish_value;
-        int delay_time;
-
-        bool is_play_time(puyoBoard& board);
-        bool is_gravity_time(puyoBoard& board);
-        bool is_vanish_time(puyoBoard& board);
+        void delay(int player_num,int time);
+        void wait(int player_num);
+        bool is_delayed(int player_num);
 
     public :
         puyoPhasing();
 
-
-        void act_play_puyo(puyoBoard& board, puyoPlayPuyo& puyo);///
-        void gravity_gravity_puyos(puyoBoard& board);
-        void vanish_vanish_puyo(puyoBoard& board);
-        void find_gravity_puyo(puyoBoard& board);
-        void find_vanish_puyo(puyoBoard& board);
-
-        void delay(int time);
-        void wait();
-        bool is_delayed();
-
         void end_game();////
 
         pair<int,int> get_new_puyo_color(int count);
+        vector<pair<int,int>>& get_new_colors();
 
-        void set_condition_for_vanish(int amount);
-        int get_condition_for_vanish();
-
-        void set_game();
+        void set_game(float spawn_x, float spawn_y, int condition, int gravity, int stay);
         void proceed_game();
         bool game_ended();
 
         int get_player_count();
         vector<unique_ptr<puyoPlayer>>&& get_players();
+        void add_player(unique_ptr<puyoPlayer>&& player);
 };

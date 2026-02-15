@@ -17,131 +17,27 @@ using namespace std;
 
 puyoPhasing::puyoPhasing()
 {
-    dir = {
-        {1,0},{-1,0},{0,1},{0,-1}
-    };
-    gravity_value = 450;
-    vanish_value = 510;
     game_end = false;
-    delay_time = 0;
 }
 
-
-void puyoPhasing::set_condition_for_vanish(int amount){condition_for_vanish = amount;}
-int puyoPhasing::get_condition_for_vanish(){return condition_for_vanish;}
-
-void puyoPhasing::act_play_puyo(puyoBoard& board, puyoPlayPuyo& puyo)
+puyoPhasing::Phase puyoPhasing::what_phase(puyoBoard& board)
 {
-    puyo.gravity_let(board);
-    puyo.act_let(board);
+    if(!board.not_existed_vanish_puyo())
+        return puyoPhasing::Phase::vanish;
+    if(!board.not_existed_gravity_puyo())
+        return puyoPhasing::Phase::gravity;
+    return puyoPhasing::Phase::play;
 }
 
-void puyoPhasing::gravity_gravity_puyos(puyoBoard& board)
-{
-    auto& gravity_puyos = board.get_gravity_puyos();
-    for(auto it = gravity_puyos.begin(); it != gravity_puyos.end(); )//삭제 수정
-        if(it->gravity_stopped())
-        {
-            if(!it->deploy_puyo(board))
-            {
-                end_game(); //배치할 뿌요가 범위를 나감
-                return;
-            }
-            it = gravity_puyos.erase(it);
-        }
-        else
-        {
-            it->gravity_let(board);
-            ++it;
-        } 
-}
-void puyoPhasing::find_gravity_puyo(puyoBoard& board)
-{
-    const auto [board_r,board_c] = board.get_board_size();
-    for(int i = 0 ; i < board_c ; ++i)
-    {
-        bool push = false;
-        for(int j = board_r-1 ; j >= 0 ; --j)//아래에 있는 뿌요가 먼저 오게
-        {
-            const int puyo = board.get_puyo(j,i);
-            if(puyo != -1)
-            {
-                if(push)
-                {
-                    board.push_gravity_puyo(std::move(puyoGravityPuyo(i,j,puyo,gravity_value)));
-                    board.remove_puyo(j,i);
-                    continue;
-                }
-            }
-            else
-                push = true;
-        }
-
-    }
-}
-
-
-
-void puyoPhasing::vanish_vanish_puyo(puyoBoard& board)
-{
-    auto& temp_puyos = board.get_vanish_puyos();
-    for(auto it = temp_puyos.begin(); it != temp_puyos.end(); ++it)
-        if(it->vanish_stopped())
-        {
-            temp_puyos.clear();
-            return;
-        }
-        else
-            it->vanish_let(board);
-}
-void puyoPhasing::find_vanish_puyo(puyoBoard& board)
-{
-    const auto [board_r,board_c] = board.get_board_size();
-    vector<vector<bool>> visited(board_r,vector<bool>(board_c,false));
-    for(int i = 0 ; i < board_r ; ++i)
-        for(int j = 0 ; j < board_c ; ++j)
-        {
-            const int puyo = board.get_puyo(i,j);
-            if(puyo == -1 || visited[i][j])
-                continue;
-            vector<pair<int,int>> stored_coords;
-            queue<pair<int,int>> coords;
-            coords.push(make_pair(i,j));
-            while(!coords.empty())
-            {
-                const auto [r,c] = coords.front();
-                coords.pop();
-                if(visited[r][c])
-                    continue;
-                stored_coords.push_back(make_pair(r,c));
-                visited[r][c] = true;
-                for(const auto [dr,dc] : dir)
-                {
-                    const int nr = r+dr, nc = c+dc;
-                    if(board.is_in_board(nr,nc) && board.get_puyo(nr,nc) == puyo && !visited[nr][nc])
-                        coords.push(make_pair(nr,nc));
-                }
-            }
-            if(stored_coords.size() >= condition_for_vanish)
-                for(const auto [r,c] : stored_coords)
-                {
-                    board.push_vanish_puyo(std::move(puyoVanishPuyo(c,r,puyo,vanish_value)));
-                    board.remove_puyo(r,c);
-                }
-        }
-    
-}
-
-void puyoPhasing::delay(int time){delay_time = time;}
-void puyoPhasing::wait(){delay_time = max(delay_time-1,0);}
-bool puyoPhasing::is_delayed(){return delay_time > 0;}
-
+void puyoPhasing::delay(int player_num, int time){delay_times[player_num] += time;}
+void puyoPhasing::wait(int player_num){delay_times[player_num] = max(delay_times[player_num]-1,0);}
+bool puyoPhasing::is_delayed(int player_num){return delay_times[player_num] > 0;}
 
 pair<int,int> puyoPhasing::get_new_puyo_color(int count)
 {
     random_device rd;
     mt19937 gen(rd());//랜덤
-    while(new_colors.size() < count)
+    while(new_colors.size() < count+2)//다음에 나올 뿌요를 보여주기 위해 +2
     {
         uniform_int_distribution<> dist1(0, MAX_PUYO_COLOR-1);
         uniform_int_distribution<> dist2(0, MAX_PUYO_COLOR-1);
@@ -150,19 +46,77 @@ pair<int,int> puyoPhasing::get_new_puyo_color(int count)
     return new_colors[count-1];
 }
 
-
-
+vector<pair<int,int>>& puyoPhasing::get_new_colors(){return new_colors;}
 
 bool puyoPhasing::game_ended(){return game_end;}
 void puyoPhasing::end_game(){game_end = true;}
+void puyoPhasing::set_game(float spawn_x, float spawn_y, int condition, int gravity, int stay)
+{
+    delay_times = vector<int>(players.size(),0);
+    for(auto&& player : players)
+    {
+        player->set_puyo_spawn_pos(spawn_x,spawn_y);
+        player->set_condition_for_vanish(condition);
+        player->set_puyo_gravity_value(gravity);
+        player->set_puyo_stay_value(stay);
+
+        player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
+    }
+}
 void puyoPhasing::proceed_game()
 {
+    for(auto&& player : players)
+    {
+        auto& board = player->get_board();
+        auto& puyo = player->get_puyo();
+        const int player_num = player->get_player_num();
+        
+        wait(player_num);
+        switch(what_phase(board))
+        {
+            case Phase::play :
+                if(is_delayed(player_num))
+                    break;
+                board.find_future_puyos(puyo);
+                puyo.gravity_let(board);
+                puyo.act_let(board);
+                if(puyo.is_dropped())
+                {
+                    board.remove_future_puyos();
+                    board.push_gravity_puyo(puyo.to_gravity_puyo());
+                    player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
+                }
+                break;
+
+            case Phase::gravity :
+                board.gravity_gravity_puyos();
+                if(board.not_existed_gravity_puyo())
+                {
+                    board.find_vanish_puyo(); 
+                    if(board.not_existed_vanish_puyo()) //드롭 후
+                        delay(player_num,800);
+                }
+                break;
+
+            case Phase::vanish :
+                board.vanish_vanish_puyo();
+                if(board.not_existed_vanish_puyo())
+                {
+                    board.find_gravity_puyo(); 
+                    if(board.not_existed_gravity_puyo()) //파괴 후
+                        delay(player_num,1200);
+                }
+                break;
+        };
+        if(board.gravity_puyo_is_out())
+            end_game();         
+    }
 }
-
-void puyoPhasing::set_game()
-{
-
-}
-
 int puyoPhasing::get_player_count(){return (int)players.size();}
 vector<unique_ptr<puyoPlayer>>&& puyoPhasing::get_players(){return std::move(players);}
+void puyoPhasing::add_player(unique_ptr<puyoPlayer>&& player)
+{
+    if(players.size() == 2)
+        throw runtime_error("Player count must 1 or 2");
+    players.push_back(std::move(player));
+}

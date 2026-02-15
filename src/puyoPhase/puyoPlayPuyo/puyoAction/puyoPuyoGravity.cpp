@@ -9,13 +9,6 @@ puyoPuyoGravity::puyoPuyoGravity(int amount, float d): puyoPuyoAct(amount)
     dist = d;
     act_count = 0;
 }
-
-void puyoPuyoGravity::arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y2)
-{
-    puyo.move_puyo(round(x1),round(y1),
-                    round(x2),round(y2));
-}
-
 bool puyoPuyoGravity::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
@@ -32,11 +25,7 @@ bool puyoPuyoGravity::decline_act(puyoBoard& board, puyoPlayPuyo& puyo)
     }
     else
     {
-        if(is_acting())
-        {
-            arrive(puyo,x1,y1,x2,y2);
-            halt_act();
-        }
+        halt_act();
         return false;
     }
     return false;

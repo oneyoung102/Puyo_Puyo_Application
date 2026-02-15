@@ -29,6 +29,7 @@ class puyoFileSystem
         puyoFileSystem();
         enum{//이미지 명
             board,
+            num,
             puyo
         };
         Sprite get_sprite(int name);

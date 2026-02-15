@@ -13,7 +13,6 @@
 #include "puyoPlayPuyo.hpp"
 
 #include "../puyoTempPuyo/puyoGravityPuyo.hpp"
-#include "../puyoTempPuyo/puyoFuturePuyo.hpp"
 
 #include <tuple>
 #include <utility>
@@ -23,12 +22,12 @@
 
 using namespace std;
 
-puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g)
+puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s)
 {
 
     action = nullptr;
     gravity  = make_unique<puyoPuyoGravity>(g,1); 
-    stay  = make_unique<puyoPuyoStay>(2000,200);
+    stay  = make_unique<puyoPuyoStay>(s,110);
 
     acts.emplace_back(make_unique<puyoPuyoLeft>(400,1));
     acts.emplace_back(make_unique<puyoPuyoRight>(400,1));
@@ -41,7 +40,7 @@ puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int
     tie(x2,y2) = make_pair(spawn_pos.first,spawn_pos.second-1);
     tie(color1,color2) = color;
 
-    gravity_value = 200;//드롭 이후에 중력 상수
+    gravity_value = 180;//드롭 이후에 중력 상수
 }
 
 
@@ -83,7 +82,11 @@ void puyoPlayPuyo::gravity_let(puyoBoard& board)
     }
 }
 
-bool puyoPlayPuyo::is_dropped(){return stay->is_destroyed() || acts[(unsigned int)puyoPlayPuyo::Act_num::drop]->is_acting();}
+bool puyoPlayPuyo::is_dropped()
+{
+    return action == nullptr && stay->is_destroyed()
+                    || acts[(unsigned int)puyoPlayPuyo::Act_num::drop]->is_acting();
+}
 
 bool puyoPlayPuyo::is_holding(){return !gravity->is_acting();}
 
@@ -123,23 +126,3 @@ void puyoPlayPuyo::let_down(){acts[(unsigned int)puyoPlayPuyo::Act_num::down]->l
 //void puyoPlayPuyo::let_up(){acts[]->let_act();}
 void puyoPlayPuyo::let_turn(){acts[(unsigned int)puyoPlayPuyo::Act_num::turn]->let_act();}
 void puyoPlayPuyo::let_drop(){acts[(unsigned int)puyoPlayPuyo::Act_num::drop]->let_act();}
-
-vector<puyoFuturePuyo> puyoPlayPuyo::get_future_puyo(puyoBoard& board)
-{
-    vector<puyoFuturePuyo> future_puyos;
-    for(int y = (int)y1 ; y < board.get_board_size().first ; ++y)
-        if(puyo_touched(board,round(x1),y+1))
-        {
-            if(y1 < y2) --y;//실제로 뿌요를 배치하지 않기에 보정
-            future_puyos.push_back(puyoFuturePuyo(round(x1),y,color1));
-            break;
-        }
-    for(int y = (int)y2 ; y < board.get_board_size().first ; ++y)
-        if(puyo_touched(board,round(x2),y+1))
-        {
-            if(y1 > y2) --y;//실제로 뿌요를 배치하지 않기에 보정
-            future_puyos.push_back(puyoFuturePuyo(round(x2),y,color2));
-            break;
-        }
-    return future_puyos;
-}

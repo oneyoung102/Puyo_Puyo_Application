@@ -7,7 +7,6 @@
 #include <memory>
 
 #include "../puyoTempPuyo/puyoGravityPuyo.hpp"
-#include "../puyoTempPuyo/puyoFuturePuyo.hpp"
 
 #include "puyoAction/puyoPuyoAct.hpp"
 #include "puyoAction/puyoPuyoGravity.hpp"
@@ -46,7 +45,7 @@ class puyoPlayPuyo//플레이어가 움직이는 뿌요
         int gravity_value;
 
     public :
-        puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g);
+        puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s);
 
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);
@@ -67,6 +66,4 @@ class puyoPlayPuyo//플레이어가 움직이는 뿌요
         void let_up();
         void let_turn();
         void let_drop();
-
-        vector<puyoFuturePuyo> get_future_puyo(puyoBoard& board); 
 };

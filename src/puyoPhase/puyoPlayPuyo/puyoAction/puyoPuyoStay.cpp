@@ -7,7 +7,7 @@ using namespace std;
 puyoPuyoStay::puyoPuyoStay(int amount, int b) : puyoPuyoAct(amount)
 {
     act_count = 0;
-    bonus_count = b;
+    bonus_count = b;//뿌요가 닿은 상태로 움직이면 추가로 주는 시간
     destroy = false;
 }
 
