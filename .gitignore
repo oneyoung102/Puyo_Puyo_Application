@@ -1,0 +1,63 @@
+# =========================
+# macOS
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Spotlight
+.Spotlight-V100
+.Trashes
+
+# =========================
+# Build / C++
+# =========================
+build/
+bin/
+obj/
+out/
+cmake-build-*/
+
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+*.dylib
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# =========================
+# SFML / Assets cache
+# =========================
+*.log
+
+# =========================
+# VSCode
+# =========================
+.vscode/
+*.code-workspace
+
+# =========================
+# Xcode / macOS dev
+# =========================
+DerivedData/
+*.xcworkspace
+*.xcuserdata
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+
+# =========================
+# Git
+# =========================
+.gitignore
