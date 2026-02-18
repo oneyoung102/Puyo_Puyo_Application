@@ -15,5 +15,5 @@ class puyoPrintObject
         puyoPrintObject(Sprite s, float xx, float yy, int l);
         virtual ~puyoPrintObject() = default;
         bool is_alive();
-        virtual void print_object(RenderWindow& w) = 0;
+        virtual void print_object(RenderWindow& w);
 };

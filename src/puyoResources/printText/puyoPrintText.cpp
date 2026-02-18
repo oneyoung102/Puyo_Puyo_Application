@@ -1,0 +1,33 @@
+#include "puyoPrintText.hpp"
+#include <SFML/Graphics.hpp>
+#include <string>
+
+using namespace std;
+using namespace sf;
+
+puyoPrintText::puyoPrintText(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int l)
+    : text(Text(font))
+{
+    life = l; // life == -1 일 때는 영생
+    text.setString(content);
+    text.setFillColor(color);
+    text.setStyle(style);
+    text.setCharacterSize(size);
+
+    // 중심 정렬을 위해 origin을 텍스트 중앙으로 설정
+    auto bounds = text.getLocalBounds();
+    text.setOrigin({
+        bounds.position.x + bounds.size.x / 2.f,
+        bounds.position.y + bounds.size.y / 2.f
+    });
+    text.setPosition({x, y});
+}
+
+bool puyoPrintText::is_alive(){return life != 0;}
+
+void puyoPrintText::print_text(RenderWindow& window)
+{
+    window.draw(text);
+    if(is_alive())
+        --life;
+}

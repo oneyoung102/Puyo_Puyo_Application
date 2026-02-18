@@ -19,18 +19,24 @@ class puyoFileSystem
         vector<Texture> textures;
         vector<Sprite> sprites;
 
+        Font font;
         fs::path getExecutablePath();
         fs::path getImgPath(string img);
 
         void getAllTexture();
         void getAllSprite();
-
+        void getFont();
+        
     public :
         puyoFileSystem();
         enum{//이미지 명
             board,
+            puyo,
             num,
-            puyo
+            sega,
+            opening,
+            black_back
         };
         Sprite get_sprite(int name);
+        Font& get_font();
 };

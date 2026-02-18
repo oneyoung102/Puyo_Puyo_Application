@@ -2,6 +2,7 @@
 
 #include <mach-o/dyld.h>
 #include <vector>
+#include <algorithm>
 #include <climits>
 #include <filesystem>
 #include <string>
@@ -29,15 +30,18 @@ fs::path puyoFileSystem::getImgPath(string img)// 사용 안 함
 void puyoFileSystem::getAllTexture()
 {
     const fs::path assetsPath = getExecutablePath().parent_path().parent_path() / "Resources/assets";
+    vector<fs::path> files;
     for (const auto& entry : fs::directory_iterator(assetsPath))
         if (entry.path().extension() == ".png")
-        {
-            string filename = entry.path().string();
-            Texture texture;
-            if (!texture.loadFromFile(filename))
-                throw std::runtime_error("Unable to load image from file"); // 로드 실패 시 종료
-            textures.push_back(texture);
-        }
+            files.push_back(entry.path());
+    sort(files.begin(), files.end());
+    for (const auto& path : files)
+    {
+        Texture texture;
+        if (!texture.loadFromFile(path.string()))
+            throw runtime_error("Unable to load image");
+        textures.push_back(texture);
+    }
 }
 void puyoFileSystem::getAllSprite()
 {
@@ -45,10 +49,19 @@ void puyoFileSystem::getAllSprite()
         sprites.push_back(Sprite(texture));
 }
 
+void puyoFileSystem::getFont()
+{
+    const fs::path fontPath = getExecutablePath().parent_path().parent_path() / "Resources/assets/puyo_font.ttf";
+    if (!font.openFromFile(fontPath.string()))
+        throw runtime_error("Unable to load image");
+}
+
 
 puyoFileSystem::puyoFileSystem()
 {
     getAllTexture();//모든 이미지 불러오기
     getAllSprite();
+    getFont();
 }
 Sprite puyoFileSystem::get_sprite(int name){return sprites[name];}
+Font& puyoFileSystem::get_font(){return font;}

@@ -19,3 +19,7 @@ void puyoPrintObject::print_sprite(RenderWindow& window, float x1, float y1)
     if(is_alive())
         --life;
 }
+void puyoPrintObject::print_object(RenderWindow& w)
+{
+    print_sprite(w,x,y);
+}
