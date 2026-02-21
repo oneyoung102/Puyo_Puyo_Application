@@ -1,0 +1,17 @@
+CMakeLists.txt
+.DS_Store
+
+build/
+bin/
+
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+*.dylib
+
+.vscode/
+
+.gitignore
