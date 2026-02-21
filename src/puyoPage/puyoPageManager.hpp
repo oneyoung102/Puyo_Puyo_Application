@@ -13,8 +13,15 @@ class puyoPageManager
     private : 
         puyoFileSystem pfs;
         std::unique_ptr<puyoPage> curr_page;
+        Page next_page;
+        int player_count, gravity, colors, win_player_num;
+
+        sf::Texture capture_texture;
+        sf::Sprite capture_sprite;
+
         void convert_page(Page p);
     public :
         puyoPageManager();
         void show_page(sf::RenderWindow& window);
+
 };

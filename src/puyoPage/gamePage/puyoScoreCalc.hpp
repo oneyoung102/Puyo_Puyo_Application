@@ -16,4 +16,5 @@ class puyoScoreCalc
         int score_to_obstruct_puyo(int score);
         void set_obstruct_puyo_rate(int v);
         int get_all_cleared_obstruct_puyo();
+        int get_obstruct_puyo_for_dropping(int obstruct_puyo);
 };

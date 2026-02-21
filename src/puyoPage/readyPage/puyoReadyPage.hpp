@@ -11,5 +11,5 @@ class puyoReadyPage : public puyoPage
     private :
     public :
         puyoReadyPage(puyoFileSystem& pfs);
-        Page proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
+        puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
 };

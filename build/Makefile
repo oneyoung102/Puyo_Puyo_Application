@@ -1281,6 +1281,30 @@ src/puyoResources/puyoPrinting.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/puyo_puyo.dir/build.make CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoPrinting.cpp.s
 .PHONY : src/puyoResources/puyoPrinting.cpp.s
 
+src/puyoResources/puyoSounding.o: src/puyoResources/puyoSounding.cpp.o
+.PHONY : src/puyoResources/puyoSounding.o
+
+# target to build an object file
+src/puyoResources/puyoSounding.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/puyo_puyo.dir/build.make CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.o
+.PHONY : src/puyoResources/puyoSounding.cpp.o
+
+src/puyoResources/puyoSounding.i: src/puyoResources/puyoSounding.cpp.i
+.PHONY : src/puyoResources/puyoSounding.i
+
+# target to preprocess a source file
+src/puyoResources/puyoSounding.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/puyo_puyo.dir/build.make CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.i
+.PHONY : src/puyoResources/puyoSounding.cpp.i
+
+src/puyoResources/puyoSounding.s: src/puyoResources/puyoSounding.cpp.s
+.PHONY : src/puyoResources/puyoSounding.s
+
+# target to generate assembly for a file
+src/puyoResources/puyoSounding.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/puyo_puyo.dir/build.make CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.s
+.PHONY : src/puyoResources/puyoSounding.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1434,6 +1458,9 @@ help:
 	@echo "... src/puyoResources/puyoPrinting.o"
 	@echo "... src/puyoResources/puyoPrinting.i"
 	@echo "... src/puyoResources/puyoPrinting.s"
+	@echo "... src/puyoResources/puyoSounding.o"
+	@echo "... src/puyoResources/puyoSounding.i"
+	@echo "... src/puyoResources/puyoSounding.s"
 .PHONY : help
 
 

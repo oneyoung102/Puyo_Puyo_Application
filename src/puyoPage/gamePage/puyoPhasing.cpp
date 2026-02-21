@@ -22,6 +22,7 @@ puyoPhasing::puyoPhasing()
 {
     game_end = false;
     color_count = 0;
+    win_player_num = -1;
     calc = puyoScoreCalc();
 }
 
@@ -80,7 +81,7 @@ void puyoPhasing::proceed_game()
         const int player_num = player->get_player_num();
         
         wait(player_num);
-        int obstruct_puyo_count = 0;
+        int obstruct_puyo_count = 0;//상대에게 넘길 방해 뿌요
         switch(get_phase(board))
         {
             case Phase::play :
@@ -94,7 +95,9 @@ void puyoPhasing::proceed_game()
                     board.remove_future_puyos();
                     board.push_gravity_puyo(puyo.to_gravity_puyo());
                     player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
+                    player->set_play_puyo_dropped();
                     board.reset_chain_count();
+                    board.approve_spawn_obstruct_puyo();
                 }
                 break;
 
@@ -106,7 +109,7 @@ void puyoPhasing::proceed_game()
                     if(board.not_existed_vanish_puyo()) //파괴할 뿌요가 없으면
                     {
                         delay(player_num,800);
-                        board.spawn_obstruct_puyo();
+                        board.spawn_obstruct_puyo(calc.get_obstruct_puyo_for_dropping(board.get_obstruct_puyo()));
                     }
                     else
                     {
@@ -140,7 +143,10 @@ void puyoPhasing::proceed_game()
             players[opposite]->get_board().give_obstruct_puyo(opp);
         }
         if(board.gravity_puyo_is_out() && board.not_existed_gravity_puyo())
-            end_game();         
+        {
+            win_player_num = player_num^1;
+            end_game(); 
+        }        
     }
 }
 int puyoPhasing::get_player_count(){return (int)players.size();}
@@ -150,4 +156,11 @@ void puyoPhasing::add_player(unique_ptr<puyoPlayer>&& player)
     if(players.size() == 2)
         throw runtime_error("Player count must be 1 or 2");
     players.push_back(std::move(player));
+}
+
+int puyoPhasing::get_win_player_num()
+{
+    if(players.size() == 1)
+        return -1;//이긴 사람 없음 == 솔로 플레이
+    return win_player_num;
 }

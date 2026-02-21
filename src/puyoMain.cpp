@@ -12,9 +12,7 @@ int main()
     window.setView(window.getDefaultView());
     while(window.isOpen())
     {
-        window.clear();
         page.show_page(window);
-        window.display();
     }
     return 0;
 }

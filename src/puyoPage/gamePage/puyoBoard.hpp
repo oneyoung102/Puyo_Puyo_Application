@@ -3,16 +3,25 @@
 #include <vector>
 #include <utility>
 #include <set>
-#include <random>
 #include "puyoTempPuyo/puyoGravityPuyo.hpp"
 #include "puyoTempPuyo/puyoVanishPuyo.hpp"
 #include "puyoTempPuyo/puyoFuturePuyo.hpp"
 
 #include "puyoPlayPuyo/puyoPlayPuyo.hpp"
+#include "../puyoObjectSignal.hpp"
 
 using namespace std;
 
-class puyoBoard
+enum class puyoBoardSignal
+{
+    chain,
+    all_cleared,
+    spawn_obsp,
+    vanished,
+    COUNT
+};
+
+class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 {
     public :
         enum class Type
@@ -30,7 +39,6 @@ class puyoBoard
         vector<puyoVanishPuyo> vanish_puyos;
         vector<puyoFuturePuyo> future_puyos;
         int obstruct_puyo,obstruct_puyo_max;
-        mt19937 gen;
         
         vector<vector<Type>> board;
         const int board_r, board_c; 
@@ -47,7 +55,8 @@ class puyoBoard
         vector<int> link_count;//점수 계산용 
         set<Type> color_count;//점수 계산용 
 
-        bool chain_signal, all_cleared_signal;
+        int temp_obstruct_puyo; //방해뿌요 소리를 위한 임시 방해뿌요 개수
+        bool approvement_for_obstruct_puyo;
 
     public :  
         puyoBoard();
@@ -70,7 +79,7 @@ class puyoBoard
         void remove_future_puyos();
 
         void give_obstruct_puyo(int count);
-        void spawn_obstruct_puyo();
+        void spawn_obstruct_puyo(int obstruct_puyo_for_dropping);
         bool not_existed_obstructed_puyo();
         int& get_obstruct_puyo();
 
@@ -99,6 +108,7 @@ class puyoBoard
         bool gravity_puyo_is_out();
 
         bool is_all_cleared();
-        bool chain_signal_for_printing();
-        bool all_cleared_signal_for_printing();
+
+        int get_temp_obstruct_puyo_for_sounding();
+        void approve_spawn_obstruct_puyo();
 };

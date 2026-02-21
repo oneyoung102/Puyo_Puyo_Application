@@ -11,6 +11,7 @@
 #include "puyoAction/puyoPuyoAct.hpp"
 #include "puyoAction/puyoPuyoGravity.hpp"
 #include "puyoAction/puyoPuyoStay.hpp"
+#include "../../puyoObjectSignal.hpp"
 
 
 using namespace std;
@@ -20,8 +21,13 @@ class puyoPuyoStay;
 
 
 class puyoBoard;
+enum class puyoPlayPuyoSignal
+{
+    puyo_move,
+    COUNT
+};
 
-class puyoPlayPuyo//플레이어가 움직이는 뿌요
+class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어가 움직이는 뿌요
 {
     private :
         enum class Act_num
@@ -50,6 +56,7 @@ class puyoPlayPuyo//플레이어가 움직이는 뿌요
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);
         bool is_dropped();
+        bool is_down();
         bool is_holding();
 
         vector<puyoGravityPuyo> to_gravity_puyo();

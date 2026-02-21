@@ -897,6 +897,26 @@ CMakeFiles/puyo_puyo.dir/src/puyoPage/gamePage/puyoGamePage.cpp.o: \
   /Users/jangoneyoung/puyo_project/src/puyoPage/gamePage/../puyoPageSignal.hpp \
   /Users/jangoneyoung/puyo_project/src/puyoPage/gamePage/../puyoPage.hpp \
   /Users/jangoneyoung/puyo_project/src/puyoPage/gamePage/../../puyoResources/puyoFileSystem.hpp \
+  /opt/homebrew/include/SFML/Audio.hpp \
+  /opt/homebrew/include/SFML/Audio/InputSoundFile.hpp \
+  /opt/homebrew/include/SFML/Audio/Export.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundFileReader.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundChannel.hpp \
+  /opt/homebrew/include/SFML/Audio/Listener.hpp \
+  /opt/homebrew/include/SFML/Audio/Music.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundStream.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundSource.hpp \
+  /opt/homebrew/include/SFML/Audio/AudioResource.hpp \
+  /opt/homebrew/include/SFML/Audio/OutputSoundFile.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundFileWriter.hpp \
+  /opt/homebrew/include/SFML/Audio/PlaybackDevice.hpp \
+  /opt/homebrew/include/SFML/Audio/Sound.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundBuffer.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/unordered_set \
+  /opt/homebrew/include/SFML/Audio/SoundBufferRecorder.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundRecorder.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundFileFactory.hpp \
+  /opt/homebrew/include/SFML/Audio/SoundFileFactory.inl \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/mach-o/dyld.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdbool.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdbool.h \

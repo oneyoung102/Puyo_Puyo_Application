@@ -10,5 +10,5 @@ class puyoMenuPage : public puyoPage
     private :
     public :
         puyoMenuPage(puyoFileSystem& pfs);
-        Page proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
+        puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
 };

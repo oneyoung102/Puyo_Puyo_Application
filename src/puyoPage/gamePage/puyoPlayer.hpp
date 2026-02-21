@@ -2,14 +2,21 @@
 
 #include "puyoBoard.hpp"
 #include "puyoPlayPuyo/puyoPlayPuyo.hpp"
+#include "../puyoObjectSignal.hpp"
 
 #include <vector>
-#include <tuple>
+#include <utility>
 #include <functional>
 
 using namespace std;
 
-class puyoPlayer
+enum class puyoPlayerSignal
+{
+    puyo_dropped,
+    COUNT
+};
+
+class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 {
     private :
         puyoBoard board;
@@ -51,4 +58,6 @@ class puyoPlayer
         //function<void()> get_let_up();
         function<void()> get_let_turn();
         function<void()> get_let_drop();
+
+        void set_play_puyo_dropped();
 };

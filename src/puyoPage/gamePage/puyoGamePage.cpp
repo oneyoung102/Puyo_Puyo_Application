@@ -35,11 +35,11 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count) 
-    : PUYO_SPRITE(pfs.get_sprite(pfs.puyo))
-    , NUM_SPRITE(pfs.get_sprite(pfs.num))
-    , BOARD_SPRITE(pfs.get_sprite(pfs.board))
-    , COUNT_DOWN_BACK_SPRITE(pfs.get_sprite(pfs.black_back))
+puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count, int gravity, int colors) 
+    : PUYO_SPRITE(pfs.get_sprite(puyoFileSystem::Image::puyo))
+    , NUM_SPRITE(pfs.get_sprite(puyoFileSystem::Image::num))
+    , BOARD_SPRITE(pfs.get_sprite(puyoFileSystem::Image::board))
+    , COUNT_DOWN_BACK_SPRITE(pfs.get_sprite(puyoFileSystem::Image::black_back))
 {
     auto player0 = make_unique<puyoPlayer>(0, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1));
     pl.allot_key((int)(Keyboard::Key::A),player0->get_let_left());
@@ -89,43 +89,77 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count)
         pp.add_print_object(make_unique<puyoPrintObstructViewer>(player->get_board().get_obstruct_puyo(),PUYO_SPRITE,player_obstruct_viewer_x,player_obstruct_viewer_y,-1));
     }
 
-    count_down = 3;
-    count_down_time = 2800;
-    pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,0,0,count_down_time*(count_down+1))); //검은색 반투명 배경
+    ready_status = Ready_status::ready;
 }
-Page puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
+puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
+    puyoPageSignal signal;
+
+    ps.manage_all_sounds();
     pp.print_all_objects(window);
     pp.print_all_texts(window);
-    if(count_down != -1)
+    switch(ready_status)
     {
-        if(pp.not_existed_print_text())
-        {
-            if(count_down == 0)
-                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,"START!",pfs.get_font(),60,Color::White,Text::Style::Bold,count_down_time));
-            else
-                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,to_string(count_down),pfs.get_font(),60,Color::White,Text::Style::Bold,count_down_time));
-            --count_down;
-        }
-        return Page::none;
-    }
-    phase.proceed_game();
-    for(auto&& player : phase.get_players())
-    {
-        const int player_num = player->get_player_num();
-        auto& board = player->get_board();
-        if(board.chain_signal_for_printing())
-        {
-            const auto[chain_x,chain_y] = PLAYER_CHAIN_POS[player_num];
-            pp.add_print_text(make_unique<puyoPrintText>(chain_x,chain_y,to_string(board.get_chain_count())+" combo",pfs.get_font(),29,Color::Red,Text::Style::Bold,1800));
-        }
-        if(board.all_cleared_signal_for_printing())
-        {
-            const auto[all_clear_x,all_clear_y] = PLAYER_ALL_CLEAR_POS[player_num];
-            pp.add_print_text(make_unique<puyoPrintText>(all_clear_x,all_clear_y,"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,4500));
-        }
-    }
-    if(phase.game_ended())
-        return Page::ending;
-    return Page::none;
+        case Ready_status::ready :
+            pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,0,0,6000)); //검은색 반투명 배경
+            pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,"Ready?",pfs.get_font(),60,Color::White,Text::Style::Bold,3000));
+            ready_status = Ready_status::start;
+            break;
+        case Ready_status::start :   
+            if(pp.not_existed_print_text())
+            {
+                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,3000));
+                ps.play_music(pfs.get_music(puyoFileSystem::Music::game_playing));
+                ready_status = Ready_status::play;
+            }
+            break;
+        case Ready_status::play :
+            for(auto&& player : phase.get_players()) //신호 받기
+            {
+                const int player_num = player->get_player_num();
+                auto& board = player->get_board();
+                auto& puyo = player->get_puyo();
+                if(board.get_signal(puyoBoardSignal::chain))
+                {
+                    const auto[chain_x,chain_y] = PLAYER_CHAIN_POS[player_num];
+                    const int chain_count = board.get_chain_count();
+                    pp.add_print_text(make_unique<puyoPrintText>(chain_x,chain_y,to_string(chain_count)+" chain",pfs.get_font(),29,Color::Red,Text::Style::Bold,1500));
+                    
+                    const int sound_number = min((int)puyoFileSystem::Sound::chain1+chain_count-1,(int)puyoFileSystem::Sound::chain7high);
+                    ps.play_sound(pfs.get_buffer((puyoFileSystem::Sound)sound_number));
+                }
+                if(board.get_signal(puyoBoardSignal::all_cleared))
+                {
+                    const auto[all_clear_x,all_clear_y] = PLAYER_ALL_CLEAR_POS[player_num];
+                    pp.add_print_text(make_unique<puyoPrintText>(all_clear_x,all_clear_y,"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,4500));
+                }
+                if(board.get_signal(puyoBoardSignal::spawn_obsp))
+                {
+                    const int temp_obstruct_puyo = board.get_temp_obstruct_puyo_for_sounding();
+                    if(temp_obstruct_puyo >= 18)
+                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::many_obsp_dropped));
+                    else if(temp_obstruct_puyo >= 6)
+                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::mid_obsp_dropped));
+                    else
+                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::less_obsp_dropped));
+                }
+                if(board.get_signal(puyoBoardSignal::vanished))
+                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_vanished));
+                if(puyo.get_signal(puyoPlayPuyoSignal::puyo_move))
+                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_move));
+                if(player->get_signal(puyoPlayerSignal::puyo_dropped))
+                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_dropped));
+            }
+            phase.proceed_game();
+            if(phase.game_ended())
+            {
+                signal.win_player_num = phase.get_win_player_num();
+                signal.request_capture = true;
+                signal.next_page = Page::ending;
+                return signal;
+            }
+            break;
+    };
+    signal.next_page = Page::none;
+    return signal;
 }

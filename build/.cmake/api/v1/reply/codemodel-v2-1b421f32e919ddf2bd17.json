@@ -1,0 +1,105 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "SFML::Audio::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SFML__Audio-Debug-cc1b518bf24a556ef114.json",
+					"name" : "SFML::Audio",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SFML::Graphics::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SFML__Graphics-Debug-e70f8b471c244598add0.json",
+					"name" : "SFML::Graphics",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SFML::System::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SFML__System-Debug-83c0f27f11437e62d23b.json",
+					"name" : "SFML::System",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SFML::Window::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SFML__Window-Debug-6c376022c0321fb0e159.json",
+					"name" : "SFML::Window",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					],
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-9ad1a58d4644cf6543fa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "puyo_project",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "puyo_puyo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-puyo_puyo-Debug-add7779a31f5cdb6e697.json",
+					"name" : "puyo_puyo",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/jangoneyoung/puyo_project/build",
+		"source" : "/Users/jangoneyoung/puyo_project"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}

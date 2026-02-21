@@ -97,6 +97,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoFileSystem.cpp.o.d"
   "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoPrinting.cpp.o"
   "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoPrinting.cpp.o.d"
+  "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.o"
+  "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

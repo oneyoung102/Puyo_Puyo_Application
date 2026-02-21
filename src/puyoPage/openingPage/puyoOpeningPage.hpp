@@ -13,5 +13,5 @@ class puyoOpeningPage : public puyoPage
         void let_end();
     public :
         puyoOpeningPage(puyoFileSystem& pfs);
-        Page proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
+        puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
 };

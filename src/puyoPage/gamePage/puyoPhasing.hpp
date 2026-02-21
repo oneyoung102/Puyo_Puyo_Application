@@ -30,8 +30,9 @@ class puyoPhasing
         puyoScoreCalc calc;
 
         bool game_end;
+        int win_player_num;
 
-        int color_count;
+        int color_count;//색 종류
 
         Phase get_phase(puyoBoard& board);
 
@@ -54,4 +55,6 @@ class puyoPhasing
         int get_player_count();
         vector<unique_ptr<puyoPlayer>>&& get_players();
         void add_player(unique_ptr<puyoPlayer>&& player);
+
+        int get_win_player_num();
 };

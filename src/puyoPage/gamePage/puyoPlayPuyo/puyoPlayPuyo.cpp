@@ -18,11 +18,12 @@
 #include <utility>
 #include <cmath>
 #include <memory>
+#include <algorithm>
 
 
 using namespace std;
 
-puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s)
+puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s) : puyoObjectSignal()
 {
 
     action = nullptr;
@@ -33,14 +34,14 @@ puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int
     acts.emplace_back(make_unique<puyoPuyoRight>(400,1));
     acts.emplace_back(make_unique<puyoPuyoDown>(400,1));
     //acts.emplace_back(make_unique<puyoPuyoUp>(400,1));
-    acts.emplace_back(make_unique<puyoPuyoTurn>(360,90));
+    acts.emplace_back(make_unique<puyoPuyoTurn>(360,-90));
     acts.emplace_back(make_unique<puyoPuyoDrop>(-1));
 
     tie(x1,y1) = spawn_pos;
     tie(x2,y2) = make_pair(spawn_pos.first,spawn_pos.second-1);
     tie(color1,color2) = color;
 
-    gravity_value = 180;//드롭 이후에 중력 상수
+    gravity_value = 150;//드롭 이후에 중력 상수
 }
 
 
@@ -52,6 +53,7 @@ void puyoPlayPuyo::act_let(puyoBoard& board)
             if(act->is_acting() && act->decline_act(board,*this))
             {
                 action = act;
+                signals[(int)puyoPlayPuyoSignal::puyo_move] = true;
                 break;
             }
     }
@@ -87,7 +89,6 @@ bool puyoPlayPuyo::is_dropped()
     return action == nullptr && stay->is_destroyed()
                     || acts[(unsigned int)puyoPlayPuyo::Act_num::drop]->is_acting();
 }
-
 bool puyoPlayPuyo::is_holding(){return !gravity->is_acting();}
 
 vector<puyoGravityPuyo> puyoPlayPuyo::to_gravity_puyo()

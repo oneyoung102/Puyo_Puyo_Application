@@ -9,7 +9,8 @@ using namespace std;
 
 puyoPlayer::puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p)
     : board(std::move(b)),
-    puyo(std::move(p))//처음에는 쓰레기값
+    puyo(std::move(p)),//처음에는 쓰레기값
+    puyoObjectSignal()
 {
     score = 0;
 
@@ -48,3 +49,5 @@ function<void()> puyoPlayer::get_let_down(){return [this](){return get_puyo().le
 //function<void()> puyoPlayer::get_let_up(){return [this](){return get_puyo().let_up();};}
 function<void()> puyoPlayer::get_let_turn(){return [this](){return get_puyo().let_turn();};}
 function<void()> puyoPlayer::get_let_drop(){return [this](){return get_puyo().let_drop();};}
+
+void puyoPlayer::set_play_puyo_dropped(){signals[(int)puyoPlayerSignal::puyo_dropped] = true;}

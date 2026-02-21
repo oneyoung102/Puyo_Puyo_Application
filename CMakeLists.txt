@@ -35,7 +35,7 @@ target_include_directories(${EXECUTABLE_NAME}
 # =========================
 # SFML 찾기
 # =========================
-find_package(SFML COMPONENTS Graphics Window System REQUIRED)
+find_package(SFML COMPONENTS Graphics Window System Audio REQUIRED)
 
 # =========================
 # 링크
@@ -44,6 +44,7 @@ target_link_libraries(puyo_puyo
     SFML::Graphics
     SFML::Window
     SFML::System
+    SFML::Audio
 )
 
 # =========================

@@ -27,35 +27,53 @@ void puyoPageManager::convert_page(Page p)
             break;
         case Page::ready :
             curr_page = make_unique<puyoReadyPage>(pfs);
+            break;        
+        case Page::game :
+            curr_page = make_unique<puyoGamePage>(pfs,player_count,gravity,colors);
             break;
-            
-        case Page::game_1_player :
-            curr_page = make_unique<puyoGamePage>(pfs,1);
-            break;
-        case Page::game_2_player :
-            curr_page = make_unique<puyoGamePage>(pfs,2);
-            break;
-        case Page::game_with_bot :
-            curr_page = make_unique<puyoGamePage>(pfs,2);//임시
-            break;
-
         case Page::ending :
-            curr_page = make_unique<puyoEndingPage>(pfs);
+            curr_page = make_unique<puyoEndingPage>(pfs,win_player_num,capture_sprite);
             break;
     };
 }
 puyoPageManager::puyoPageManager()
+    : capture_sprite(Sprite(capture_texture))
 {
-    curr_page = make_unique<puyoOpeningPage>(pfs);
+    next_page = Page::opening;
+    player_count = 2;
+    gravity = 1800;
+    colors = 4;
+    win_player_num = -1;
 }
 
 void puyoPageManager::show_page(RenderWindow& window)
 {
-    while (auto event = window.pollEvent())//이벤트 처리
+    convert_page(next_page);
+    while (auto event = window.pollEvent())
     {
-        if (event->is<Event::Closed>())//닫힘 이벤트
+        if (event->is<Event::Closed>())
             window.close();
-        (curr_page->get_let()).detect_keyboard(event);
+        curr_page->get_let().detect_keyboard(event);
     }
-    convert_page(curr_page->proceed_page(pfs,window));
+    window.clear();
+    puyoPageSignal signal = curr_page->proceed_page(pfs, window);
+    next_page = signal.next_page;
+    if(next_page != Page::none)
+    {
+        if (signal.player_count)
+            player_count = *signal.player_count;
+        if (signal.gravity)
+            gravity = *signal.gravity;
+        if (signal.colors)
+            colors = *signal.colors;
+        if (signal.win_player_num)
+            win_player_num = *signal.win_player_num;
+    }
+    window.display();
+    if (signal.request_capture && *signal.request_capture)
+    {
+        capture_texture = sf::Texture(window.getSize()); 
+        capture_texture.update(window);
+        capture_sprite.setTexture(capture_texture, true);
+    }
 }

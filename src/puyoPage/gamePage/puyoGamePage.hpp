@@ -14,10 +14,16 @@
 class puyoGamePage : public puyoPage
 {
     private :
-        int count_down, count_down_time;
+        enum class Ready_status
+        {
+            ready,
+            start,
+            play
+        };
+        Ready_status ready_status;
         puyoPhasing phase;
         const Sprite PUYO_SPRITE, NUM_SPRITE, BOARD_SPRITE,COUNT_DOWN_BACK_SPRITE;
     public :
-        puyoGamePage(puyoFileSystem& pfs, int player_count);
-        Page proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
+        puyoGamePage(puyoFileSystem& pfs, int player_count, int gravity, int colors);
+        puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
 };

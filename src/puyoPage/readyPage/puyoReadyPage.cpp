@@ -10,7 +10,9 @@ using namespace std;
 using namespace sf;
 
 puyoReadyPage::puyoReadyPage(puyoFileSystem& pfs){}
-Page puyoReadyPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
+puyoPageSignal puyoReadyPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
-    return Page::none;
+    puyoPageSignal signal;
+    signal.next_page = Page::none;
+    return signal;
 }

@@ -8,7 +8,7 @@ using namespace std;
 
 puyoScoreCalc::puyoScoreCalc()
 {
-    obstruct_puyo_rate = 120;
+    obstruct_puyo_rate = 70;
     all_cleared_obstruct_puyo = 30;
     chain_bonus = {0,0,8,16,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512};
     link_bonus = {0,0,0,0,0,2,3,4,5,6,7,10}; // 11개 이상은 항상 10
@@ -32,5 +32,7 @@ pair<int,int> puyoScoreCalc::get_obstruct_puyo_count(int self_obstruct_puyo_coun
     return {self_obstruct_puyo_count,opp_obstruct_puyo_count};
 }
 int puyoScoreCalc::score_to_obstruct_puyo(int score){return score/obstruct_puyo_rate;}
+
 void puyoScoreCalc::set_obstruct_puyo_rate(int v){obstruct_puyo_rate = max(v,1);}
 int puyoScoreCalc::get_all_cleared_obstruct_puyo(){return all_cleared_obstruct_puyo;}
+int puyoScoreCalc::get_obstruct_puyo_for_dropping(int obstruct_puyo){return min(obstruct_puyo,30);}//30개가 넘으면 30개 단위로 떨어뜨림

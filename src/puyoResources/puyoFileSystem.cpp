@@ -22,16 +22,16 @@ fs::path puyoFileSystem::getExecutablePath()
         throw runtime_error("Unable to get executable path");
     return fs::canonical(path);
 }
-fs::path puyoFileSystem::getImgPath(string img)// 사용 안 함
+fs::path puyoFileSystem::getResourcesPath(string resource)
 {
-    return getExecutablePath().parent_path().parent_path() / ("Resources/assets/"+img);
+    return getExecutablePath().parent_path().parent_path() / ("Resources/assets/"+resource);
 }
 
 void puyoFileSystem::getAllTexture()
 {
-    const fs::path assetsPath = getExecutablePath().parent_path().parent_path() / "Resources/assets";
+    const fs::path imgPath = getResourcesPath("img");
     vector<fs::path> files;
-    for (const auto& entry : fs::directory_iterator(assetsPath))
+    for (const auto& entry : fs::directory_iterator(imgPath))
         if (entry.path().extension() == ".png")
             files.push_back(entry.path());
     sort(files.begin(), files.end());
@@ -51,17 +51,46 @@ void puyoFileSystem::getAllSprite()
 
 void puyoFileSystem::getFont()
 {
-    const fs::path fontPath = getExecutablePath().parent_path().parent_path() / "Resources/assets/puyo_font.ttf";
+    const fs::path fontPath = getResourcesPath("font/puyo_font.ttf");
     if (!font.openFromFile(fontPath.string()))
         throw runtime_error("Unable to load image");
 }
 
+void puyoFileSystem::getAllSound()
+{
+    const fs::path soundPath = getResourcesPath("sound");
+    vector<fs::path> files;
+    for (const auto& entry : fs::directory_iterator(soundPath))
+        if (entry.path().extension() == ".mp3")
+            files.push_back(entry.path());
+    sort(files.begin(), files.end());
+    for (const auto& path : files)
+    {
+        SoundBuffer buffer;
+        if (!buffer.loadFromFile(path.string()))
+            throw runtime_error("Unable to load sound");
+        buffers.push_back(buffer);
+    }
+}
+
+void puyoFileSystem::getAllMusicPath()
+{
+    const fs::path soundPath = getResourcesPath("music");
+    for (const auto& entry : fs::directory_iterator(soundPath))
+        if (entry.path().extension() == ".mp3")
+            musics.push_back(entry.path());
+    sort(musics.begin(), musics.end());
+}
 
 puyoFileSystem::puyoFileSystem()
 {
     getAllTexture();//모든 이미지 불러오기
     getAllSprite();
     getFont();
+    getAllSound();
+    getAllMusicPath();
 }
-Sprite puyoFileSystem::get_sprite(int name){return sprites[name];}
+Sprite puyoFileSystem::get_sprite(puyoFileSystem::Image name){return sprites[(int)name];}
 Font& puyoFileSystem::get_font(){return font;}
+sf::SoundBuffer& puyoFileSystem::get_buffer(puyoFileSystem::Sound name){return buffers[(int)name];}
+fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name){return musics[(int)name];}

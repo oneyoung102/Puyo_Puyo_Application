@@ -2,7 +2,6 @@
 #include <tuple>
 #include <utility>
 #include <queue>
-#include <random>
 
 #include "puyoBoard.hpp"
 #include "puyoTempPuyo/puyoGravityPuyo.hpp"
@@ -11,22 +10,22 @@
 using namespace std;
 
 
-puyoBoard::puyoBoard() : board_r(12), board_c(6), gen(random_device{}())
+puyoBoard::puyoBoard() : board_r(12), board_c(6), puyoObjectSignal()
 {
     dir = {
         {1,0},{-1,0},{0,1},{0,-1}
     };
     obstruct_puyo = 0;
     obstruct_puyo_max = 7776;
-    gravity_value = 350;
+    gravity_value = 310;
     vanish_value = 510;
     board = vector<vector<Type>>(board_r,vector<Type>(board_c,Type::blank));
     gravity_puyo_is_out_in_board = false;
 
     puyo_count = 0;
     chain_count = 0;
-    all_cleared_signal = false;
-    chain_signal = false;
+    temp_obstruct_puyo = 0;
+    approvement_for_obstruct_puyo = false;
 }
 
 pair<float,float> puyoBoard::get_puyo_spawn_pos(){return make_pair(puyo_spawn_x,puyo_spawn_y);}
@@ -95,6 +94,7 @@ void puyoBoard::vanish_vanish_puyo()
         {
             std::swap(vanish_puyos[i], vanish_puyos.back());
             vanish_puyos.pop_back();
+            signals[(int)puyoBoardSignal::vanished] = true;
         }
         else
         {
@@ -107,7 +107,7 @@ void puyoBoard::vanish_vanish_puyo()
 int puyoBoard::get_chain_count(){return chain_count;}
 void puyoBoard::add_chain_count()
 {
-    chain_signal = true;
+    signals[(int)puyoBoardSignal::chain] = true;
     ++chain_count;
 }
 void puyoBoard::reset_chain_count(){chain_count = 0;}
@@ -190,10 +190,11 @@ void puyoBoard::find_vanish_puyo()
                         coords.push(make_pair(nr,nc));
                 }
             }
-            if(stored_puyos.size()-obstruct_puyo_counting >= condition_for_vanish)
+            const int puyo_count_except_obsp = stored_puyos.size()-obstruct_puyo_counting;
+            if(puyo_count_except_obsp >= condition_for_vanish)
             {
-                puyo_count += stored_puyos.size();
-                link_count.push_back((int)stored_puyos.size());
+                puyo_count += puyo_count_except_obsp;
+                link_count.push_back(puyo_count_except_obsp);
                 color_count.insert(puyo);// 방해 뿌요는 종류에 포함 안 시킴
 
                 for(const auto [r,c,type] : stored_puyos)
@@ -227,33 +228,33 @@ void puyoBoard::find_future_puyos(puyoPlayPuyo& puyo)
 void puyoBoard::remove_future_puyos(){future_puyos.clear();}
 
 void puyoBoard::give_obstruct_puyo(int count){obstruct_puyo = min(max(0,obstruct_puyo+count),obstruct_puyo_max);}
-void puyoBoard::spawn_obstruct_puyo()
+void puyoBoard::spawn_obstruct_puyo(int obstruct_puyo_for_dropping)
 {
-    int rest = obstruct_puyo%board_c;
-    obstruct_puyo = min(obstruct_puyo,board_r*board_c);
-    int obstruct_floor = obstruct_puyo - rest, r = -1;
-    while(obstruct_floor > 0)
+    if(!approvement_for_obstruct_puyo || obstruct_puyo_for_dropping == 0)
+        return;
+    approvement_for_obstruct_puyo = false;
+
+    signals[(int)puyoBoardSignal::spawn_obsp] = true;
+    temp_obstruct_puyo = obstruct_puyo_for_dropping;
+    vector<int> obstruct_puyo_height(board_c,0);
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq; // {height,col}
+    for(int i = 0 ; i < board_c ; ++i)
+        for(int j = 0 ; j <= board_r ; ++j)
+            if(j == board_r || board[j][i] != Type::blank)
+            {
+                pq.push(make_pair(board_r-j,i));
+                break;
+            }
+    while(obstruct_puyo_for_dropping > 0)
     {
-        for(int c = 0 ; c < board_c ; ++c)
-            gravity_puyos.push_back(puyoGravityPuyo(c,r,(int)Type::obstruct,gravity_value));
-        obstruct_floor -= board_c;
-        --r;
+        const auto [height,col] = pq.top();
+        pq.pop();
+        --obstruct_puyo_for_dropping;
+        --obstruct_puyo;
+        gravity_puyos.push_back(puyoGravityPuyo(col,-obstruct_puyo_height[col]-1,(int)Type::obstruct,gravity_value));
+        ++obstruct_puyo_height[col];
+        pq.push(make_pair(height+1,col));
     }
-    if(rest != 0)
-    {
-        vector<bool> used(board_c,false);
-        while(rest > 0)
-        {
-            uniform_int_distribution<> rand_c(0, board_c-1);
-            const int col = rand_c(gen);
-            if(used[col])
-                continue;
-            used[col] = true;
-            gravity_puyos.push_back(puyoGravityPuyo(col,r,(int)Type::obstruct,gravity_value));
-            --rest;
-        }
-    }
-    obstruct_puyo = 0;
 }
 bool puyoBoard::not_existed_obstructed_puyo(){return obstruct_puyo == 0;}
 int& puyoBoard::get_obstruct_puyo(){return obstruct_puyo;}
@@ -266,9 +267,10 @@ bool puyoBoard::is_all_cleared()
     for(const auto puyo : board.back())
         if(puyo != Type::blank)
             return false;
-    all_cleared_signal = true;
+    signals[(int)puyoBoardSignal::all_cleared] = true;
     return true;
 }
 
-bool puyoBoard::chain_signal_for_printing(){return exchange(chain_signal,false);}
-bool puyoBoard::all_cleared_signal_for_printing(){return exchange(all_cleared_signal,false);}
+int puyoBoard::get_temp_obstruct_puyo_for_sounding(){return exchange(temp_obstruct_puyo,0);}
+void puyoBoard::approve_spawn_obstruct_puyo(){approvement_for_obstruct_puyo = true;}
+

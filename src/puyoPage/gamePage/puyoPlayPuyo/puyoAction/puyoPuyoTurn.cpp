@@ -16,16 +16,16 @@ bool puyoPuyoTurn::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
     if(round(x1) == round(x2))
     {
-        if(y1 > y2)
+        if(y1 < y2)
             return !puyo.puyo_touched(board,floor(x1)+1,floor(y1)) && !puyo.puyo_touched(board,floor(x1)+1,ceil(y1)) && !puyo.puyo_touched(board,ceil(x1)+1,y1) && !puyo.puyo_touched(board,floor(x2)+1,y2);
-        else if(y1 < y2)
+        else if(y1 > y2)
             return !puyo.puyo_touched(board,floor(x1)-1,floor(y1)) && !puyo.puyo_touched(board,floor(x1)-1,ceil(y1)) && !puyo.puyo_touched(board,ceil(x1)-1,y1) && !puyo.puyo_touched(board,floor(x2)-1,y2);
     }
     else if(round(y1) == round(y2))
     {
-        if(x1 < x2)
+        if(x1 > x2)
             return !puyo.puyo_touched(board,x1,floor(y1)+1) && !puyo.puyo_touched(board,x1,ceil(y1)+1) && !puyo.puyo_touched(board,x2,floor(y2)+1);
-        else if(x1 > x2)
+        else if(x1 < x2)
             return !puyo.puyo_touched(board,x1,floor(y1)-1) && !puyo.puyo_touched(board,x1,ceil(y1)-1) && !puyo.puyo_touched(board,x2,floor(y2)-1);
     }
     return false;
@@ -46,13 +46,13 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
             puyoPuyoUp up(act_count_constant,up_gap);
                 if(round(x1) == round(x2))
                 {
-                    if(y1 > y2)
+                    if(y1 < y2)
                     {
                         left.let_act();
                         if(left.decline_act(board,puyo))
                             sub_act = new puyoPuyoLeft(act_count_constant,left_gap);
                     }
-                    else if(y1 < y2)
+                    else if(y1 > y2)
                     {
                         right.let_act();
                         if(right.decline_act(board,puyo))
@@ -61,10 +61,10 @@ bool puyoPuyoTurn::decline_act(puyoBoard& board,puyoPlayPuyo& puyo)
                 }
                 else if(round(y1) == round(y2))
                 {
-                    /*if(x1 > x2 && down.decline_act(board,puyo))
+                    /*if(x1 < x2 && down.decline_act(board,puyo))
                         sub_act = new puyoPuyoDown(act_count_constant,1);
                     */
-                    if(x1 < x2)
+                    if(x1 > x2)
                     {
                         up.let_act();
                         if(up.decline_act(board,puyo))
@@ -89,9 +89,9 @@ void puyoPuyoTurn::arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y
         puyo.move_puyo(round(x1),y1,round(x2),y1);
     if(round(start_y1) == round(start_y2))
     {
-        if(start_x1 < start_x2)
-            puyo.move_puyo(round(x1),y1,round(x1),y1+1);
         if(start_x1 > start_x2)
+            puyo.move_puyo(round(x1),y1,round(x1),y1+1);
+        else if(start_x1 < start_x2)
             puyo.move_puyo(round(x1),y1,round(x1),y1-1);
 
     }

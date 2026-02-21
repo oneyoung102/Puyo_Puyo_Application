@@ -286,5 +286,11 @@
   "command": "/usr/bin/c++  -I/Users/jangoneyoung/puyo_project/src -isystem /opt/homebrew/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoPrinting.cpp.o -c /Users/jangoneyoung/puyo_project/src/puyoResources/puyoPrinting.cpp",
   "file": "/Users/jangoneyoung/puyo_project/src/puyoResources/puyoPrinting.cpp",
   "output": "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoPrinting.cpp.o"
+},
+{
+  "directory": "/Users/jangoneyoung/puyo_project/build",
+  "command": "/usr/bin/c++  -I/Users/jangoneyoung/puyo_project/src -isystem /opt/homebrew/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.o -c /Users/jangoneyoung/puyo_project/src/puyoResources/puyoSounding.cpp",
+  "file": "/Users/jangoneyoung/puyo_project/src/puyoResources/puyoSounding.cpp",
+  "output": "CMakeFiles/puyo_puyo.dir/src/puyoResources/puyoSounding.cpp.o"
 }
 ]

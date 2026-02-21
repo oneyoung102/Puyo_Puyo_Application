@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 
 enum class Page
 {
@@ -6,8 +7,19 @@ enum class Page
     opening,
     menu,
     ready,
-    game_1_player,
-    game_2_player,
-    game_with_bot,
+    game,
     ending
+};
+
+struct puyoPageSignal
+{
+    Page next_page = Page::none;
+
+    std::optional<int> player_count;
+    std::optional<int> gravity;
+    std::optional<int> colors;
+
+    std::optional<int> win_player_num;
+
+    std::optional<bool> request_capture;
 };

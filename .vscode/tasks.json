@@ -32,6 +32,8 @@
                 "src/puyoResources/printObject/gamePage/puyoPrintScore.cpp",
                 "src/puyoResources/printObject/gamePage/puyoPrintObstructViewer.cpp",
 
+                "src/puyoResources/puyoSounding.cpp",
+
 
                 "src/puyoPage/puyoPageManager.cpp",
                 "src/puyoPage/puyoPage.cpp",
@@ -76,7 +78,8 @@
                 "-L/opt/homebrew/lib",
                 "-lsfml-graphics",
                 "-lsfml-window",
-                "-lsfml-system"
+                "-lsfml-system",
+                "-lsfml-audio"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
