@@ -12,7 +12,6 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
-#include <queue>
 
 using namespace std;
 using namespace puyoImageConstant;
@@ -72,6 +71,7 @@ void puyoPhasing::set_game(float spawn_x, float spawn_y, int condition, int grav
         player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
     }
 }
+
 void puyoPhasing::proceed_game()
 {
     for(auto&& player : players)
@@ -81,21 +81,27 @@ void puyoPhasing::proceed_game()
         const int player_num = player->get_player_num();
         
         wait(player_num);
-        int obstruct_puyo_count = 0;//상대에게 넘길 방해 뿌요
+        int obstruct_puyo_count = 0/*상대에게 넘길 방해 뿌요*/, added_score = 0;
         switch(get_phase(board))
         {
             case Phase::play :
                 if(is_delayed(player_num))
                     break;
+                if(player->is_bot())//봇이라면 행동
+                    player->act_bot_let();
+
                 board.find_future_puyos(puyo);
                 puyo.gravity_let(board);
                 puyo.act_let(board);
+                if(puyo.is_down())
+                    ++added_score;
                 if(puyo.is_dropped())
                 {
                     board.remove_future_puyos();
+                    added_score += puyo.get_drop_height(board);
                     board.push_gravity_puyo(puyo.to_gravity_puyo());
                     player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
-                    player->set_play_puyo_dropped();
+                    player->sign_play_puyo_dropped();
                     board.reset_chain_count();
                     board.approve_spawn_obstruct_puyo();
                 }
@@ -115,8 +121,7 @@ void puyoPhasing::proceed_game()
                     {
                         board.add_chain_count();
                         const int add_score = calc.get_add_score(board.get_puyo_count(),board.get_chain_count(),board.get_link_count(),board.get_color_count());
-                        player->add_score(add_score);
-                        obstruct_puyo_count += calc.score_to_obstruct_puyo(add_score);
+                        added_score += add_score;
                     }
                 }
                 break;
@@ -130,13 +135,15 @@ void puyoPhasing::proceed_game()
                     {
                         delay(player_num,1200);
                         if(board.is_all_cleared())
-                            obstruct_puyo_count += calc.get_all_cleared_obstruct_puyo();
+                            obstruct_puyo_count += calc.get_all_cleared_obstruct_puyo();//올클리어 보너스
                     }
                 }
                 break;
         };
-        if(players.size() != 1 && obstruct_puyo_count > 0) //방해 뿌요 연산
+        player->add_score(added_score);
+        if(players.size() != 1) //방해 뿌요 연산
         {
+            obstruct_puyo_count += calc.score_to_obstruct_puyo(added_score);
             const auto[self,opp] = calc.get_obstruct_puyo_count(obstruct_puyo_count,board.get_obstruct_puyo());
             board.give_obstruct_puyo(-self);
             const int opposite = player_num^1;

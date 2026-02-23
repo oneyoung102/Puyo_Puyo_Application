@@ -2,8 +2,6 @@
 
 #include <tuple>
 #include <utility>
-#include <cmath>
-#include <functional>
 #include <memory>
 
 #include "../puyoTempPuyo/puyoGravityPuyo.hpp"
@@ -30,7 +28,7 @@ enum class puyoPlayPuyoSignal
 class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어가 움직이는 뿌요
 {
     private :
-        enum class Act_num
+        enum class Act_type
         {
             left,
             right,
@@ -47,6 +45,7 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
 
         shared_ptr<puyoPuyoAct> action; //명령이 들어온 행동
         
+        bool taken_down_let;//아래 이동 명령 접수 여부
 
         int gravity_value;
 
@@ -55,9 +54,10 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
 
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);
-        bool is_dropped();
         bool is_down();
+        bool is_dropped();
         bool is_holding();
+        int get_drop_height(puyoBoard& board);
 
         vector<puyoGravityPuyo> to_gravity_puyo();
 
@@ -73,4 +73,6 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         void let_up();
         void let_turn();
         void let_drop();
+
+        bool is_moving();
 };

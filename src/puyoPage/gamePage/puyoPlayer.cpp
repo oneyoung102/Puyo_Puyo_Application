@@ -2,12 +2,13 @@
 #include "puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPlayer.hpp"
 
+#include <cstddef>
 #include <vector>
 #include <functional>
 
 using namespace std;
 
-puyoPlayer::puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p)
+puyoPlayer::puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p, bool temp_player_is_bot)
     : board(std::move(b)),
     puyo(std::move(p)),//처음에는 쓰레기값
     puyoObjectSignal()
@@ -18,6 +19,12 @@ puyoPlayer::puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p)
         throw runtime_error("Player number is not 0 or 1");
     player_num = pn;
     new_puyo_count = 0;
+
+    player_is_bot = temp_player_is_bot;
+    if(player_is_bot)
+        bot_algorithm = std::move(make_unique<puyoBotAlgorithm>());
+    else
+        bot_algorithm = nullptr;
 }
 
 int puyoPlayer::get_player_num(){return player_num;}
@@ -50,4 +57,13 @@ function<void()> puyoPlayer::get_let_down(){return [this](){return get_puyo().le
 function<void()> puyoPlayer::get_let_turn(){return [this](){return get_puyo().let_turn();};}
 function<void()> puyoPlayer::get_let_drop(){return [this](){return get_puyo().let_drop();};}
 
-void puyoPlayer::set_play_puyo_dropped(){signals[(int)puyoPlayerSignal::puyo_dropped] = true;}
+void puyoPlayer::sign_play_puyo_dropped(){signals[(int)puyoPlayerSignal::puyo_dropped] = true;}
+
+bool puyoPlayer::is_bot(){return player_is_bot;}
+void puyoPlayer::act_bot_let()
+{
+    if(bot_algorithm->bot_lets_empty())
+        bot_algorithm->think_perfect_lets(board, puyo);
+    else
+        bot_algorithm->let_bot_act(puyo);
+}

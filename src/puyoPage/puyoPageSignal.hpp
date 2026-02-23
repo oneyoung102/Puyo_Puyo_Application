@@ -10,12 +10,18 @@ enum class Page
     game,
     ending
 };
+enum Play_mode
+{
+    solo,
+    dual,
+    bot
+};
 
 struct puyoPageSignal
 {
     Page next_page = Page::none;
 
-    std::optional<int> player_count;
+    std::optional<Play_mode> play_mode;
     std::optional<int> gravity;
     std::optional<int> colors;
 

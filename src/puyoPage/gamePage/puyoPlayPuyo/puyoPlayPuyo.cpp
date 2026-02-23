@@ -16,7 +16,6 @@
 
 #include <tuple>
 #include <utility>
-#include <cmath>
 #include <memory>
 #include <algorithm>
 
@@ -41,6 +40,8 @@ puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int
     tie(x2,y2) = make_pair(spawn_pos.first,spawn_pos.second-1);
     tie(color1,color2) = color;
 
+    taken_down_let = false;
+
     gravity_value = 150;//드롭 이후에 중력 상수
 }
 
@@ -52,6 +53,8 @@ void puyoPlayPuyo::act_let(puyoBoard& board)
         for(auto&& act : acts)//행동 찾기
             if(act->is_acting() && act->decline_act(board,*this))
             {
+                if(act == acts[(int)Act_type::down])
+                    taken_down_let = true;
                 action = act;
                 signals[(int)puyoPlayPuyoSignal::puyo_move] = true;
                 break;
@@ -83,13 +86,24 @@ void puyoPlayPuyo::gravity_let(puyoBoard& board)
             stay->more_stay();
     }
 }
-
+bool puyoPlayPuyo::is_down(){return exchange(taken_down_let,false);}
 bool puyoPlayPuyo::is_dropped()
 {
     return action == nullptr && stay->is_destroyed()
-                    || acts[(unsigned int)puyoPlayPuyo::Act_num::drop]->is_acting();
+                    || acts[(unsigned int)Act_type::drop]->is_acting();
 }
 bool puyoPlayPuyo::is_holding(){return !gravity->is_acting();}
+
+int puyoPlayPuyo::get_drop_height(puyoBoard& board)
+{
+    const auto[board_r,board_c] = board.get_board_size();
+    int iy1 = y1, iy2 = y2;
+    for(int dy = 1 ; dy < board_r ; ++dy)
+        if(!board.is_in_board(iy1+dy,x1) || puyo_touched(board,x1,iy1+dy)
+        || !board.is_in_board(iy2+dy,x2) || puyo_touched(board,x2,iy2+dy))
+            return dy;
+    return 0;
+}
 
 vector<puyoGravityPuyo> puyoPlayPuyo::to_gravity_puyo()
 {
@@ -121,9 +135,11 @@ void puyoPlayPuyo::move_puyo(float to_x1, float to_y1, float to_x2, float to_y2)
 }
 pair<int,int> puyoPlayPuyo::get_puyo_color(){return make_pair(color1,color2);}
 
-void puyoPlayPuyo::let_left(){acts[(unsigned int)puyoPlayPuyo::Act_num::left]->let_act();}
-void puyoPlayPuyo::let_right(){acts[(unsigned int)puyoPlayPuyo::Act_num::right]->let_act();}
-void puyoPlayPuyo::let_down(){acts[(unsigned int)puyoPlayPuyo::Act_num::down]->let_act();}
+void puyoPlayPuyo::let_left(){acts[(unsigned int)puyoPlayPuyo::Act_type::left]->let_act();}
+void puyoPlayPuyo::let_right(){acts[(unsigned int)puyoPlayPuyo::Act_type::right]->let_act();}
+void puyoPlayPuyo::let_down(){acts[(unsigned int)puyoPlayPuyo::Act_type::down]->let_act();}
 //void puyoPlayPuyo::let_up(){acts[]->let_act();}
-void puyoPlayPuyo::let_turn(){acts[(unsigned int)puyoPlayPuyo::Act_num::turn]->let_act();}
-void puyoPlayPuyo::let_drop(){acts[(unsigned int)puyoPlayPuyo::Act_num::drop]->let_act();}
+void puyoPlayPuyo::let_turn(){acts[(unsigned int)puyoPlayPuyo::Act_type::turn]->let_act();}
+void puyoPlayPuyo::let_drop(){acts[(unsigned int)puyoPlayPuyo::Act_type::drop]->let_act();}
+
+bool puyoPlayPuyo::is_moving(){return action != nullptr;}

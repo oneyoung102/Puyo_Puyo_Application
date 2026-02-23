@@ -5,9 +5,9 @@
 
 #include <mach-o/dyld.h>
 #include <vector>
-#include <climits>
 #include <filesystem>
 #include <string>
+#include <random>
 
 using namespace sf;
 using namespace std;
@@ -21,6 +21,8 @@ class puyoFileSystem
         vector<Sprite> sprites;
         vector<sf::SoundBuffer> buffers;
         vector<fs::path> musics;
+
+        mt19937 gen;
 
         Font font;
         fs::path getExecutablePath();
@@ -62,10 +64,19 @@ class puyoFileSystem
         };
         enum class Music{//음악 명
             main_menu = 0,
-            game_playing
+            character_select,
+            game_music1, //faeri fire!
+            game_music2, //more beautiful more strong
+            game_music3, // in the middle of stroll
+            game_music4, // i'm the greatest ever
+            game_music5, // the twin ghosts are super
+            game_music6, // doens't matter who it is 
+            game_music7, // let's dancing together
+
         };
         Sprite get_sprite(Image name);
         Font& get_font();
         sf::SoundBuffer& get_buffer(Sound name);
         fs::path& get_music(Music name);
+        fs::path& get_random_music();
 };

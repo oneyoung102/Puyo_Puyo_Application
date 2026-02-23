@@ -262,13 +262,21 @@ int& puyoBoard::get_obstruct_puyo(){return obstruct_puyo;}
 void puyoBoard::set_condition_for_vanish(int amount){condition_for_vanish = amount;}
 int puyoBoard::get_condition_for_vanish(){return condition_for_vanish;}
 
-bool puyoBoard::is_all_cleared()
+bool puyoBoard::is_empty()
 {
     for(const auto puyo : board.back())
         if(puyo != Type::blank)
             return false;
-    signals[(int)puyoBoardSignal::all_cleared] = true;
     return true;
+}
+bool puyoBoard::is_all_cleared()
+{
+    if(is_empty())
+    {
+        signals[(int)puyoBoardSignal::all_cleared] = true;
+        return true;
+    }
+    return false;
 }
 
 int puyoBoard::get_temp_obstruct_puyo_for_sounding(){return exchange(temp_obstruct_puyo,0);}

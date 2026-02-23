@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "../puyoPageSignal.hpp"
-#include "../puyoPage.hpp"
 #include "puyoGamePage.hpp"
 
 #include "puyoPlayer.hpp"
@@ -35,13 +34,13 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count, int gravity, int colors) 
+puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int gravity, int colors) 
     : PUYO_SPRITE(pfs.get_sprite(puyoFileSystem::Image::puyo))
     , NUM_SPRITE(pfs.get_sprite(puyoFileSystem::Image::num))
     , BOARD_SPRITE(pfs.get_sprite(puyoFileSystem::Image::board))
     , COUNT_DOWN_BACK_SPRITE(pfs.get_sprite(puyoFileSystem::Image::black_back))
 {
-    auto player0 = make_unique<puyoPlayer>(0, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1));
+    auto player0 = make_unique<puyoPlayer>(0, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1),false);
     pl.allot_key((int)(Keyboard::Key::A),player0->get_let_left());
     pl.allot_key((int)(Keyboard::Key::S),player0->get_let_down());
     pl.allot_key((int)(Keyboard::Key::D),player0->get_let_right());
@@ -49,9 +48,9 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count, int gravity, i
     pl.allot_key((int)(Keyboard::Key::LShift),player0->get_let_drop());
     phase.add_player(std::move(player0));
 
-    if(player_count == 2)
+    if(play_mode == Play_mode::dual)
     {
-        auto player1 = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1));
+        auto player1 = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1),false);
         pl.allot_key((int)(Keyboard::Key::Left),player1->get_let_left());
         pl.allot_key((int)(Keyboard::Key::Down),player1->get_let_down());
         pl.allot_key((int)(Keyboard::Key::Right),player1->get_let_right());
@@ -59,8 +58,14 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count, int gravity, i
         pl.allot_key((int)(Keyboard::Key::RShift),player1->get_let_drop());
         phase.add_player(std::move(player1));
     }
-    phase.set_game(2,-1.5, 4,1800,2000,4);
+    else if(play_mode == Play_mode::bot)
+    {
+        auto bot = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1),true);
+        phase.add_player(std::move(bot));
+    }
+    phase.set_game(2,-0.9, 4,1800,2000,4);
 
+    
     pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),BOARD_SPRITE,0,0,-1));
     for(auto&& player : phase.get_players())
     {
@@ -94,7 +99,6 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, int player_count, int gravity, i
 puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
     puyoPageSignal signal;
-
     ps.manage_all_sounds();
     pp.print_all_objects(window);
     pp.print_all_texts(window);
@@ -109,7 +113,7 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
             if(pp.not_existed_print_text())
             {
                 pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,3000));
-                ps.play_music(pfs.get_music(puyoFileSystem::Music::game_playing));
+                ps.play_music(pfs.get_random_music());
                 ready_status = Ready_status::play;
             }
             break;

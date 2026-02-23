@@ -1,14 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include "../puyoPageSignal.hpp"
-#include "../puyoPage.hpp"
 #include "puyoMenuPage.hpp"
 #include "../../puyoResources/printObject/puyoPrintObject.hpp"
-#include "../../puyoResources/printText/puyoPrintText.hpp"
 #include "../../puyoResources/puyoFileSystem.hpp"
 #include "../../puyoResources/puyoPrinting.hpp"
 #include "../../puyoResources/puyoImageConstant.hpp"
 
-#include "../puyoLet.hpp"
 #include <memory>
 
 using namespace std;

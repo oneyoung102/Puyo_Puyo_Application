@@ -3,7 +3,6 @@
 #include <mach-o/dyld.h>
 #include <vector>
 #include <algorithm>
-#include <climits>
 #include <filesystem>
 #include <string>
 
@@ -14,7 +13,7 @@ using namespace std;
 
 namespace fs = std::filesystem;
 
-fs::path puyoFileSystem::getExecutablePath()
+fs::path puyoFileSystem::getExecutablePath() 
 {
     char path[PATH_MAX];
     uint32_t size = sizeof(path);
@@ -82,7 +81,7 @@ void puyoFileSystem::getAllMusicPath()
     sort(musics.begin(), musics.end());
 }
 
-puyoFileSystem::puyoFileSystem()
+puyoFileSystem::puyoFileSystem() : gen(random_device{}())
 {
     getAllTexture();//모든 이미지 불러오기
     getAllSprite();
@@ -94,3 +93,8 @@ Sprite puyoFileSystem::get_sprite(puyoFileSystem::Image name){return sprites[(in
 Font& puyoFileSystem::get_font(){return font;}
 sf::SoundBuffer& puyoFileSystem::get_buffer(puyoFileSystem::Sound name){return buffers[(int)name];}
 fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name){return musics[(int)name];}
+fs::path& puyoFileSystem::get_random_music()
+{
+    uniform_int_distribution<> dist((int)Music::game_music1, (int)Music::game_music7);
+    return musics[dist(gen)];
+}

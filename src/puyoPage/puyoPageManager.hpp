@@ -4,7 +4,6 @@
 #include "puyoPageSignal.hpp"
 #include "puyoPage.hpp"
 #include "../puyoResources/puyoFileSystem.hpp"
-#include "puyoLet.hpp"
 
 #include <memory>
 
@@ -14,7 +13,8 @@ class puyoPageManager
         puyoFileSystem pfs;
         std::unique_ptr<puyoPage> curr_page;
         Page next_page;
-        int player_count, gravity, colors, win_player_num;
+        Play_mode play_mode;
+        int gravity, colors, win_player_num;
 
         sf::Texture capture_texture;
         sf::Sprite capture_sprite;

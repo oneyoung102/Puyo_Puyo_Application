@@ -3,10 +3,11 @@
 #include "puyoBoard.hpp"
 #include "puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "../puyoObjectSignal.hpp"
+#include "puyoBotAlgorithm.hpp"
 
-#include <vector>
 #include <utility>
 #include <functional>
+#include <memory>
 
 using namespace std;
 
@@ -27,10 +28,12 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         int new_puyo_count;
 
         int puyo_gravity_value,puyo_stay_value;
+        bool player_is_bot;
+        unique_ptr<puyoBotAlgorithm> bot_algorithm;
 
     public :
 
-        puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p);
+        puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p,bool temp_player_is_bot);
 
 
         int get_player_num();
@@ -59,5 +62,8 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         function<void()> get_let_turn();
         function<void()> get_let_drop();
 
-        void set_play_puyo_dropped();
+        void sign_play_puyo_dropped();
+
+        bool is_bot();
+        void act_bot_let();
 };

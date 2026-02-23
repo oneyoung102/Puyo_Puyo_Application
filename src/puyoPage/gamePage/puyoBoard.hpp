@@ -107,6 +107,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         bool not_existed_vanish_puyo();
         bool gravity_puyo_is_out();
 
+        bool is_empty();
         bool is_all_cleared();
 
         int get_temp_obstruct_puyo_for_sounding();

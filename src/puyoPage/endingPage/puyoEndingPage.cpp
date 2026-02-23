@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "../puyoPageSignal.hpp"
-#include "../puyoPage.hpp"
 #include "puyoEndingPage.hpp"
 
 #include "../../puyoResources/puyoFileSystem.hpp"
