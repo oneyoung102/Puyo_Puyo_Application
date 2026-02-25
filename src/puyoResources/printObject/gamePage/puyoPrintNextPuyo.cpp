@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPrintNextPuyo.hpp"
-#include "../../../puyoPage/gamePage/puyoPhasing.hpp"
 #include "../../puyoImageConstant.hpp"
 
 using namespace puyoImageConstant;
+using namespace std;
 
 puyoPrintNextPuyo::puyoPrintNextPuyo(int pn, int& npc, vector<pair<int,int>>& nc, Sprite puyo, int x, int y, int life)
     : puyoPrintObject(puyo,x,y,life),
@@ -11,12 +11,6 @@ puyoPrintNextPuyo::puyoPrintNextPuyo(int pn, int& npc, vector<pair<int,int>>& nc
     new_puyo_count(npc)
 {
     player_num = pn;
-}
-void puyoPrintNextPuyo::print_puyo(RenderWindow& w, int img_x, int img_y,int px, int py)
-{
-    img_x = PUYO_SIZE*img_x, img_y = PUYO_SIZE*img_y;
-    sprite.setTextureRect(IntRect({img_x, img_y}, {PUYO_SIZE, PUYO_SIZE})); 
-    print_sprite(w,px,py);
 }
 
 void puyoPrintNextPuyo::print_object(RenderWindow& w)

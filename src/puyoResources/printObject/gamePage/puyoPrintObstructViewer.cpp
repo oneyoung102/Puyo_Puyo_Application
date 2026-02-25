@@ -3,9 +3,6 @@
 #include "../../puyoImageConstant.hpp"
 
 using namespace puyoImageConstant;
-
-#include <vector>
-
 using namespace std;
 
 puyoPrintObstructViewer::puyoPrintObstructViewer(int& op, Sprite puyo, int x, int y, int life)

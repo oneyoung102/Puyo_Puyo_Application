@@ -8,12 +8,6 @@ using namespace puyoImageConstant;
 
 puyoPrintVanishPuyo::puyoPrintVanishPuyo(vector<puyoVanishPuyo>& vp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), vanish_puyos(vp){}
 
-void puyoPrintVanishPuyo::print_puyo(RenderWindow& w, int img_x, int img_y, int px, int py)
-{
-    img_x = PUYO_SIZE*img_x, img_y = PUYO_SIZE*img_y;
-    sprite.setTextureRect(IntRect({img_x, img_y}, {PUYO_SIZE, PUYO_SIZE})); 
-    print_sprite(w,px,py);
-}
 
 void puyoPrintVanishPuyo::print_object(RenderWindow& w)
 {
@@ -27,10 +21,12 @@ void puyoPrintVanishPuyo::print_object(RenderWindow& w)
             print_puyo(w,OBSTRUCT_VANISH_PUYO_X,OBSTRUCT_VANISH_PUYO_Y,px,py);
         else
         {
-            if(vanish_puyo.vanish_soon())
-                print_puyo(w,VANISH_PUYO_X+2*puyo,VANISH_PUYO_Y,px,py);
+            if(vanish_puyo.vanish_stay())
+                print_puyo(w,VANISH_STAY_PUYO_X+2*puyo,VANISH_STAY_PUYO_Y,px,py);
+            else if(vanish_puyo.vanish_soon())
+                print_puyo(w,VANISH_SOON_PUYO_X+2*puyo,VANISH_SOON_PUYO_Y,px,py);
             else
-                print_puyo(w,VANISH_PUYO_X+2*puyo+1,VANISH_PUYO_Y,px,py);
+                print_puyo(w,VANISH_SOON_PUYO_X+2*puyo+1,VANISH_SOON_PUYO_Y,px,py);
         }
     }
 }

@@ -37,8 +37,25 @@ void puyoPrinting::print_all_texts(RenderWindow& window)
             print_texts.pop_back();
         }
 }
+void puyoPrinting::print_all_buttons(RenderWindow& window)
+{
+    for(int i = 0 ; i < print_buttons.size() ; )
+        if(print_buttons[i]->is_alive())
+        {
+            print_buttons[i]->print_button(window);
+            ++i;
+        }
+        else
+        {
+            std::swap(print_buttons[i], print_buttons.back());
+            print_buttons.pop_back();
+        }
+}
 
 void puyoPrinting::add_print_object(unique_ptr<puyoPrintObject>&& object){print_objects.push_back(std::move(object));}
 void puyoPrinting::add_print_text(unique_ptr<puyoPrintText>&& text){print_texts.push_back(std::move(text));}
+void puyoPrinting::add_print_button(unique_ptr<puyoPrintButton>&& button){print_buttons.push_back(std::move(button));}
+
 bool puyoPrinting::not_existed_print_object(){return print_objects.empty();}
 bool puyoPrinting::not_existed_print_text(){return print_texts.empty();}
+bool puyoPrinting::not_existed_print_button(){return print_buttons.empty();}

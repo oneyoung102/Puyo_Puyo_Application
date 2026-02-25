@@ -23,3 +23,4 @@ void puyoVanishPuyo::vanish_let(puyoBoard& board) //
         vanish->act_puyo(*this);
 }
 bool puyoVanishPuyo::vanish_soon(){return vanish->vanish_soon();}
+bool puyoVanishPuyo::vanish_stay(){return vanish->vanish_stay();}

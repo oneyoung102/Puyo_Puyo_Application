@@ -29,4 +29,5 @@ void puyoPuyoVanish_temp::act_puyo(puyoTempPuyo& puyo)
     ++act_count;
 };
 
-bool puyoPuyoVanish_temp::vanish_soon(){return act_count*2 > act_count_init;}
+bool puyoPuyoVanish_temp::vanish_soon(){return act_count < act_count_init*0.85;}
+bool puyoPuyoVanish_temp::vanish_stay(){return act_count < act_count_init*0.7;}

@@ -60,7 +60,11 @@ class puyoFileSystem
             chain5,
             chain6,
             chain7high,
-            victory 
+            all_clear,
+            ready,
+            start,
+            victory,
+            lose
         };
         enum class Music{//음악 명
             main_menu = 0,
@@ -72,6 +76,12 @@ class puyoFileSystem
             game_music5, // the twin ghosts are super
             game_music6, // doens't matter who it is 
             game_music7, // let's dancing together
+            game_music8, // Chearful Puyo
+            game_music9, // Rising Comet!
+            game_music10, // FEVER! FEVER! FEVER!
+            game_music11, // Combat Queen Rulue-sama
+
+            victory,//99번
 
         };
         Sprite get_sprite(Image name);

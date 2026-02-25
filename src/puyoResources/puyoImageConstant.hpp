@@ -20,15 +20,16 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
         const float FUTURE_PUYO_ALPHA_VALUE = 0.7;
 
-        const int GRAVITY_PUYO_X = 4, GRAVITY_PUYO_Y = 13;
-        const int VANISH_PUYO_X = 6, VANISH_PUYO_Y = 10;
+        const int DROPPING_PUYO_X = 4, DROPPING_PUYO_Y = 13;
+        const int GRAVITY_PUYO_X = 5, GRAVITY_PUYO_Y = 11;
+        const int VANISH_SOON_PUYO_X = 6, VANISH_SOON_PUYO_Y = 10, VANISH_STAY_PUYO_X = 0, VANISH_STAY_PUYO_Y = 12;
 
         const int SPAWN_SPOT_STATE_MAX = 5; 
-        const int SPAWN_SPOT_STATE_X = 7, SPAWN_SPOT_STATE_Y = 12;  //이미지 위치 
+        const int SPAWN_SPOT_STATE_X = 11, SPAWN_SPOT_STATE_Y = 12;  //이미지 위치 
 
-        const int OBSTRUCT_PUYO_X = 6, OBSTRUCT_PUYO_Y = 12;
-        const int OBSTRUCT_VANISH_PUYO_X = 6, OBSTRUCT_VANISH_PUYO_Y = 15;
-        const int OBSTRUCT_PUYOS_X = 10, OBSTRUCT_PUYOS_Y = 11; //방해 뿌요 뷰어에 사용되는 이미지
+        const int OBSTRUCT_PUYO_X = 10, OBSTRUCT_PUYO_Y = 12;//이미지 위치 
+        const int OBSTRUCT_VANISH_PUYO_X = 6, OBSTRUCT_VANISH_PUYO_Y = 15;//이미지 위치 
+        const int OBSTRUCT_PUYOS_X = 15, OBSTRUCT_PUYOS_Y = 11; //방해 뿌요 뷰어에 사용되는 이미지
         const std::vector<std::pair<int,int>> PLAYER_OBSTRUCT_VIEWER_POS = {std::make_pair(31,2),std::make_pair(386+31,2)};
 
     //puyo_num.png

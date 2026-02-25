@@ -23,4 +23,5 @@ class puyoVanishPuyo : public puyoTempPuyo
 
         void vanish_let(puyoBoard& board);
         bool vanish_soon();
+        bool vanish_stay();
 };

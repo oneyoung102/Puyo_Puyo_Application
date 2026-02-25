@@ -1,6 +1,8 @@
 #include "puyoPrintObject.hpp"
 #include <SFML/Graphics.hpp>
+#include "../puyoImageConstant.hpp"
 
+using namespace puyoImageConstant;
 using namespace sf;
 
 puyoPrintObject::puyoPrintObject(Sprite s, float xx, float yy, int l) : sprite(s)
@@ -11,6 +13,13 @@ puyoPrintObject::puyoPrintObject(Sprite s, float xx, float yy, int l) : sprite(s
 }
 
 bool puyoPrintObject::is_alive(){return life != 0;}
+
+void puyoPrintObject::print_puyo(RenderWindow& w, int img_x, int img_y, int px, int py)
+{
+    img_x = PUYO_SIZE*img_x, img_y = PUYO_SIZE*img_y;
+    sprite.setTextureRect(IntRect({img_x, img_y}, {PUYO_SIZE, PUYO_SIZE})); 
+    print_sprite(w,px,py);
+}
 
 void puyoPrintObject::print_sprite(RenderWindow& window, float x1, float y1)
 {

@@ -32,7 +32,7 @@ void puyoPageManager::convert_page(Page p)
             curr_page = make_unique<puyoGamePage>(pfs,play_mode,gravity,colors);
             break;
         case Page::ending :
-            curr_page = make_unique<puyoEndingPage>(pfs,win_player_num,capture_sprite);
+            curr_page = make_unique<puyoEndingPage>(pfs,win_player_num,capture_sprite,play_mode);
             break;
     };
 }
@@ -40,10 +40,10 @@ puyoPageManager::puyoPageManager()
     : capture_sprite(Sprite(capture_texture))
 {
     next_page = Page::opening;
-    play_mode = Play_mode::bot;
     gravity = 1800;
     colors = 4;
     win_player_num = -1;
+    //play_mode = Play_mode::bot;
 }
 
 void puyoPageManager::show_page(RenderWindow& window)

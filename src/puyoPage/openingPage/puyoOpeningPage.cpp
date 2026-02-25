@@ -21,7 +21,7 @@ puyoOpeningPage::puyoOpeningPage(puyoFileSystem& pfs)
 {
     opening_printed = false;
     opening_end = false;
-    pp.add_print_object(make_unique<puyoPrintObject>(SEGA_SPRITE,0,0,8000));
+    pp.add_print_object(make_unique<puyoPrintObject>(SEGA_SPRITE,0,0,9500));
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::sega_intro));
 
     pl.allot_key((int)(Keyboard::Key::Enter),[this](){return let_end();});
@@ -36,7 +36,7 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
     {
         if(opening_end)
         {
-            signal.next_page = Page::game;//menu
+            signal.next_page = Page::menu;
             return signal;
         }
     }

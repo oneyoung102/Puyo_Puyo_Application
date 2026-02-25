@@ -10,11 +10,12 @@ class puyoEndingPage : public puyoPage
 {
     private :
         int win_player_num;
-        int proceed_count, proceed_count_max;//멕스 도달 시 메세지 출력
+        int proceed_count, proceed_text_appear, proceed_button_appear;
 
-        bool re_game;
+        Play_mode play_mode;
+        bool re_play;
         void let_end();
     public :
-        puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite cs);
+        puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite cs, Play_mode pm);
         puyoPageSignal proceed_page(puyoFileSystem& pfs,  sf::RenderWindow& window);
 };

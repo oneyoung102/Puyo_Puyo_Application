@@ -95,6 +95,6 @@ sf::SoundBuffer& puyoFileSystem::get_buffer(puyoFileSystem::Sound name){return b
 fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name){return musics[(int)name];}
 fs::path& puyoFileSystem::get_random_music()
 {
-    uniform_int_distribution<> dist((int)Music::game_music1, (int)Music::game_music7);
+    uniform_int_distribution<> dist((int)Music::game_music1, (int)Music::game_music11);
     return musics[dist(gen)];
 }

@@ -16,9 +16,10 @@ puyoBoard::puyoBoard() : board_r(12), board_c(6), puyoObjectSignal()
         {1,0},{-1,0},{0,1},{0,-1}
     };
     obstruct_puyo = 0;
-    obstruct_puyo_max = 7776;
+    obstruct_puyo_max = 7776; //6^5
     gravity_value = 310;
-    vanish_value = 510;
+    vanish_value = 1500;
+
     board = vector<vector<Type>>(board_r,vector<Type>(board_c,Type::blank));
     gravity_puyo_is_out_in_board = false;
 
@@ -199,7 +200,10 @@ void puyoBoard::find_vanish_puyo()
 
                 for(const auto [r,c,type] : stored_puyos)
                 {
-                    push_vanish_puyo(std::move(puyoVanishPuyo(c,r,(int)type,vanish_value)));
+                    if(type == Type::obstruct)
+                        push_vanish_puyo(std::move(puyoVanishPuyo(c,r,(int)type,vanish_value*0.4)));
+                    else
+                        push_vanish_puyo(std::move(puyoVanishPuyo(c,r,(int)type,vanish_value)));
                     remove_puyo(r,c);
                 }
             }

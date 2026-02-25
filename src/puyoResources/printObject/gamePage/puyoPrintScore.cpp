@@ -2,7 +2,6 @@
 #include "puyoPrintScore.hpp"
 #include "../../puyoImageConstant.hpp"
 
-#include <cmath>
 
 using namespace std;
 using namespace puyoImageConstant;

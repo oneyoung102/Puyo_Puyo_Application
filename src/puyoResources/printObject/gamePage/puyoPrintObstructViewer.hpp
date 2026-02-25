@@ -2,7 +2,6 @@
 
 #include "../puyoPrintObject.hpp"
 
-#include <vector>
 
 class puyoPrintObstructViewer : public puyoPrintObject
 {

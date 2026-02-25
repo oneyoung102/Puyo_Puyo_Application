@@ -15,4 +15,5 @@ class puyoPuyoVanish_temp : public puyoPuyoAct_temp
         bool decline_act(puyoBoard& board, puyoTempPuyo& puyo);
         void act_puyo(puyoTempPuyo& puyo);
         bool vanish_soon();
+        bool vanish_stay();
 };
