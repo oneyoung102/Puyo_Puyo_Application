@@ -14,10 +14,12 @@ puyoPlayer::puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p, bool temp_player
     puyoObjectSignal()
 {
     score = 0;
+    opposite_obstruct_puyo_count = 0;
 
     if(pn != 0 && pn != 1)
         throw runtime_error("Player number is not 0 or 1");
     player_num = pn;
+
     new_puyo_count = 0;
 
     player_is_bot = temp_player_is_bot;
@@ -33,6 +35,9 @@ puyoPlayPuyo& puyoPlayer::get_puyo(){return puyo;}
 
 int& puyoPlayer::get_score(){return score;}
 void puyoPlayer::add_score(int s){score += s;}
+int puyoPlayer::get_opposite_obstruct_puyo_count(){return opposite_obstruct_puyo_count;}
+void puyoPlayer::add_opposite_obstruct_puyo_count(int c){opposite_obstruct_puyo_count += c;}
+void puyoPlayer::clear_opposite_obstruct_puyo_count(){opposite_obstruct_puyo_count = 0;}
 
 void puyoPlayer::give_new_puyo(pair<int,int> colors)
 {

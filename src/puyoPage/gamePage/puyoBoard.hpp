@@ -6,6 +6,7 @@
 #include "puyoTempPuyo/puyoGravityPuyo.hpp"
 #include "puyoTempPuyo/puyoVanishPuyo.hpp"
 #include "puyoTempPuyo/puyoFuturePuyo.hpp"
+#include "puyoTempPuyo/puyoEnergyPuyo.hpp"
 
 #include "puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "../puyoObjectSignal.hpp"
@@ -38,6 +39,8 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         vector<puyoGravityPuyo> gravity_puyos;
         vector<puyoVanishPuyo> vanish_puyos;
         vector<puyoFuturePuyo> future_puyos;
+        vector<tuple<int,int,int>> temp_energy_puyos; 
+        vector<puyoEnergyPuyo> energy_puyos; 
         int obstruct_puyo,obstruct_puyo_max;
         
         vector<vector<Type>> board;
@@ -49,7 +52,8 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 
         vector<pair<int,int>> dir; //queue를 위해
         int condition_for_vanish;
-        int gravity_value, vanish_value;
+
+        int gravity_value, vanish_value, fly_value;
 
         int puyo_count, chain_count;//점수 계산용 
         vector<int> link_count;//점수 계산용 
@@ -77,6 +81,8 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         void find_vanish_puyo();
         void find_future_puyos(puyoPlayPuyo& puyo);
         void remove_future_puyos();
+        void find_energy_puyos(float fx, float fy, float tx, float ty);// temp_energy_puyo를 energy_puyo로
+        void clear_temp_energy_puyos();
 
         void give_obstruct_puyo(int count);
         void spawn_obstruct_puyo(int obstruct_puyo_for_dropping);
@@ -84,7 +90,8 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         int& get_obstruct_puyo();
 
         void gravity_gravity_puyos();
-        void vanish_vanish_puyo();
+        void vanish_vanish_puyos();
+        void fly_energy_puyos();
 
         int get_chain_count();
         void add_chain_count();
@@ -103,8 +110,10 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         vector<puyoGravityPuyo>& get_gravity_puyos();
         vector<puyoVanishPuyo>& get_vanish_puyos();
         vector<puyoFuturePuyo>& get_future_puyos();
+        vector<puyoEnergyPuyo>& get_energy_puyos();
         bool not_existed_gravity_puyo();
         bool not_existed_vanish_puyo();
+        bool not_existed_temp_energy_puyo();
         bool gravity_puyo_is_out();
 
         bool is_empty();

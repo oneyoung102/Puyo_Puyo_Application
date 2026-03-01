@@ -22,7 +22,7 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
     private :
         puyoBoard board;
         puyoPlayPuyo puyo;
-        int score;
+        int score, opposite_obstruct_puyo_count/*상대에게 보낼 방해 뿌요*/;
 
         int player_num; // 0 또는 1
         int new_puyo_count;
@@ -42,6 +42,9 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 
         int& get_score();
         void add_score(int s);
+        int get_opposite_obstruct_puyo_count();
+        void add_opposite_obstruct_puyo_count(int c);
+        void clear_opposite_obstruct_puyo_count();
 
         void give_new_puyo(pair<int,int> colors);
         int& get_new_puyo_count();

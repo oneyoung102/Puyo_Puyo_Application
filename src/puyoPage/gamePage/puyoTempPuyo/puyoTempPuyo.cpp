@@ -3,9 +3,6 @@
 #include "puyoTempPuyo.hpp"
 
 #include <tuple>
-#include <utility>
-#include <cmath>
-
 
 using namespace std;
 

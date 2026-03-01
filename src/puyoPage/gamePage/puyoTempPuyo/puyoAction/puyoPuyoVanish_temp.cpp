@@ -9,7 +9,7 @@ puyoPuyoVanish_temp::puyoPuyoVanish_temp(int amount) : puyoPuyoAct_temp(amount){
 
 bool puyoPuyoVanish_temp::test_act(puyoBoard& board, puyoTempPuyo& puyo)
 {
-    return true;
+    return act_count <= act_count_init;
 }
 bool puyoPuyoVanish_temp::decline_act(puyoBoard& board, puyoTempPuyo& puyo)
 {
@@ -21,11 +21,6 @@ bool puyoPuyoVanish_temp::decline_act(puyoBoard& board, puyoTempPuyo& puyo)
 }
 void puyoPuyoVanish_temp::act_puyo(puyoTempPuyo& puyo)
 {
-    if(act_count == act_count_init)
-    {
-        halt_act();
-        return;
-    }
     ++act_count;
 };
 

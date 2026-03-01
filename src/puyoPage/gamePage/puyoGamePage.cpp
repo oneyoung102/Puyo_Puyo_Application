@@ -22,6 +22,7 @@
 #include "../../puyoResources/printObject/gamePage/puyoPrintNextPuyo.hpp"
 #include "../../puyoResources/printObject/gamePage/puyoPrintScore.hpp"
 #include "../../puyoResources/printObject/gamePage/puyoPrintObstructViewer.hpp"
+#include "../../puyoResources/printObject/gamePage/puyoPrintEnergyPuyo.hpp"
 #include "../../puyoResources/printText/puyoPrintText.hpp"
 
 #include "../../puyoResources/puyoFileSystem.hpp"
@@ -83,6 +84,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int gravity
         pp.add_print_object(make_unique<puyoPrintFuturePuyo>(player->get_board().get_future_puyos(),PUYO_SPRITE,player_board_x,player_board_y,-1));
         pp.add_print_object(make_unique<puyoPrintVanishPuyo>(player->get_board().get_vanish_puyos(),PUYO_SPRITE,player_board_x,player_board_y,-1));
         pp.add_print_object(make_unique<puyoPrintGravityPuyo>(player->get_board().get_gravity_puyos(),PUYO_SPRITE,player_board_x,player_board_y,-1));
+        pp.add_print_object(make_unique<puyoPrintEnergyPuyo>(player->get_board().get_energy_puyos(),PUYO_SPRITE,0,0,-1));
         pp.add_print_object(make_unique<puyoPrintBoard>(player->get_board(),PUYO_SPRITE,player_board_x,player_board_y,-1));
         pp.add_print_object(make_unique<puyoPrintPlayPuyo>(player->get_puyo(),PUYO_SPRITE,player_board_x,player_board_y,-1));
 

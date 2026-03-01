@@ -81,7 +81,9 @@ void puyoPhasing::proceed_game()
         const int player_num = player->get_player_num();
         
         wait(player_num);
-        int obstruct_puyo_count = 0/*상대에게 넘길 방해 뿌요*/, added_score = 0;
+        board.fly_energy_puyos();
+
+        int added_score = 0;
         switch(get_phase(board))
         {
             case Phase::play :
@@ -127,7 +129,7 @@ void puyoPhasing::proceed_game()
                 break;
 
             case Phase::vanish :
-                board.vanish_vanish_puyo();
+                board.vanish_vanish_puyos();
                 if(board.not_existed_vanish_puyo())
                 {
                     board.find_gravity_puyo(); 
@@ -135,21 +137,35 @@ void puyoPhasing::proceed_game()
                     {
                         delay(player_num,1200);
                         if(board.is_all_cleared())
-                            obstruct_puyo_count += calc.get_all_cleared_obstruct_puyo();//올클리어 보너스
+                            player->add_opposite_obstruct_puyo_count(calc.get_all_cleared_obstruct_puyo());//올클리어 보너스
                     }
                 }
                 break;
         };
+
         player->add_score(added_score);
         if(players.size() != 1) //방해 뿌요 연산
         {
-            obstruct_puyo_count += calc.score_to_obstruct_puyo(added_score);
-            const auto[self,opp] = calc.get_obstruct_puyo_count(obstruct_puyo_count,board.get_obstruct_puyo());
-            board.give_obstruct_puyo(-self);
-            const int opposite = player_num^1;
-            players[opposite]->get_board().give_obstruct_puyo(opp);
+            player->add_opposite_obstruct_puyo_count(calc.score_to_obstruct_puyo(added_score));
+            if(player->get_opposite_obstruct_puyo_count() > 0) 
+            {
+                if(!board.not_existed_temp_energy_puyo())
+                {
+                    const int opposite = player_num^1;
+                    const auto[self,opp] = calc.get_obstruct_puyo_count(player->get_opposite_obstruct_puyo_count(),board.get_obstruct_puyo());
+                    board.give_obstruct_puyo(-self);
+                    players[opposite]->get_board().give_obstruct_puyo(opp);
+                    player->clear_opposite_obstruct_puyo_count();
+
+                    const auto[bx,by] = PLAYER_BOARD_POS[player_num];
+                    const auto[ox,oy] = PLAYER_OBSTRUCT_VIEWER_POS[opposite];
+                    board.find_energy_puyos(bx,by,ox,oy);//에너지 뿌요 생성
+                }
+            } 
+            else
+                board.clear_temp_energy_puyos();
         }
-        if(board.gravity_puyo_is_out() && board.not_existed_gravity_puyo())
+        if(board.gravity_puyo_is_out() && board.not_existed_gravity_puyo())//게임 종료
         {
             win_player_num = player_num^1;
             end_game(); 

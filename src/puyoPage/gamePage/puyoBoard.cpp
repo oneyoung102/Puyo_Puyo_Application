@@ -4,10 +4,13 @@
 #include <queue>
 
 #include "puyoBoard.hpp"
+#include "puyoPage/gamePage/puyoTempPuyo/puyoEnergyPuyo.hpp"
 #include "puyoTempPuyo/puyoGravityPuyo.hpp"
 #include "puyoTempPuyo/puyoVanishPuyo.hpp"
+#include "../../puyoResources/puyoImageConstant.hpp"
 
 using namespace std;
+using namespace puyoImageConstant;
 
 
 puyoBoard::puyoBoard() : board_r(12), board_c(6), puyoObjectSignal()
@@ -17,8 +20,10 @@ puyoBoard::puyoBoard() : board_r(12), board_c(6), puyoObjectSignal()
     };
     obstruct_puyo = 0;
     obstruct_puyo_max = 7776; //6^5
+
     gravity_value = 310;
     vanish_value = 1500;
+    fly_value = 1500;
 
     board = vector<vector<Type>>(board_r,vector<Type>(board_c,Type::blank));
     gravity_puyo_is_out_in_board = false;
@@ -64,8 +69,10 @@ void puyoBoard::push_vanish_puyo(puyoVanishPuyo&& ptp) //std::move
 vector<puyoGravityPuyo>& puyoBoard::get_gravity_puyos(){return gravity_puyos;}
 vector<puyoVanishPuyo>& puyoBoard::get_vanish_puyos(){return vanish_puyos;}
 vector<puyoFuturePuyo>& puyoBoard::get_future_puyos(){return future_puyos;}
+vector<puyoEnergyPuyo>& puyoBoard::get_energy_puyos(){return energy_puyos;}
 bool puyoBoard::not_existed_gravity_puyo(){return gravity_puyos.empty();}
 bool puyoBoard::not_existed_vanish_puyo(){return vanish_puyos.empty();}
+bool puyoBoard::not_existed_temp_energy_puyo(){return temp_energy_puyos.empty();}
 bool puyoBoard::gravity_puyo_is_out(){return gravity_puyo_is_out_in_board;}
 
 
@@ -87,19 +94,40 @@ void puyoBoard::gravity_gravity_puyos()
         }
     }
 }
-void puyoBoard::vanish_vanish_puyo()
+void puyoBoard::vanish_vanish_puyos()
 {
     for(int i = 0 ; i < vanish_puyos.size() ; )
     {
         if(vanish_puyos[i].vanish_stopped())
         {
             std::swap(vanish_puyos[i], vanish_puyos.back());
+
+            const auto[x,y] = vanish_puyos.back().get_puyo_pos();
+            const int color = vanish_puyos.back().get_puyo_color();
+            temp_energy_puyos.push_back(make_tuple(x,y,color));
+
             vanish_puyos.pop_back();
             signals[(int)puyoBoardSignal::vanished] = true;
         }
         else
         {
             vanish_puyos[i].vanish_let(*this);
+            ++i;
+        }
+    }
+}
+void puyoBoard::fly_energy_puyos()
+{
+    for(int i = 0 ; i < energy_puyos.size() ; )
+    {
+        if(energy_puyos[i].fly_stopped())
+        {
+            std::swap(energy_puyos[i], energy_puyos.back());
+            energy_puyos.pop_back();
+        }
+        else
+        {
+            energy_puyos[i].fly_let(*this);
             ++i;
         }
     }
@@ -285,4 +313,14 @@ bool puyoBoard::is_all_cleared()
 
 int puyoBoard::get_temp_obstruct_puyo_for_sounding(){return exchange(temp_obstruct_puyo,0);}
 void puyoBoard::approve_spawn_obstruct_puyo(){approvement_for_obstruct_puyo = true;}
+
+void puyoBoard::find_energy_puyos(float fx, float fy, float tx, float ty)
+{
+    if(temp_energy_puyos.empty())
+        return;
+    for(const auto[x,y,color] : temp_energy_puyos)
+        energy_puyos.push_back(puyoEnergyPuyo(fx+x*PUYO_SIZE,fy+y*PUYO_SIZE,tx,ty,color,fly_value));
+    temp_energy_puyos.clear();
+}
+void puyoBoard::clear_temp_energy_puyos(){temp_energy_puyos.clear();}
 
