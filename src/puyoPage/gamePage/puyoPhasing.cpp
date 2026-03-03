@@ -5,6 +5,7 @@
 #include "puyoTempPuyo/puyoAction/puyoPuyoGravity_temp.hpp"
 #include "puyoTempPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
 #include "../../puyoResources/puyoImageConstant.hpp"
+#include "puyoGameConstant.hpp"
 
 #include "puyoBoard.hpp"
 #include "puyoScoreCalc.hpp"
@@ -15,6 +16,7 @@
 
 using namespace std;
 using namespace puyoImageConstant;
+using namespace puyoGameConstant;
 
 puyoPhasing::puyoPhasing()
     : gen(random_device{}())
@@ -184,6 +186,6 @@ void puyoPhasing::add_player(unique_ptr<puyoPlayer>&& player)
 int puyoPhasing::get_win_player_num()
 {
     if(players.size() == 1)
-        return -1;//이긴 사람 없음 == 솔로 플레이
+        return NO_WINNER;//이긴 사람 없음 == 솔로 플레이
     return win_player_num;
 }

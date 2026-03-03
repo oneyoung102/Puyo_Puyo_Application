@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <memory>
 
 #include "puyoAction/puyoPuyoGravity_temp.hpp"

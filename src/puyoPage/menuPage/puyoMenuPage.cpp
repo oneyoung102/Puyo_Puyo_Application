@@ -48,7 +48,5 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
         signal.next_page = Page::game;
         signal.play_mode = this->play_mode;
     }
-    else
-        signal.next_page = Page::none;
     return signal;
 }

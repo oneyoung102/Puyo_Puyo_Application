@@ -53,8 +53,6 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         vector<pair<int,int>> dir; //queue를 위해
         int condition_for_vanish;
 
-        int gravity_value, vanish_value, fly_value;
-
         int puyo_count, chain_count;//점수 계산용 
         vector<int> link_count;//점수 계산용 
         set<Type> color_count;//점수 계산용 

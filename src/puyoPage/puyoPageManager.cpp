@@ -1,4 +1,5 @@
 #include "puyoPageManager.hpp"
+#include "puyoPage.hpp"
 #include "puyoPageSignal.hpp"
 
 #include "openingPage/puyoOpeningPage.hpp"
@@ -17,8 +18,6 @@ void puyoPageManager::convert_page(Page p)
 {
     switch(p)
     {
-        case Page::none :
-            break;
         case Page::opening :
             curr_page = make_unique<puyoOpeningPage>(pfs);
             break;
@@ -29,26 +28,22 @@ void puyoPageManager::convert_page(Page p)
             curr_page = make_unique<puyoReadyPage>(pfs);
             break;        
         case Page::game :
-            curr_page = make_unique<puyoGamePage>(pfs,play_mode,gravity,colors);
+            curr_page = make_unique<puyoGamePage>(pfs,*signal.play_mode,*signal.condition,*signal.gravity,*signal.stay,*signal.colors);
             break;
         case Page::ending :
-            curr_page = make_unique<puyoEndingPage>(pfs,win_player_num,capture_sprite,play_mode);
+            curr_page = make_unique<puyoEndingPage>(pfs,*signal.win_player_num,capture_sprite,*signal.play_mode);
             break;
     };
 }
 puyoPageManager::puyoPageManager()
     : capture_sprite(Sprite(capture_texture))
 {
-    next_page = Page::opening;
-    gravity = 1800;
-    colors = 4;
-    win_player_num = -1;
-    //play_mode = Play_mode::bot;
+    signal = puyoPageSignal{Page::opening,Play_mode::solo,4,1800,2000,4,-1,false};
+    convert_page(*signal.next_page);
 }
 
 void puyoPageManager::show_page(RenderWindow& window)
 {
-    convert_page(next_page);
     while (auto event = window.pollEvent())
     {
         if (event->is<Event::Closed>())
@@ -56,19 +51,11 @@ void puyoPageManager::show_page(RenderWindow& window)
         curr_page->get_let().detect_keyboard(event);
     }
     window.clear();
-    puyoPageSignal signal = curr_page->proceed_page(pfs, window);
-    next_page = signal.next_page;
-    if(next_page != Page::none)
-    {
-        if (signal.play_mode)
-            play_mode = *signal.play_mode;
-        if (signal.gravity)
-            gravity = *signal.gravity;
-        if (signal.colors)
-            colors = *signal.colors;
-        if (signal.win_player_num)
-            win_player_num = *signal.win_player_num;
-    }
+
+    signal = curr_page->proceed_page(pfs, window);
+    if(signal.next_page)
+        convert_page(*signal.next_page);
+    
     window.display();
     if (signal.request_capture && *signal.request_capture)
     {

@@ -12,10 +12,7 @@ class puyoPageManager
     private : 
         puyoFileSystem pfs;
         std::unique_ptr<puyoPage> curr_page;
-        Page next_page;
-        Play_mode play_mode;
-        int gravity, colors, win_player_num;
-
+        puyoPageSignal signal;
         sf::Texture capture_texture;
         sf::Sprite capture_sprite;
 

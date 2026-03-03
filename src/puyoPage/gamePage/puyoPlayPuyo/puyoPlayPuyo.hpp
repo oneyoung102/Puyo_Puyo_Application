@@ -47,8 +47,6 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         
         bool taken_down_let;//아래 이동 명령 접수 여부
 
-        int gravity_value;
-
     public :
         puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s);
 

@@ -23,7 +23,7 @@ void puyoEndingPage::let_end(){re_play = true;}
 puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite capture_sprite, Play_mode pm)
 {
     pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,0,0,-1));
-    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),0,0,-1));
+    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),0,0,PRINT_IMMORTAL));
     win_player_num = wpn;
     play_mode = pm;
 
@@ -74,7 +74,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         60,
         Color::White,
         (Text::Style)(Text::Style::Underlined | Text::Style::Bold),
-        -1));
+        PRINT_IMMORTAL));
     }
     else if(proceed_count == proceed_button_appear)
     {
@@ -88,15 +88,13 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         40,
         Color::Blue,
         Text::Style::Bold,
-        -1));
+        PRINT_IMMORTAL));
         pl.allot_key((int)(Keyboard::Key::Enter),[this](){return let_end();});
     }
     if(re_play)
     {
         signal.win_player_num = -1;
         signal.next_page = Page::game;
-        return signal;
     } 
-    signal.next_page = Page::none;
     return signal;
 }

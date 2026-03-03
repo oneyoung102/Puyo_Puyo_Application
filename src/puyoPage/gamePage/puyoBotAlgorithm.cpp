@@ -12,7 +12,7 @@ vector<pair<int,int>> puyoBotAlgorithm::calc_all_probablities(puyoBoard& board)
     const auto[board_r,board_c] = board.get_board_size();
     const auto[spawn_x,spawn_y] = board.get_puyo_spawn_pos();
     for(int c = 0 ; c < board_c ; ++c)
-        for(int t = 0 ; t < 4 ; ++t)
+        for(int t = 0 ; t < 4 ; ++t)//4방위
             all_probablities.push_back(make_pair(c-spawn_x,t));
     return all_probablities;
 }

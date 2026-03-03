@@ -35,15 +35,12 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
     if(opening_printed)
     {
         if(opening_end)
-        {
             signal.next_page = Page::menu;
-            return signal;
-        }
     }
     else if(pp.not_existed_print_object())
     {
         ps.play_music(pfs.get_music(puyoFileSystem::Music::main_menu));
-        pp.add_print_object(make_unique<puyoPrintObject>(OPENING_SPRITE,0,0,-1));
+        pp.add_print_object(make_unique<puyoPrintObject>(OPENING_SPRITE,0,0,PRINT_IMMORTAL));
         pp.add_print_text(make_unique<puyoPrintTextFlash>(
             TEXT_PRESS_ENTER_X,TEXT_PRESS_ENTER_Y,
             "Press Enter",
@@ -51,10 +48,9 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
             35,
             Color::White,
             Text::Style::Regular,
-            -1,
+            PRINT_IMMORTAL,
             1200));
         opening_printed = true;
     }
-    signal.next_page = Page::none;
     return signal;
 }

@@ -13,6 +13,7 @@
 #include "puyoPlayPuyo.hpp"
 
 #include "../puyoTempPuyo/puyoGravityPuyo.hpp"
+#include "../puyoGameConstant.hpp"
 
 #include <tuple>
 #include <utility>
@@ -21,28 +22,27 @@
 
 
 using namespace std;
+using namespace puyoGameConstant;
 
 puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s) : puyoObjectSignal()
 {
 
     action = nullptr;
-    gravity  = make_unique<puyoPuyoGravity>(g,1); 
-    stay  = make_unique<puyoPuyoStay>(s,110);
+    gravity  = make_unique<puyoPuyoGravity>(g,PLAYPUYO_FALL_GRAVITY_DISTANCE); 
+    stay  = make_unique<puyoPuyoStay>(s,PLAYPUYO_STAY_BONUS);
 
-    acts.emplace_back(make_unique<puyoPuyoLeft>(400,1));
-    acts.emplace_back(make_unique<puyoPuyoRight>(400,1));
-    acts.emplace_back(make_unique<puyoPuyoDown>(400,1));
-    //acts.emplace_back(make_unique<puyoPuyoUp>(400,1));
-    acts.emplace_back(make_unique<puyoPuyoTurn>(360,-90));
-    acts.emplace_back(make_unique<puyoPuyoDrop>(-1));
+    acts.emplace_back(make_unique<puyoPuyoLeft>(PLAYPUYO_LEFT_TICK,PLAYPUYO_LEFT_DISTANCE));
+    acts.emplace_back(make_unique<puyoPuyoRight>(PLAYPUYO_RIGHT_TICK,PLAYPUYO_RIGHT_DISTANCE));
+    acts.emplace_back(make_unique<puyoPuyoDown>(PLAYPUYO_DOWN_TICK,PLAYPUYO_DOWN_DISTANCE));
+    //acts.emplace_back(make_unique<puyoPuyoUp>(PLAYPUYO_UP_TICK,PLAYPUYO_UP_DISTANCE));
+    acts.emplace_back(make_unique<puyoPuyoTurn>(PLAYPUYO_TURN_TICK,PLAYPUYO_TURN_DEGREE));
+    acts.emplace_back(make_unique<puyoPuyoDrop>(PLAYPUYO_LEFT_DISTANCE));
 
     tie(x1,y1) = spawn_pos;
     tie(x2,y2) = make_pair(spawn_pos.first,spawn_pos.second-1);
     tie(color1,color2) = color;
 
     taken_down_let = false;
-
-    gravity_value = 150;//드롭 이후에 중력 상수
 }
 
 
@@ -114,8 +114,8 @@ vector<puyoGravityPuyo> puyoPlayPuyo::to_gravity_puyo()
         swap(color1,color2);
     }
     vector<puyoGravityPuyo> v;
-    v.emplace_back(x1, y1, color1,gravity_value);
-    v.emplace_back(x2, y2, color2,gravity_value);
+    v.emplace_back(x1, y1, color1,PLAYPUYO_DROP_GRAVITY_TICK);
+    v.emplace_back(x2, y2, color2,PLAYPUYO_DROP_GRAVITY_TICK);
     return v;
 }
 

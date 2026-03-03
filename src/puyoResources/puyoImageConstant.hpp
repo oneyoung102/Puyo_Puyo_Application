@@ -7,6 +7,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         //gamePage
         const unsigned int SCREEN_X = 640, SCREEN_Y = 444;
         const std::vector<std::pair<int,int>> PLAYER_BOARD_POS = {std::make_pair(31,35),std::make_pair(386+31,35)};
+        const int BOARD_HEIGHT = 12;
 
         const std::vector<std::pair<int,int>> PLAYER_NEXT_PUYO_VIEWER_POS = {std::make_pair(244,62),std::make_pair(367,62)};
         const int NEXT_PUYO_BREADTH = 36;
@@ -49,4 +50,6 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         const int TEXT_PRESS_ENTER_X = SCREEN_X/2, TEXT_PRESS_ENTER_Y = SCREEN_Y/2+20;
         //endingPage
         const int TEXT_WINNER_X = SCREEN_X/2, TEXT_WINNER_Y = SCREEN_Y/2-35;
+
+    const int PRINT_IMMORTAL = -1;
 };
