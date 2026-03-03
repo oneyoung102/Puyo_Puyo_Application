@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#include "puyoLet.hpp"
+#include "puyoPage/puyoLet.hpp"
 
 #include <optional>
 #include <functional>

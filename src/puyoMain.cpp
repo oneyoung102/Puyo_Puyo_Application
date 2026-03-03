@@ -1,6 +1,6 @@
-#include "puyoPage/puyoPageManager.hpp"
+#include "puyoPage/puyoPageManager/puyoPageManager.hpp"
 #include <SFML/Graphics.hpp>
-#include "puyoResources/puyoImageConstant.hpp"
+#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace sf;
 using namespace puyoImageConstant;
