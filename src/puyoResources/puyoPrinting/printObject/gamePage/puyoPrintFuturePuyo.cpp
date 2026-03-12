@@ -3,7 +3,11 @@
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoFuturePuyo.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
+#include <vector>
+
 using namespace puyoImageConstant;
+using namespace std;
+using namespace sf;
 
 puyoPrintFuturePuyo::puyoPrintFuturePuyo(vector<puyoFuturePuyo>& fp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), future_puyos(fp)
 {

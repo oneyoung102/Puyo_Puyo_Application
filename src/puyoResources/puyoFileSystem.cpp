@@ -10,7 +10,6 @@
 
 using namespace sf;
 using namespace std;
-
 namespace fs = std::filesystem;
 
 fs::path puyoFileSystem::getExecutablePath() 

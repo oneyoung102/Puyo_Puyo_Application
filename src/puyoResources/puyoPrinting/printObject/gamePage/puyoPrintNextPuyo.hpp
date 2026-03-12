@@ -9,9 +9,9 @@ class puyoPrintNextPuyo : public puyoPrintObject
 {
     private :
         int player_num;
-        int& new_puyo_count;
-        std::vector<std::pair<int,int>>& new_colors;
+        const int& new_puyo_count;
+        const std::vector<std::pair<int,int>>& new_colors;
     public :
-        puyoPrintNextPuyo(int pn, int& npc, std::vector<std::pair<int,int>>& nc, Sprite puyo, int x, int y, int life);
-        void print_object(RenderWindow& w);
+        puyoPrintNextPuyo(int pn, const int& npc, const std::vector<std::pair<int,int>>& nc, sf::Sprite puyo, int x, int y, int life);
+        void print_object(sf::RenderWindow& w);
 };

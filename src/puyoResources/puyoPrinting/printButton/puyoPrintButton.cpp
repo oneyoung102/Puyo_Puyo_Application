@@ -2,20 +2,24 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+
 using namespace std;
 using namespace sf;
+using namespace puyoImageConstant;
 
-puyoPrintButton::puyoPrintButton(sf::Sprite uss, sf::Sprite ss, bool& selected_temp, float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int l)
+puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected_temp, float x, float y, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int l)
     : text(Text(font))
     , selected(selected_temp)
-    , unselected_sprite(uss)
-    , selected_sprite(ss)
+    , sprite(s)
 {
     life = l; // life == -1 일 때는 영생
     text.setString(content);
     text.setFillColor(color);
     text.setStyle(style);
-    text.setCharacterSize(size);
+
+    text.setCharacterSize(TEXT_SIZE_IN_BUTTON*scaling);
+    sprite.setScale({scaling,scaling});
 
     // 중심 정렬을 위해 origin을 텍스트 중앙으로 설정
     auto bounds0 = text.getLocalBounds();
@@ -25,19 +29,13 @@ puyoPrintButton::puyoPrintButton(sf::Sprite uss, sf::Sprite ss, bool& selected_t
     });
     text.setPosition({x, y});
 
-    auto bounds1 = unselected_sprite.getLocalBounds();
-    unselected_sprite.setOrigin({
+    sprite.setTextureRect(IntRect({0,0}, {BUTTON_X, BUTTON_Y}));
+    auto bounds1 = sprite.getLocalBounds();
+    sprite.setOrigin({
         bounds1.position.x + bounds1.size.x / 2.f,
         bounds1.position.y + bounds1.size.y / 2.f
     });
-    unselected_sprite.setPosition({x, y});
-
-    auto bounds2 = selected_sprite.getLocalBounds();
-    selected_sprite.setOrigin({
-        bounds2.position.x + bounds2.size.x / 2.f,
-        bounds2.position.y + bounds2.size.y / 2.f
-    });
-    selected_sprite.setPosition({x, y});
+    sprite.setPosition({x, y});
 }
 
 bool puyoPrintButton::is_alive(){return life != 0;}
@@ -45,9 +43,10 @@ bool puyoPrintButton::is_alive(){return life != 0;}
 void puyoPrintButton::print_button(RenderWindow& window)
 {
     if(selected)
-        window.draw(selected_sprite);
+        sprite.setTextureRect(IntRect({0,0}, {BUTTON_X, BUTTON_Y}));
     else
-        window.draw(unselected_sprite);
+        sprite.setTextureRect(IntRect({0, BUTTON_Y}, {BUTTON_X, BUTTON_Y}));
+    window.draw(sprite);
     window.draw(text);
     if(is_alive())
         --life;

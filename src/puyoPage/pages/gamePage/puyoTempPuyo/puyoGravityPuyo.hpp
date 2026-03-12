@@ -5,15 +5,12 @@
 #include "puyoAction/puyoPuyoGravity_temp.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoTempPuyo.hpp"
 
-
-using namespace std;
-
 class puyoBoard;
 
 class puyoGravityPuyo : public puyoTempPuyo
 {
     private :
-        unique_ptr<puyoPuyoGravity_temp> gravity;
+        std::unique_ptr<puyoPuyoGravity_temp> gravity;
     public :
         puyoGravityPuyo(float xx, float yy, int c, int amount);
 

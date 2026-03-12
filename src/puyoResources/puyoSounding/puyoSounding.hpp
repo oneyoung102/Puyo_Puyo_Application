@@ -14,4 +14,5 @@ class puyoSounding
         void manage_all_sounds();
         void play_sound(sf::SoundBuffer& buffer);
         void play_music(std::filesystem::path& path);
+        bool sounds_empty();
 };

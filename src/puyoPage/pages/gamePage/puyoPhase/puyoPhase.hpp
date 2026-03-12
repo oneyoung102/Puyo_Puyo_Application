@@ -8,8 +8,6 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoScoreCalc.hpp"
 
-using namespace std;
-
 class puyoPlayPuyo;
 class puyoTempPuyo;
 class puyoBoard;
@@ -22,11 +20,11 @@ class puyoPhase
             gravity,
             vanish
         };
-        vector<unique_ptr<puyoPlayer>> players;
-        vector<int> delay_times;
+        std::vector<std::unique_ptr<puyoPlayer>> players;
+        std::vector<int> delay_times;
         
-        mt19937 gen;
-        vector<pair<int,int>> new_colors;
+        std::mt19937 gen;
+        std::vector<std::pair<int,int>> new_colors;
 
         puyoScoreCalc calc;
 
@@ -46,16 +44,16 @@ class puyoPhase
 
         void end_game();////
 
-        pair<int,int> get_new_puyo_color(int count);
-        vector<pair<int,int>>& get_new_colors();
+        std::pair<int,int> get_new_puyo_color(int count);
+        std::vector<std::pair<int,int>>& get_new_colors();
 
         void set_game(float spawn_x, float spawn_y, int condition, int gravity, int stay, int cc);
         void proceed_game();
         bool game_ended();
 
         int get_player_count();
-        vector<unique_ptr<puyoPlayer>>&& get_players();
-        void add_player(unique_ptr<puyoPlayer>&& player);
+        std::vector<std::unique_ptr<puyoPlayer>>&& get_players();
+        void add_player(std::unique_ptr<puyoPlayer>&& player);
 
         int get_win_player_num();
 };

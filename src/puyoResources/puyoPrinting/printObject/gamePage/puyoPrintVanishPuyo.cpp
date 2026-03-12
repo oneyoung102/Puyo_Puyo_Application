@@ -5,6 +5,7 @@
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace puyoImageConstant;
+using namespace sf;
 
 puyoPrintVanishPuyo::puyoPrintVanishPuyo(vector<puyoVanishPuyo>& vp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), vanish_puyos(vp){}
 

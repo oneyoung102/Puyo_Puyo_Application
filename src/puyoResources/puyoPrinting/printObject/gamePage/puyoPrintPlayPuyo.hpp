@@ -8,6 +8,6 @@ class puyoPrintPlayPuyo : public puyoPrintObject
     private :
         puyoPlayPuyo& play_puyo;
     public :
-        puyoPrintPlayPuyo(puyoPlayPuyo& pp, Sprite puyo, int x, int y, int life);
-        void print_object(RenderWindow& w);
+        puyoPrintPlayPuyo(puyoPlayPuyo& pp, sf::Sprite puyo, int x, int y, int life);
+        void print_object(sf::RenderWindow& w);
 };

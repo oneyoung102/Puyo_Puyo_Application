@@ -3,6 +3,7 @@
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace puyoImageConstant;
+using namespace sf;
 
 puyoPrintScreenhead::puyoPrintScreenhead(Sprite screen, int x, int y, int life) : puyoPrintObject(screen,x,y,life)
 {

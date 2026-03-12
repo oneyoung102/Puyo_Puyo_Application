@@ -29,3 +29,5 @@ void puyoSounding::play_music(filesystem::path& path)
     music.setLooping(true);
     music.play();
 }
+
+ bool puyoSounding::sounds_empty(){return sounds.empty();}

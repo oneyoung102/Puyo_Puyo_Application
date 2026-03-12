@@ -5,10 +5,10 @@
 
 using namespace std;
 using namespace puyoImageConstant;
+using namespace sf;
 
 
-
-puyoPrintScore::puyoPrintScore(int pn, int& s, Sprite num, int x, int y, int life)
+puyoPrintScore::puyoPrintScore(int pn, const int& s, Sprite num, int x, int y, int life)
     : puyoPrintObject(num,x,y,life),
         to_score(s)
 {

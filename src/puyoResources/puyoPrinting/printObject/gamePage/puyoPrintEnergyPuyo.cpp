@@ -4,7 +4,11 @@
 
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
+#include <vector>
+
 using namespace puyoImageConstant;
+using namespace std;
+using namespace sf;
 
 puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(vector<puyoEnergyPuyo>& ep, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), energy_puyos(ep){}
 

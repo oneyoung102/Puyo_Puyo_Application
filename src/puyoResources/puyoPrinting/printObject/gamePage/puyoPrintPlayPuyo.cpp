@@ -4,6 +4,7 @@
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace puyoImageConstant;
+using namespace sf;
 
 puyoPrintPlayPuyo::puyoPrintPlayPuyo(puyoPlayPuyo& pp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), play_puyo(pp){}
 

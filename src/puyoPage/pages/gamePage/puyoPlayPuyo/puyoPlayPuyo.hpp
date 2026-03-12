@@ -12,8 +12,6 @@
 #include "puyoPage/puyoObjectSignal.hpp"
 
 
-using namespace std;
-
 class puyoPuyoGravity;
 class puyoPuyoStay;
 
@@ -39,16 +37,16 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         float x1, y1, x2, y2; // 1이 중심 뿌요
         int color1, color2;
 
-        unique_ptr<puyoPuyoGravity> gravity;
-        unique_ptr<puyoPuyoStay> stay;
-        vector<shared_ptr<puyoPuyoAct>> acts;
+        std::unique_ptr<puyoPuyoGravity> gravity;
+        std::unique_ptr<puyoPuyoStay> stay;
+        std::vector<std::shared_ptr<puyoPuyoAct>> acts;
 
-        shared_ptr<puyoPuyoAct> action; //명령이 들어온 행동
+        std::shared_ptr<puyoPuyoAct> action; //명령이 들어온 행동
         
         bool taken_down_let;//아래 이동 명령 접수 여부
 
     public :
-        puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s);
+        puyoPlayPuyo(std::pair<float,float> spawn_pos, std::pair<int,int> color, int g, int s);
 
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);
@@ -57,13 +55,13 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         bool is_holding();
         int get_drop_height(puyoBoard& board);
 
-        vector<puyoGravityPuyo> to_gravity_puyo();
+        std::vector<puyoGravityPuyo> to_gravity_puyo();
 
         bool puyo_touched(puyoBoard& board, int ix, int iy);
 
-        tuple<float,float,float,float> get_puyo_pos();
+        std::tuple<float,float,float,float> get_puyo_pos();
         void move_puyo(float to_x1, float to_y1, float to_x2, float to_y2);
-        pair<int,int> get_puyo_color();
+        std::pair<int,int> get_puyo_color();
         
         void let_left();
         void let_right();

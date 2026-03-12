@@ -1,4 +1,5 @@
 #include "puyoPageManager.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/puyoPage.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 
@@ -46,7 +47,7 @@ void puyoPageManager::capture_window(sf::RenderWindow& window)
 puyoPageManager::puyoPageManager()
     : capture_sprite(Sprite(capture_texture))
 {
-    signal = puyoPageSignal{Page::opening,Play_mode::solo,4,1800,2000,4,-1,false};
+    signal = puyoPageSignal{Page::opening,Play_mode::solo,4,-1,-1,-1,puyoGameConstant::NO_WINNER,false};
     convert_page(*signal.next_page);
 }
 
@@ -56,14 +57,18 @@ void puyoPageManager::show_page(RenderWindow& window)
     {
         if (event->is<Event::Closed>())
             window.close();
-        curr_page->get_let().detect_keyboard(event);
+        curr_page->get_let().act_keyboard_let(event);
     }
     window.clear();
     signal = curr_page->proceed_page(pfs, window);
     window.display();
     
     if (signal.request_capture && *signal.request_capture)
+    {
         capture_window(window);
+        signal.request_capture = false;
+
+    }
     if(signal.next_page)
         convert_page(*signal.next_page);
 }

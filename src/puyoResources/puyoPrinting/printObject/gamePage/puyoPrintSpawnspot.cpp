@@ -2,11 +2,11 @@
 #include "puyoPrintSpawnspot.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
-using namespace puyoImageConstant;
-
 #include <utility>
 
 using namespace std;
+using namespace sf;
+using namespace puyoImageConstant;
 
 puyoPrintSpawnspot::puyoPrintSpawnspot(int pn, Sprite puyo, int x, int y, int life)
     : puyoPrintObject(puyo,x,y,life)

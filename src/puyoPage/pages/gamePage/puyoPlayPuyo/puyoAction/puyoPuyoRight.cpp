@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 bool puyoPuyoRight::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();

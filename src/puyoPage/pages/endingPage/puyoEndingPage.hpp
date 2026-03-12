@@ -5,16 +5,22 @@
 #include "puyoPage/pages/puyoPage.hpp"
 
 #include "puyoResources/puyoFileSystem.hpp"
+#include "puyoPage/pages/puyoButtonCursor.hpp"
 
 class puyoEndingPage : public puyoPage
 {
     private :
         int win_player_num;
-        int proceed_count, proceed_text_appear, proceed_button_appear;
-
         Play_mode play_mode;
-        bool re_play;
-        void let_end();
+
+        int proceed_count;
+
+        enum class buttonName{
+            replay,
+            to_menu
+        };
+        puyoButtonCursor<1,2,buttonName> button_cursor;
+        bool convert_page;
     public :
         puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite cs, Play_mode pm);
         puyoPageSignal proceed_page(puyoFileSystem& pfs,  sf::RenderWindow& window);

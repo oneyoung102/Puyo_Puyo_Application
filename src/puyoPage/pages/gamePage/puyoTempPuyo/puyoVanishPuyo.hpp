@@ -5,9 +5,6 @@
 #include "puyoAction/puyoPuyoVanish_temp.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoTempPuyo.hpp"
 
-
-using namespace std;
-
 class puyoBoard;
 
 class puyoVanishPuyo : public puyoTempPuyo
@@ -15,7 +12,7 @@ class puyoVanishPuyo : public puyoTempPuyo
     private :
         float x, y;
         int color;
-        unique_ptr<puyoPuyoVanish_temp> vanish;
+        std::unique_ptr<puyoPuyoVanish_temp> vanish;
     public :
         puyoVanishPuyo(float xx, float yy, int c, int amount);
 

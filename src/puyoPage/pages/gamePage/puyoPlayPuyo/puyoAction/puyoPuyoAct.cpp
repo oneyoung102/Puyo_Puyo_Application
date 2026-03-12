@@ -4,6 +4,8 @@
 #include <tuple>
 #include <cmath>
 
+using namespace std;
+
 bool puyoPuyoAct::is_acting(){return act_count != -1;}
 puyoPuyoAct::puyoPuyoAct(int amount) : act_count_constant(amount){act_count = -1;}
 void puyoPuyoAct::arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y2)

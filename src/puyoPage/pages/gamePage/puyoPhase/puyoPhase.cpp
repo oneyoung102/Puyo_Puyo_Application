@@ -23,15 +23,15 @@ puyoPhase::puyoPhase()
 {
     game_end = false;
     color_count = 0;
-    win_player_num = -1;
+    win_player_num = NO_WINNER;
     calc = puyoScoreCalc();
 }
 
 puyoPhase::Phase puyoPhase::get_phase(puyoBoard& board)
 {
-    if(!board.not_existed_vanish_puyo())
+    if(!board.vanish_puyo_empty())
         return puyoPhase::Phase::vanish;
-    if(!board.not_existed_gravity_puyo())
+    if(!board.gravity_puyo_empty())
         return puyoPhase::Phase::gravity;
     return puyoPhase::Phase::play;
 }
@@ -113,10 +113,10 @@ void puyoPhase::proceed_game()
 
             case Phase::gravity :
                 board.gravity_gravity_puyos();
-                if(board.not_existed_gravity_puyo())
+                if(board.gravity_puyo_empty())
                 {             
                     board.find_vanish_puyo(); 
-                    if(board.not_existed_vanish_puyo()) //파괴할 뿌요가 없으면
+                    if(board.vanish_puyo_empty()) //파괴할 뿌요가 없으면
                     {
                         delay(player_num,800);
                         board.spawn_obstruct_puyo(calc.get_obstruct_puyo_for_dropping(board.get_obstruct_puyo()));
@@ -132,10 +132,10 @@ void puyoPhase::proceed_game()
 
             case Phase::vanish :
                 board.vanish_vanish_puyos();
-                if(board.not_existed_vanish_puyo())
+                if(board.vanish_puyo_empty())
                 {
                     board.find_gravity_puyo(); 
-                    if(board.not_existed_gravity_puyo()) //파괴 후, 드롭할 뿌요가 없으면
+                    if(board.gravity_puyo_empty()) //파괴 후, 드롭할 뿌요가 없으면
                     {
                         delay(player_num,1200);
                         if(board.is_all_cleared())
@@ -151,7 +151,7 @@ void puyoPhase::proceed_game()
             player->add_opposite_obstruct_puyo_count(calc.score_to_obstruct_puyo(added_score));
             if(player->get_opposite_obstruct_puyo_count() > 0) 
             {
-                if(!board.not_existed_temp_energy_puyo())
+                if(!board.temp_energy_puyo_empty())
                 {
                     const int opposite = player_num^1;
                     const auto[self,opp] = calc.get_obstruct_puyo_count(player->get_opposite_obstruct_puyo_count(),board.get_obstruct_puyo());
@@ -167,7 +167,7 @@ void puyoPhase::proceed_game()
             else
                 board.clear_temp_energy_puyos();
         }
-        if(board.gravity_puyo_is_out() && board.not_existed_gravity_puyo())//게임 종료
+        if(board.gravity_puyo_is_out() && board.gravity_puyo_empty())//게임 종료
         {
             win_player_num = player_num^1;
             end_game(); 

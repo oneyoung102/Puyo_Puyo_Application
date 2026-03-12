@@ -6,9 +6,8 @@
 class puyoPrintObstructViewer : public puyoPrintObject
 {
     private :
-        int& obstruct_puyo;
-        int unit;
+        const int& obstruct_puyo;
     public :
-        puyoPrintObstructViewer(int& op, Sprite screen, int x, int y, int life);
-        void print_object(RenderWindow& w);
+        puyoPrintObstructViewer(const int& op, sf::Sprite screen, int x, int y, int life);
+        void print_object(sf::RenderWindow& w);
 };

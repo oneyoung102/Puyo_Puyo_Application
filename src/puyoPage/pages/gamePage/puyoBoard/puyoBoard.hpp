@@ -41,7 +41,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         vector<puyoFuturePuyo> future_puyos;
         vector<tuple<int,int,int>> temp_energy_puyos; 
         vector<puyoEnergyPuyo> energy_puyos; 
-        int obstruct_puyo,obstruct_puyo_max;
+        int obstruct_puyo;
         
         vector<vector<Type>> board;
         const int board_r, board_c; 
@@ -84,7 +84,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 
         void give_obstruct_puyo(int count);
         void spawn_obstruct_puyo(int obstruct_puyo_for_dropping);
-        bool not_existed_obstructed_puyo();
+        bool obstructed_puyo_empty();
         int& get_obstruct_puyo();
 
         void gravity_gravity_puyos();
@@ -109,9 +109,9 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         vector<puyoVanishPuyo>& get_vanish_puyos();
         vector<puyoFuturePuyo>& get_future_puyos();
         vector<puyoEnergyPuyo>& get_energy_puyos();
-        bool not_existed_gravity_puyo();
-        bool not_existed_vanish_puyo();
-        bool not_existed_temp_energy_puyo();
+        bool gravity_puyo_empty();
+        bool vanish_puyo_empty();
+        bool temp_energy_puyo_empty();
         bool gravity_puyo_is_out();
 
         bool is_empty();

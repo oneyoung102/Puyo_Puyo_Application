@@ -5,7 +5,11 @@
 
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
+#include <vector>
+
 using namespace puyoImageConstant;
+using namespace std;
+using namespace sf;
 
 puyoPrintGravityPuyo::puyoPrintGravityPuyo(vector<puyoGravityPuyo>& gp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gp){}
 
@@ -24,8 +28,8 @@ void puyoPrintGravityPuyo::print_object(RenderWindow& w)
         {
             if(gravity_puyo.is_fast())//dropping
             {
-                print_puyo(w,DROPPING_PUYO_X+puyo,DROPPING_PUYO_Y,px,py);
-                print_puyo(w,DROPPING_PUYO_X+puyo,DROPPING_PUYO_Y+1,px,py-1);
+                print_puyo(w,DROPPING_PUYO_X+puyo,DROPPING_PUYO_Y,px,py-PUYO_SIZE);
+                print_puyo(w,DROPPING_PUYO_X+puyo,DROPPING_PUYO_Y+1,px,py);
             }
             else//gravity
                 print_puyo(w,GRAVITY_PUYO_X+puyo,GRAVITY_PUYO_Y,px,py);

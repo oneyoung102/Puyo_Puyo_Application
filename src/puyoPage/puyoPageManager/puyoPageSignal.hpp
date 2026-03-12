@@ -9,7 +9,7 @@ enum class Page
     game,
     ending
 };
-enum Play_mode
+enum class Play_mode
 {
     solo,
     dual,

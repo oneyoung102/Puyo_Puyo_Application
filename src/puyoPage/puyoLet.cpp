@@ -14,18 +14,16 @@ puyoLet::puyoLet()
     key_allot = vector<function<void()>>(101);  //sf::Keyboard::Key에서 key는 0 ~ 100번 까지
 }
 
-bool puyoLet::detect_keyboard(const optional<Event>& event)
+void puyoLet::act_keyboard_let(const optional<Event>& event)
 {
     if(!event)
-        return false;
+        return;
     if(auto* key = event->getIf<Event::KeyPressed>())
     {
         auto& func = key_allot[(int)key->code];
         if(func)
             func();
-        return true;
     }
-    return false;
 }
 void puyoLet::allot_key(int key, function<void()> func){key_allot[key] = func;}
 void puyoLet::clear_allot()

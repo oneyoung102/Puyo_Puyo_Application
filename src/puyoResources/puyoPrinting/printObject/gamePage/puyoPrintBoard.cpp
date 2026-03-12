@@ -4,7 +4,8 @@
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace puyoImageConstant;
-
+using namespace std;
+using namespace sf;
 
 puyoPrintBoard::puyoPrintBoard(puyoBoard& b, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), board(b){}
 void puyoPrintBoard::print_object(RenderWindow& w)

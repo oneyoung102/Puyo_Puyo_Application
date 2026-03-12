@@ -2,8 +2,6 @@
 
 #include "puyoPuyoAct.hpp"
 
-using namespace std;
-
 class puyoBoard;
 class puyoPlayPuyo; 
 

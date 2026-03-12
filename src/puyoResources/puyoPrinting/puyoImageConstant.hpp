@@ -10,7 +10,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         const int BOARD_HEIGHT = 12;
 
         const std::vector<std::pair<int,int>> PLAYER_NEXT_PUYO_VIEWER_POS = {std::make_pair(244,62),std::make_pair(367,62)};
-        const int NEXT_PUYO_BREADTH = 36;
+        const int NEXT_PUYO_VIEWER_BREADTH = 36;
 
         const int SCREEN_BAR_FROM_X = 302, SCREEN_BAR_FROM_Y = 60, SCREEN_BAR_TO_X = 38, SCREEN_BAR_TO_Y = 100;
 
@@ -31,11 +31,10 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         const int SPAWN_SPOT_STATE_X = 11, SPAWN_SPOT_STATE_Y = 12;  //이미지 위치 
 
         const int OBSTRUCT_PUYO_X = 10, OBSTRUCT_PUYO_Y = 12;//이미지 위치 
-        const int OBSTRUCT_VANISH_PUYO_X = 6, OBSTRUCT_VANISH_PUYO_Y = 15;//이미지 위치 
-        const int OBSTRUCT_PUYOS_X = 15, OBSTRUCT_PUYOS_Y = 11; //방해 뿌요 뷰어에 사용되는 이미지
+        const int OBSTRUCT_VANISH_PUYO_X = 10, OBSTRUCT_VANISH_PUYO_Y = 11;//이미지 위치 
+        const int OBSTRUCT_PUYO_VIEWER_X = 6, OBSTRUCT_PUYO_VIEWER_Y = 15; //방해 뿌요 뷰어에 사용되는 이미지
         
-
-        const int ENERGY_PUYO_X = 0, ENERGY_PUYO_Y = 15;
+        const int ENERGY_PUYO_X = 11, ENERGY_PUYO_Y = 11;//이미지 위치 
 
     //puyo_num.png
         //gamePage
@@ -50,6 +49,14 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         const int TEXT_PRESS_ENTER_X = SCREEN_X/2, TEXT_PRESS_ENTER_Y = SCREEN_Y/2+20;
         //endingPage
         const int TEXT_WINNER_X = SCREEN_X/2, TEXT_WINNER_Y = SCREEN_Y/2-35;
+    
+    //button
+        const int BUTTON_X = 126, BUTTON_Y = 42;//이미지 크기
+        const int TEXT_SIZE_IN_BUTTON = 31;//5글자 기준 기본 텍스트 사이즈
+        //menuPage
+        //endingPage
+            const int REPLAY_BUTTON_X = SCREEN_X/2-85, REPLAY_BUTTON_Y = SCREEN_Y/2+70;
+            const int TO_MENU_BUTTON_X = SCREEN_X/2+85, TO_MENU_BUTTON_Y = SCREEN_Y/2+70;
 
     const int PRINT_IMMORTAL = -1;
 };

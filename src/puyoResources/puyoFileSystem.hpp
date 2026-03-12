@@ -9,24 +9,20 @@
 #include <string>
 #include <random>
 
-using namespace sf;
-using namespace std;
-
-namespace fs = std::filesystem;
 
 class puyoFileSystem
 {
     private : 
-        vector<Texture> textures;
-        vector<Sprite> sprites;
-        vector<sf::SoundBuffer> buffers;
-        vector<fs::path> musics;
+        std::vector<sf::Texture> textures;
+        std::vector<sf::Sprite> sprites;
+        std::vector<sf::SoundBuffer> buffers;
+        std::vector<std::filesystem::path> musics;
 
-        mt19937 gen;
+        std::mt19937 gen;
 
-        Font font;
-        fs::path getExecutablePath();
-        fs::path getResourcesPath(string resource);
+        sf::Font font;
+        std::filesystem::path getExecutablePath();
+        std::filesystem::path getResourcesPath(std::string resource);
 
         void getAllTexture();
         void getAllSprite();
@@ -43,7 +39,8 @@ class puyoFileSystem
             sega,
             opening,
             black_back,
-            basic_back
+            basic_back,
+            button,
         };
         enum class Sound{//사운드 명
             sega_intro = 0,
@@ -64,11 +61,15 @@ class puyoFileSystem
             ready,
             start,
             victory,
-            lose
+            lose,
+            select,
+            cancel,
+            cursor
         };
         enum class Music{//음악 명
-            main_menu = 0,
-            character_select,
+            opening_page = 0,
+            menu_page,
+            ready_page,
             game_music1, //faeri fire!
             game_music2, //more beautiful more strong
             game_music3, // in the middle of stroll
@@ -84,9 +85,9 @@ class puyoFileSystem
             victory,//99번
 
         };
-        Sprite get_sprite(Image name);
-        Font& get_font();
+        sf::Sprite get_sprite(Image name);
+        sf::Font& get_font();
         sf::SoundBuffer& get_buffer(Sound name);
-        fs::path& get_music(Music name);
-        fs::path& get_random_music();
+        std::filesystem::path& get_music(Music name);
+        std::filesystem::path& get_random_music();
 };

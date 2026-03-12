@@ -13,7 +13,7 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-void puyoOpeningPage::let_end(){opening_end = true;}
+void puyoOpeningPage::let_start(){opening_end = true;}
 
 puyoOpeningPage::puyoOpeningPage(puyoFileSystem& pfs)
     : SEGA_SPRITE(pfs.get_sprite(puyoFileSystem::Image::sega))
@@ -23,8 +23,6 @@ puyoOpeningPage::puyoOpeningPage(puyoFileSystem& pfs)
     opening_end = false;
     pp.add_print_object(make_unique<puyoPrintObject>(SEGA_SPRITE,0,0,9500));
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::sega_intro));
-
-    pl.allot_key((int)(Keyboard::Key::Enter),[this](){return let_end();});
 }
 puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
@@ -37,20 +35,21 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
         if(opening_end)
             signal.next_page = Page::menu;
     }
-    else if(pp.not_existed_print_object())
+    else if(pp.print_objects_empty())
     {
-        ps.play_music(pfs.get_music(puyoFileSystem::Music::main_menu));
+        ps.play_music(pfs.get_music(puyoFileSystem::Music::opening_page));
         pp.add_print_object(make_unique<puyoPrintObject>(OPENING_SPRITE,0,0,PRINT_IMMORTAL));
         pp.add_print_text(make_unique<puyoPrintTextFlash>(
             TEXT_PRESS_ENTER_X,TEXT_PRESS_ENTER_Y,
             "Press Enter",
             pfs.get_font(),
-            35,
+            38,
             Color::White,
             Text::Style::Regular,
             PRINT_IMMORTAL,
             1200));
         opening_printed = true;
+        pl.allot_key((int)(Keyboard::Key::Enter),[this](){return let_start();});
     }
     return signal;
 }

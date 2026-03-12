@@ -73,7 +73,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int condtio
             break;
         }
     };
-    phase.set_game(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y, 4,gravity,2000,colors);
+    phase.set_game(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y, 4,gravity,stay,colors);
 
     
     pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),BOARD_SPRITE,0,0,PRINT_IMMORTAL));
@@ -122,7 +122,7 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
     switch(ready_status)
     {
         case Ready_status::ready :
-            if(pp.not_existed_print_text())
+            if(pp.print_texts_empty())
             {
                 pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,4200));
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::start));
@@ -131,7 +131,7 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
             }
             break;
         case Ready_status::start :   
-            if(pp.not_existed_print_text())
+            if(pp.print_texts_empty())
                 ready_status = Ready_status::play;
             break;
         case Ready_status::play :

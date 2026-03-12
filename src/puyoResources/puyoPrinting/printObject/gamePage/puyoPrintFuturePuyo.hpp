@@ -3,11 +3,13 @@
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoFuturePuyo.hpp"
 
+#include <vector>
+
 class puyoPrintFuturePuyo : public puyoPrintObject
 {
     private :
-        vector<puyoFuturePuyo>& future_puyos;
+        std::vector<puyoFuturePuyo>& future_puyos;
     public :
-        puyoPrintFuturePuyo(vector<puyoFuturePuyo>& fp, Sprite puyo, int x, int y, int life);
-        void print_object(RenderWindow& w);
+        puyoPrintFuturePuyo(std::vector<puyoFuturePuyo>& fp, sf::Sprite puyo, int x, int y, int life);
+        void print_object(sf::RenderWindow& w);
 };

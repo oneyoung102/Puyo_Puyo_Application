@@ -9,8 +9,8 @@ class puyoOpeningPage : public puyoPage
 {
     private :
         bool opening_printed, opening_end;
-        const Sprite SEGA_SPRITE, OPENING_SPRITE;
-        void let_end();
+        const sf::Sprite SEGA_SPRITE, OPENING_SPRITE;
+        void let_start();
     public :
         puyoOpeningPage(puyoFileSystem& pfs);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);

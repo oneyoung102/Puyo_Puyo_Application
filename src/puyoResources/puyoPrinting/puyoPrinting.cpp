@@ -56,6 +56,6 @@ void puyoPrinting::add_print_object(unique_ptr<puyoPrintObject>&& object){print_
 void puyoPrinting::add_print_text(unique_ptr<puyoPrintText>&& text){print_texts.push_back(std::move(text));}
 void puyoPrinting::add_print_button(unique_ptr<puyoPrintButton>&& button){print_buttons.push_back(std::move(button));}
 
-bool puyoPrinting::not_existed_print_object(){return print_objects.empty();}
-bool puyoPrinting::not_existed_print_text(){return print_texts.empty();}
-bool puyoPrinting::not_existed_print_button(){return print_buttons.empty();}
+bool puyoPrinting::print_objects_empty(){return print_objects.empty();}
+bool puyoPrinting::print_texts_empty(){return print_texts.empty();}
+bool puyoPrinting::print_buttons_empty(){return print_buttons.empty();}

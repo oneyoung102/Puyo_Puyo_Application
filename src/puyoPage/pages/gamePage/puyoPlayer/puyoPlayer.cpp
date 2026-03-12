@@ -33,7 +33,7 @@ int puyoPlayer::get_player_num(){return player_num;}
 puyoBoard& puyoPlayer::get_board(){return board;}
 puyoPlayPuyo& puyoPlayer::get_puyo(){return puyo;}
 
-int& puyoPlayer::get_score(){return score;}
+const int& puyoPlayer::get_score(){return score;}
 void puyoPlayer::add_score(int s){score += s;}
 int puyoPlayer::get_opposite_obstruct_puyo_count(){return opposite_obstruct_puyo_count;}
 void puyoPlayer::add_opposite_obstruct_puyo_count(int c){opposite_obstruct_puyo_count += c;}
@@ -44,7 +44,7 @@ void puyoPlayer::give_new_puyo(pair<int,int> colors)
     puyo = std::move(puyoPlayPuyo(board.get_puyo_spawn_pos(),colors,puyo_gravity_value,puyo_stay_value));
     ++new_puyo_count;
 }
-int& puyoPlayer::get_new_puyo_count(){return new_puyo_count;}
+const int& puyoPlayer::get_new_puyo_count(){return new_puyo_count;}
 
 pair<float,float> puyoPlayer::get_puyo_spawn_pos(){return board.get_puyo_spawn_pos();}
 void puyoPlayer::set_puyo_spawn_pos(float x, float y){board.set_puyo_spawn_pos(x,y);}

@@ -4,15 +4,20 @@
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoPage/pages/puyoPage.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
+#include "puyoPage/pages/puyoButtonCursor.hpp"
 
 class puyoMenuPage : public puyoPage
 {
     private :
         Play_mode play_mode;
-        bool declined;
-        void let_decline_solo();
-        void let_decline_dual();
-        void let_decline_bot();
+        enum class buttonName
+        {
+            solo,
+            dual,
+            bot
+        };
+        puyoButtonCursor<1,3,buttonName> button_cursor;
+        bool convert_page;
     public :
         puyoMenuPage(puyoFileSystem& pfs);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);

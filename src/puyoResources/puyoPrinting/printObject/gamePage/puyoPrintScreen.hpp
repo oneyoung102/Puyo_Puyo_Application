@@ -7,6 +7,6 @@ class puyoPrintScreen : public puyoPrintObject
     private :
         int player_count;
     public :
-        puyoPrintScreen(int pc, Sprite screen, int x, int y, int life);
-        void print_object(RenderWindow& w);
+        puyoPrintScreen(int pc, sf::Sprite screen, int x, int y, int life);
+        void print_object(sf::RenderWindow& w);
 };
