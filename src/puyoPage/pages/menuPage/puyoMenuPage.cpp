@@ -8,6 +8,7 @@
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 #include "puyoResources/puyoPrinting/printButton/puyoPrintButton.hpp"
+#include "puyoResources/puyoPrinting/printText/puyoPrintTextZoom.hpp"
 
 #include <memory>
 
@@ -16,10 +17,21 @@ using namespace sf;
 using namespace puyoImageConstant;
 
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
+    : button_cursor(puyoButtonCursor<1,3,buttonName>({{buttonName::solo,buttonName::dual,buttonName::bot}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),0,0,-1));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
 
+    pp.add_print_text(make_unique<puyoPrintTextZoom>(
+        SCREEN_X/2,SCREEN_Y/2-120,
+        "Select Arcade!!!",
+        pfs.get_font(),
+        58,
+        Color::Green,
+        Text::Style::Bold,
+        PRINT_IMMORTAL,
+        1150
+    ));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::dual),
@@ -60,12 +72,15 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
     puyoPageSignal signal;
     pp.print_all_objects(window);
     pp.print_all_buttons(window);
+    pp.print_all_texts(window);
     ps.manage_all_sounds();
     if(button_cursor.get_signal(puyoButtonCursorSignal::cursor))
     {
         ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cursor));
         switch(button_cursor.get_selected_button())
         {
+            case buttonName::NONE :
+                break;
             case buttonName::solo :
                 play_mode = Play_mode::solo;
                 break;
@@ -88,7 +103,7 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
     }
     else if(ps.sounds_empty())
     {
-        signal.next_page = Page::ready;
+        signal.next_page = Page::option;
         signal.play_mode = this->play_mode;
     }
     return signal;

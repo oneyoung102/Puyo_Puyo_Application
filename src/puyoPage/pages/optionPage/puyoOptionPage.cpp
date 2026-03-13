@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "puyoPage/pages/readyPage/puyoReadyConstant.hpp"
+#include "puyoPage/pages/optionPage/puyoOptionConstant.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
-#include "puyoReadyPage.hpp"
+#include "puyoOptionPage.hpp"
 
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
@@ -10,19 +10,21 @@
 using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
-using namespace puyoReadyConstant;
+using namespace puyoOptionConstant;
 
-puyoReadyPage::puyoReadyPage(puyoFileSystem& pfs)
+puyoOptionPage::puyoOptionPage(puyoFileSystem& pfs)
+    : button_cursor(puyoButtonCursor<2,3,buttonName>({{buttonName::easy,buttonName::normal,buttonName::hard}
+                                                                ,{buttonName::NONE,buttonName::back,buttonName::NONE,}}))
 {
     gravity = -1,
     stay = -1;
     colors = -1;
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),0,0,puyoImageConstant::PRINT_IMMORTAL));
-    ps.play_music(pfs.get_music(puyoFileSystem::Music::ready_page));
+    ps.play_music(pfs.get_music(puyoFileSystem::Music::option_page));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::easy),
-        SCREEN_X/2-240,SCREEN_Y/2,
+        SCREEN_X/2-160,SCREEN_Y/2,
         "Easy",
         pfs.get_font(),
         1.1,
@@ -32,7 +34,7 @@ puyoReadyPage::puyoReadyPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(//임시임시임시임시임시임시임시임시임시임시임시임시임시임시임시임시임시
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::normal),
-        SCREEN_X/2-90,SCREEN_Y/2,
+        SCREEN_X/2,SCREEN_Y/2,
         "normal",
         pfs.get_font(),
         1.1,
@@ -42,7 +44,7 @@ puyoReadyPage::puyoReadyPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::hard),
-        SCREEN_X/2+60,SCREEN_Y/2,
+        SCREEN_X/2+160,SCREEN_Y/2,
         "Hard",
         pfs.get_font(),
         1.1,
@@ -52,7 +54,7 @@ puyoReadyPage::puyoReadyPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::back),
-        SCREEN_X/2+240,SCREEN_Y/2,
+        SCREEN_X/2,SCREEN_Y/2+150,
         "Back",
         pfs.get_font(),
         0.9,
@@ -61,10 +63,12 @@ puyoReadyPage::puyoReadyPage(puyoFileSystem& pfs)
         PRINT_IMMORTAL));
     pl.allot_key((int)(Keyboard::Key::Left),[this](){return button_cursor.let_choose_left();});
     pl.allot_key((int)(Keyboard::Key::Right),[this](){return button_cursor.let_choose_right();});
+    pl.allot_key((int)(Keyboard::Key::Up),[this](){return button_cursor.let_choose_up();});
+    pl.allot_key((int)(Keyboard::Key::Down),[this](){return button_cursor.let_choose_down();});
     pl.allot_key((int)(Keyboard::Key::Enter),[this](){return button_cursor.let_select();});
     convert_page = false;
 }
-puyoPageSignal puyoReadyPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
+puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
     puyoPageSignal signal;
     pp.print_all_objects(window);
@@ -76,6 +80,8 @@ puyoPageSignal puyoReadyPage::proceed_page(puyoFileSystem& pfs, RenderWindow& wi
         ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cursor));
         switch(button_cursor.get_selected_button())
         {
+            case buttonName::NONE :
+                break;
             case buttonName::easy :
                 tie(gravity,stay,colors) = EASY_DIFF_SETTING;
                 break;

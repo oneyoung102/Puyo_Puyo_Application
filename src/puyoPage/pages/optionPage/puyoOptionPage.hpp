@@ -7,20 +7,21 @@
 
 #include "puyoResources/puyoFileSystem.hpp"
 
-class puyoReadyPage : public puyoPage
+class puyoOptionPage : public puyoPage
 {
     private :
         int gravity, stay, colors;
         enum class buttonName//임시
         {
+            NONE,
             easy,
             normal,
             hard,
             back
         };
-        puyoButtonCursor<1,4,buttonName> button_cursor;
+        puyoButtonCursor<2,3,buttonName> button_cursor;
         bool convert_page;
     public :
-        puyoReadyPage(puyoFileSystem& pfs);
+        puyoOptionPage(puyoFileSystem& pfs);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
 };

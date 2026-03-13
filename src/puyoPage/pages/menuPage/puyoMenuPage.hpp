@@ -12,6 +12,7 @@ class puyoMenuPage : public puyoPage
         Play_mode play_mode;
         enum class buttonName
         {
+            NONE,
             solo,
             dual,
             bot

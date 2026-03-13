@@ -2,7 +2,7 @@
 
 #include <tuple>
 
-namespace puyoReadyConstant
+namespace puyoOptionConstant
 {
     const int EASY_DIFF_GRAVITY = 2170, EASY_DIFF_STAY = 2850, EASY_DIFF_COLORS = 3;
     const std::tuple<int,int,int> EASY_DIFF_SETTING = std::make_tuple(EASY_DIFF_GRAVITY,EASY_DIFF_STAY,EASY_DIFF_COLORS); // gravity,stay,colors

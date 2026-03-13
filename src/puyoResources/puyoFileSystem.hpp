@@ -69,7 +69,7 @@ class puyoFileSystem
         enum class Music{//음악 명
             opening_page = 0,
             menu_page,
-            ready_page,
+            option_page,
             game_music1, //faeri fire!
             game_music2, //more beautiful more strong
             game_music3, // in the middle of stroll

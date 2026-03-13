@@ -5,7 +5,7 @@
 
 #include "puyoPage/pages/openingPage/puyoOpeningPage.hpp"
 #include "puyoPage/pages/menuPage/puyoMenuPage.hpp"
-#include "puyoPage/pages/readyPage/puyoReadyPage.hpp"
+#include "puyoPage/pages/optionPage/puyoOptionPage.hpp"
 #include "puyoPage/pages/gamePage/puyoGamePage.hpp"
 #include "puyoPage/pages/endingPage/puyoEndingPage.hpp"
 
@@ -25,8 +25,8 @@ void puyoPageManager::convert_page(Page p)
         case Page::menu :
             curr_page = make_unique<puyoMenuPage>(pfs);
             break;
-        case Page::ready :
-            curr_page = make_unique<puyoReadyPage>(pfs);
+        case Page::option :
+            curr_page = make_unique<puyoOptionPage>(pfs);
             break;        
         case Page::game :
             curr_page = make_unique<puyoGamePage>(pfs,*signal.play_mode,*signal.condition,*signal.gravity,*signal.stay,*signal.colors);

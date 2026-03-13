@@ -16,6 +16,7 @@ class puyoEndingPage : public puyoPage
         int proceed_count;
 
         enum class buttonName{
+            NONE,
             replay,
             to_menu
         };

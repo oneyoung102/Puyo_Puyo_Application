@@ -5,7 +5,7 @@ enum class Page
 {
     opening,
     menu,
-    ready,
+    option,
     game,
     ending
 };

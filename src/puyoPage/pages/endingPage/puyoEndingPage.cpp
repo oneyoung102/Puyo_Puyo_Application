@@ -20,6 +20,7 @@ using namespace puyoImageConstant;
 
 
 puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite capture_sprite, Play_mode pm)
+    : button_cursor(puyoButtonCursor<1,2,buttonName>({{buttonName::replay,buttonName::to_menu}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,0,0,PRINT_IMMORTAL));
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),0,0,PRINT_IMMORTAL));
@@ -122,6 +123,8 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         signal.win_player_num = puyoGameConstant::NO_WINNER;
         switch(button_cursor.get_selected_button())
         {
+            case buttonName::NONE :
+                break;
             case buttonName::replay :
                 signal.next_page = Page::game;
                 break;
