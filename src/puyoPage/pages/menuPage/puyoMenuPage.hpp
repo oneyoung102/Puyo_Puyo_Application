@@ -9,7 +9,6 @@
 class puyoMenuPage : public puyoPage
 {
     private :
-        Play_mode play_mode;
         enum class buttonName
         {
             NONE,

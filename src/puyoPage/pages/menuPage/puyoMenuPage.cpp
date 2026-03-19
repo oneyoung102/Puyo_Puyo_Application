@@ -75,23 +75,7 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
     pp.print_all_texts(window);
     ps.manage_all_sounds();
     if(button_cursor.get_signal(puyoButtonCursorSignal::cursor))
-    {
         ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cursor));
-        switch(button_cursor.get_selected_button())
-        {
-            case buttonName::NONE :
-                break;
-            case buttonName::solo :
-                play_mode = Play_mode::solo;
-                break;
-            case buttonName::dual :
-                play_mode = Play_mode::dual;
-                break;
-            case buttonName::bot :
-                play_mode = Play_mode::bot;
-                break;
-        };
-    }
     if(!convert_page)
     {
         convert_page = button_cursor.get_signal(puyoButtonCursorSignal::select);
@@ -104,7 +88,20 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
     else if(ps.sounds_empty())
     {
         signal.next_page = Page::option;
-        signal.play_mode = this->play_mode;
+        switch(button_cursor.get_selected_button())
+        {
+            case buttonName::NONE :
+                break;
+            case buttonName::solo :
+                signal.play_mode = Play_mode::solo;
+                break;
+            case buttonName::dual :
+                signal.play_mode = Play_mode::dual;
+                break;
+            case buttonName::bot :
+                signal.play_mode = Play_mode::bot;
+                break;
+        };
     }
     return signal;
 }

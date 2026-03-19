@@ -10,16 +10,29 @@
 class puyoOptionPage : public puyoPage
 {
     private :
-        int gravity, stay, colors;
-        enum class buttonName//임시
+        enum class buttonName
+        {
+            NONE,
+            diff_dial,
+            mode_dial,
+            back,
+            ready,
+        };
+        enum class diffDialName
         {
             NONE,
             easy,
             normal,
             hard,
-            back
         };
-        puyoButtonCursor<2,3,buttonName> button_cursor;
+        enum class modeDialName
+        {
+            NONE,
+            basic,
+        };
+        puyoButtonCursor<2,2,buttonName> button_cursor;
+        puyoButtonCursor<1,3,diffDialName> diff_dial_button_cursor;
+        puyoButtonCursor<1,1,modeDialName> mode_dial_button_cursor;
         bool convert_page;
     public :
         puyoOptionPage(puyoFileSystem& pfs);

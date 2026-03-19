@@ -29,7 +29,10 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected_temp, float 
     });
     text.setPosition({x, y});
 
-    sprite.setTextureRect(IntRect({0,0}, {BUTTON_X, BUTTON_Y}));
+    const auto [X,Y] = sprite.getTexture().getSize();
+    button_x = X;
+    button_y = Y/2;
+    sprite.setTextureRect(IntRect({0,0}, {button_x,button_y}));
     auto bounds1 = sprite.getLocalBounds();
     sprite.setOrigin({
         bounds1.position.x + bounds1.size.x / 2.f,
@@ -43,9 +46,9 @@ bool puyoPrintButton::is_alive(){return life != 0;}
 void puyoPrintButton::print_button(RenderWindow& window)
 {
     if(selected)
-        sprite.setTextureRect(IntRect({0,0}, {BUTTON_X, BUTTON_Y}));
+        sprite.setTextureRect(IntRect({0,button_y}, {button_x, button_y}));
     else
-        sprite.setTextureRect(IntRect({0, BUTTON_Y}, {BUTTON_X, BUTTON_Y}));
+        sprite.setTextureRect(IntRect({0, 0}, {button_x, button_y}));
     window.draw(sprite);
     window.draw(text);
     if(is_alive())

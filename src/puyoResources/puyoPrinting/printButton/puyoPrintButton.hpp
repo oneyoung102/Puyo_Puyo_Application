@@ -10,8 +10,10 @@ class puyoPrintButton
         sf::Sprite sprite;
         sf::Text text;
         const bool& selected;
+        int button_x, button_y;
     public:
         puyoPrintButton(sf::Sprite s, const bool& selected_temp, float xx, float yy, std::string content, sf::Font& font, float scaling, sf::Color color, sf::Text::Style style,int l);
+        ~puyoPrintButton() = default;
         bool is_alive();
-        void print_button(sf::RenderWindow& w);
+        virtual void print_button(sf::RenderWindow& w);
 };
