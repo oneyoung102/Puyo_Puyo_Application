@@ -19,7 +19,7 @@ using namespace sf;
 using namespace puyoImageConstant;
 
 
-puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite capture_sprite, Play_mode pm)
+puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite capture_sprite, Arcade pm)
     : button_cursor(puyoButtonCursor<1,2,buttonName>({{buttonName::replay,buttonName::to_menu}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,0,0,PRINT_IMMORTAL));
@@ -46,15 +46,15 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
             string text = "";
             switch(play_mode)
             {
-                case Play_mode::solo :
+                case Arcade::solo :
                     text = "Game Over!";
                     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::lose));
                     break;
-                case Play_mode::dual :
+                case Arcade::dual :
                     text = "Player"+to_string(win_player_num+1)+" WIN!!!";
                     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::victory));
                     break;
-                case Play_mode::bot :
+                case Arcade::bot :
                     if(win_player_num == 0)
                     {
                         text = "You WIN!!!";
@@ -65,6 +65,8 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                         text = "Bot WIN!!!";
                         ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::lose));
                     }
+                    break;
+                case Arcade::NONE :
                     break;
             };   
             pp.add_print_text(make_unique<puyoPrintText>(

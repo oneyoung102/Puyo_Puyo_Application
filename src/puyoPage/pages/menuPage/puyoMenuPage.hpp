@@ -9,14 +9,7 @@
 class puyoMenuPage : public puyoPage
 {
     private :
-        enum class buttonName
-        {
-            NONE,
-            solo,
-            dual,
-            bot
-        };
-        puyoButtonCursor<1,3,buttonName> button_cursor;
+        puyoButtonCursor<1,3,Arcade> button_cursor;
         bool convert_page;
     public :
         puyoMenuPage(puyoFileSystem& pfs);

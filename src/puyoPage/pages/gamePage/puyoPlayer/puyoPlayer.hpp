@@ -25,7 +25,6 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         int player_num; // 0 또는 1
         int new_puyo_count;
 
-        int puyo_gravity_value,puyo_stay_value;
         bool player_is_bot;
         std::unique_ptr<puyoBotAlgorithm> bot_algorithm;
 
@@ -44,15 +43,15 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         void add_opposite_obstruct_puyo_count(int c);
         void clear_opposite_obstruct_puyo_count();
 
-        void give_new_puyo(pair<int,int> colors);
+        void give_new_puyo(pair<int,int> colors, int puyo_gravity_value, int puyo_stay_value);
         const int& get_new_puyo_count();
 
         std::pair<float,float> get_puyo_spawn_pos();
         void set_puyo_spawn_pos(float x, float y);
-        int get_puyo_gravity_value();
-        void set_puyo_gravity_value(int v);
-        int get_puyo_stay_value();
-        void set_puyo_stay_value(int v);
+        int get_puyo_gravity_value() = delete;
+        void set_puyo_gravity_value(int v) = delete;
+        int get_puyo_stay_value() = delete;
+        void set_puyo_stay_value(int v) = delete;
         int get_condition_for_vanish();
         void set_condition_for_vanish(int amount);
 

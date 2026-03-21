@@ -18,21 +18,9 @@ class puyoOptionPage : public puyoPage
             back,
             ready,
         };
-        enum class diffDialName
-        {
-            NONE,
-            easy,
-            normal,
-            hard,
-        };
-        enum class modeDialName
-        {
-            NONE,
-            basic,
-        };
         puyoButtonCursor<2,2,buttonName> button_cursor;
-        puyoButtonCursor<1,3,diffDialName> diff_dial_button_cursor;
-        puyoButtonCursor<1,1,modeDialName> mode_dial_button_cursor;
+        puyoButtonCursor<1,3,Diff> diff_dial_button_cursor;
+        puyoButtonCursor<1,2,Mode> mode_dial_button_cursor;
         bool convert_page;
     public :
         puyoOptionPage(puyoFileSystem& pfs);

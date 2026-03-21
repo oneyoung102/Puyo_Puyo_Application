@@ -41,9 +41,10 @@ class puyoFileSystem
             black_back,
             basic_back,
             button,
-            easy_button,
+            easy_button,//난이도
             normal_button,
             hard_button,
+            basic_button,//모드
         };
         enum class Sound{//사운드 명
             sega_intro = 0,

@@ -17,7 +17,7 @@ using namespace sf;
 using namespace puyoImageConstant;
 
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
-    : button_cursor(puyoButtonCursor<1,3,buttonName>({{buttonName::solo,buttonName::dual,buttonName::bot}}))
+    : button_cursor(puyoButtonCursor<1,3,Arcade>({{Arcade::solo,Arcade::dual,Arcade::bot}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),0,0,-1));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
@@ -34,7 +34,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     ));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(buttonName::dual),
+        button_cursor.get_select_status(Arcade::dual),
         SCREEN_X/2,SCREEN_Y/2,
         "Dual",
         pfs.get_font(),
@@ -44,7 +44,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         PRINT_IMMORTAL));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(buttonName::solo),
+        button_cursor.get_select_status(Arcade::solo),
         SCREEN_X/2-170,SCREEN_Y/2,
         "Solo",
         pfs.get_font(),
@@ -54,7 +54,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         PRINT_IMMORTAL));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(buttonName::bot),
+        button_cursor.get_select_status(Arcade::bot),
         SCREEN_X/2+170,SCREEN_Y/2,
         "Bot",
         pfs.get_font(),
@@ -88,20 +88,7 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
     else if(ps.sounds_empty())
     {
         signal.next_page = Page::option;
-        switch(button_cursor.get_selected_button())
-        {
-            case buttonName::NONE :
-                break;
-            case buttonName::solo :
-                signal.play_mode = Play_mode::solo;
-                break;
-            case buttonName::dual :
-                signal.play_mode = Play_mode::dual;
-                break;
-            case buttonName::bot :
-                signal.play_mode = Play_mode::bot;
-                break;
-        };
+        signal.arcade = button_cursor.get_selected_button();
     }
     return signal;
 }

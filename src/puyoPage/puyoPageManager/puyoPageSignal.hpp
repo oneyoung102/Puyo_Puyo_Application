@@ -9,22 +9,34 @@ enum class Page
     game,
     ending
 };
-enum class Play_mode
+enum class Arcade
 {
+    NONE,
     solo,
     dual,
     bot
+};
+enum class Diff
+{
+    NONE,
+    easy,
+    normal,
+    hard
+};
+enum class Mode
+{
+    NONE,
+    basic,
+    acceleration,
 };
 
 struct puyoPageSignal
 {
     std::optional<Page> next_page;
 
-    std::optional<Play_mode> play_mode;
-    std::optional<int> condition;
-    std::optional<int> gravity;
-    std::optional<int> stay;
-    std::optional<int> colors;
+    std::optional<Arcade> arcade;
+    std::optional<Diff> diff;//난이도
+    std::optional<Mode> mode;//게임 모드
 
     std::optional<int> win_player_num;
 
@@ -37,16 +49,12 @@ struct puyoPageSignal
         this->next_page = other.next_page;
         if(this->next_page)//값이 존재해야 함. 즉 페이지 전환이 이루어져야
         {
-            if(other.play_mode)
-                this->play_mode = *other.play_mode;
-            if(other.condition)
-                this->condition = *other.condition;
-            if(other.gravity)
-                this->gravity = *other.gravity;
-            if(other.stay)
-                this->stay = *other.stay;
-            if(other.colors)
-                this->colors = *other.colors;
+            if(other.arcade)
+                this->arcade = *other.arcade;
+            if(other.diff)
+                this->diff = *other.diff;
+            if(other.mode)
+                this->mode = *other.mode;
             if(other.win_player_num)
                 this->win_player_num = *other.win_player_num;
             if(other.request_capture)

@@ -37,13 +37,14 @@ using namespace sf;
 using namespace puyoImageConstant;
 using namespace puyoGameConstant;
 
-puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int condtion, int gravity, int stay, int colors) 
+puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode mode) 
     : PUYO_SPRITE(pfs.get_sprite(puyoFileSystem::Image::puyo))
     , NUM_SPRITE(pfs.get_sprite(puyoFileSystem::Image::num))
     , BOARD_SPRITE(pfs.get_sprite(puyoFileSystem::Image::board))
     , COUNT_DOWN_BACK_SPRITE(pfs.get_sprite(puyoFileSystem::Image::black_back))
 {
 
+////////Arcade
     auto player0 = make_unique<puyoPlayer>(0, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1),false);
     pl.allot_key((int)(Keyboard::Key::A),player0->get_let_left());
     pl.allot_key((int)(Keyboard::Key::S),player0->get_let_down());
@@ -51,11 +52,11 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int condtio
     pl.allot_key((int)(Keyboard::Key::W),player0->get_let_turn());
     pl.allot_key((int)(Keyboard::Key::LShift),player0->get_let_drop());
     phase.add_player(std::move(player0));
-    switch(play_mode)
+    switch(arcade)
     {   
-        case Play_mode::solo :
+        case Arcade::solo :
             break;
-        case Play_mode::dual :
+        case Arcade::dual :
         {
             auto player1 = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1),false);
             pl.allot_key((int)(Keyboard::Key::Left),player1->get_let_left());
@@ -66,16 +67,18 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int condtio
             phase.add_player(std::move(player1));
             break;
         }
-        case Play_mode::bot :
+        case Arcade::bot :
         {
             auto bot = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{-1,-1},-1,-1),true);
             phase.add_player(std::move(bot));
             break;
         }
+        case Arcade::NONE :
+            break;
     };
-    phase.set_game(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y, 4,gravity,stay,colors);
+    phase.set_game(diff,mode);
 
-    
+//////출력 객체
     pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),BOARD_SPRITE,0,0,PRINT_IMMORTAL));
     for(auto&& player : phase.get_players())
     {
@@ -107,7 +110,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int condtio
         pp.add_print_object(make_unique<puyoPrintObstructViewer>(player->get_board().get_obstruct_puyo(),PUYO_SPRITE,player_obstruct_viewer_x,player_obstruct_viewer_y,PRINT_IMMORTAL));
     }
 
-    //준비 전 단계
+//////준비 전 단계
     pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,0,0,8200)); //검은색 반투명 배경
     pp.add_print_text(make_unique<puyoPrintText>(SCREEN_X/2,SCREEN_Y/2,"Ready?",pfs.get_font(),60,Color::White,Text::Style::Bold,4000));
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::ready));

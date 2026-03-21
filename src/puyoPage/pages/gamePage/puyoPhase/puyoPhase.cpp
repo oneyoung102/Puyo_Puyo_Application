@@ -1,15 +1,20 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeAcceleration.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoGravityPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoVanishPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoAction/puyoPuyoGravity_temp.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
+#include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoScoreCalc.hpp"
 
+#include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBasic.hpp"
+
+#include <stdexcept>
 #include <vector>
 #include <algorithm>
 #include <memory>
@@ -50,28 +55,49 @@ pair<int,int> puyoPhase::get_new_puyo_color(int count)
     }
     return new_colors[count];
 }
-
 vector<pair<int,int>>& puyoPhase::get_new_colors(){return new_colors;}
 
 bool puyoPhase::game_ended(){return game_end;}
 void puyoPhase::end_game(){game_end = true;}
-void puyoPhase::set_game(float spawn_x, float spawn_y, int condition, int gravity, int stay, int cc)
-{
-    if(1 <= cc && cc <= MAX_PUYO_COLOR)
-        color_count = cc;
-    else
-        throw runtime_error("Color Count is out of range");
 
-    delay_times = vector<int>(players.size(),0);
+void puyoPhase::set_game(Diff diff, Mode mode)
+{
+//////난이도
+    switch(diff)
+    { 
+        case Diff::easy :
+            tie(gravity_value,stay_value,color_count) = EASY_DIFF_SETTING;
+            break;
+        case Diff::normal :
+            tie(gravity_value,stay_value,color_count) = NORMAL_DIFF_SETTING;
+            break;
+        case Diff::hard :
+            tie(gravity_value,stay_value,color_count) = HARD_DIFF_SETTING;
+            break;
+        case Diff::NONE :
+            break;
+    } 
+//////플레이어 기본 설정
     for(auto&& player : players)
     {
-        player->set_puyo_spawn_pos(spawn_x,spawn_y);
-        player->set_condition_for_vanish(condition);
-        player->set_puyo_gravity_value(gravity);
-        player->set_puyo_stay_value(stay);
-
-        player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
+        player->set_puyo_spawn_pos(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y);
+        player->set_condition_for_vanish(4);
+        player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()),gravity_value,stay_value);
     }
+//////모드
+    switch(mode)
+    {
+        case Mode::basic :
+            curr_mode = make_unique<puyoModeBasic>();
+            break;
+        case Mode::acceleration :
+            curr_mode = make_unique<puyoModeAcceleration>(gravity_value);
+            break;
+        case Mode::NONE : 
+            throw runtime_error("curr mode ptr is nullptr");
+            break;
+    }
+    delay_times = vector<int>(players.size(),0);
 }
 
 void puyoPhase::proceed_game()
@@ -93,6 +119,7 @@ void puyoPhase::proceed_game()
                     break;
                 if(player->is_bot())//봇이라면 행동
                     player->act_bot_let();
+                curr_mode->proceed_mode(*this);//모드 진행
 
                 board.find_future_puyos(puyo);
                 puyo.gravity_let(board);
@@ -104,7 +131,7 @@ void puyoPhase::proceed_game()
                     board.remove_future_puyos();
                     added_score += puyo.get_drop_height(board);
                     board.push_gravity_puyo(puyo.to_gravity_puyo());
-                    player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()));
+                    player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()),gravity_value,stay_value);
                     player->sign_play_puyo_dropped();
                     board.reset_chain_count();
                     board.approve_spawn_obstruct_puyo();
@@ -144,23 +171,23 @@ void puyoPhase::proceed_game()
                 }
                 break;
         };
-
+//////////점수 관련 연산
         player->add_score(added_score);
-        if(players.size() != 1) //방해 뿌요 연산
+        if(players.size() != 1)
         {
             player->add_opposite_obstruct_puyo_count(calc.score_to_obstruct_puyo(added_score));
             if(player->get_opposite_obstruct_puyo_count() > 0) 
             {
                 if(!board.temp_energy_puyo_empty())
                 {
-                    const int opposite = player_num^1;
+                    const int opposite = player_num^1;//방해 뿌요 연산
                     const auto[self,opp] = calc.get_obstruct_puyo_count(player->get_opposite_obstruct_puyo_count(),board.get_obstruct_puyo());
                     board.give_obstruct_puyo(-self);
                     players[opposite]->get_board().give_obstruct_puyo(opp);
                     player->clear_opposite_obstruct_puyo_count();
 
-                    const auto[bx,by] = PLAYER_BOARD_POS[player_num];
-                    const auto[ox,oy] = PLAYER_OBSTRUCT_VIEWER_POS[opposite];
+                    const auto[bx,by] = PLAYER_BOARD_POS[player_num];//에너지 뿌요 생성
+                    const auto[ox,oy] = PLAYER_OBSTRUCT_VIEWER_POS[opposite];//에너지 뿌요 생성
                     board.find_energy_puyos(bx,by,ox,oy);//에너지 뿌요 생성
                 }
             } 
@@ -173,6 +200,7 @@ void puyoPhase::proceed_game()
             end_game(); 
         }        
     }
+
 }
 int puyoPhase::get_player_count(){return (int)players.size();}
 vector<unique_ptr<puyoPlayer>>&& puyoPhase::get_players(){return std::move(players);}
@@ -182,6 +210,12 @@ void puyoPhase::add_player(unique_ptr<puyoPlayer>&& player)
         throw runtime_error("Player count must be 1 or 2");
     players.push_back(std::move(player));
 }
+int puyoPhase::get_gravity_value(){return gravity_value;}
+void puyoPhase::set_gravity_value(int value){gravity_value = value;}
+int puyoPhase::get_stay_value(){return stay_value;}
+void puyoPhase::set_stay_value(int value){stay_value = value;}
+int puyoPhase::get_color_count(){return color_count;}
+void puyoPhase::set_color_count(int value){color_count = value;}
 
 int puyoPhase::get_win_player_num()
 {

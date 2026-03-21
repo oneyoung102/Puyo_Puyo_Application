@@ -19,7 +19,6 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
     //puyos.png
         //gamePage
         const int PUYO_SIZE = 32;
-        const int MAX_PUYO_COLOR = 5;
 
         const float FUTURE_PUYO_ALPHA_VALUE = 0.7;
 

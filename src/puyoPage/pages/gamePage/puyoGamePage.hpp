@@ -21,6 +21,6 @@ class puyoGamePage : public puyoPage
         puyoPhase phase;
         const sf::Sprite PUYO_SPRITE, NUM_SPRITE, BOARD_SPRITE,COUNT_DOWN_BACK_SPRITE;
     public :
-        puyoGamePage(puyoFileSystem& pfs, Play_mode play_mode, int condtion, int gravity, int stay, int colors);
+        puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode mode);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);
 };

@@ -29,10 +29,10 @@ void puyoPageManager::convert_page(Page p)
             curr_page = make_unique<puyoOptionPage>(pfs);
             break;        
         case Page::game :
-            curr_page = make_unique<puyoGamePage>(pfs,*signal.play_mode,*signal.condition,*signal.gravity,*signal.stay,*signal.colors);
+            curr_page = make_unique<puyoGamePage>(pfs,*signal.arcade,*signal.diff,*signal.mode);
             break;
         case Page::ending :
-            curr_page = make_unique<puyoEndingPage>(pfs,*signal.win_player_num,capture_sprite,*signal.play_mode);
+            curr_page = make_unique<puyoEndingPage>(pfs,*signal.win_player_num,capture_sprite,*signal.arcade);
             break;
     };
 }
@@ -47,7 +47,7 @@ void puyoPageManager::capture_window(sf::RenderWindow& window)
 puyoPageManager::puyoPageManager()
     : capture_sprite(Sprite(capture_texture))
 {
-    signal = puyoPageSignal{Page::opening,Play_mode::solo,4,-1,-1,-1,puyoGameConstant::NO_WINNER,false};
+    signal = puyoPageSignal{Page::opening,Arcade::NONE,Diff::NONE,Mode::NONE,puyoGameConstant::NO_WINNER,false};
     convert_page(*signal.next_page);
 }
 
