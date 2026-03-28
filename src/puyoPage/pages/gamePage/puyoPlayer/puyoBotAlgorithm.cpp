@@ -1,8 +1,8 @@
 #include "puyoBotAlgorithm.hpp"
 
-#include <queue>
 #include <random>
 #include <cmath>
+#include <queue>
 
 using namespace std;
 
@@ -34,7 +34,7 @@ tuple<int,int,int,int> puyoBotAlgorithm::to_coord(pair<int,int> probablity, puyo
     return make_tuple(x1,y1,x2,y2);
 }
 
-bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoBoard::Type>>& simulate_board, int& x1, int& y1, int& x2, int& y2, int color1, int color2)
+bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoType>>& simulate_board, int& x1, int& y1, int& x2, int& y2, puyoType color1, puyoType color2)
 {
     const bool swapped = y1 < y2;
     if(swapped) //더 아래있는 걸 먼저 낙하시키기 위해 순서 바꾸기
@@ -43,21 +43,21 @@ bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoBoard::Type>>& 
         swap(x1,x2);
     }
     while(y1+1 < simulate_board.size())
-        if(y1+1 >= 0 && simulate_board[y1+1][x1] != puyoBoard::Type::blank)
+        if(y1+1 >= 0 && simulate_board[y1+1][x1] != puyoType::blank)
             break;
         else
             ++y1;
     if(y1 < 0)
         return false;
-    simulate_board[y1][x1] = (puyoBoard::Type)color1;
+    simulate_board[y1][x1] = (puyoType)color1;
     while(y2+1 < simulate_board.size())
-        if(y2+1 >= 0 && simulate_board[y2+1][x2] != puyoBoard::Type::blank)
+        if(y2+1 >= 0 && simulate_board[y2+1][x2] != puyoType::blank)
             break;
         else
             ++y2;
     if(y2 < 0)
         return false;
-    simulate_board[y2][x2] = (puyoBoard::Type)color2;
+    simulate_board[y2][x2] = (puyoType)color2;
     if(swapped) //복구
     {
         swap(y1,y2);
@@ -107,16 +107,16 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
     const auto[board_r,board_c] = board.get_board_size();
 
     int puyo_count = 0;
-    vector<vector<puyoBoard::Type>> simulate_board(board_r,vector<puyoBoard::Type>(board_c));
+    vector<vector<puyoType>> simulate_board(board_r,vector<puyoType>(board_c));
     for(int i = 0 ; i < board_r ; ++i)
         for(int j = 0 ; j < board_c ; ++j)
         {
             simulate_board[i][j] = board.get_puyo(i,j);
-            if(simulate_board[i][j] != puyoBoard::Type::blank)
+            if(simulate_board[i][j] != puyoType::blank)
                 ++puyo_count;
         }
     bool fire_chain = false;
-    if(dist(gen) < possiblity_model(puyo_count,board_r*board_c,board.get_obstruct_puyo()))
+    if(dist(gen) < possiblity_model(puyo_count,board_r*board_c,board.controll_obstuct().get_obstruct_puyo()))
         fire_chain = true;
 
     pair<int,int> perfect_probablity(-spawn_x,0);
@@ -134,9 +134,9 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
 
         int cluster_size = 0, cluster_size_sum = 0;
         vector<vector<bool>> visited(board_r,vector<bool>(board_c,false));
-        vector<tuple<int,int,puyoBoard::Type>> changed;//{x,y,puyo}
-        changed.push_back(make_tuple(x1,y1,(puyoBoard::Type)color1));
-        changed.push_back(make_tuple(x2,y2,(puyoBoard::Type)color2));
+        vector<tuple<int,int,puyoType>> changed;//{x,y,puyo}
+        changed.push_back(make_tuple(x1,y1,(puyoType)color1));
+        changed.push_back(make_tuple(x2,y2,(puyoType)color2));
 
         for(const auto[x,y,curr_puyo] : changed)
         {
@@ -156,7 +156,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
                     const int nr = r+dr, nc = c+dc;
                     if(!board.is_in_board(nr,nc))
                         continue;
-                    const puyoBoard::Type npuyo = simulate_board[nr][nc];
+                    const puyoType npuyo = simulate_board[nr][nc];
                     if(npuyo == curr_puyo && !visited[nr][nc])
                         coords.push(make_pair(nr,nc));
                 }
@@ -176,8 +176,8 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
                     perfect_probablity = probablity;
                     bottom_y = temp_bottom_y;
                 }
-        simulate_board[y1][x1] = puyoBoard::Type::blank;//복구
-        simulate_board[y2][x2] = puyoBoard::Type::blank;
+        simulate_board[y1][x1] = puyoType::blank;//복구
+        simulate_board[y2][x2] = puyoType::blank;
     }
     to_let(perfect_probablity,puyo);
 }

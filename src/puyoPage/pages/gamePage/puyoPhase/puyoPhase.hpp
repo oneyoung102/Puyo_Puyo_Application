@@ -10,12 +10,21 @@
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoMode.hpp"
+#include "puyoPage/puyoObjectSignal.hpp"
 
+enum class puyoModeSignal
+{
+    speed_up,//스피드 업 모드
+    bomb_fused,//폭탄 모드
+    bomb_explode,
+    COUNT
+};
+ 
 class puyoPlayPuyo;
 class puyoTempPuyo;
 class puyoBoard;
 
-class puyoPhase
+class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 {
     private :
         enum class Phase{
@@ -29,7 +38,7 @@ class puyoPhase
         std::vector<int> delay_times;
         
         std::mt19937 gen;
-        std::vector<std::pair<int,int>> new_colors;
+        std::vector<std::pair<puyoType,puyoType>> new_colors;
 
         puyoScoreCalc calc;
 
@@ -37,6 +46,7 @@ class puyoPhase
         int win_player_num;
 
         std::unique_ptr<puyoMode> curr_mode; 
+        Mode mode_type;
         int gravity_value, stay_value, color_count;
 
         void delay(int player_num,int time);
@@ -48,15 +58,15 @@ class puyoPhase
 
         void end_game();////
 
-        std::pair<int,int> get_new_puyo_color(int count);
-        std::vector<std::pair<int,int>>& get_new_colors();
+        std::pair<puyoType,puyoType> get_new_puyo_color(int count);
+        const std::vector<std::pair<puyoType,puyoType>>& get_new_colors();
 
         void set_game(Diff diff, Mode mode);
         void proceed_game();
         bool game_ended();
 
         int get_player_count();
-        std::vector<std::unique_ptr<puyoPlayer>>&& get_players();
+        const std::vector<std::unique_ptr<puyoPlayer>>& get_players();
         void add_player(std::unique_ptr<puyoPlayer>&& player);
         int get_gravity_value();
         void set_gravity_value(int value);
@@ -64,6 +74,8 @@ class puyoPhase
         void set_stay_value(int value);
         int get_color_count();
         void set_color_count(int value);
+        Mode get_mode_type();
 
         int get_win_player_num();
+        void set_win_player_num(int num);
 };

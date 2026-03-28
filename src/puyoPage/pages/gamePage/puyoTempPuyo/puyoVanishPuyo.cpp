@@ -9,7 +9,7 @@
 
 using namespace std;
 
-puyoVanishPuyo::puyoVanishPuyo(float xx, float yy, int c, int amount) : puyoTempPuyo(xx,yy,c)
+puyoVanishPuyo::puyoVanishPuyo(float xx, float yy, puyoType c, int amount) : puyoTempPuyo(xx,yy,c)
 {
     vanish = make_unique<puyoPuyoVanish_temp>(amount);
     vanish->let_act();

@@ -18,8 +18,8 @@ void puyoPrintFuturePuyo::print_object(RenderWindow& w)
 {
     for(auto&& future_puyo : future_puyos)
     {
-        const int color = future_puyo.get_puyo_color();
+        const auto puyo = future_puyo.get_puyo_color();
         const auto [px,py] = future_puyo.get_puyo_pos();
-        print_puyo(w,0,color,x+PUYO_SIZE*px,y +PUYO_SIZE*py);
+        print_puyo(w,puyo,x+PUYO_SIZE*px,y +PUYO_SIZE*py);
     }
 }

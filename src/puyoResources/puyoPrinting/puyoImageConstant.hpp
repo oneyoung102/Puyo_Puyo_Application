@@ -25,15 +25,18 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         const int DROPPING_PUYO_X = 4, DROPPING_PUYO_Y = 13;
         const int GRAVITY_PUYO_X = 5, GRAVITY_PUYO_Y = 11;
         const int VANISH_SOON_PUYO_X = 6, VANISH_SOON_PUYO_Y = 10, VANISH_STAY_PUYO_X = 0, VANISH_STAY_PUYO_Y = 12;
+        const int VANISH_OTHER_X = 5, VANISH_OTHER_Y = 10;//이미지 위치 
 
         const int SPAWN_SPOT_STATE_MAX = 5; 
         const int SPAWN_SPOT_STATE_X = 11, SPAWN_SPOT_STATE_Y = 12;  //이미지 위치 
 
         const int OBSTRUCT_PUYO_X = 10, OBSTRUCT_PUYO_Y = 12;//이미지 위치 
-        const int OBSTRUCT_VANISH_PUYO_X = 10, OBSTRUCT_VANISH_PUYO_Y = 11;//이미지 위치 
         const int OBSTRUCT_PUYO_VIEWER_X = 6, OBSTRUCT_PUYO_VIEWER_Y = 15; //방해 뿌요 뷰어에 사용되는 이미지
         
         const int ENERGY_PUYO_X = 11, ENERGY_PUYO_Y = 11;//이미지 위치 
+
+        const int BOMB_X = 12, BOMB_Y = 15; //이미지 위치 ..12~15
+        const int BOMB_VANISH_X = 0, BOMB_VANISH_Y = 5;
 
     //puyo_num.png
         //gamePage
@@ -42,8 +45,10 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
     //Text
         //gamePage
-        const std::vector<std::pair<int,int>> PLAYER_CHAIN_POS = {std::make_pair(126,205),std::make_pair(386+126,205)};
-        const std::vector<std::pair<int,int>> PLAYER_ALL_CLEAR_POS = {std::make_pair(126,241),std::make_pair(386+126,241)};
+        const std::vector<std::pair<int,int>> TEXT_PLAYER_CHAIN_POS = {std::make_pair(126,205),std::make_pair(386+126,205)};
+        const std::vector<std::pair<int,int>> TEXT_PLAYER_ALL_CLEAR_POS = {std::make_pair(126,241),std::make_pair(386+126,241)};
+            //speed up mode
+            const int TEXT_SPEED_UP_X = SCREEN_X/2, TEXT_SPEED_UP_Y = 310;
         //openingPage
         const int TEXT_PRESS_ENTER_X = SCREEN_X/2, TEXT_PRESS_ENTER_Y = SCREEN_Y/2+20;
         //endingPage

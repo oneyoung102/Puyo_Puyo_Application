@@ -14,6 +14,7 @@
 
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoGravityPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
 
 #include <tuple>
 #include <utility>
@@ -24,7 +25,7 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<int,int> color, int g, int s) : puyoObjectSignal()
+puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<puyoType,puyoType> color, int g, int s) : puyoObjectSignal()
 {
 
     action = nullptr;
@@ -121,7 +122,7 @@ vector<puyoGravityPuyo> puyoPlayPuyo::to_gravity_puyo()
 
 bool puyoPlayPuyo::puyo_touched(puyoBoard& board, int ix, int iy)
 {
-    return iy >= 0 && (!board.is_in_board(iy,ix) || board.get_puyo(iy,ix) != puyoBoard::Type::blank)
+    return iy >= 0 && (!board.is_in_board(iy,ix) || board.get_puyo(iy,ix) != puyoType::blank)
         || iy < 0 && !board.is_in_col(ix);
 }
 
@@ -133,7 +134,7 @@ void puyoPlayPuyo::move_puyo(float to_x1, float to_y1, float to_x2, float to_y2)
     x2 = to_x2;
     y2 = to_y2;
 }
-pair<int,int> puyoPlayPuyo::get_puyo_color(){return make_pair(color1,color2);}
+pair<puyoType,puyoType> puyoPlayPuyo::get_puyo_color(){return make_pair(color1,color2);}
 
 void puyoPlayPuyo::let_left(){acts[(unsigned int)puyoPlayPuyo::Act_type::left]->let_act();}
 void puyoPlayPuyo::let_right(){acts[(unsigned int)puyoPlayPuyo::Act_type::right]->let_act();}

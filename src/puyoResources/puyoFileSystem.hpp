@@ -45,9 +45,11 @@ class puyoFileSystem
             normal_button,
             hard_button,
             basic_button,//모드
+            speed_button,
         };
         enum class Sound{//사운드 명
             sega_intro = 0,
+            //게임 사운드
             puyo_move,
             less_obsp_dropped,//적은 양 방해 뿌요 드롭
             mid_obsp_dropped,//방해 뿌요 드롭
@@ -64,8 +66,14 @@ class puyoFileSystem
             all_clear,
             ready,
             start,
+            //모드 사운드
+            speed_up,
+            bomb_fused,
+            bomb_explode,
+            //게임 종료 후 사운드
             victory,
             lose,
+            //버튼 사운드
             select,
             cancel,
             cursor

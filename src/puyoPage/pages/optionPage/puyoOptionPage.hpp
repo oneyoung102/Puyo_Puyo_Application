@@ -20,7 +20,7 @@ class puyoOptionPage : public puyoPage
         };
         puyoButtonCursor<2,2,buttonName> button_cursor;
         puyoButtonCursor<1,3,Diff> diff_dial_button_cursor;
-        puyoButtonCursor<1,2,Mode> mode_dial_button_cursor;
+        puyoButtonCursor<1,3,Mode> mode_dial_button_cursor;
         bool convert_page;
     public :
         puyoOptionPage(puyoFileSystem& pfs);

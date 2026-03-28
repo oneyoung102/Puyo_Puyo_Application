@@ -27,7 +27,8 @@ enum class Mode
 {
     NONE,
     basic,
-    acceleration,
+    speed,
+    bomb,
 };
 
 struct puyoPageSignal

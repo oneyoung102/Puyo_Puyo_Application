@@ -1,8 +1,10 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoTempPuyo/puyoTempPuyo.hpp"
 #include "puyoPuyoVanish_temp.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 using namespace std;
+using namespace puyoGameConstant;
 
 
 puyoPuyoVanish_temp::puyoPuyoVanish_temp(int amount) : puyoPuyoAct_temp(amount){};
@@ -24,5 +26,5 @@ void puyoPuyoVanish_temp::act_puyo(puyoTempPuyo& puyo)
     ++act_count;
 };
 
-bool puyoPuyoVanish_temp::vanish_soon(){return act_count < act_count_init*0.85;}
-bool puyoPuyoVanish_temp::vanish_stay(){return act_count < act_count_init*0.7;}
+bool puyoPuyoVanish_temp::vanish_soon(){return act_count < act_count_init*VANISH_SOON_PROP;}
+bool puyoPuyoVanish_temp::vanish_stay(){return act_count < act_count_init*VANISH_STAY_PROP;}

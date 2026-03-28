@@ -23,15 +23,13 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         int score, opposite_obstruct_puyo_count/*상대에게 보낼 방해 뿌요*/;
 
         int player_num; // 0 또는 1
-        int new_puyo_count;
+        int new_puyo_count;//새 뿌요를 받은 횟수
 
         bool player_is_bot;
         std::unique_ptr<puyoBotAlgorithm> bot_algorithm;
 
     public :
-
         puyoPlayer(int pn, puyoBoard&& b, puyoPlayPuyo&& p,bool temp_player_is_bot);
-
 
         int get_player_num();
         puyoBoard& get_board();
@@ -43,17 +41,8 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         void add_opposite_obstruct_puyo_count(int c);
         void clear_opposite_obstruct_puyo_count();
 
-        void give_new_puyo(pair<int,int> colors, int puyo_gravity_value, int puyo_stay_value);
+        void give_new_puyo(std::pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value);
         const int& get_new_puyo_count();
-
-        std::pair<float,float> get_puyo_spawn_pos();
-        void set_puyo_spawn_pos(float x, float y);
-        int get_puyo_gravity_value() = delete;
-        void set_puyo_gravity_value(int v) = delete;
-        int get_puyo_stay_value() = delete;
-        void set_puyo_stay_value(int v) = delete;
-        int get_condition_for_vanish();
-        void set_condition_for_vanish(int amount);
 
         std::function<void()> get_let_left();
         std::function<void()> get_let_right();
@@ -62,7 +51,7 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         std::function<void()> get_let_turn();
         std::function<void()> get_let_drop();
 
-        void sign_play_puyo_dropped();
+        void sign_puyo_dropped();
 
         bool is_bot();
         void act_bot_let();

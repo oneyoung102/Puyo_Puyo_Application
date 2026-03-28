@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utility>
+#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
 
 class puyoBoard;
 
@@ -8,12 +9,12 @@ class puyoTempPuyo
 {
     protected :
         float x, y;
-        int color;
+        puyoType color;
     public :
-        puyoTempPuyo(float xx, float yy, int c);
+        puyoTempPuyo(float xx, float yy, puyoType c);
 
         bool puyo_touched(puyoBoard& board, int ix, int iy);
         std::pair<float,float> get_puyo_pos();
         void move_puyo(float to_x, float to_y);
-        int get_puyo_color();
+        puyoType get_puyo_color();
 };

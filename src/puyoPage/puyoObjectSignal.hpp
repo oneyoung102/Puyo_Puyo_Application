@@ -12,6 +12,7 @@ class puyoObjectSignal // 템플릿 자료형으로 enum을 사용할 것, enum 
         {
             signals = std::vector<bool>((int)T::COUNT,false);
         }
+        void set_signal(T name){signals[(int)name] = true;}
         bool get_signal(T name)
         {
             const bool s = signals[(int)name];

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-puyoTempPuyo::puyoTempPuyo(float xx, float yy, int c)
+puyoTempPuyo::puyoTempPuyo(float xx, float yy, puyoType c)
 {  
     x = xx;
     y = yy;
@@ -14,7 +14,7 @@ puyoTempPuyo::puyoTempPuyo(float xx, float yy, int c)
 }
 bool puyoTempPuyo::puyo_touched(puyoBoard& board, int ix, int iy)
 {
-    return iy >= 0 && (!board.is_in_board(iy,ix) || board.get_puyo(iy,ix) != puyoBoard::Type::blank)
+    return iy >= 0 && (!board.is_in_board(iy,ix) || board.get_puyo(iy,ix) != puyoType::blank)
         || iy < 0 && !board.is_in_col(ix);
 }
 pair<float,float> puyoTempPuyo::get_puyo_pos(){return make_pair(x,y);}
@@ -23,4 +23,4 @@ void puyoTempPuyo::move_puyo(float to_x, float to_y)
     x = to_x;
     y = to_y;
 }
-int puyoTempPuyo::get_puyo_color(){return color;}
+puyoType puyoTempPuyo::get_puyo_color(){return color;}

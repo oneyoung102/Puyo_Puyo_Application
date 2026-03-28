@@ -18,7 +18,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     : button_cursor(puyoButtonCursor<2, 2, buttonName>({{buttonName::diff_dial, buttonName::mode_dial},
                                                                     {buttonName::back, buttonName::ready}}))
     ,  diff_dial_button_cursor(puyoButtonCursor<1, 3, Diff>({{Diff::easy, Diff::normal, Diff::hard}})),
-      mode_dial_button_cursor(puyoButtonCursor<1, 2, Mode>({{Mode::basic,Mode::acceleration}}))
+      mode_dial_button_cursor(puyoButtonCursor<1, 3, Mode>({{Mode::basic,Mode::speed,Mode::bomb}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back), 0, 0,puyoImageConstant::PRINT_IMMORTAL));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::option_page));
@@ -71,11 +71,22 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         Text::Style::Bold,
         PRINT_IMMORTAL));
     pp.add_print_button(make_unique<puyoPrintDialButton>(
-        pfs.get_sprite(puyoFileSystem::Image::basic_button),
-        mode_dial_button_cursor.get_select_status(Mode::acceleration),
+        pfs.get_sprite(puyoFileSystem::Image::speed_button),
+        mode_dial_button_cursor.get_select_status(Mode::speed),
         button_cursor.get_select_status(buttonName::mode_dial),
         SCREEN_X / 2 + 140,SCREEN_Y / 2,
-        "Acceleration",
+        "Speed-Up",
+        pfs.get_font(),
+        1, 
+        Color::White,
+        Text::Style::Bold,
+        PRINT_IMMORTAL));
+    pp.add_print_button(make_unique<puyoPrintDialButton>(//임시
+        pfs.get_sprite(puyoFileSystem::Image::basic_button),
+        mode_dial_button_cursor.get_select_status(Mode::bomb),
+        button_cursor.get_select_status(buttonName::mode_dial),
+        SCREEN_X / 2 + 140,SCREEN_Y / 2,
+        "Bomb",
         pfs.get_font(),
         1, 
         Color::White,
