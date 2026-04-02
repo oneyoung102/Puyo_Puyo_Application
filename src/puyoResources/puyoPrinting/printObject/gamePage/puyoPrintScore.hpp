@@ -9,6 +9,6 @@ class puyoPrintScore : public puyoPrintObject
         const int& to_score;
         void print_num(sf::RenderWindow& w, int img_x,int px, int py);
     public :
-        puyoPrintScore(int pn, const int& s, sf::Sprite num, int x, int y, int life);
+        puyoPrintScore(int player_num, const int& score, sf::Sprite num, int x, int y, int life);
         void print_object(sf::RenderWindow& w);
 };

@@ -23,7 +23,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
 
     pp.add_print_text(make_unique<puyoPrintTextZoom>(
-        SCREEN_X/2,SCREEN_Y/2-120,
+        TEXT_ARCADE_X, TEXT_ARCADE_Y,
         "Select Arcade!!!",
         pfs.get_font(),
         58,
@@ -34,18 +34,8 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     ));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(Arcade::dual),
-        SCREEN_X/2,SCREEN_Y/2,
-        "Dual",
-        pfs.get_font(),
-        1.3,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
-    pp.add_print_button(make_unique<puyoPrintButton>(
-        pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::solo),
-        SCREEN_X/2-170,SCREEN_Y/2,
+        SOLO_BUTTON_X,SOLO_BUTTON_Y,
         "Solo",
         pfs.get_font(),
         1.3,
@@ -54,8 +44,18 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         PRINT_IMMORTAL));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
+        button_cursor.get_select_status(Arcade::dual),
+        DUAL_BUTTON_X,DUAL_BUTTON_Y,
+        "Dual",
+        pfs.get_font(),
+        1.3,
+        Color::White,
+        Text::Style::Bold,
+        PRINT_IMMORTAL));
+    pp.add_print_button(make_unique<puyoPrintButton>(
+        pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::bot),
-        SCREEN_X/2+170,SCREEN_Y/2,
+        BOT_BUTTON_X,BOT_BUTTON_Y,
         "Bot",
         pfs.get_font(),
         1.3,

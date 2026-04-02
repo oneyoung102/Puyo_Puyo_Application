@@ -8,6 +8,6 @@ class puyoPrintBoard : public puyoPrintObject
     private :
         puyoBoard& board;
     public :
-        puyoPrintBoard(puyoBoard& b, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintBoard(puyoBoard& board, sf::Sprite puyo, int x, int y, int life);
         void print_object(sf::RenderWindow& w);
 };

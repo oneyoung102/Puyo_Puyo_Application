@@ -10,6 +10,6 @@ class puyoPrintGravityPuyo : public puyoPrintObject
     private :
         std::vector<puyoGravityPuyo>& gravity_puyos;
     public :
-        puyoPrintGravityPuyo(std::vector<puyoGravityPuyo>& gp, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintGravityPuyo(std::vector<puyoGravityPuyo>& gravity_puyos, sf::Sprite puyo, int x, int y, int life);
         void print_object(sf::RenderWindow& w);
 };

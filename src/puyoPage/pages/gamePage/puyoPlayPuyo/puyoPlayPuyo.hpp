@@ -15,9 +15,8 @@
 
 class puyoPuyoGravity;
 class puyoPuyoStay;
-
-
 class puyoBoard;
+
 enum class puyoPlayPuyoSignal
 {
     puyo_move,
@@ -36,7 +35,7 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
             drop
         };
         float x1, y1, x2, y2; // 1이 중심 뿌요
-        puyoType color1, color2;
+        puyoType type1, type2;
 
         std::unique_ptr<puyoPuyoGravity> gravity;
         std::unique_ptr<puyoPuyoStay> stay;
@@ -44,10 +43,10 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
 
         std::shared_ptr<puyoPuyoAct> action; //명령이 들어온 행동
         
-        bool taken_down_let;//아래 이동 명령 접수 여부
+        bool down_let_is_taken;//아래 이동 명령 접수 여부
 
     public :
-        puyoPlayPuyo(std::pair<float,float> spawn_pos, std::pair<puyoType,puyoType> color, int g, int s);
+        puyoPlayPuyo(std::pair<float,float> spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
 
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);
@@ -62,7 +61,7 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
 
         std::tuple<float,float,float,float> get_puyo_pos();
         void move_puyo(float to_x1, float to_y1, float to_x2, float to_y2);
-        std::pair<puyoType,puyoType> get_puyo_color();
+        std::pair<puyoType,puyoType> get_puyo_type();
         
         void let_left();
         void let_right();

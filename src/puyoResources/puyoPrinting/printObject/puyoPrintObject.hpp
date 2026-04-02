@@ -13,7 +13,7 @@ class puyoPrintObject
         void print_16x16(sf::RenderWindow& w, int img_x, int img_y, int px, int py);
         void print_puyo(sf::RenderWindow& w, puyoType type, int px, int py);
     public:
-        puyoPrintObject(sf::Sprite s, float xx, float yy, int l);
+        puyoPrintObject(sf::Sprite s, float x, float y, int life);
         virtual ~puyoPrintObject() = default;
         bool is_alive();
         virtual void print_object(sf::RenderWindow& w);

@@ -117,6 +117,69 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::ready));
     ready_status = Ready_status::ready;
 }
+
+////////////////////신호 받기
+void puyoGamePage::receive_phase_signal(puyoFileSystem& pfs)
+{
+    for(const auto& player : phase.get_players())
+    {
+        const int player_num = player->get_player_num();
+        auto& board = player->get_board();
+        auto& puyo = player->get_puyo();
+        if(board.get_signal(puyoBoardSignal::chain))
+        {
+            const auto[chain_x,chain_y] = TEXT_PLAYER_CHAIN_POS[player_num];
+            const int chain_count = board.controll_score().get_chain_count();
+            pp.add_print_text(make_unique<puyoPrintText>(chain_x,chain_y,to_string(chain_count)+" chain",pfs.get_font(),29,Color::Red,Text::Style::Bold,1500));
+            
+            const int sound_number = min((int)puyoFileSystem::Sound::chain1+chain_count-1,(int)puyoFileSystem::Sound::chain7high);
+            ps.play_sound(pfs.get_buffer((puyoFileSystem::Sound)sound_number));
+        }
+        if(board.get_signal(puyoBoardSignal::all_cleared))
+        {
+            const auto[all_clear_x,all_clear_y] = TEXT_PLAYER_ALL_CLEAR_POS[player_num];
+            pp.add_print_text(make_unique<puyoPrintText>(all_clear_x,all_clear_y,"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,4500));
+            ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::all_clear));
+        }
+        if(board.get_signal(puyoBoardSignal::spawn_obsp))
+        {
+            const int temp_obstruct_puyo = board.controll_obstuct().get_temp_obstruct_puyo();
+            if(temp_obstruct_puyo >= OBSTRUCT_PUYO_MANY)
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::many_obsp_dropped));
+            else if(temp_obstruct_puyo >= OBSTRUCT_PUYO_MID)
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::mid_obsp_dropped));
+            else
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::less_obsp_dropped));
+        }
+        if(board.get_signal(puyoBoardSignal::vanished))
+            ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_vanished));
+        if(puyo.get_signal(puyoPlayPuyoSignal::puyo_move))
+            ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_move));
+        if(player->get_signal(puyoPlayerSignal::puyo_dropped))
+            ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_dropped));
+    }
+}
+/////////////////////모드 신호
+void puyoGamePage::receive_mode_signal(puyoFileSystem& pfs)
+{
+    switch(phase.get_mode_type())
+    {
+        case Mode::speed :
+            if(phase.get_signal(puyoModeSignal::speed_up))
+            {
+                pp.add_print_text(make_unique<puyoPrintText>(TEXT_SPEED_UP_X,TEXT_SPEED_UP_Y,"Speed Up!!!",pfs.get_font(),38,Color::Yellow,Text::Style::Bold,3300));
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::speed_up));
+            }
+        case Mode::bomb :
+            if(phase.get_signal(puyoModeSignal::bomb_fused))
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::bomb_fused));
+            if(phase.get_signal(puyoModeSignal::bomb_explode))
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::bomb_explode));
+        default :
+            break;
+    }
+}
+
 puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
     puyoPageSignal signal;
@@ -139,61 +202,8 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
                 ready_status = Ready_status::play;
             break;
         case Ready_status::play :
-//////////////신호 받기
-            for(const auto& player : phase.get_players())
-            {
-                const int player_num = player->get_player_num();
-                auto& board = player->get_board();
-                auto& puyo = player->get_puyo();
-                if(board.get_signal(puyoBoardSignal::chain))
-                {
-                    const auto[chain_x,chain_y] = TEXT_PLAYER_CHAIN_POS[player_num];
-                    const int chain_count = board.controll_score().get_chain_count();
-                    pp.add_print_text(make_unique<puyoPrintText>(chain_x,chain_y,to_string(chain_count)+" chain",pfs.get_font(),29,Color::Red,Text::Style::Bold,1500));
-                    
-                    const int sound_number = min((int)puyoFileSystem::Sound::chain1+chain_count-1,(int)puyoFileSystem::Sound::chain7high);
-                    ps.play_sound(pfs.get_buffer((puyoFileSystem::Sound)sound_number));
-                }
-                if(board.get_signal(puyoBoardSignal::all_cleared))
-                {
-                    const auto[all_clear_x,all_clear_y] = TEXT_PLAYER_ALL_CLEAR_POS[player_num];
-                    pp.add_print_text(make_unique<puyoPrintText>(all_clear_x,all_clear_y,"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,4500));
-                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::all_clear));
-                }
-                if(board.get_signal(puyoBoardSignal::spawn_obsp))
-                {
-                    const int temp_obstruct_puyo = board.controll_obstuct().get_temp_obstruct_puyo();
-                    if(temp_obstruct_puyo >= OBSTRUCT_PUYO_MANY)
-                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::many_obsp_dropped));
-                    else if(temp_obstruct_puyo >= OBSTRUCT_PUYO_MID)
-                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::mid_obsp_dropped));
-                    else
-                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::less_obsp_dropped));
-                }
-                if(board.get_signal(puyoBoardSignal::vanished))
-                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_vanished));
-                if(puyo.get_signal(puyoPlayPuyoSignal::puyo_move))
-                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_move));
-                if(player->get_signal(puyoPlayerSignal::puyo_dropped))
-                    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_dropped));
-            }
-    //////////모드 신호
-            switch(phase.get_mode_type())
-            {
-                case Mode::speed :
-                    if(phase.get_signal(puyoModeSignal::speed_up))
-                    {
-                        pp.add_print_text(make_unique<puyoPrintText>(TEXT_SPEED_UP_X,TEXT_SPEED_UP_Y,"Speed Up!!!",pfs.get_font(),38,Color::Yellow,Text::Style::Bold,3300));
-                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::speed_up));
-                    }
-                case Mode::bomb :
-                    if(phase.get_signal(puyoModeSignal::bomb_fused))
-                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::bomb_fused));
-                    if(phase.get_signal(puyoModeSignal::bomb_explode))
-                        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::bomb_explode));
-                default :
-                    break;
-            }
+            receive_phase_signal(pfs);
+            receive_mode_signal(pfs);
 //////////////게임 진행
             phase.proceed_game();
             if(phase.game_ended())

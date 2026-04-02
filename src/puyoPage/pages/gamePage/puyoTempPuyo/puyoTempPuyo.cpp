@@ -6,11 +6,11 @@
 
 using namespace std;
 
-puyoTempPuyo::puyoTempPuyo(float xx, float yy, puyoType c)
+puyoTempPuyo::puyoTempPuyo(float x, float y, puyoType type)
 {  
-    x = xx;
-    y = yy;
-    color = c;
+    this->x = x;
+    this->y = y;
+    this->type = type;
 }
 bool puyoTempPuyo::puyo_touched(puyoBoard& board, int ix, int iy)
 {
@@ -23,4 +23,4 @@ void puyoTempPuyo::move_puyo(float to_x, float to_y)
     x = to_x;
     y = to_y;
 }
-puyoType puyoTempPuyo::get_puyo_color(){return color;}
+puyoType puyoTempPuyo::get_puyo_type(){return type;}

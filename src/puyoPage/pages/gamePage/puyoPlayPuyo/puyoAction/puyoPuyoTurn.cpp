@@ -97,7 +97,7 @@ void puyoPuyoTurn::arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y
     }
 }
 
-puyoPuyoTurn::puyoPuyoTurn(int amount, float d) : puyoPuyoAct(amount){degree = d;}
+puyoPuyoTurn::puyoPuyoTurn(int amount, float degree) : puyoPuyoAct(amount){this->degree = degree;}
 
 void puyoPuyoTurn::act_puyo(puyoPlayPuyo& puyo)
 {

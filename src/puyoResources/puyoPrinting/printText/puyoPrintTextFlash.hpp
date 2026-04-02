@@ -7,9 +7,10 @@
 class puyoPrintTextFlash : public puyoPrintText
 {
     private:
-        int cycle, cycle_count;//옵션 주기
+        const int cycle;//옵션 주기
+        int cycle_count;
         bool cycle_back;
     public:
-        puyoPrintTextFlash(float x, float y, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int l, int c);
+        puyoPrintTextFlash(float x, float y, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle);
         void print_text(sf::RenderWindow& w);
 };

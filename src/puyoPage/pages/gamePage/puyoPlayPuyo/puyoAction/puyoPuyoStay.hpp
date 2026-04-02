@@ -13,7 +13,7 @@ class puyoPuyoStay : public puyoPuyoAct
     protected :
         bool test_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
     public :
-        puyoPuyoStay(int amount, int b);
+        puyoPuyoStay(int amount, int bonus_count);
         bool decline_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
         void act_puyo(puyoPlayPuyo& puyo) override;
         void more_stay();

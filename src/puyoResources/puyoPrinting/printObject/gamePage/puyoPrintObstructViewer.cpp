@@ -8,9 +8,9 @@ using namespace puyoGameConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintObstructViewer::puyoPrintObstructViewer(const int& op, Sprite puyo, int x, int y, int life)
+puyoPrintObstructViewer::puyoPrintObstructViewer(const int& obstruct_puyo, Sprite puyo, int x, int y, int life)
     : puyoPrintObject(puyo,x,y,life),
-    obstruct_puyo(op)
+    obstruct_puyo(obstruct_puyo)
 {}
 
 void puyoPrintObstructViewer::print_object(RenderWindow& w)

@@ -8,11 +8,11 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintSpawnspot::puyoPrintSpawnspot(int pn, Sprite puyo, int x, int y, int life)
+puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, int x, int y, int life)
     : puyoPrintObject(puyo,x,y,life)
     , SPAWN_SPOT_CYCLE(800)
 {
-    player_num = pn;
+    this->player_num = player_num;
     spawn_spot_state = 0;
     spawn_spot_rotate_dir = false;//왼쪽
 }

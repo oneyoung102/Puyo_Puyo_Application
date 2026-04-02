@@ -41,7 +41,7 @@ bool puyoBoard::is_empty()
 bool puyoBoard::is_all_cleared() {
     if(!is_empty())
         return false;
-    signals[(int)puyoBoardSignal::all_cleared] = true;
+    set_signal(puyoBoardSignal::all_cleared);
     return true;
 }
 

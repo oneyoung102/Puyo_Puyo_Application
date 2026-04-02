@@ -12,7 +12,7 @@ class puyoEnergyPuyo : public puyoTempPuyo
     private :
         std::unique_ptr<puyoPuyoFly_temp> fly;
     public :
-        puyoEnergyPuyo(float xx, float yy, float tx, float ty, puyoType c, int amount);
+        puyoEnergyPuyo(float xx, float yy, float tx, float ty, puyoType type, int amount);
 
         void fly_let(puyoBoard& board);
         bool fly_stopped();

@@ -8,11 +8,10 @@ class puyoPlayPuyo;
 class puyoPuyoUp : public puyoPuyoAct
 {
     private :
-        float start_x1,start_y1,start_x2,start_y2;
         float dist;
         bool test_act(puyoBoard& board, puyoPlayPuyo& puyo) override;
     public :
-        puyoPuyoUp(int amount, float d);
+        puyoPuyoUp(int amount, float dist);
 
         void act_puyo(puyoPlayPuyo& puyo) override;
 };

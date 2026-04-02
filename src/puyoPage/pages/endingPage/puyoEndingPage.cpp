@@ -19,14 +19,13 @@ using namespace sf;
 using namespace puyoImageConstant;
 
 
-puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite capture_sprite, Arcade pm)
+puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int win_player_num, sf::Sprite capture_sprite, Arcade arcade)
     : button_cursor(puyoButtonCursor<1,2,buttonName>({{buttonName::replay,buttonName::to_menu}}))
+    , win_player_num(win_player_num)
+    , arcade(arcade)
 {
     pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,0,0,PRINT_IMMORTAL));
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),0,0,PRINT_IMMORTAL));
-    win_player_num = wpn;
-    play_mode = pm;
-
     proceed_count = 0;
     convert_page = false;
 }
@@ -44,7 +43,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         case 3000 : 
         {
             string text = "";
-            switch(play_mode)
+            switch(arcade)
             {
                 case Arcade::solo :
                     text = "Game Over!";

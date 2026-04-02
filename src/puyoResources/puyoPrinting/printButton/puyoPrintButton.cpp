@@ -8,12 +8,12 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected_temp, float x, float y, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int l)
+puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, float x, float y, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
-    , selected(selected_temp)
+    , selected(selected)
     , sprite(s)
 {
-    life = l; // life == -1 일 때는 영생
+    this->life = life; // life == -1 일 때는 영생
     text.setString(content);
     text.setFillColor(color);
     text.setStyle(style);

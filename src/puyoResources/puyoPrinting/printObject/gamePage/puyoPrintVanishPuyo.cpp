@@ -10,7 +10,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintVanishPuyo::puyoPrintVanishPuyo(vector<puyoVanishPuyo>& vp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), vanish_puyos(vp){}
+puyoPrintVanishPuyo::puyoPrintVanishPuyo(vector<puyoVanishPuyo>& vanish_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), vanish_puyos(vanish_puyos){}
 
 
 void puyoPrintVanishPuyo::print_object(RenderWindow& w)
@@ -20,7 +20,7 @@ void puyoPrintVanishPuyo::print_object(RenderWindow& w)
         auto [px,py] = vanish_puyo.get_puyo_pos();
         px = x + PUYO_SIZE*px;
         py = y + PUYO_SIZE*py;
-        const auto puyo = vanish_puyo.get_puyo_color();
+        const auto puyo = vanish_puyo.get_puyo_type();
         switch(puyo)
         {
             case puyoType::blank :

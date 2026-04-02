@@ -51,13 +51,24 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
             const int TEXT_SPEED_UP_X = SCREEN_X/2, TEXT_SPEED_UP_Y = 310;
         //openingPage
         const int TEXT_PRESS_ENTER_X = SCREEN_X/2, TEXT_PRESS_ENTER_Y = SCREEN_Y/2+20;
+        //menuPage
+        const int TEXT_ARCADE_X = SCREEN_X/2, TEXT_ARCADE_Y = SCREEN_Y/2-120;
         //endingPage
         const int TEXT_WINNER_X = SCREEN_X/2, TEXT_WINNER_Y = SCREEN_Y/2-35;
     
     //button
         const int TEXT_SIZE_IN_BUTTON = 31;//5글자 기준 기본 텍스트 사이즈
         //menuPage
+        const int SOLO_BUTTON_X = SCREEN_X/2-170, SOLO_BUTTON_Y = SCREEN_Y/2+23;
+        const int DUAL_BUTTON_X = SCREEN_X/2, DUAL_BUTTON_Y = SCREEN_Y/2+23;
+        const int BOT_BUTTON_X = SCREEN_X/2+170, BOT_BUTTON_Y = SCREEN_Y/2+23;
         //openingPage
+        //optionPage
+        const int DIFF_DIAL_BUTTON_X = SCREEN_X / 2-130, DIFF_DIAL_BUTTON_Y = SCREEN_Y/2-5;
+        const int MODE_DIAL_BUTTON_X = SCREEN_X / 2+130, MODE_DIAL_BUTTON_Y = SCREEN_Y/2-5;
+
+        const int BACK_BUTTON_X = SCREEN_X / 2 - 190, BACK_BUTTON_Y = SCREEN_Y / 2 + 153;
+        const int READY_BUTTON_X = SCREEN_X / 2 + 190, READY_BUTTON_Y = SCREEN_Y / 2 + 153;
         //endingPage
             const int REPLAY_BUTTON_X = SCREEN_X/2-85, REPLAY_BUTTON_Y = SCREEN_Y/2+70;
             const int TO_MENU_BUTTON_X = SCREEN_X/2+85, TO_MENU_BUTTON_Y = SCREEN_Y/2+70;

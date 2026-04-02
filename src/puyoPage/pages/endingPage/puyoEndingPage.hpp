@@ -10,8 +10,8 @@
 class puyoEndingPage : public puyoPage
 {
     private :
-        int win_player_num;
-        Arcade play_mode;
+        const int win_player_num;
+        const Arcade arcade;
 
         int proceed_count;
 
@@ -24,6 +24,6 @@ class puyoEndingPage : public puyoPage
         puyoButtonCursor<1,2,buttonName> button_cursor;
         bool convert_page;
     public :
-        puyoEndingPage(puyoFileSystem& pfs, int wpn, sf::Sprite cs, Arcade pm);
+        puyoEndingPage(puyoFileSystem& pfs, int win_player_num, sf::Sprite capture_sprite, Arcade arcade);
         puyoPageSignal proceed_page(puyoFileSystem& pfs,  sf::RenderWindow& window);
 };

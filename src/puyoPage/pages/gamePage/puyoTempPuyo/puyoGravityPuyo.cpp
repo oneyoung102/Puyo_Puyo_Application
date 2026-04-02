@@ -9,7 +9,7 @@
 
 using namespace std;
 
-puyoGravityPuyo::puyoGravityPuyo(float xx, float yy, puyoType c, int amount) : puyoTempPuyo(xx,yy,c)
+puyoGravityPuyo::puyoGravityPuyo(float x, float y, puyoType type, int amount) : puyoTempPuyo(x,y,type)
 {  
     gravity = make_unique<puyoPuyoGravity_temp>(amount);
     gravity->let_act();
@@ -25,7 +25,7 @@ bool puyoGravityPuyo::deploy_puyo(puyoBoard& board)
     const int ix = round(x), iy = round(y);
     if(!board.is_in_board(iy,ix))
         return false; 
-    board.insert_puyo(color,iy,ix);
+    board.insert_puyo(type,iy,ix);
     return true;
 }
 

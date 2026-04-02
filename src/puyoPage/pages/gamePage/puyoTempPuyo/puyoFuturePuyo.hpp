@@ -5,5 +5,5 @@
 class puyoFuturePuyo : public puyoTempPuyo
 {
     public :
-        puyoFuturePuyo(int xx, int yy, puyoType c);
+        puyoFuturePuyo(int xx, int yy, puyoType type);
 };

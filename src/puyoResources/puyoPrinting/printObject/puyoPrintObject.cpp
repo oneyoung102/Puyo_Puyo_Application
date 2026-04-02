@@ -6,11 +6,11 @@
 using namespace puyoImageConstant;
 using namespace sf;
 
-puyoPrintObject::puyoPrintObject(Sprite s, float xx, float yy, int l) : sprite(s)
+puyoPrintObject::puyoPrintObject(Sprite s, float x, float y, int life) : sprite(s)
 {
-    life = l; // life == -1 일 때는 영생
-    x = xx;
-    y = yy;
+    this->life = life; // life == -1 일 때는 영생
+    this->x = x;
+    this->y = y;
 }
 
 bool puyoPrintObject::is_alive(){return life != 0;}

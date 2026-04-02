@@ -122,7 +122,11 @@ void puyoPhase::proceed_game()
       
         wait(player_num);
         ce.fly_energy_puyos(board);
-//////////모드 진행
+/////////////////봇이라면 행동
+        if(player->is_bot())
+            if(get_phase(board) == Phase::play && !is_delayed(player_num))
+                player->act_bot_let(); 
+/////////////////모드 진행
         curr_mode->proceed_mode(*this, *player);
 
         int added_score = 0;
@@ -132,13 +136,9 @@ void puyoPhase::proceed_game()
             case Phase::play :
                 if(is_delayed(player_num))
                     break;
-                    
                 cf.find_future_puyos(board,puyo);
                 puyo.gravity_let(board);
                 puyo.act_let(board);
-//////////////////봇이라면 행동
-                if(player->is_bot())
-                    player->act_bot_let(); 
 
                 if(puyo.is_down())
                     ++added_score;

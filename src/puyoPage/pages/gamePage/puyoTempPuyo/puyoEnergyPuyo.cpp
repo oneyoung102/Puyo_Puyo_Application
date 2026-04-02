@@ -9,7 +9,7 @@
 
 using namespace std;
 
-puyoEnergyPuyo::puyoEnergyPuyo(float fx, float fy, float tx, float ty, puyoType c, int amount) : puyoTempPuyo(fx,fy,c)
+puyoEnergyPuyo::puyoEnergyPuyo(float fx, float fy, float tx, float ty, puyoType type, int amount) : puyoTempPuyo(fx,fy,type)
 {  
     fly = make_unique<puyoPuyoFly_temp>(fx,fy,tx,ty,amount);
     fly->let_act();

@@ -10,6 +10,6 @@ class puyoPrintEnergyPuyo : public puyoPrintObject
     private :
         std::vector<puyoEnergyPuyo>& energy_puyos;
     public :
-        puyoPrintEnergyPuyo(std::vector<puyoEnergyPuyo>& gp, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintEnergyPuyo(std::vector<puyoEnergyPuyo>& energy_puyos, sf::Sprite puyo, int x, int y, int life);
         void print_object(sf::RenderWindow& w);
 };

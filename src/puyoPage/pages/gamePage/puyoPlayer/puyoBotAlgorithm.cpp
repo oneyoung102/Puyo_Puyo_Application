@@ -1,4 +1,5 @@
 #include "puyoBotAlgorithm.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 #include <random>
 #include <cmath>
@@ -34,7 +35,7 @@ tuple<int,int,int,int> puyoBotAlgorithm::to_coord(pair<int,int> probablity, puyo
     return make_tuple(x1,y1,x2,y2);
 }
 
-bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoType>>& simulate_board, int& x1, int& y1, int& x2, int& y2, puyoType color1, puyoType color2)
+bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoType>>& simulate_board, int x1, int& y1, int x2, int& y2, puyoType type1, puyoType type2)
 {
     const bool swapped = y1 < y2;
     if(swapped) //더 아래있는 걸 먼저 낙하시키기 위해 순서 바꾸기
@@ -49,7 +50,7 @@ bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoType>>& simulat
             ++y1;
     if(y1 < 0)
         return false;
-    simulate_board[y1][x1] = (puyoType)color1;
+    simulate_board[y1][x1] = type1;
     while(y2+1 < simulate_board.size())
         if(y2+1 >= 0 && simulate_board[y2+1][x2] != puyoType::blank)
             break;
@@ -57,7 +58,7 @@ bool puyoBotAlgorithm::simulate_drop(std::vector<std::vector<puyoType>>& simulat
             ++y2;
     if(y2 < 0)
         return false;
-    simulate_board[y2][x2] = (puyoType)color2;
+    simulate_board[y2][x2] = type2;
     if(swapped) //복구
     {
         swap(y1,y2);
@@ -128,15 +129,15 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
         if(!board.is_in_board(y1,x1) || !board.is_in_board(y2,x2))
             continue;
 
-        const auto [color1,color2] = puyo.get_puyo_color();
-        if(!simulate_drop(simulate_board,x1,y1,x2,y2,color1,color2))
+        const auto [type1,type2] = puyo.get_puyo_type();
+        if(!simulate_drop(simulate_board,x1,y1,x2,y2,type1,type2))
             continue;
 
         int cluster_size = 0, cluster_size_sum = 0;
         vector<vector<bool>> visited(board_r,vector<bool>(board_c,false));
         vector<tuple<int,int,puyoType>> changed;//{x,y,puyo}
-        changed.push_back(make_tuple(x1,y1,(puyoType)color1));
-        changed.push_back(make_tuple(x2,y2,(puyoType)color2));
+        changed.push_back(make_tuple(x1,y1,(puyoType)type1));
+        changed.push_back(make_tuple(x2,y2,(puyoType)type2));
 
         for(const auto[x,y,curr_puyo] : changed)
         {
@@ -166,7 +167,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
         }
         
         const int temp_bottom_y = max(y1,y2);
-        if(cluster_size < 4 || fire_chain)
+        if(cluster_size < puyoGameConstant::PUYO_VANISH_CONDITION || fire_chain)
             if(max_cluster_size < cluster_size
                 || max_cluster_size == cluster_size && max_cluster_size_sum < cluster_size_sum
                 || max_cluster_size == cluster_size && max_cluster_size_sum == cluster_size_sum &&  bottom_y < temp_bottom_y)
@@ -182,10 +183,8 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
     to_let(perfect_probablity,puyo);
 }
 bool puyoBotAlgorithm::bot_lets_empty(){return lets.empty();}
-void puyoBotAlgorithm::let_bot_act(puyoPlayPuyo& puyo)
+void puyoBotAlgorithm::let_bot_act()
 {
-    if(puyo.is_moving())
-        return;
     if(lets.empty())
         return;
     lets.back()();

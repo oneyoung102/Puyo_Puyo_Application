@@ -9,14 +9,14 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintGravityPuyo::puyoPrintGravityPuyo(vector<puyoGravityPuyo>& gp, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gp){}
+puyoPrintGravityPuyo::puyoPrintGravityPuyo(vector<puyoGravityPuyo>& gravity_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gravity_puyos){}
 
 
 void puyoPrintGravityPuyo::print_object(RenderWindow& w)
 {
     for(auto& gravity_puyo : gravity_puyos)
     {
-        const auto puyo = gravity_puyo.get_puyo_color();
+        const auto puyo = gravity_puyo.get_puyo_type();
         auto [px,py]= gravity_puyo.get_puyo_pos();
         px = x + PUYO_SIZE*px;
         py = y + PUYO_SIZE*py;

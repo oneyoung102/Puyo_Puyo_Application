@@ -13,7 +13,7 @@ bool puyoPuyoLeft::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
             !puyo.puyo_touched(board,x1-dist,ceil(y1)) && !puyo.puyo_touched(board,x2-dist,ceil(y2));
 }
 
-puyoPuyoLeft::puyoPuyoLeft(int amount, float d) : puyoPuyoAct(amount){dist = d;}
+puyoPuyoLeft::puyoPuyoLeft(int amount, float dist) : puyoPuyoAct(amount){this->dist = dist;}
 
 void puyoPuyoLeft::act_puyo(puyoPlayPuyo& puyo)
 {

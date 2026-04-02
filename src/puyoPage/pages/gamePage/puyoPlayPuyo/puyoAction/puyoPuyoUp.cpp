@@ -10,7 +10,7 @@ bool puyoPuyoUp::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
     const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
     return !puyo.puyo_touched(board,x1,y1-dist) && !puyo.puyo_touched(board,x2,y2-dist);
 }
-puyoPuyoUp::puyoPuyoUp(int amount, float d) : puyoPuyoAct(amount){dist = d;} 
+puyoPuyoUp::puyoPuyoUp(int amount, float dist) : puyoPuyoAct(amount){this->dist = dist;} 
 
 void puyoPuyoUp::act_puyo(puyoPlayPuyo& puyo)
 {

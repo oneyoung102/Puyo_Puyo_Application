@@ -8,12 +8,12 @@ using namespace puyoImageConstant;
 using namespace sf;
 
 
-puyoPrintScore::puyoPrintScore(int pn, const int& s, Sprite num, int x, int y, int life)
+puyoPrintScore::puyoPrintScore(int player_num, const int& score, Sprite num, int x, int y, int life)
     : puyoPrintObject(num,x,y,life),
-        to_score(s)
+        to_score(score)
 {
-    from_score = s;
-    player_num = pn;
+    from_score = score;
+    this->player_num = player_num;
 }
 
 void puyoPrintScore::print_num(RenderWindow& w, int img_x, int px, int py)

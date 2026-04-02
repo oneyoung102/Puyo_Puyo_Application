@@ -13,7 +13,7 @@ void puyoBoardFutureControll::find_future_puyos(puyoBoard& board, puyoPlayPuyo &
 {
     future_puyos.clear();
     const auto [x1, y1, x2, y2] = puyo.get_puyo_pos();
-    const auto [color1, color2] = puyo.get_puyo_color();
+    const auto [color1, color2] = puyo.get_puyo_type();
     const auto [board_r, board_c] = board.get_board_size();
     for(int y = (int)y1; y < board_r; ++y)
         if(puyo.puyo_touched(board, round(x1), y + 1))

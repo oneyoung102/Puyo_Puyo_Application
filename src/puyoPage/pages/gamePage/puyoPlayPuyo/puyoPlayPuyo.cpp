@@ -25,12 +25,12 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<puyoType,puyoType> color, int g, int s) : puyoObjectSignal()
+puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<puyoType,puyoType> types, int gravity_value, int stay_value) : puyoObjectSignal()
 {
 
     action = nullptr;
-    gravity  = make_unique<puyoPuyoGravity>(g,PLAYPUYO_FALL_GRAVITY_DISTANCE); 
-    stay  = make_unique<puyoPuyoStay>(s,PLAYPUYO_STAY_BONUS);
+    gravity  = make_unique<puyoPuyoGravity>(gravity_value,PLAYPUYO_FALL_GRAVITY_DISTANCE); 
+    stay  = make_unique<puyoPuyoStay>(stay_value,PLAYPUYO_STAY_BONUS);
 
     acts.emplace_back(make_unique<puyoPuyoLeft>(PLAYPUYO_LEFT_TICK,PLAYPUYO_LEFT_DISTANCE));
     acts.emplace_back(make_unique<puyoPuyoRight>(PLAYPUYO_RIGHT_TICK,PLAYPUYO_RIGHT_DISTANCE));
@@ -40,10 +40,10 @@ puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<puyoType,puyoType> 
     acts.emplace_back(make_unique<puyoPuyoDrop>(PLAYPUYO_LEFT_DISTANCE));
 
     tie(x1,y1) = spawn_pos;
-    tie(x2,y2) = make_pair(spawn_pos.first,spawn_pos.second-1);
-    tie(color1,color2) = color;
+    --spawn_pos.second; tie(x2,y2) = spawn_pos;
+    tie(type1,type2) = types;
 
-    taken_down_let = false;
+    down_let_is_taken = false;
 }
 
 
@@ -55,9 +55,9 @@ void puyoPlayPuyo::act_let(puyoBoard& board)
             if(act->is_acting() && act->decline_act(board,*this))
             {
                 if(act == acts[(int)Act_type::down])
-                    taken_down_let = true;
+                    down_let_is_taken = true;
                 action = act;
-                signals[(int)puyoPlayPuyoSignal::puyo_move] = true;
+                set_signal(puyoPlayPuyoSignal::puyo_move);
                 break;
             }
     }
@@ -87,7 +87,7 @@ void puyoPlayPuyo::gravity_let(puyoBoard& board)
             stay->more_stay();
     }
 }
-bool puyoPlayPuyo::is_down(){return exchange(taken_down_let,false);}
+bool puyoPlayPuyo::is_down(){return exchange(down_let_is_taken,false);}
 bool puyoPlayPuyo::is_dropped()
 {
     return action == nullptr && stay->is_destroyed()
@@ -112,11 +112,11 @@ vector<puyoGravityPuyo> puyoPlayPuyo::to_gravity_puyo()
     {
         swap(x1,x2);
         swap(y1,y2);
-        swap(color1,color2);
+        swap(type1,type2);
     }
     vector<puyoGravityPuyo> v;
-    v.emplace_back(x1, y1, color1,PLAYPUYO_DROP_GRAVITY_TICK);
-    v.emplace_back(x2, y2, color2,PLAYPUYO_DROP_GRAVITY_TICK);
+    v.emplace_back(x1, y1, type1,PLAYPUYO_DROP_GRAVITY_TICK);
+    v.emplace_back(x2, y2, type2,PLAYPUYO_DROP_GRAVITY_TICK);
     return v;
 }
 
@@ -134,7 +134,7 @@ void puyoPlayPuyo::move_puyo(float to_x1, float to_y1, float to_x2, float to_y2)
     x2 = to_x2;
     y2 = to_y2;
 }
-pair<puyoType,puyoType> puyoPlayPuyo::get_puyo_color(){return make_pair(color1,color2);}
+pair<puyoType,puyoType> puyoPlayPuyo::get_puyo_type(){return make_pair(type1,type2);}
 
 void puyoPlayPuyo::let_left(){acts[(unsigned int)puyoPlayPuyo::Act_type::left]->let_act();}
 void puyoPlayPuyo::let_right(){acts[(unsigned int)puyoPlayPuyo::Act_type::right]->let_act();}

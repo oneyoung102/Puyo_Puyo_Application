@@ -12,6 +12,6 @@ class puyoPuyoDown : public puyoPuyoAct
         float dist;
         bool test_act(puyoBoard& board, puyoPlayPuyo& puyo) override;
     public :
-        puyoPuyoDown(int amount, float d);
+        puyoPuyoDown(int amount, float dist);
         void act_puyo(puyoPlayPuyo& puyo)override;
 };

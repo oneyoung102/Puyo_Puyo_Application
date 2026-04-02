@@ -5,10 +5,10 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintText::puyoPrintText(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int l)
+puyoPrintText::puyoPrintText(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
 {
-    life = l; // life == -1 일 때는 영생
+    this->life = life; // life == -1 일 때는 영생
     text.setString(content);
     text.setFillColor(color);
     text.setStyle(style);

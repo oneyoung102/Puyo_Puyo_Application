@@ -12,7 +12,7 @@ class puyoPuyoRight : public puyoPuyoAct
         bool test_act(puyoBoard& board, puyoPlayPuyo& puyo) override;
         
     public :
-        puyoPuyoRight(int amount, float d);
+        puyoPuyoRight(int amount, float dist);
 
         void act_puyo(puyoPlayPuyo& puyo) override;
 };

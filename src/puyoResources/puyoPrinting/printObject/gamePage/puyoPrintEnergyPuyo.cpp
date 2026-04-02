@@ -10,14 +10,14 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(vector<puyoEnergyPuyo>& ep, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), energy_puyos(ep){}
+puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(vector<puyoEnergyPuyo>& energy_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), energy_puyos(energy_puyos){}
 
 
 void puyoPrintEnergyPuyo::print_object(RenderWindow& w)
 {
     for(auto& energy_puyo : energy_puyos)
     {
-        const auto puyo = energy_puyo.get_puyo_color();
+        const auto puyo = energy_puyo.get_puyo_type();
         const auto [px,py]= energy_puyo.get_puyo_pos();      
         switch(puyo)
         {

@@ -12,7 +12,7 @@ class puyoGravityPuyo : public puyoTempPuyo
     private :
         std::unique_ptr<puyoPuyoGravity_temp> gravity;
     public :
-        puyoGravityPuyo(float xx, float yy, puyoType c, int amount);
+        puyoGravityPuyo(float x, float y, puyoType type, int amount);
 
         bool deploy_puyo(puyoBoard& board);
         void gravity_let(puyoBoard& board);

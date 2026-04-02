@@ -6,10 +6,10 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintTextFlash::puyoPrintTextFlash(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int l, int c)
-    : puyoPrintText(x,y,content,font,size,color,style,l)
+puyoPrintTextFlash::puyoPrintTextFlash(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle)
+    : puyoPrintText(x,y,content,font,size,color,style,life)
+    , cycle(cycle)
 {
-    cycle = c;
     cycle_count = 0;
     cycle_back = true;
 }

@@ -12,7 +12,7 @@ class puyoVanishPuyo : public puyoTempPuyo
     private :
         std::unique_ptr<puyoPuyoVanish_temp> vanish;
     public :
-        puyoVanishPuyo(float xx, float yy, puyoType c, int amount);
+        puyoVanishPuyo(float x, float y, puyoType type, int amount);
 
         bool vanish_stopped();
 

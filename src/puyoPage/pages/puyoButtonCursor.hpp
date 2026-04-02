@@ -55,7 +55,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
                 }
             }
             selected[cursor_r][cursor_c].second = true;
-            signals[(int)puyoButtonCursorSignal::cursor] = true;
+            set_signal(puyoButtonCursorSignal::cursor);
         }
         void cursor_move_parallel(int amount)
         {
@@ -88,7 +88,8 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
                 }
             }
             selected[cursor_r][cursor_c].second = true;
-            signals[(int)puyoButtonCursorSignal::cursor] = true;
+            set_signal(puyoButtonCursorSignal::cursor);
+
         }
     public :
         puyoButtonCursor(const std::vector<std::vector<buttonName>> allocated)
@@ -110,7 +111,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             if(!init_found)   
                 throw std::runtime_error("Button allocated vector has no button.(only has NONE)");
         }
-        void let_select(){signals[(int)puyoButtonCursorSignal::select] = true;}
+        void let_select(){set_signal(puyoButtonCursorSignal::select);}
         void let_choose_left()
         {
             if(cursor_c > 0)

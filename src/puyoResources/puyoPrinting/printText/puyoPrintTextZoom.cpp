@@ -7,15 +7,15 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintTextZoom::puyoPrintTextZoom(float x, float y, string content, Font& font, int size_temp, sf::Color color, sf::Text::Style style, int l, int c)
-    : puyoPrintText(x,y,content,font,size_temp,color,style,l)
+puyoPrintTextZoom::puyoPrintTextZoom(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle)
+    : puyoPrintText(x,y,content,font,size,color,style,life)
+    , cycle(cycle)
+    , dsize(max(1,size/30))
+    , dcycle(max(1,cycle/15))
 {
-    cycle = c;
     cycle_count = 0;
     cycle_back = true;
-    size = size_temp;
-    dsize = max(1,size/30);
-    dcycle = max(1,cycle/15);
+    this->size = size;
 }
 void puyoPrintTextZoom::print_text(RenderWindow& window)
 {

@@ -13,6 +13,6 @@ class puyoPrintNextPuyo : public puyoPrintObject
         const int& new_puyo_count;
         const std::vector<std::pair<puyoType,puyoType>>& new_colors;
     public :
-        puyoPrintNextPuyo(int pn, const int& npc, const std::vector<std::pair<puyoType,puyoType>>& nc, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintNextPuyo(int player_num, const int& new_puyo_count, const std::vector<std::pair<puyoType,puyoType>>& new_colors, sf::Sprite puyo, int x, int y, int life);
         void print_object(sf::RenderWindow& w);
 };

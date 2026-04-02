@@ -4,9 +4,9 @@
 
 using namespace std;
 
-puyoPuyoGravity::puyoPuyoGravity(int amount, float d): puyoPuyoAct(amount)
+puyoPuyoGravity::puyoPuyoGravity(int amount, float dist): puyoPuyoAct(amount)
 {
-    dist = d;
+    this->dist = dist;
     act_count = 0;
 }
 bool puyoPuyoGravity::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
