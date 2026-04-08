@@ -13,6 +13,7 @@ namespace puyoGameConstant
     const int PLAYPUYO_UP_TICK = 400;
     const int PLAYPUYO_TURN_TICK = 360;
     const int PLAYPUYO_DROP_GRAVITY_TICK = 150;
+    const int GRAVITY_TICK_STANDARD = 250;
 
     const int PLAYPUYO_LEFT_DISTANCE = 1;
     const int PLAYPUYO_RIGHT_DISTANCE = 1;

@@ -9,5 +9,5 @@ class puyoPrintObstructViewer : public puyoPrintObject
         const int& obstruct_puyo;
     public :
         puyoPrintObstructViewer(const int& obstruct_puyo, sf::Sprite screen, int x, int y, int life);
-        void print_object(sf::RenderWindow& w);
+        void print(sf::RenderWindow& w);
 };

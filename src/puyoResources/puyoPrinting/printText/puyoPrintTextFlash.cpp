@@ -13,7 +13,7 @@ puyoPrintTextFlash::puyoPrintTextFlash(float x, float y, string content, Font& f
     cycle_count = 0;
     cycle_back = true;
 }
-void puyoPrintTextFlash::print_text(RenderWindow& window)
+void puyoPrintTextFlash::print(RenderWindow& window)
 {
     if(++cycle_count >= cycle)
     {
@@ -22,6 +22,6 @@ void puyoPrintTextFlash::print_text(RenderWindow& window)
     }
     if(cycle_back)
         window.draw(text);
-    if(is_alive())
+    if(alive())
         --life;
 }

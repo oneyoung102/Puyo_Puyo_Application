@@ -14,5 +14,5 @@ class puyoLet
         puyoLet();
         void act_keyboard_let(const std::optional<sf::Event>& event);
         void allot_key(int key, std::function<void()> func);
-        void clear_allot();
+        void clear();
 };

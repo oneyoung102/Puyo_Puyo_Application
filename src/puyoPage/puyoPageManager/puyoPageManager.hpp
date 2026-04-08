@@ -18,7 +18,7 @@ class puyoPageManager
         sf::Sprite capture_sprite;
         void capture_window(sf::RenderWindow& window);
 
-        void convert_page(Page p);
+        void change_page(Page p);
     public :
         puyoPageManager();
         void show_page(sf::RenderWindow& window);

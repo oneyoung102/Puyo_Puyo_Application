@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPrintEnergyPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoEnergyPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
@@ -10,15 +10,15 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(vector<puyoEnergyPuyo>& energy_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), energy_puyos(energy_puyos){}
+puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(vector<puyoPuyo>& energy_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), energy_puyos(energy_puyos){}
 
 
-void puyoPrintEnergyPuyo::print_object(RenderWindow& w)
+void puyoPrintEnergyPuyo::print(RenderWindow& w)
 {
     for(auto& energy_puyo : energy_puyos)
     {
-        const auto puyo = energy_puyo.get_puyo_type();
-        const auto [px,py]= energy_puyo.get_puyo_pos();      
+        const auto puyo = energy_puyo.get_type();
+        const auto [px,py]= energy_puyo.get_pos();      
         switch(puyo)
         {
             case puyoType::blue :

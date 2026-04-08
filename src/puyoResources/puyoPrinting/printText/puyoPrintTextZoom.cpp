@@ -2,7 +2,6 @@
 #include "puyoPrintTextZoom.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <cmath>
 
 using namespace std;
 using namespace sf;
@@ -17,7 +16,7 @@ puyoPrintTextZoom::puyoPrintTextZoom(float x, float y, string content, Font& fon
     cycle_back = true;
     this->size = size;
 }
-void puyoPrintTextZoom::print_text(RenderWindow& window)
+void puyoPrintTextZoom::print(RenderWindow& window)
 {
     if(++cycle_count >= cycle)
     {
@@ -34,6 +33,6 @@ void puyoPrintTextZoom::print_text(RenderWindow& window)
             text.setCharacterSize(size-=dsize);
     }
     window.draw(text);
-    if(is_alive())
+    if(alive())
         --life;
 }

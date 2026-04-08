@@ -17,7 +17,7 @@ puyoPrintNextPuyo::puyoPrintNextPuyo(int player_num, const int& new_puyo_count, 
     this->player_num = player_num;
 }
 
-void puyoPrintNextPuyo::print_object(RenderWindow& w)
+void puyoPrintNextPuyo::print(RenderWindow& w)
 {
     const auto [player_next_puyo_viewer_x,player_next_puyo_viewer_y] = PLAYER_NEXT_PUYO_VIEWER_POS[player_num];
     const auto[color1,color2] = new_colors[new_puyo_count];

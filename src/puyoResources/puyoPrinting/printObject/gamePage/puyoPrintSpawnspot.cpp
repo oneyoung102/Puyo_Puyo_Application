@@ -17,7 +17,7 @@ puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, int x, int y
     spawn_spot_rotate_dir = false;//왼쪽
 }
 
-void puyoPrintSpawnspot::print_object(RenderWindow& w)
+void puyoPrintSpawnspot::print(RenderWindow& w)
 {
     if(spawn_spot_state == SPAWN_SPOT_STATE_MAX*SPAWN_SPOT_CYCLE-1 || spawn_spot_state == -1)
         spawn_spot_rotate_dir ^= 1;

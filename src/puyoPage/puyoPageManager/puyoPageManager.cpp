@@ -15,7 +15,7 @@
 using namespace std;
 using namespace sf;
 
-void puyoPageManager::convert_page(Page p)
+void puyoPageManager::change_page(Page p)
 {
     switch(p)
     {
@@ -48,7 +48,7 @@ puyoPageManager::puyoPageManager()
     : capture_sprite(Sprite(capture_texture))
 {
     signal = puyoPageSignal{Page::opening,Arcade::NONE,Diff::NONE,Mode::NONE,puyoGameConstant::NO_WINNER,false};
-    convert_page(*signal.next_page);
+    change_page(*signal.next_page);
 }
 
 void puyoPageManager::show_page(RenderWindow& window)
@@ -70,5 +70,5 @@ void puyoPageManager::show_page(RenderWindow& window)
 
     }
     if(signal.next_page)
-        convert_page(*signal.next_page);
+        change_page(*signal.next_page);
 }

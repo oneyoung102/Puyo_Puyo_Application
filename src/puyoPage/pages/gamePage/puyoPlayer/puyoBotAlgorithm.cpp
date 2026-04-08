@@ -10,8 +10,8 @@ using namespace std;
 vector<pair<int,int>> puyoBotAlgorithm::calc_all_probablities(puyoBoard& board)
 {
     vector<pair<int,int>> all_probablities;
-    const auto[board_r,board_c] = board.get_board_size();
-    const auto[spawn_x,spawn_y] = board.get_puyo_spawn_pos();
+    const auto[board_r,board_c] = board.get_size();
+    const auto[spawn_x,spawn_y] = board.get_spawn_pos();
     for(int c = 0 ; c < board_c ; ++c)
         for(int t = 0 ; t < 4 ; ++t)//4방위
             all_probablities.push_back(make_pair(c-spawn_x,t));
@@ -19,7 +19,7 @@ vector<pair<int,int>> puyoBotAlgorithm::calc_all_probablities(puyoBoard& board)
 }
 tuple<int,int,int,int> puyoBotAlgorithm::to_coord(pair<int,int> probablity, puyoPlayPuyo& puyo)
 {
-    auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
+    auto[x1,y1,x2,y2] = puyo.get_pos();
     const auto[move_count,turn_count] = probablity;
     x1 += move_count;
     x2 += move_count;
@@ -81,7 +81,7 @@ void puyoBotAlgorithm::to_let(pair<int,int> perfect_probablity, puyoPlayPuyo& pu
         lets.push_back([&puyo](){return puyo.let_turn();});
 }
 
-int puyoBotAlgorithm::possiblity_model(int puyo_count, int sum, int obstruct_puyo)
+int puyoBotAlgorithm::get_possiblity(int puyo_count, int sum, int obstruct_puyo)
 {
     if(puyo_count == 2)// puyo_count == 2일 때 같은 색 새로운 2개 뿌요가 들어온다면 all clear
         return 100;
@@ -104,8 +104,8 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
         {1,0},{-1,0},{0,1},{0,-1}
     };
     
-    const auto[spawn_x,spawn_y] = board.get_puyo_spawn_pos();
-    const auto[board_r,board_c] = board.get_board_size();
+    const auto[spawn_x,spawn_y] = board.get_spawn_pos();
+    const auto[board_r,board_c] = board.get_size();
 
     int puyo_count = 0;
     vector<vector<puyoType>> simulate_board(board_r,vector<puyoType>(board_c));
@@ -117,7 +117,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
                 ++puyo_count;
         }
     bool fire_chain = false;
-    if(dist(gen) < possiblity_model(puyo_count,board_r*board_c,board.controll_obstuct().get_obstruct_puyo()))
+    if(dist(gen) < get_possiblity(puyo_count,board_r*board_c,board.controll_obstuct().get()))
         fire_chain = true;
 
     pair<int,int> perfect_probablity(-spawn_x,0);
@@ -126,10 +126,10 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
     for(const auto probablity : calc_all_probablities(board))
     {
         auto[x1,y1,x2,y2] = to_coord(probablity,puyo);
-        if(!board.is_in_board(y1,x1) || !board.is_in_board(y2,x2))
+        if(!board.in(y1,x1) || !board.in(y2,x2))
             continue;
 
-        const auto [type1,type2] = puyo.get_puyo_type();
+        const auto [type1,type2] = puyo.get_types();
         if(!simulate_drop(simulate_board,x1,y1,x2,y2,type1,type2))
             continue;
 
@@ -155,7 +155,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
                 for(const auto [dr,dc] : dir)
                 {
                     const int nr = r+dr, nc = c+dc;
-                    if(!board.is_in_board(nr,nc))
+                    if(!board.in(nr,nc))
                         continue;
                     const puyoType npuyo = simulate_board[nr][nc];
                     if(npuyo == curr_puyo && !visited[nr][nc])

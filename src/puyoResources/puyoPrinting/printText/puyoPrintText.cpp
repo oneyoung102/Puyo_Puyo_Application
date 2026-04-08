@@ -23,11 +23,11 @@ puyoPrintText::puyoPrintText(float x, float y, string content, Font& font, int s
     text.setPosition({x, y});
 }
 
-bool puyoPrintText::is_alive(){return life != 0;}
+bool puyoPrintText::alive(){return life != 0;}
 
-void puyoPrintText::print_text(RenderWindow& window)
+void puyoPrintText::print(RenderWindow& window)
 {
     window.draw(text);
-    if(is_alive())
+    if(alive())
         --life;
 }

@@ -41,7 +41,7 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         void add_opposite_obstruct_puyo_count(int c);
         void clear_opposite_obstruct_puyo_count();
 
-        void give_new_puyo(std::pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value);
+        void give_new_puyos(std::pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value);
         const int& get_new_puyo_count();
 
         std::function<void()> get_let_left();

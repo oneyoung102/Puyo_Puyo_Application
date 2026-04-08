@@ -10,12 +10,12 @@ class puyoBoardObstructControll
         bool approvement_for_obstruct_puyo;
     public :
         puyoBoardObstructControll();
-        void give_obstruct_puyo(int count);
-        void spawn_obstruct_puyo(puyoBoard& board, int obstruct_puyo_for_dropping);
-        bool obstructed_puyo_empty();
-        int& get_obstruct_puyo();
-        int get_temp_obstruct_puyo();
+        void give(int count);
+        void spawn(puyoBoard& board, int obstruct_puyo_for_dropping);
+        bool empty();
+        const int& get();
+        int temp_get();
 
-        void approve_spawn_obstruct_puyo();
-        void disapprove_spawn_obstruct_puyo();
+        void approve_spawn();
+        void disapprove_spawn();
 };

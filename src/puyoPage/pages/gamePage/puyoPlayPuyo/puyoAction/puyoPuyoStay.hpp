@@ -11,11 +11,11 @@ class puyoPuyoStay : public puyoPuyoAct
         int bonus_count;
         bool destroy;
     protected :
-        bool test_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
+        bool test(puyoBoard& board,puyoPlayPuyo& puyo) override;
     public :
         puyoPuyoStay(int amount, int bonus_count);
-        bool decline_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
-        void act_puyo(puyoPlayPuyo& puyo) override;
+        bool decline(puyoBoard& board,puyoPlayPuyo& puyo) override;
+        void act(puyoPlayPuyo& puyo) override;
         void more_stay();
-        bool is_destroyed();
+        bool broken();
 };

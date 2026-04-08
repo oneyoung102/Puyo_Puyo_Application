@@ -9,10 +9,10 @@ class puyoPuyoGravity : public puyoPuyoAct
 {
     private :
         float dist;
-        bool test_act(puyoBoard& board, puyoPlayPuyo& puyo) override;
+        bool test(puyoBoard& board, puyoPlayPuyo& puyo) override;
     public :
         puyoPuyoGravity(int amount, float dist);
 
-        bool decline_act(puyoBoard& board, puyoPlayPuyo& puyo) override;
-        void act_puyo(puyoPlayPuyo& puyo) override;
+        bool decline(puyoBoard& board, puyoPlayPuyo& puyo) override;
+        void act(puyoPlayPuyo& puyo) override;
 };

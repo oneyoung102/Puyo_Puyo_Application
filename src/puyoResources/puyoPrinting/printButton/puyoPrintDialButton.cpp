@@ -15,7 +15,7 @@ puyoPrintDialButton::puyoPrintDialButton(sf::Sprite s, const bool& selected, con
 {
 
 }
-void puyoPrintDialButton::print_button(RenderWindow& window)
+void puyoPrintDialButton::print(RenderWindow& window)
 {
     if(selected)
     {
@@ -26,6 +26,6 @@ void puyoPrintDialButton::print_button(RenderWindow& window)
         window.draw(sprite);
         window.draw(text);
     }  
-    if(is_alive())
+    if(alive())
         --life;
 }

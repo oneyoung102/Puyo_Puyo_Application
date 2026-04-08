@@ -136,7 +136,7 @@ puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &wi
     {
         if(button_cursor.get_signal(puyoButtonCursorSignal::select))
         {
-            pl.clear_allot();
+            pl.clear();
             switch (button_cursor.get_selected_button())
             {
                 case buttonName::back:

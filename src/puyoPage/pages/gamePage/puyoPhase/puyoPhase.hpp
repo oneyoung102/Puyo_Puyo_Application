@@ -21,7 +21,7 @@ enum class puyoModeSignal
 };
  
 class puyoPlayPuyo;
-class puyoTempPuyo;
+class puyoPuyo;
 class puyoBoard;
 
 class puyoPhase : public puyoObjectSignal<puyoModeSignal>
@@ -38,7 +38,7 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         std::vector<int> delay_times;
         
         std::mt19937 gen;
-        std::vector<std::pair<puyoType,puyoType>> new_colors;
+        std::vector<std::pair<puyoType,puyoType>> new_types;
 
         puyoScoreCalc calc;
 
@@ -51,15 +51,15 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 
         void delay(int player_num,int time);
         void wait(int player_num);
-        bool is_delayed(int player_num);
+        bool delayed(int player_num);
 
     public :
         puyoPhase();
 
         void end_game();////
 
-        std::pair<puyoType,puyoType> get_new_puyo_color(int count);
-        const std::vector<std::pair<puyoType,puyoType>>& get_new_colors();
+        std::pair<puyoType,puyoType> get_new_puyos(int count);
+        const std::vector<std::pair<puyoType,puyoType>>& get_new_types();
 
         void set_game(Diff diff, Mode mode);
         void proceed_game();

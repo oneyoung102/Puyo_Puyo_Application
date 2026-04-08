@@ -12,6 +12,6 @@ class puyoPrintText
     public:
         puyoPrintText(float x, float y, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int life);
         virtual ~puyoPrintText() = default;
-        bool is_alive();
-        virtual void print_text(sf::RenderWindow& w);
+        bool alive();
+        virtual void print(sf::RenderWindow& w);
 };

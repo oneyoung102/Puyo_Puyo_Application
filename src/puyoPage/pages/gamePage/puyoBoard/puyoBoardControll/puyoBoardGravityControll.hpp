@@ -1,25 +1,28 @@
 #pragma once
 
+#include <tuple>
 #include <vector>
 
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoGravityPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
 class puyoBoard;
 
 class puyoBoardGravityControll
 {
     private :
-        std::vector<puyoGravityPuyo> gravity_puyos;
+        std::vector<puyoPuyo> gravity_puyos;
         bool gravity_puyo_is_out_in_board;
+
     public :
         puyoBoardGravityControll();
 
-        void find_gravity_puyo(puyoBoard& board);
-        void gravity_gravity_puyos(puyoBoard& board);
-        void push_gravity_puyo(puyoGravityPuyo&& ptp);
-        void push_gravity_puyo(std::vector<puyoGravityPuyo>&& ptp_v);
-        std::vector<puyoGravityPuyo>& get_gravity_puyos();
+        void find(puyoBoard& board);
+        void gravity(puyoBoard& board);
+        void add(PUYO_INFO puyo);
+        void add(std::vector<PUYO_INFO> puyos);
+        std::vector<puyoPuyo>& get();
 
-        bool gravity_puyo_empty();
-        bool gravity_puyo_is_out();
+        bool empty();
+        bool out();
 };

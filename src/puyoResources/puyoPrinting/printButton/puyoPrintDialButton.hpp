@@ -11,5 +11,5 @@ class puyoPrintDialButton : public puyoPrintButton
         const bool& dial_selected;
     public:
         puyoPrintDialButton(sf::Sprite s, const bool& selected, const bool& dial_selected, float x, float y, std::string content, sf::Font& font, float scaling, sf::Color color, sf::Text::Style style, int life);
-        void print_button(sf::RenderWindow& w) override;
+        void print(sf::RenderWindow& w) override;
 };

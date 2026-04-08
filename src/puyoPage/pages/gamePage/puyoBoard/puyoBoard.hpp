@@ -38,20 +38,19 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
     public :  
         puyoBoard();
 
-        void set_puyo_spawn_pos(float x, float y);
-        std::pair<float,float> get_puyo_spawn_pos();
+        void set_spawn_pos(float x, float y);
+        std::pair<float,float> get_spawn_pos();
         
-        std::pair<int,int> get_board_size();
-        bool is_in_row(int r);
-        bool is_in_col(int c);
-        bool is_in_board(int r, int c);
+        std::pair<int,int> get_size();
+        bool in_row(int r);
+        bool in_col(int c);
+        bool in(int r, int c);
 
         puyoType get_puyo(int r, int c);//이건 행,열
         void insert_puyo(puyoType puyo, int r, int c);//이건 행,열
         void remove_puyo(int r, int c);//이건 행,열
- 
-        bool is_empty();
-        bool is_all_cleared();
+        bool empty();
+        bool all_cleared();
 
         puyoBoardEnergyControll& controll_energy();
         puyoBoardGravityControll& controll_gravity();

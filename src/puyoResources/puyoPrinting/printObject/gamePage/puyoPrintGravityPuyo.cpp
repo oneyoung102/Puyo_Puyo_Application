@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPrintGravityPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoGravityPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 #include <vector>
@@ -9,15 +10,15 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintGravityPuyo::puyoPrintGravityPuyo(vector<puyoGravityPuyo>& gravity_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gravity_puyos){}
+puyoPrintGravityPuyo::puyoPrintGravityPuyo(vector<puyoPuyo>& gravity_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gravity_puyos){}
 
 
-void puyoPrintGravityPuyo::print_object(RenderWindow& w)
+void puyoPrintGravityPuyo::print(RenderWindow& w)
 {
     for(auto& gravity_puyo : gravity_puyos)
     {
-        const auto puyo = gravity_puyo.get_puyo_type();
-        auto [px,py]= gravity_puyo.get_puyo_pos();
+        const auto puyo = gravity_puyo.get_type();
+        auto [px,py]= gravity_puyo.get_pos();
         px = x + PUYO_SIZE*px;
         py = y + PUYO_SIZE*py;
         switch(puyo)
@@ -28,7 +29,7 @@ void puyoPrintGravityPuyo::print_object(RenderWindow& w)
             case puyoType::green :
             case puyoType::pupple :
             {
-                if(gravity_puyo.is_fast())//dropping
+                if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
                 {
                     print_16x16(w,DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y,px,py-PUYO_SIZE);
                     print_16x16(w,DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y+1,px,py);

@@ -15,16 +15,16 @@ puyoBoardObstructControll::puyoBoardObstructControll()
     temp_obstruct_puyo = 0;
 }
 
-void puyoBoardObstructControll::give_obstruct_puyo(int count)
+void puyoBoardObstructControll::give(int count)
 {
      obstruct_puyo = min(max(0, obstruct_puyo + count), ::OBSTRUCT_PUYO_VIEWER_UNIT.back() * 6);
 }
-void puyoBoardObstructControll::spawn_obstruct_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
+void puyoBoardObstructControll::spawn(puyoBoard& board, int obstruct_puyo_for_dropping)
 {
     if (!approvement_for_obstruct_puyo || obstruct_puyo_for_dropping == 0)
         return;
     approvement_for_obstruct_puyo = false;
-    const auto[board_r, board_c] = board.get_board_size();
+    const auto[board_r, board_c] = board.get_size();
 
     board.set_signal(puyoBoardSignal::spawn_obsp);
     temp_obstruct_puyo = obstruct_puyo_for_dropping;
@@ -43,18 +43,16 @@ void puyoBoardObstructControll::spawn_obstruct_puyo(puyoBoard& board, int obstru
         pq.pop();
         --obstruct_puyo_for_dropping;
         --obstruct_puyo;
-        board
-        .controll_gravity()
-        .get_gravity_puyos()
-        .push_back(puyoGravityPuyo(col, -obstruct_puyo_height[col] + OBSTRUCT_PUYO_SPAWN_Y,puyoType::obstruct, BOARD_FALL_GRAVITY_TICK));
+        board.controll_gravity()
+        .add({col, -obstruct_puyo_height[col] + OBSTRUCT_PUYO_SPAWN_Y, puyoType::obstruct, BOARD_FALL_GRAVITY_TICK});
         ++obstruct_puyo_height[col];
         pq.push(make_pair(height + 1, col));
     }
 }
-bool puyoBoardObstructControll::obstructed_puyo_empty() { return obstruct_puyo == 0; }
-int &puyoBoardObstructControll::get_obstruct_puyo() { return obstruct_puyo; }
+bool puyoBoardObstructControll::empty() { return obstruct_puyo == 0; }
+const int &puyoBoardObstructControll::get() { return obstruct_puyo; }
 
 
-int puyoBoardObstructControll::get_temp_obstruct_puyo() {return exchange(temp_obstruct_puyo, 0);}
-void puyoBoardObstructControll::approve_spawn_obstruct_puyo() {approvement_for_obstruct_puyo = true;}
-void puyoBoardObstructControll::disapprove_spawn_obstruct_puyo() {approvement_for_obstruct_puyo = false;}
+int puyoBoardObstructControll::temp_get() {return exchange(temp_obstruct_puyo, 0);}
+void puyoBoardObstructControll::approve_spawn() {approvement_for_obstruct_puyo = true;}
+void puyoBoardObstructControll::disapprove_spawn() {approvement_for_obstruct_puyo = false;}

@@ -2,16 +2,14 @@
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 
-#include <cstddef>
-#include <vector>
 #include <functional>
 
 using namespace std;
 
 puyoPlayer::puyoPlayer(int player_num, puyoBoard&& board, puyoPlayPuyo&& play_puyo, bool player_is_bot)
-    : board(std::move(board)),
-    puyo(std::move(play_puyo)),//처음에는 쓰레기값
-    puyoObjectSignal()
+    : board(std::move(board))
+    , puyo(std::move(play_puyo))
+    , puyoObjectSignal()
 {
     score = 0;
     opposite_obstruct_puyo_count = 0;
@@ -39,9 +37,9 @@ int puyoPlayer::get_opposite_obstruct_puyo_count(){return opposite_obstruct_puyo
 void puyoPlayer::add_opposite_obstruct_puyo_count(int c){opposite_obstruct_puyo_count += c;}
 void puyoPlayer::clear_opposite_obstruct_puyo_count(){opposite_obstruct_puyo_count = 0;}
 
-void puyoPlayer::give_new_puyo(pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value)
+void puyoPlayer::give_new_puyos(pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value)
 {
-    puyo = std::move(puyoPlayPuyo(board.get_puyo_spawn_pos(),colors,puyo_gravity_value,puyo_stay_value));
+    puyo = std::move(puyoPlayPuyo(board.get_spawn_pos(),colors,puyo_gravity_value,puyo_stay_value));
     ++new_puyo_count;
 }
 const int& puyoPlayer::get_new_puyo_count(){return new_puyo_count;}

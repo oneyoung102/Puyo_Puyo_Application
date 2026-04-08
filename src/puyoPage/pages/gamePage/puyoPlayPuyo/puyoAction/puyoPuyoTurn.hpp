@@ -12,11 +12,11 @@ class puyoPuyoTurn : public puyoPuyoAct
     private :
         std::unique_ptr<puyoPuyoAct> sub_act;
         float degree;
-        bool test_act(puyoBoard& board, puyoPlayPuyo& puyo) override;
+        bool test(puyoBoard& board, puyoPlayPuyo& puyo) override;
         void arrive(puyoPlayPuyo& puyo, float x1,float y1,float x2,float y2) override;
     public :
         puyoPuyoTurn(int amount, float degree);
-        bool decline_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
-        void act_puyo(puyoPlayPuyo& puyo) override;
-        void let_act() override;
+        bool decline(puyoBoard& board,puyoPlayPuyo& puyo) override;
+        void act(puyoPlayPuyo& puyo) override;
+        void let() override;
 };

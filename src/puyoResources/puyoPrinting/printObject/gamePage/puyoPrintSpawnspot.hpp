@@ -11,5 +11,5 @@ class puyoPrintSpawnspot : public puyoPrintObject
         bool spawn_spot_rotate_dir;
     public :
         puyoPrintSpawnspot(int player_num, sf::Sprite screen, int x, int y, int life);
-        void print_object(sf::RenderWindow& w);
+        void print(sf::RenderWindow& w);
 };

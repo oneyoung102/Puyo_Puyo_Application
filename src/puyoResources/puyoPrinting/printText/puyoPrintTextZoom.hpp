@@ -13,5 +13,5 @@ class puyoPrintTextZoom : public puyoPrintText
         bool cycle_back = true;
     public:
         puyoPrintTextZoom(float x, float y, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle);
-        virtual void print_text(sf::RenderWindow& w);
+        virtual void print(sf::RenderWindow& w);
 };

@@ -7,5 +7,5 @@ class puyoPrintScreenhead : public puyoPrintObject
     private :
     public :
         puyoPrintScreenhead(sf::Sprite screen, int x, int y, int life);
-        void print_object(sf::RenderWindow& w);
+        void print(sf::RenderWindow& w);
 };

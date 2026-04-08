@@ -24,7 +24,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         const std::vector<std::pair<int,int>> dir = {
             {-1,0},{1,0},{0,-1},{0,1}
         };
-        void cursor_move_vertical(int amount)
+        void move_vertical(int amount)
         {
             selected[cursor_r][cursor_c].second = false;
             if(selected[cursor_r+amount][cursor_c].first != buttonName::NONE)
@@ -57,7 +57,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             selected[cursor_r][cursor_c].second = true;
             set_signal(puyoButtonCursorSignal::cursor);
         }
-        void cursor_move_parallel(int amount)
+        void move_parallel(int amount)
         {
             selected[cursor_r][cursor_c].second = false;
             if(selected[cursor_r][cursor_c+amount].first != buttonName::NONE)
@@ -115,22 +115,22 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         void let_choose_left()
         {
             if(cursor_c > 0)
-                cursor_move_parallel(-1);
+                move_parallel(-1);
         }
         void let_choose_right()
         {
             if(cursor_c < C-1)
-                cursor_move_parallel(1);
+                move_parallel(1);
         }
         void let_choose_up()
         {
             if(cursor_r > 0)
-                cursor_move_vertical(-1);
+                move_vertical(-1);
         }
         void let_choose_down()
         {
             if(cursor_r < R-1)
-                cursor_move_vertical(1);
+                move_vertical(1);
         }
         const bool& get_select_status(buttonName type)
         {

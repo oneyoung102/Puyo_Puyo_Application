@@ -9,34 +9,34 @@ puyoPuyoGravity::puyoPuyoGravity(int amount, float dist): puyoPuyoAct(amount)
     this->dist = dist;
     act_count = 0;
 }
-bool puyoPuyoGravity::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
+bool puyoPuyoGravity::test(puyoBoard& board, puyoPlayPuyo& puyo)
 {
-    const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
-    return !puyo.puyo_touched(board,x1,y1+1) && !puyo.puyo_touched(board,x2,y2+1);
+    const auto[x1,y1,x2,y2] = puyo.get_pos();
+    return !puyo.touched(board,x1,y1+1) && !puyo.touched(board,x2,y2+1);
 }
-bool puyoPuyoGravity::decline_act(puyoBoard& board, puyoPlayPuyo& puyo)
+bool puyoPuyoGravity::decline(puyoBoard& board, puyoPlayPuyo& puyo)
 {
-    const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
-    if(test_act(board, puyo))
+    const auto[x1,y1,x2,y2] = puyo.get_pos();
+    if(test(board, puyo))
     {
-        if(!is_acting())
-            let_act();
+        if(!acting())
+            let();
         return true;
     }
     else
     {
-        halt_act();
+        halt();
         return false;
     }
     return false;
 }
-void puyoPuyoGravity::act_puyo(puyoPlayPuyo& puyo)
+void puyoPuyoGravity::act(puyoPlayPuyo& puyo)
 {
     if(act_count == act_count_constant)
         act_count = 0;
-    const auto[x1,y1,x2,y2] = puyo.get_puyo_pos();
+    const auto[x1,y1,x2,y2] = puyo.get_pos();
     const float dy = dist/act_count_constant;
 
-    puyo.move_puyo(x1,y1+dy,x2,y2+dy);
+    puyo.move(x1,y1+dy,x2,y2+dy);
     ++act_count;
 };

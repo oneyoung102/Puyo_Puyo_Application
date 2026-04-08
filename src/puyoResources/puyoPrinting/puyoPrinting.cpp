@@ -12,9 +12,9 @@ puyoPrinting::puyoPrinting(){}
 void puyoPrinting::print_all_objects(RenderWindow& window)
 {
     for(int i = 0 ; i < print_objects.size() ; )
-        if(print_objects[i]->is_alive())
+        if(print_objects[i]->alive())
         {
-            print_objects[i]->print_object(window);
+            print_objects[i]->print(window);
             ++i;
         }
         else
@@ -26,9 +26,9 @@ void puyoPrinting::print_all_objects(RenderWindow& window)
 void puyoPrinting::print_all_texts(RenderWindow& window)
 {
     for(int i = 0 ; i < print_texts.size() ; )
-        if(print_texts[i]->is_alive())
+        if(print_texts[i]->alive())
         {
-            print_texts[i]->print_text(window);
+            print_texts[i]->print(window);
             ++i;
         }
         else
@@ -40,9 +40,9 @@ void puyoPrinting::print_all_texts(RenderWindow& window)
 void puyoPrinting::print_all_buttons(RenderWindow& window)
 {
     for(int i = 0 ; i < print_buttons.size() ; )
-        if(print_buttons[i]->is_alive())
+        if(print_buttons[i]->alive())
         {
-            print_buttons[i]->print_button(window);
+            print_buttons[i]->print(window);
             ++i;
         }
         else

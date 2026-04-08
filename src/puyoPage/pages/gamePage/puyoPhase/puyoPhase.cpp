@@ -1,11 +1,11 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeSpeed.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoGravityPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoVanishPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoAction/puyoPuyoGravity_temp.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity_temp.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
@@ -34,28 +34,28 @@ puyoPhase::puyoPhase()
 
 puyoPhase::Phase puyoPhase::get_phase(puyoBoard& board)
 {
-    if(!board.controll_vanish().vanish_puyo_empty())
+    if(!board.controll_vanish().empty())
         return puyoPhase::Phase::vanish;
-    if(!board.controll_gravity().gravity_puyo_empty())
+    if(!board.controll_gravity().empty())
         return puyoPhase::Phase::gravity;
     return puyoPhase::Phase::play;
 }
 
 void puyoPhase::delay(int player_num, int time){delay_times[player_num] += time;}
 void puyoPhase::wait(int player_num){delay_times[player_num] = max(delay_times[player_num]-1,0);}
-bool puyoPhase::is_delayed(int player_num){return delay_times[player_num] > 0;}
+bool puyoPhase::delayed(int player_num){return delay_times[player_num] > 0;}
 
-pair<puyoType,puyoType> puyoPhase::get_new_puyo_color(int count)
+pair<puyoType,puyoType> puyoPhase::get_new_puyos(int count)
 {
-    while(new_colors.size() < count+3)//다음에 나올 뿌요를 보여주기 위해 +3
+    while(new_types.size() < count+3)//다음에 나올 뿌요를 보여주기 위해 +3
     {
         uniform_int_distribution<> dist1(0, color_count-1);
         uniform_int_distribution<> dist2(0, color_count-1);
-        new_colors.push_back(make_pair((puyoType)dist1(gen),(puyoType)dist2(gen)));
+        new_types.push_back(make_pair((puyoType)dist1(gen),(puyoType)dist2(gen)));
     }
-    return new_colors[count];
+    return new_types[count];
 }
-const vector<pair<puyoType,puyoType>>& puyoPhase::get_new_colors(){return new_colors;}
+const vector<pair<puyoType,puyoType>>& puyoPhase::get_new_types(){return new_types;}
 
 bool puyoPhase::game_ended(){return game_end;}
 void puyoPhase::end_game(){game_end = true;}
@@ -80,9 +80,9 @@ void puyoPhase::set_game(Diff diff, Mode mode)
 //////플레이어 기본 설정
     for(const auto& player : players)
     {
-        player->get_board().set_puyo_spawn_pos(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y);
-        player->get_board().controll_vanish().set_condition_for_vanish(PUYO_VANISH_CONDITION);
-        player->give_new_puyo(get_new_puyo_color(player->get_new_puyo_count()),gravity_value,stay_value);
+        player->get_board().set_spawn_pos(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y);
+        player->get_board().controll_vanish().set_condition(PUYO_VANISH_CONDITION);
+        player->give_new_puyos(get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
     }
 //////모드
     mode_type = mode;
@@ -121,47 +121,47 @@ void puyoPhase::proceed_game()
         const int opposite = player_num^1;
       
         wait(player_num);
-        ce.fly_energy_puyos(board);
 /////////////////봇이라면 행동
         if(player->is_bot())
-            if(get_phase(board) == Phase::play && !is_delayed(player_num))
+            if(get_phase(board) == Phase::play && !delayed(player_num))
                 player->act_bot_let(); 
 /////////////////모드 진행
         curr_mode->proceed_mode(*this, *player);
 
+        ce.fly(board);
         int added_score = 0;
         bool change_to_play_phase = false;
         switch(get_phase(board))
         {
             case Phase::play :
-                if(is_delayed(player_num))
+                if(delayed(player_num))
                     break;
-                cf.find_future_puyos(board,puyo);
+                cf.find(board,puyo);
                 puyo.gravity_let(board);
                 puyo.act_let(board);
 
-                if(puyo.is_down())
+                if(puyo.down())
                     ++added_score;
-                else if(puyo.is_dropped())
+                else if(puyo.dropped())
                 {
                     added_score += puyo.get_drop_height(board);
-                    cf.remove_future_puyos();
-                    cg.push_gravity_puyo(puyo.to_gravity_puyo());
-                    player->give_new_puyo(this->get_new_puyo_color(player->get_new_puyo_count()),gravity_value,stay_value);
+                    cf.kill();
+                    cg.add(puyo.to_gravity_puyo());
+                    player->give_new_puyos(this->get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
                     player->sign_puyo_dropped();
-                    co.approve_spawn_obstruct_puyo();
+                    co.approve_spawn();
                 }
                 break;
 
             case Phase::gravity :
-                cg.gravity_gravity_puyos(board);
-                if(cg.gravity_puyo_empty())
+                cg.gravity(board);
+                if(cg.empty())
                 {             
-                    cv.find_vanish_puyo(board); 
-                    if(cv.vanish_puyo_empty()) //파괴할 뿌요가 없으면
+                    cv.find(board); 
+                    if(cv.empty()) //파괴할 뿌요가 없으면
                     {
                         change_to_play_phase = true;
-                        co.spawn_obstruct_puyo(board,calc.get_obstruct_puyo_for_dropping(co.get_obstruct_puyo()));
+                        co.spawn(board,calc.get_obstruct_puyo_for_dropping(co.get()));
                     }
                     else
                     {
@@ -173,14 +173,14 @@ void puyoPhase::proceed_game()
                 break;
 
             case Phase::vanish :
-                cv.vanish_vanish_puyos(board);
-                if(cv.vanish_puyo_empty())
+                cv.vanish(board);
+                if(cv.empty())
                 {
-                    cg.find_gravity_puyo(board); 
-                    if(cg.gravity_puyo_empty()) //파괴 후, 드롭할 뿌요가 없으면
+                    cg.find(board); 
+                    if(cg.empty()) //파괴 후, 드롭할 뿌요가 없으면
                     {
                         change_to_play_phase = true;
-                        if(board.is_all_cleared())
+                        if(board.all_cleared())
                             player->add_opposite_obstruct_puyo_count(calc.get_all_cleared_obstruct_puyo());//올클리어 보너스
                     }
                 }
@@ -190,36 +190,36 @@ void puyoPhase::proceed_game()
         {
             delay(player_num,1500);
             cs.reset_chain_count();
-            co.disapprove_spawn_obstruct_puyo();
+            co.disapprove_spawn();
         }
 //////////점수 관련 연산
         player->add_score(added_score);
         if(players.size() != 1)
         {
-            player->add_opposite_obstruct_puyo_count(calc.score_to_obstruct_puyo(added_score));
+            player->add_opposite_obstruct_puyo_count(calc.to_obstruct_puyo(added_score));
             if(player->get_opposite_obstruct_puyo_count() > 0) 
             {
-                if(!ce.temp_energy_puyo_empty())
+                if(!ce.temp_empty())
                 {
-                    const auto[self,opp] = calc.get_obstruct_puyo_count(player->get_opposite_obstruct_puyo_count(),co.get_obstruct_puyo());
-                    co.give_obstruct_puyo(-self);
+                    const auto[self,opp] = calc.get_obstruct_puyo_count(player->get_opposite_obstruct_puyo_count(),co.get());
+                    co.give(-self);
 
                     players[opposite]
                     ->get_board()
                     .controll_obstuct()
-                    .give_obstruct_puyo(opp);
+                    .give(opp);
                     player->clear_opposite_obstruct_puyo_count();
 
                     const auto[bx,by] = PLAYER_BOARD_POS[player_num];//에너지 뿌요 생성
                     const auto[ox,oy] = PLAYER_OBSTRUCT_VIEWER_POS[opposite];//에너지 뿌요 생성
-                    ce.find_energy_puyos(bx,by,ox,oy);//에너지 뿌요 생성
+                    ce.find(bx,by,ox,oy);//에너지 뿌요 생성
                 }
             } 
             else
-                ce.clear_temp_energy_puyos();
+                ce.temp_clear();
         }
 /////////게임 종료
-        if(cg.gravity_puyo_is_out() && cg.gravity_puyo_empty())//게임 종료
+        if(cg.out() && cg.empty())//게임 종료
         {
             win_player_num = opposite;
             end_game(); 

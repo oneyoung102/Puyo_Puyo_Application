@@ -11,22 +11,22 @@ puyoPuyoStay::puyoPuyoStay(int amount, int bonus_count) : puyoPuyoAct(amount)
     destroy = false;
 }
 
-bool puyoPuyoStay::test_act(puyoBoard& board, puyoPlayPuyo& puyo)
+bool puyoPuyoStay::test(puyoBoard& board, puyoPlayPuyo& puyo)
 {
-    return puyo.is_holding();
+    return puyo.holding();
 }
-bool puyoPuyoStay::decline_act(puyoBoard& board, puyoPlayPuyo& puyo)
+bool puyoPuyoStay::decline(puyoBoard& board, puyoPlayPuyo& puyo)
 {
-    if(test_act(board,puyo))
+    if(test(board,puyo))
         return true;
     return false;
 }
-void puyoPuyoStay::act_puyo(puyoPlayPuyo& puyo)
+void puyoPuyoStay::act(puyoPlayPuyo& puyo)
 {
     if(act_count == act_count_constant)
     {
         destroy = true;
-        halt_act();
+        halt();
     }
     ++act_count;
 };
@@ -35,5 +35,5 @@ void puyoPuyoStay::more_stay()
     act_count = max(act_count-bonus_count,0);
     bonus_count /= 2;
 }
-bool puyoPuyoStay::is_destroyed(){return destroy;}
+bool puyoPuyoStay::broken(){return destroy;}
 

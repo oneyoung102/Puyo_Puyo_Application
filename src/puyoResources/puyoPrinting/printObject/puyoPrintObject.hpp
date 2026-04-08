@@ -15,6 +15,6 @@ class puyoPrintObject
     public:
         puyoPrintObject(sf::Sprite s, float x, float y, int life);
         virtual ~puyoPrintObject() = default;
-        bool is_alive();
-        virtual void print_object(sf::RenderWindow& w);
+        bool alive();
+        virtual void print(sf::RenderWindow& w);
 };

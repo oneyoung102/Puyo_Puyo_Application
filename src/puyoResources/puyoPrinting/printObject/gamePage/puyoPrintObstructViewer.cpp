@@ -13,7 +13,7 @@ puyoPrintObstructViewer::puyoPrintObstructViewer(const int& obstruct_puyo, Sprit
     obstruct_puyo(obstruct_puyo)
 {}
 
-void puyoPrintObstructViewer::print_object(RenderWindow& w)
+void puyoPrintObstructViewer::print(RenderWindow& w)
 {
     int img_x = PUYO_SIZE*OBSTRUCT_PUYO_VIEWER_X, img_y = PUYO_SIZE*OBSTRUCT_PUYO_VIEWER_Y, obp = obstruct_puyo, dx = 0;
     int count = 6;//6자리만 보여줌

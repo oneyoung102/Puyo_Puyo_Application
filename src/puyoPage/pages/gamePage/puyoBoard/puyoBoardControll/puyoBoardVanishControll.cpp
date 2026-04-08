@@ -1,7 +1,8 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoVanishPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardVanishControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
 #include <queue>
 #include <utility>
 
@@ -11,44 +12,47 @@ puyoBoardVanishControll::puyoBoardVanishControll()
     : dir({{1, 0}, {-1, 0}, {0, 1}, {0, -1}})
 {}
 
-void puyoBoardVanishControll::push_vanish_puyo(puyoVanishPuyo &&ptp){vanish_puyos.push_back(std::move(ptp));}
+void puyoBoardVanishControll::add(PUYO_INFO puyo)
+{
+    vanish_puyos.push_back(std::move(puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),std::get<2>(puyo),
+        make_unique<puyoPuyoVanish_temp>(std::get<3>(puyo)))));
+    vanish_puyos.back().let();
+}
 
 
-vector<puyoVanishPuyo> &puyoBoardVanishControll::get_vanish_puyos() { return vanish_puyos; }
-bool puyoBoardVanishControll::vanish_puyo_empty() { return vanish_puyos.empty(); }
+vector<puyoPuyo> &puyoBoardVanishControll::get() { return vanish_puyos; }
+bool puyoBoardVanishControll::empty() { return vanish_puyos.empty(); }
 
-void puyoBoardVanishControll::vanish_vanish_puyos(puyoBoard& board)
+void puyoBoardVanishControll::vanish(puyoBoard& board)
 {
     for (int i = 0; i < vanish_puyos.size();)
-    {
-        if (vanish_puyos[i].vanish_stopped())
+        if(!vanish_puyos[i].acting())
         {
             std::swap(vanish_puyos[i], vanish_puyos.back());
-            const auto [x, y] = vanish_puyos.back().get_puyo_pos();
-            const auto color = vanish_puyos.back().get_puyo_type();
+            const auto [x, y] = vanish_puyos.back().get_pos();
+            const auto color = vanish_puyos.back().get_type();
             board
             .controll_energy()
-            .add_temp_energy_puyo(make_tuple(x, y, color));
+            .temp_add(make_tuple(x, y, color));
 
             vanish_puyos.pop_back();
             board.set_signal(puyoBoardSignal::vanished);
         }
         else
         {
-            vanish_puyos[i].vanish_let(board);
+            vanish_puyos[i].act_let(board);
             ++i;
         }
-    }
 }
 
-void puyoBoardVanishControll::vanish_deployed_puyo(puyoBoard& board, int x, int y, puyoType type, int tick)
+void puyoBoardVanishControll::make_vanish(puyoBoard& board, int x, int y, puyoType type, int tick)
 {
-    push_vanish_puyo(std::move(puyoVanishPuyo(x, y, type, tick)));
+    add({x, y, type, tick});
     board.remove_puyo(y, x);
 }
-void puyoBoardVanishControll::find_vanish_puyo(puyoBoard& board)
+void puyoBoardVanishControll::find(puyoBoard& board)
 {
-    const auto[board_r, board_c] = board.get_board_size();
+    const auto[board_r, board_c] = board.get_size();
     vector<vector<bool>> visited(board_r, vector<bool>(board_c, false));
     for (int i = 0; i < board_r; ++i)
         for (int j = 0; j < board_c; ++j)
@@ -82,7 +86,7 @@ void puyoBoardVanishControll::find_vanish_puyo(puyoBoard& board)
                 for (const auto [dr, dc] : dir)
                 {
                     const int nr = r + dr, nc = c + dc;
-                    if (!board.is_in_board(nr, nc))
+                    if (!board.in(nr, nc))
                         continue;
                     const puyoType npuyo = board.get_puyo(nr, nc);
                     if ((npuyo == puyo || npuyo == puyoType::obstruct) && !visited[nr][nc])
@@ -100,10 +104,10 @@ void puyoBoardVanishControll::find_vanish_puyo(puyoBoard& board)
                 for(const auto [r, c, type] : stored_puyos)
                 {
                     const int tick = (type == puyoType::obstruct) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
-                    vanish_deployed_puyo(board,c,r,type,tick);
+                    make_vanish(board,c,r,type,tick);
                 }
             }
     }
 }
-void puyoBoardVanishControll::set_condition_for_vanish(int amount){condition_for_vanish = amount;}
-int puyoBoardVanishControll::get_condition_for_vanish() { return condition_for_vanish; }
+void puyoBoardVanishControll::set_condition(int amount){condition_for_vanish = amount;}
+int puyoBoardVanishControll::get_condition() { return condition_for_vanish; }

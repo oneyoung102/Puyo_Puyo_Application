@@ -26,7 +26,7 @@ void puyoLet::act_keyboard_let(const optional<Event>& event)
     }
 }
 void puyoLet::allot_key(int key, function<void()> func){key_allot[key] = func;}
-void puyoLet::clear_allot()
+void puyoLet::clear()
 {
     key_allot = vector<function<void()>>(101);
 }

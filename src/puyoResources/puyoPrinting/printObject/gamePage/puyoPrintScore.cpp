@@ -23,7 +23,7 @@ void puyoPrintScore::print_num(RenderWindow& w, int img_x, int px, int py)
     print_sprite(w,px,py);
 }
 
-void puyoPrintScore::print_object(RenderWindow& w)
+void puyoPrintScore::print(RenderWindow& w)
 {
     from_score = min(++from_score,to_score);
     for(int px = x, tens = 1e7 ; tens != 0 ; tens /= 10)

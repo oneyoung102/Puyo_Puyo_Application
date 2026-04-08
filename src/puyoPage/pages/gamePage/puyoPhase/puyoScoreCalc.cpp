@@ -30,7 +30,7 @@ pair<int,int> puyoScoreCalc::get_obstruct_puyo_count(int self_obstruct_puyo_coun
     const int opp_obstruct_puyo_count = max(0,self_obstruct_puyo_count-curr_obstruct_puyo_count);
     return {self_obstruct_puyo_count,opp_obstruct_puyo_count};
 }
-int puyoScoreCalc::score_to_obstruct_puyo(int score){return score/obstruct_puyo_rate;}
+int puyoScoreCalc::to_obstruct_puyo(int score){return score/obstruct_puyo_rate;}
 
 void puyoScoreCalc::set_obstruct_puyo_rate(int v){obstruct_puyo_rate = max(v,1);}
 int puyoScoreCalc::get_all_cleared_obstruct_puyo(){return all_cleared_obstruct_puyo;}

@@ -9,9 +9,9 @@ class puyoPlayPuyo;
 class puyoPuyoDrop : public puyoPuyoAct
 {
     private :
-        bool test_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
+        bool test(puyoBoard& board,puyoPlayPuyo& puyo) override;
     public :
         puyoPuyoDrop(int amount);
-        bool decline_act(puyoBoard& board,puyoPlayPuyo& puyo) override;
-        void act_puyo(puyoPlayPuyo& puyo) override;
+        bool decline(puyoBoard& board,puyoPlayPuyo& puyo) override;
+        void act(puyoPlayPuyo& puyo) override;
 };

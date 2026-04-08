@@ -13,7 +13,7 @@ puyoPrintObject::puyoPrintObject(Sprite s, float x, float y, int life) : sprite(
     this->y = y;
 }
 
-bool puyoPrintObject::is_alive(){return life != 0;}
+bool puyoPrintObject::alive(){return life != 0;}
 
 void puyoPrintObject::print_16x16(RenderWindow& w, int img_x, int img_y, int px, int py)
 {
@@ -46,10 +46,10 @@ void puyoPrintObject::print_sprite(RenderWindow& window, float x1, float y1)
 {
     sprite.setPosition({x1, y1});
     window.draw(sprite);
-    if(is_alive())
+    if(alive())
         --life;
 }
-void puyoPrintObject::print_object(RenderWindow& w)
+void puyoPrintObject::print(RenderWindow& w)
 {
     print_sprite(w,x,y);
 }

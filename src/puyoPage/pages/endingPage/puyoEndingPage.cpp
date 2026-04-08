@@ -116,7 +116,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         if(convert_page)
         {
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::select));
-            pl.clear_allot();
+            pl.clear();
         }
     }
     else if(ps.sounds_empty())

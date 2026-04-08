@@ -4,7 +4,7 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
-#include "puyoPage/pages/gamePage/puyoTempPuyo/puyoVanishPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include <random>
 
 using namespace std;
@@ -29,7 +29,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
     auto& cs = board.controll_score();
     auto& cg = board.controll_gravity();
 
-    const auto[r,c] = board.get_board_size();
+    const auto[r,c] = board.get_size();
     const int opposite = bomb_have_player_num^1;
     if(bomb_is_spawned)
     {
@@ -41,10 +41,10 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
                 for(int i = 0 ; i < r ; ++i)
                     for(int j = 0 ; j < c ; ++j)
                         if(board.get_puyo(i,j) != puyoType::blank)
-                            cv.vanish_deployed_puyo(board,j,i,board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK);                                                 
+                            cv.make_vanish(board,j,i,board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK);                                                 
                 bomb_tick = -1;
             }
-            else if(cv.vanish_puyo_empty())
+            else if(cv.empty())
             {
                 phase.end_game();
                 phase.set_win_player_num(opposite);
@@ -58,7 +58,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
                 const auto puyo = board.get_puyo(i,bomb_c);
                 if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                 {
-                    cv.vanish_deployed_puyo(board,bomb_c,i,puyo,BOMB_VANISH_TICK);
+                    cv.make_vanish(board,bomb_c,i,puyo,BOMB_VANISH_TICK);
                     break;
                 }
             }
@@ -66,7 +66,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             if(phase.get_player_count() == 2)//2인 플레이일 때만 넘김
                 bomb_have_player_num = opposite;
         }
-        else if(cv.vanish_puyo_empty() && cg.gravity_puyo_empty())//폭탄 진행
+        else if(cv.empty() && cg.empty())//폭탄 진행
         {
             --bomb_tick;
             bool appearance_change = true;
@@ -99,12 +99,12 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             }
         }
     }
-    else if(cv.vanish_puyo_empty() && cg.gravity_puyo_empty())//폭탄 소환
+    else if(cv.empty() && cg.empty())//폭탄 소환
     {
-        std::uniform_int_distribution<> dist(0, board.get_board_size().second-1);
+        std::uniform_int_distribution<> dist(0, board.get_size().second-1);
         bomb_c = dist(gen);
         bomb_appearance = puyoType::tiny_bomb;
-        cg.push_gravity_puyo(std::move(puyoGravityPuyo(bomb_c, OBSTRUCT_PUYO_SPAWN_Y,bomb_appearance, BOARD_FALL_GRAVITY_TICK)));
+        cg.add({bomb_c, OBSTRUCT_PUYO_SPAWN_Y,bomb_appearance, BOARD_FALL_GRAVITY_TICK});
         bomb_tick = BOMB_MAX_TICK;
         bomb_is_spawned = true;
         phase.set_signal(puyoModeSignal::bomb_fused);

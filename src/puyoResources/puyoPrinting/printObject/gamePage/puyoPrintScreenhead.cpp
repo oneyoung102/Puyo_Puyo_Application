@@ -11,7 +11,7 @@ puyoPrintScreenhead::puyoPrintScreenhead(Sprite screen, int x, int y, int life) 
     sprite.setTextureRect(IntRect({0,0}, {static_cast<int>(SCREEN_X),player_board_y+1})); 
 }
 
-void puyoPrintScreenhead::print_object(RenderWindow& w)
+void puyoPrintScreenhead::print(RenderWindow& w)
 {
     print_sprite(w,x,y);
 }
