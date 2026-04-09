@@ -8,8 +8,8 @@
 class puyoPrintVanishPuyo : public puyoPrintObject
 {
     private :
-        std::vector<puyoPuyo>& vanish_puyos;
+        const std::vector<puyoPuyo>& vanish_puyos;
     public :
-        puyoPrintVanishPuyo(std::vector<puyoPuyo>& vanish_puyos, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintVanishPuyo(const std::vector<puyoPuyo>& vanish_puyos, sf::Sprite puyo, int x, int y, int life);
         void print(sf::RenderWindow& w);
 };

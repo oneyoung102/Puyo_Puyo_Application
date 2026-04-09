@@ -12,8 +12,8 @@ class puyoBoardObstructControll
         puyoBoardObstructControll();
         void give(int count);
         void spawn(puyoBoard& board, int obstruct_puyo_for_dropping);
-        bool empty();
-        const int& get();
+        bool empty() const;
+        const int& get() const;
         int temp_get();
 
         void approve_spawn();

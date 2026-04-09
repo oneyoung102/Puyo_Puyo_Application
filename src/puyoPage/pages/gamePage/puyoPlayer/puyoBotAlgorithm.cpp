@@ -129,7 +129,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
         if(!board.in(y1,x1) || !board.in(y2,x2))
             continue;
 
-        const auto [type1,type2] = puyo.get_types();
+        const auto [type1,type2] = puyo.get_type();
         if(!simulate_drop(simulate_board,x1,y1,x2,y2,type1,type2))
             continue;
 

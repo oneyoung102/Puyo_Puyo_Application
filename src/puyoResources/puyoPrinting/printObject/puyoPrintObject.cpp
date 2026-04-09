@@ -6,7 +6,7 @@
 using namespace puyoImageConstant;
 using namespace sf;
 
-puyoPrintObject::puyoPrintObject(Sprite s, float x, float y, int life) : sprite(s)
+puyoPrintObject::puyoPrintObject(Sprite s, double x, double y, int life) : sprite(s)
 {
     this->life = life; // life == -1 일 때는 영생
     this->x = x;
@@ -42,9 +42,9 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, int px, int py)
     }
 }
 
-void puyoPrintObject::print_sprite(RenderWindow& window, float x1, float y1)
+void puyoPrintObject::print_sprite(RenderWindow& window, double x1, double y1)
 {
-    sprite.setPosition({x1, y1});
+    sprite.setPosition({(float)x1, (float)y1});
     window.draw(sprite);
     if(alive())
         --life;

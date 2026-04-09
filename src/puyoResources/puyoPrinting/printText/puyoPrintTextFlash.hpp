@@ -11,6 +11,6 @@ class puyoPrintTextFlash : public puyoPrintText
         int cycle_count;
         bool cycle_back;
     public:
-        puyoPrintTextFlash(float x, float y, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle);
+        puyoPrintTextFlash(double x, double y, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle);
         void print(sf::RenderWindow& w);
 };

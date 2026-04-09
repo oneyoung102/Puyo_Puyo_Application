@@ -8,8 +8,8 @@
 class puyoPrintFuturePuyo : public puyoPrintObject
 {
     private :
-        std::vector<puyoPuyo>& future_puyos;
+        const std::vector<puyoPuyo>& future_puyos;
     public :
-        puyoPrintFuturePuyo(std::vector<puyoPuyo>& future_puyos, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintFuturePuyo(const std::vector<puyoPuyo>& future_puyos, sf::Sprite puyo, int x, int y, int life);
         void print(sf::RenderWindow& w);
 };

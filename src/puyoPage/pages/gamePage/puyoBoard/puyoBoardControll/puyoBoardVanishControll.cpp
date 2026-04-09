@@ -2,7 +2,7 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardVanishControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
 #include <queue>
 #include <utility>
 
@@ -14,14 +14,15 @@ puyoBoardVanishControll::puyoBoardVanishControll()
 
 void puyoBoardVanishControll::add(PUYO_INFO puyo)
 {
-    vanish_puyos.push_back(std::move(puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),std::get<2>(puyo),
-        make_unique<puyoPuyoVanish_temp>(std::get<3>(puyo)))));
+    vanish_puyos.push_back(
+        puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),std::get<2>(puyo),
+        make_unique<puyoPuyoVanish>(std::get<3>(puyo))));
     vanish_puyos.back().let();
 }
 
 
-vector<puyoPuyo> &puyoBoardVanishControll::get() { return vanish_puyos; }
-bool puyoBoardVanishControll::empty() { return vanish_puyos.empty(); }
+const vector<puyoPuyo> &puyoBoardVanishControll::get() const { return vanish_puyos; }
+bool puyoBoardVanishControll::empty() const { return vanish_puyos.empty(); }
 
 void puyoBoardVanishControll::vanish(puyoBoard& board)
 {
@@ -110,4 +111,4 @@ void puyoBoardVanishControll::find(puyoBoard& board)
     }
 }
 void puyoBoardVanishControll::set_condition(int amount){condition_for_vanish = amount;}
-int puyoBoardVanishControll::get_condition() { return condition_for_vanish; }
+int puyoBoardVanishControll::get_condition() const { return condition_for_vanish; }

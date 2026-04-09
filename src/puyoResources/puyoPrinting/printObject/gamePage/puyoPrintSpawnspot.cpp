@@ -29,12 +29,12 @@ void puyoPrintSpawnspot::print(RenderWindow& w)
     {
         sprite.setScale({1, 1});
         ++spawn_spot_state;
-        print_sprite(w,player_board_x + PUYO_SIZE*x,player_board_y + PUYO_SIZE*max(y,0.0f));
+        print_sprite(w,player_board_x + PUYO_SIZE*x,player_board_y + PUYO_SIZE*max(y,0.0));
     }
     else
     {
         sprite.setScale({-1, 1});
         --spawn_spot_state;
-        print_sprite(w,player_board_x + PUYO_SIZE*(x+1),player_board_y + PUYO_SIZE*max(y,0.0f));//반전 때문에 +1
+        print_sprite(w,player_board_x + PUYO_SIZE*(x+1),player_board_y + PUYO_SIZE*max(y,0.0));//반전 때문에 +1
     }
 }

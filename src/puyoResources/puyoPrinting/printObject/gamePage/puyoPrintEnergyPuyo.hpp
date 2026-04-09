@@ -8,8 +8,8 @@
 class puyoPrintEnergyPuyo : public puyoPrintObject
 {
     private :
-        std::vector<puyoPuyo>& energy_puyos;
+        const std::vector<puyoPuyo>& energy_puyos;
     public :
-        puyoPrintEnergyPuyo(std::vector<puyoPuyo>& energy_puyos, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintEnergyPuyo(const std::vector<puyoPuyo>& energy_puyos, sf::Sprite puyo, int x, int y, int life);
         void print(sf::RenderWindow& w);
 };

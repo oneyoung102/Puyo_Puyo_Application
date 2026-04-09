@@ -20,8 +20,8 @@ class puyoBoardVanishControll
         void add(PUYO_INFO puyo);
 
         void set_condition(int amount);
-        int get_condition();
+        int get_condition() const;
 
-        std::vector<puyoPuyo>& get();
-        bool empty();
+        const std::vector<puyoPuyo>& get() const;
+        bool empty() const;
 };

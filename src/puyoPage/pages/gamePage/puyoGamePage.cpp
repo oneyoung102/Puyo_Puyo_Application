@@ -45,7 +45,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
 {
 
 ////////Arcade
-    auto player0 = make_unique<puyoPlayer>(0, puyoBoard(), puyoPlayPuyo({0,0},{puyoType::blank,puyoType::blank},-1,-1),false);
+    auto player0 = make_unique<puyoPlayer>(0, make_unique<puyoBoard>(),false);
     pl.allot_key((int)(Keyboard::Key::A),player0->get_let_left());
     pl.allot_key((int)(Keyboard::Key::S),player0->get_let_down());
     pl.allot_key((int)(Keyboard::Key::D),player0->get_let_right());
@@ -58,7 +58,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
             break;
         case Arcade::dual :
         {
-            auto player1 = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{puyoType::blank,puyoType::blank,},-1,-1),false);
+            auto player1 = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),false);
             pl.allot_key((int)(Keyboard::Key::Left),player1->get_let_left());
             pl.allot_key((int)(Keyboard::Key::Down),player1->get_let_down());
             pl.allot_key((int)(Keyboard::Key::Right),player1->get_let_right());
@@ -69,7 +69,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         }
         case Arcade::bot :
         {
-            auto bot = make_unique<puyoPlayer>(1, puyoBoard(), puyoPlayPuyo({0,0},{puyoType::blank,puyoType::blank},-1,-1),true);
+            auto bot = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),true);
             phase.add_player(std::move(bot));
             break;
         }
@@ -94,7 +94,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         pp.add_print_object(make_unique<puyoPrintGravityPuyo>(board.controll_gravity().get(),PUYO_SPRITE,player_board_x,board_printing_y,PRINT_IMMORTAL));
         pp.add_print_object(make_unique<puyoPrintEnergyPuyo>(board.controll_energy().get(),PUYO_SPRITE,0,0,PRINT_IMMORTAL));
         pp.add_print_object(make_unique<puyoPrintBoard>(board,PUYO_SPRITE,player_board_x,board_printing_y,PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintPlayPuyo>(player->get_puyo(),PUYO_SPRITE,player_board_x,board_printing_y,PRINT_IMMORTAL));
+        pp.add_print_object(make_unique<puyoPrintPlayPuyo>(*player,PUYO_SPRITE,player_board_x,board_printing_y,PRINT_IMMORTAL));
 
         const auto [player_next_puyo_viewer_x,player_next_puyo_viewer_y] = PLAYER_NEXT_PUYO_VIEWER_POS[player_num];
         pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player->get_new_puyo_count(),phase.get_new_types(),PUYO_SPRITE,player_next_puyo_viewer_x,player_next_puyo_viewer_y,PRINT_IMMORTAL));

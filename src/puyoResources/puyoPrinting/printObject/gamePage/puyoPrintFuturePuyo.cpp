@@ -9,7 +9,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintFuturePuyo::puyoPrintFuturePuyo(vector<puyoPuyo>& future_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), future_puyos(future_puyos)
+puyoPrintFuturePuyo::puyoPrintFuturePuyo(const vector<puyoPuyo>& future_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), future_puyos(future_puyos)
 {
     sprite.setColor(Color(255, 255, 255, 128*FUTURE_PUYO_ALPHA_VALUE));//투명도 조절
 }

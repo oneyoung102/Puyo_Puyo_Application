@@ -20,7 +20,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         //gamePage
         const int PUYO_SIZE = 32;
 
-        const float FUTURE_PUYO_ALPHA_VALUE = 0.7;
+        const double FUTURE_PUYO_ALPHA_VALUE = 0.7;
 
         const int DROPPING_PUYO_X = 4, DROPPING_PUYO_Y = 13;
         const int GRAVITY_PUYO_X = 5, GRAVITY_PUYO_Y = 11;

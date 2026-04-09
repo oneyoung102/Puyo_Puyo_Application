@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, float x, float y, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int life)
+puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, double x, double y, string content, Font& font, double scaling, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
     , selected(selected)
     , sprite(s)
@@ -19,7 +19,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, float x, fl
     text.setStyle(style);
 
     text.setCharacterSize(TEXT_SIZE_IN_BUTTON*scaling);
-    sprite.setScale({scaling,scaling});
+    sprite.setScale({(float)scaling,(float)scaling});
 
     // 중심 정렬을 위해 origin을 텍스트 중앙으로 설정
     auto bounds0 = text.getLocalBounds();
@@ -27,7 +27,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, float x, fl
         bounds0.position.x + bounds0.size.x / 2.f,
         bounds0.position.y + bounds0.size.y / 2.f
     });
-    text.setPosition({x, y});
+    text.setPosition({(float)x, (float)y});
 
     const auto [X,Y] = sprite.getTexture().getSize();
     button_x = X;
@@ -38,7 +38,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, float x, fl
         bounds1.position.x + bounds1.size.x / 2.f,
         bounds1.position.y + bounds1.size.y / 2.f
     });
-    sprite.setPosition({x, y});
+    sprite.setPosition({(float)x, (float)y});
 }
 
 bool puyoPrintButton::alive(){return life != 0;}

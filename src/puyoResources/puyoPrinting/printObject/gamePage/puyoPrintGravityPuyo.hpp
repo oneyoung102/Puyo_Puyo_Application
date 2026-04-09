@@ -8,8 +8,8 @@
 class puyoPrintGravityPuyo : public puyoPrintObject
 {
     private :
-        std::vector<puyoPuyo>& gravity_puyos;
+        const std::vector<puyoPuyo>& gravity_puyos;
     public :
-        puyoPrintGravityPuyo(std::vector<puyoPuyo>& gravity_puyos, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintGravityPuyo(const std::vector<puyoPuyo>& gravity_puyos, sf::Sprite puyo, int x, int y, int life);
         void print(sf::RenderWindow& w);
 };

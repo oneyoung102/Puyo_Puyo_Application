@@ -10,7 +10,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintGravityPuyo::puyoPrintGravityPuyo(vector<puyoPuyo>& gravity_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gravity_puyos){}
+puyoPrintGravityPuyo::puyoPrintGravityPuyo(const vector<puyoPuyo>& gravity_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gravity_puyos){}
 
 
 void puyoPrintGravityPuyo::print(RenderWindow& w)

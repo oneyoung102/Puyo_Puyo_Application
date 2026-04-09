@@ -57,7 +57,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             selected[cursor_r][cursor_c].second = true;
             set_signal(puyoButtonCursorSignal::cursor);
         }
-        void move_parallel(int amount)
+        void move_horizontal(int amount)
         {
             selected[cursor_r][cursor_c].second = false;
             if(selected[cursor_r][cursor_c+amount].first != buttonName::NONE)
@@ -115,12 +115,12 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         void let_choose_left()
         {
             if(cursor_c > 0)
-                move_parallel(-1);
+                move_horizontal(-1);
         }
         void let_choose_right()
         {
             if(cursor_c < C-1)
-                move_parallel(1);
+                move_horizontal(1);
         }
         void let_choose_up()
         {

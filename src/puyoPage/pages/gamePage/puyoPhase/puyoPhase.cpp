@@ -4,8 +4,8 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity_temp.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish_temp.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
@@ -83,6 +83,7 @@ void puyoPhase::set_game(Diff diff, Mode mode)
         player->get_board().set_spawn_pos(PLAYPUYO_IN_BOARD_SPAWN_X,PLAYPUYO_IN_BOARD_SPAWN_Y);
         player->get_board().controll_vanish().set_condition(PUYO_VANISH_CONDITION);
         player->give_new_puyos(get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
+        player->get_board().controll_future().set(player->get_board(),player->get_puyo());
     }
 //////모드
     mode_type = mode;
@@ -136,18 +137,18 @@ void puyoPhase::proceed_game()
             case Phase::play :
                 if(delayed(player_num))
                     break;
-                cf.find(board,puyo);
+                cf.fall(board);
                 puyo.gravity_let(board);
                 puyo.act_let(board);
 
                 if(puyo.down())
                     ++added_score;
-                else if(puyo.dropped())
+                else if(puyo.dropped(board))
                 {
-                    added_score += puyo.get_drop_height(board);
-                    cf.kill();
+                    added_score += puyo.get_height(board);
                     cg.add(puyo.to_gravity_puyo());
                     player->give_new_puyos(this->get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
+                    cf.set(board,player->get_puyo());
                     player->sign_puyo_dropped();
                     co.approve_spawn();
                 }

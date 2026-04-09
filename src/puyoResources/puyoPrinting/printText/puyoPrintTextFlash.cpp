@@ -6,7 +6,7 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintTextFlash::puyoPrintTextFlash(float x, float y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle)
+puyoPrintTextFlash::puyoPrintTextFlash(double x, double y, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle)
     : puyoPrintText(x,y,content,font,size,color,style,life)
     , cycle(cycle)
 {

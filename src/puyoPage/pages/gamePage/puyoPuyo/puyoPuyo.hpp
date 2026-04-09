@@ -3,33 +3,35 @@
 #include <utility>
 #include <memory>
 #include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct_temp.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
 
 class puyoBoard;
 
-using PUYO_INFO = std::tuple<float,float,puyoType,int>;
+using PUYO_INFO = std::tuple<double,double,puyoType,int>;
 
 class puyoPuyo
 {
     private :
-        float x, y;
+        double x, y;
         puyoType type;
-        std::unique_ptr<puyoPuyoAct_temp> act;
+        std::unique_ptr<puyoPuyoAct> act;
     public :
-        puyoPuyo(float x, float y, puyoType type, std::unique_ptr<puyoPuyoAct_temp>&& act);
-        puyoPuyo(float x, float y, puyoType type);
+        puyoPuyo(double x, double y, puyoType type, std::unique_ptr<puyoPuyoAct>&& act);
+        puyoPuyo(double x, double y, puyoType type);
 
-        bool touched(puyoBoard& board, int ix, int iy);
-        void move(float to_x, float to_y);
+        void move(double to_x, double to_y);
 
-        std::pair<float,float> get_pos();
-        puyoType get_type();
-        int get_tick();
+        std::pair<double,double> const get_pos() const;
+        puyoType const get_type() const;
 
-        bool acting();
-        float get_state();
+        double const get_state() const;
+        int const get_tick() const;
+
+        bool const acting() const;
+        bool have_act() const;
         void act_let(puyoBoard& board);
-        void change_act(std::unique_ptr<puyoPuyoAct_temp>&& act);
+        void set_act(std::unique_ptr<puyoPuyoAct>&& act);
+        void set_act();
         void let();   
         
 };

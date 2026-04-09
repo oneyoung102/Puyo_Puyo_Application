@@ -49,8 +49,8 @@ void puyoBoardObstructControll::spawn(puyoBoard& board, int obstruct_puyo_for_dr
         pq.push(make_pair(height + 1, col));
     }
 }
-bool puyoBoardObstructControll::empty() { return obstruct_puyo == 0; }
-const int &puyoBoardObstructControll::get() { return obstruct_puyo; }
+bool puyoBoardObstructControll::empty() const { return obstruct_puyo == 0; }
+const int &puyoBoardObstructControll::get() const { return obstruct_puyo; }
 
 
 int puyoBoardObstructControll::temp_get() {return exchange(temp_obstruct_puyo, 0);}

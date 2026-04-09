@@ -18,18 +18,18 @@ enum class puyoPlayerSignal
 class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 {
     private :
-        puyoBoard board;
-        puyoPlayPuyo puyo;
+        std::unique_ptr<puyoBoard> board;
+        std::unique_ptr<puyoPlayPuyo> puyo;
+        const int player_num; // 0 또는 1
+        
         int score, opposite_obstruct_puyo_count/*상대에게 보낼 방해 뿌요*/;
-
-        int player_num; // 0 또는 1
         int new_puyo_count;//새 뿌요를 받은 횟수
 
         bool player_is_bot;
         std::unique_ptr<puyoBotAlgorithm> bot_algorithm;
 
     public :
-        puyoPlayer(int player_num, puyoBoard&& board, puyoPlayPuyo&& play_puyo ,bool player_is_bot);
+        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board ,bool player_is_bot);
 
         int get_player_num();
         puyoBoard& get_board();
@@ -47,7 +47,6 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         std::function<void()> get_let_left();
         std::function<void()> get_let_right();
         std::function<void()> get_let_down();
-        //std::function<void()> get_let_up();
         std::function<void()> get_let_turn();
         std::function<void()> get_let_drop();
 

@@ -1,35 +1,30 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardFutureControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFall.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
+#include <memory>
 
 using namespace std;
 
-puyoBoardFutureControll::puyoBoardFutureControll(){};
+puyoBoardFutureControll::puyoBoardFutureControll(){}
 
-vector<puyoPuyo> &puyoBoardFutureControll::get() { return future_puyos; }
+const vector<puyoPuyo> &puyoBoardFutureControll::get() { return future_puyos; }
 
-void puyoBoardFutureControll::find(puyoBoard& board, puyoPlayPuyo &puyo)
+void puyoBoardFutureControll::set(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     future_puyos.clear();
-    const auto [x1, y1, x2, y2] = puyo.get_pos();
-    const auto [color1, color2] = puyo.get_types();
-    const auto [board_r, board_c] = board.get_size();
-    for(int y = (int)y1; y < board_r; ++y)
-        if(puyo.touched(board, round(x1), y + 1))
-        {
-            if (y1 < y2)
-                --y; // 실제로 뿌요를 배치하지 않기에 보정
-            future_puyos.push_back(puyoPuyo(round(x1), y, color1));
-            break;
-        }
-    for(int y = (int)y2; y < board_r; ++y)
-        if(puyo.touched(board, round(x2), y + 1))
-        {
-            if (y1 > y2)
-                --y; // 실제로 뿌요를 배치하지 않기에 보정
-            future_puyos.push_back(puyoPuyo(round(x2), y, color2));
-            break;
-        }
+    for(int i = 0 ; i < 2 ; ++i)
+    {
+        const auto[x,y] = puyo.get_each(i)->get_pos();
+        const auto type = puyo.get_each(i)->get_type();
+        future_puyos.push_back(puyoPuyo(x,y,type,
+            std::move(make_unique<puyoPuyoFall>(board,*puyo.get_each(i),*puyo.get_each(i^1)))));
+    }
 }
-void puyoBoardFutureControll::kill() { future_puyos.clear(); }
+
+void puyoBoardFutureControll::fall(puyoBoard& board)
+{
+    for(auto& future_puyo : future_puyos)
+        future_puyo.act_let(board);
+}

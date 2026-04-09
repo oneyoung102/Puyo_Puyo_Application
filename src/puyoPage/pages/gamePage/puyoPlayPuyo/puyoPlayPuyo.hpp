@@ -1,14 +1,12 @@
 #pragma once
 
-#include <tuple>
 #include <utility>
 #include <memory>
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
-#include "puyoAction/puyoPuyoAct.hpp"
-#include "puyoAction/puyoPuyoGravity.hpp"
-#include "puyoAction/puyoPuyoStay.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 #include "puyoPage/puyoObjectSignal.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
 
@@ -26,42 +24,31 @@ enum class puyoPlayPuyoSignal
 class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어가 움직이는 뿌요
 {
     private :
-        enum class Act_type
-        {
-            left,
-            right,
-            down,
-            turn,
-            drop
-        };
-        float x1, y1, x2, y2; // 1이 중심 뿌요
-        puyoType type1, type2;
-
-        std::unique_ptr<puyoPuyoGravity> gravity;
-        std::unique_ptr<puyoPuyoStay> stay;
-        std::vector<std::shared_ptr<puyoPuyoAct>> acts;
-
-        std::shared_ptr<puyoPuyoAct> action; //명령이 들어온 행동
+        const int gravity_value, stay_value;
+        std::array<std::unique_ptr<puyoPuyo>,2> play_puyo;
+        std::array<std::unique_ptr<puyoPuyoAct>,2> gravity;
         
-        bool down_let_is_taken;//아래 이동 명령 접수 여부
+        bool down_taken, drop_taken;//명령 접수 여부
 
     public :
-        puyoPlayPuyo(std::pair<float,float> spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
+        puyoPlayPuyo(std::pair<double,double> spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
 
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);
+        
         bool down();
-        bool dropped();
-        bool holding();
-        int get_drop_height(puyoBoard& board);
+        bool dropped(puyoBoard& board);
+
+        int get_height(puyoBoard& board);
 
         std::vector<PUYO_INFO> to_gravity_puyo();
+        const std::unique_ptr<puyoPuyo>& get_each(size_t number);
+        const decltype(play_puyo)& get();
+        std::tuple<double,double,double,double> get_pos() const;
+        std::pair<puyoType,puyoType> get_type() const;
 
-        bool touched(puyoBoard& board, int ix, int iy);
-
-        std::tuple<float,float,float,float> get_pos();
-        void move(float to_x1, float to_y1, float to_x2, float to_y2);
-        std::pair<puyoType,puyoType> get_types();
+        bool sat(puyoBoard& board);
+        bool moving();
         
         void let_left();
         void let_right();
@@ -69,6 +56,4 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         void let_up();
         void let_turn();
         void let_drop();
-
-        bool is_moving();
 };

@@ -15,12 +15,12 @@ class puyoBoardEnergyControll
     public :
         puyoBoardEnergyControll();
         void fly(puyoBoard& board);
-        void find(float fx, float fy, float tx, float ty);// temp_energy_puyo를 energy_puyo로
+        void find(double fx, double fy, double tx, double ty);// temp_energy_puyo를 energy_puyo로
 
         void temp_add(std::tuple<int,int,puyoType> temp_energy_puyo);
         void temp_clear();
 
-        std::vector<puyoPuyo>& get();
+        const std::vector<puyoPuyo>& get();
 
-        bool temp_empty();
+        bool temp_empty() const;
 };

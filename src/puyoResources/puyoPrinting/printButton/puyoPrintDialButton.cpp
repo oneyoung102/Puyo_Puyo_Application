@@ -9,7 +9,7 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintDialButton::puyoPrintDialButton(sf::Sprite s, const bool& selected, const bool& dial_selected, float x, float y, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int life)
+puyoPrintDialButton::puyoPrintDialButton(sf::Sprite s, const bool& selected, const bool& dial_selected, double x, double y, string content, Font& font, double scaling, sf::Color color, sf::Text::Style style, int life)
     : puyoPrintButton(s,selected,x,y,content,font,scaling,color,style,life)
     , dial_selected(dial_selected)
 {
