@@ -1,5 +1,4 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
-#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
@@ -43,16 +42,16 @@ bool puyoPuyoTurn::decline(puyoBoard& board,puyoPuyo& puyo)
                 switch(dir)
                 {
                     case Direction::UP :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),1,0));
+                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(1,0)));
                         break;
                     case Direction::DOWN :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),-1,0));
+                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(-1,0)));
                         break;
                     case Direction::RIGHT :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),0,+1));
+                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(0,1)));
                         break;
                     case Direction::LEFT :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),0,-1));
+                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(0,-1)));
                         break;
                 }
                 acts[i]->let();
@@ -68,6 +67,7 @@ bool puyoPuyoTurn::decline(puyoBoard& board,puyoPuyo& puyo)
     else if(acting())
         return true;
     halt();
+    arrive(puyo);
     return false;
 }
 
@@ -91,7 +91,7 @@ void puyoPuyoTurn::arrive(puyoPuyo& puyo)
     }
 }
 
-puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, std::pair<double,double> turning)
+puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, std::pair<float,float> turning)
     : puyoPuyoAct(amount)
     , rad(-M_PI/2/act_count_init), c(cos(rad)),s(sin(rad))//시계 반대방향
     , center(center)
@@ -108,7 +108,7 @@ void puyoPuyoTurn::act(puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
     const auto[center_x,center_y] = center.get_pos();
-    const double dx = x-center_x, dy = y-center_y;
+    const float dx = x-center_x, dy = y-center_y;
     puyo.move(center_x + dx*c - dy*s, center_y + dx*s + dy*c);
     if(sub_acts[0] && sub_acts[1]) 
     {

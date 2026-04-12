@@ -8,11 +8,11 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, int x, int y, int life)
-    : puyoPrintObject(puyo,x,y,life)
+puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, std::pair<float,float> pos, int life)
+    : puyoPrintObject(puyo,pos,life)
     , SPAWN_SPOT_CYCLE(800)
+    , player_num(player_num)
 {
-    this->player_num = player_num;
     spawn_spot_state = 0;
     spawn_spot_rotate_dir = false;//왼쪽
 }
@@ -29,12 +29,12 @@ void puyoPrintSpawnspot::print(RenderWindow& w)
     {
         sprite.setScale({1, 1});
         ++spawn_spot_state;
-        print_sprite(w,player_board_x + PUYO_SIZE*x,player_board_y + PUYO_SIZE*max(y,0.0));
+        print_sprite(w,{player_board_x + PUYO_SIZE*x,player_board_y + PUYO_SIZE*max(y,0.0f)});
     }
     else
     {
         sprite.setScale({-1, 1});
         --spawn_spot_state;
-        print_sprite(w,player_board_x + PUYO_SIZE*(x+1),player_board_y + PUYO_SIZE*max(y,0.0));//반전 때문에 +1
+        print_sprite(w,{player_board_x + PUYO_SIZE*(x+1),player_board_y + PUYO_SIZE*max(y,0.0f)});//반전 때문에 +1
     }
 }

@@ -8,8 +8,8 @@ using namespace puyoGameConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintObstructViewer::puyoPrintObstructViewer(const int& obstruct_puyo, Sprite puyo, int x, int y, int life)
-    : puyoPrintObject(puyo,x,y,life),
+puyoPrintObstructViewer::puyoPrintObstructViewer(const int& obstruct_puyo, Sprite puyo, std::pair<int,int> pos, int life)
+    : puyoPrintObject(puyo,pos,life),
     obstruct_puyo(obstruct_puyo)
 {}
 
@@ -22,7 +22,7 @@ void puyoPrintObstructViewer::print(RenderWindow& w)
         while(obp >= OBSTRUCT_PUYO_VIEWER_UNIT[i] && count > 0)
         {
             sprite.setTextureRect(IntRect({img_x, img_y}, {PUYO_SIZE, PUYO_SIZE})); 
-            print_sprite(w,x+dx,y);
+            print_sprite(w,{x+dx,y});
             obp -= OBSTRUCT_PUYO_VIEWER_UNIT[i];
             dx += PUYO_SIZE;
             --count;

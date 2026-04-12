@@ -1,18 +1,17 @@
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
 #include <utility>
 
 using namespace std;
 
-puyoPuyo::puyoPuyo(double x, double y, puyoType type, unique_ptr<puyoPuyoAct>&& act)
+puyoPuyo::puyoPuyo(float x, float y, puyoType type, unique_ptr<puyoPuyoAct>&& act)
 {  
     this->x = x;
     this->y = y;
     this->type = type;
     this->act = std::move(act);
 }
-puyoPuyo::puyoPuyo(double x, double y, puyoType type)
+puyoPuyo::puyoPuyo(float x, float y, puyoType type)
 {
     this->x = x;
     this->y = y;
@@ -20,13 +19,13 @@ puyoPuyo::puyoPuyo(double x, double y, puyoType type)
     this->act = nullptr;
 }
 
-void puyoPuyo::move(double to_x, double to_y)
+void puyoPuyo::move(float to_x, float to_y)
 {
     x = to_x;
     y = to_y;
 }
 
-pair<double,double> const puyoPuyo::get_pos() const {return {x,y};}
+pair<float,float> const puyoPuyo::get_pos() const {return {x,y};}
 puyoType const puyoPuyo::get_type() const {return type;}
 
 int const puyoPuyo::get_tick() const
@@ -35,7 +34,7 @@ int const puyoPuyo::get_tick() const
         return act->get_act_count_init();
     return -1;
 }
-double const puyoPuyo::get_state() const
+float const puyoPuyo::get_state() const
 {
     if(act)
         return act->get_state();

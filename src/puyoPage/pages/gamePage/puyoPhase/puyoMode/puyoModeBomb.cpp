@@ -1,6 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.hpp"
 
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
@@ -41,7 +41,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
                 for(int i = 0 ; i < r ; ++i)
                     for(int j = 0 ; j < c ; ++j)
                         if(board.get_puyo(i,j) != puyoType::blank)
-                            cv.make_vanish(board,j,i,board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK);                                                 
+                            cv.to_vanish_puyo(board,{j,i,board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK});                                                 
                 bomb_tick = -1;
             }
             else if(cv.empty())
@@ -58,11 +58,14 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
                 const auto puyo = board.get_puyo(i,bomb_c);
                 if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                 {
-                    cv.make_vanish(board,bomb_c,i,puyo,BOMB_VANISH_TICK);
+                    cv.to_vanish_puyo(board,{bomb_c,i,puyo,BOMB_VANISH_TICK});
                     break;
                 }
             }
-            player.add_opposite_obstruct_puyo_count(player.get_opposite_obstruct_puyo_count());
+            phase.get_players()[opposite]
+            ->get_board()
+            .controll_obstuct()
+            .add(player.get_board().controll_obstuct().get());
             if(phase.get_player_count() == 2)//2인 플레이일 때만 넘김
                 bomb_have_player_num = opposite;
         }

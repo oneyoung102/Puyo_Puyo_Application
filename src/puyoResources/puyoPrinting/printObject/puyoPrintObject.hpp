@@ -1,19 +1,20 @@
 #pragma once
 
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include <SFML/Graphics.hpp>
 
 class puyoPrintObject
 {
     protected:
         sf::Sprite sprite;
-        double x, y;
+        float x, y;
         int life;
-        void print_sprite(sf::RenderWindow& w, double x1, double y1);
-        void print_16x16(sf::RenderWindow& w, int img_x, int img_y, int px, int py);
-        void print_puyo(sf::RenderWindow& w, puyoType type, int px, int py);
+        void print_sprite(sf::RenderWindow& w, sf::Vector2f screen_pos);
+        void print_16x16(sf::RenderWindow& w, std::pair<int,int> img_pos, sf::Vector2f screen_pos);
+        void print_puyo(sf::RenderWindow& w, puyoType type, sf::Vector2f screen_pos);
     public:
-        puyoPrintObject(sf::Sprite s, double x, double y, int life);
+        puyoPrintObject(sf::Sprite s, std::pair<float,float> pos, int life);
+        puyoPrintObject(sf::Sprite s, int life);
         virtual ~puyoPrintObject() = default;
         bool alive();
         virtual void print(sf::RenderWindow& w);

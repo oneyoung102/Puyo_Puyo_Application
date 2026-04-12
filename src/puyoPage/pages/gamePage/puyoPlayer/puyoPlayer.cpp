@@ -10,16 +10,14 @@ puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool playe
     : board(std::move(board))
     , puyoObjectSignal()
     , player_num(player_num)
+    , player_is_bot(player_is_bot)
 {
     if(player_num != 0 && player_num != 1)
         throw runtime_error("Player number is not 0 or 1");
 
     score = 0;
-    opposite_obstruct_puyo_count = 0;
-
     new_puyo_count = 0;
 
-    this->player_is_bot = player_is_bot;
     if(player_is_bot)
         bot_algorithm = std::move(make_unique<puyoBotAlgorithm>());
     else
@@ -32,13 +30,10 @@ puyoPlayPuyo& puyoPlayer::get_puyo(){return *puyo;}
 
 const int& puyoPlayer::get_score(){return score;}
 void puyoPlayer::add_score(int s){score += s;}
-int puyoPlayer::get_opposite_obstruct_puyo_count(){return opposite_obstruct_puyo_count;}
-void puyoPlayer::add_opposite_obstruct_puyo_count(int c){opposite_obstruct_puyo_count += c;}
-void puyoPlayer::clear_opposite_obstruct_puyo_count(){opposite_obstruct_puyo_count = 0;}
 
-void puyoPlayer::give_new_puyos(pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value)
+void puyoPlayer::give_new_puyos(pair<puyoType,puyoType> types, int puyo_gravity_value, int puyo_stay_value)
 {
-    puyo = std::move(make_unique<puyoPlayPuyo>(board->get_spawn_pos(),colors,puyo_gravity_value,puyo_stay_value));
+    puyo = std::move(make_unique<puyoPlayPuyo>(board->get_spawn_pos(),types,puyo_gravity_value,puyo_stay_value));
     ++new_puyo_count;
 }
 const int& puyoPlayer::get_new_puyo_count(){return new_puyo_count;}

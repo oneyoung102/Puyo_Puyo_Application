@@ -1,20 +1,25 @@
 #pragma once
 
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
+#include <vector>
 class puyoBoard;
 
 class puyoBoardObstructControll
 {
     private :
-        int obstruct_puyo;
-        int temp_obstruct_puyo; //방해뿌요 소리를 위한 임시 방해뿌요 개수
-        bool approvement_for_obstruct_puyo;
+        int obstruct_puyo, opposite_obstruct_puyo;
+        bool approvement_spawn;
     public :
         puyoBoardObstructControll();
-        void give(int count);
-        void spawn(puyoBoard& board, int obstruct_puyo_for_dropping);
+        void add(int count);
+        std::vector<PUYO_INFO> to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping);
         bool empty() const;
         const int& get() const;
-        int temp_get();
+
+        void add_opp(int count);
+        int get_opp() const;
+        bool empty_opp() const;
+        void clear_opp();
 
         void approve_spawn();
         void disapprove_spawn();

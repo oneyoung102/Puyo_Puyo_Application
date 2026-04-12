@@ -1,6 +1,7 @@
 #pragma once
 
 #include "puyoPuyoAct.hpp"
+#include <utility>
 
 
 class puyoBoard;
@@ -12,6 +13,6 @@ class puyoPuyoFourWayMove : public puyoPuyoAct
         const int dx, dy;
         bool test(puyoBoard& board, puyoPuyo& puyo) override;
     public :
-        puyoPuyoFourWayMove(int amount, int dx, int dy);
+        puyoPuyoFourWayMove(int amount, std::pair<float,float> delta);
         void act(puyoPuyo& puyo) override;
 };

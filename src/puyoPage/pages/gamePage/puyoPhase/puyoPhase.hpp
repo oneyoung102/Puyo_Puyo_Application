@@ -5,6 +5,8 @@
 #include <random>
 #include <memory>
 
+#include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardObstructControll.hpp"
+#include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardScoreControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoScoreCalc.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
@@ -53,6 +55,12 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         void wait(int player_num);
         bool delayed(int player_num);
 
+        void ready_for_play(int player_num, puyoBoardObstructControll& co, puyoBoardScoreControll& cs);
+        void proceed_play(const std::unique_ptr<puyoPlayer>& player, int& added_score);
+        void proceed_gravity(const std::unique_ptr<puyoPlayer>& player, int& added_score);
+        void proceed_vanish(const std::unique_ptr<puyoPlayer>& player, int& added_score);
+        void calc_obstruct(const std::unique_ptr<puyoPlayer>& player, int& added_score);
+
     public :
         puyoPhase();
 
@@ -68,6 +76,7 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         int get_player_count();
         const std::vector<std::unique_ptr<puyoPlayer>>& get_players();
         void add_player(std::unique_ptr<puyoPlayer>&& player);
+        
         int get_gravity_value();
         void set_gravity_value(int value);
         int get_stay_value();

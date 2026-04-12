@@ -1,7 +1,8 @@
 #include <vector>
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
@@ -14,11 +15,10 @@ puyoBoard::puyoBoard() : board_r(13), board_c(6), puyoObjectSignal()
     board = vector<vector<puyoType>>(board_r, vector<puyoType>(board_c, puyoType::blank));
 }
 
-pair<double, double> puyoBoard::get_spawn_pos() const {return make_pair(puyo_spawn_x, puyo_spawn_y);}
-void puyoBoard::set_spawn_pos(double x, double y)
+pair<float, float> puyoBoard::get_spawn_pos() const {return spawn_pos;}
+void puyoBoard::set_spawn_pos(std::pair<float,float> pos)
 {
-    puyo_spawn_x = x;
-    puyo_spawn_y = y;
+    spawn_pos = pos;
 };
 
 pair<int, int> puyoBoard::get_size() const {return make_pair(board_r, board_c);}
@@ -47,6 +47,28 @@ bool puyoBoard::all_cleared(){
         return false;
     set_signal(puyoBoardSignal::all_cleared);
     return true;
+}
+
+vector<PUYO_INFO> puyoBoard::to_gravity_puyo()
+{
+    vector<PUYO_INFO> gravity_puyos;
+    for(int j = 0 ; j < board_c; ++j)
+    {
+        bool floating = false;
+        for(int i = board_r-1 ; i >= 0 ; --i)
+        {
+            const puyoType puyo = get_puyo(i,j);
+            if(puyo == puyoType::blank)
+                floating = true;
+            else if(floating)
+            {
+                gravity_puyos.push_back({j,i, puyo, puyoGameConstant::BOARD_FALL_GRAVITY_TICK});
+                remove_puyo(i,j);
+                continue;
+            }
+        }
+    }
+    return std::move(gravity_puyos);
 }
 
 puyoBoardEnergyControll& puyoBoard::controll_energy(){return energy_controll;}

@@ -20,7 +20,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     ,  diff_dial_button_cursor(puyoButtonCursor<1, 3, Diff>({{Diff::easy, Diff::normal, Diff::hard}})),
       mode_dial_button_cursor(puyoButtonCursor<1, 3, Mode>({{Mode::basic,Mode::speed,Mode::bomb}}))
 {
-    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back), 0, 0,puyoImageConstant::PRINT_IMMORTAL));
+    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),puyoImageConstant::PRINT_IMMORTAL));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::option_page));
 
     //난이도
@@ -28,7 +28,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_sprite(puyoFileSystem::Image::easy_button),
         diff_dial_button_cursor.get_select_status(Diff::easy),
         button_cursor.get_select_status(buttonName::diff_dial),
-        DIFF_DIAL_BUTTON_X,DIFF_DIAL_BUTTON_Y,
+        DIFF_DIAL_BUTTON_POS,
         "Easy",
         pfs.get_font(),
         1,
@@ -39,7 +39,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_sprite(puyoFileSystem::Image::normal_button),
         diff_dial_button_cursor.get_select_status(Diff::normal),
         button_cursor.get_select_status(buttonName::diff_dial),
-        DIFF_DIAL_BUTTON_X,DIFF_DIAL_BUTTON_Y,
+        DIFF_DIAL_BUTTON_POS,
         "Normal",
         pfs.get_font(),
         1,
@@ -50,7 +50,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_sprite(puyoFileSystem::Image::hard_button),
         diff_dial_button_cursor.get_select_status(Diff::hard),
         button_cursor.get_select_status(buttonName::diff_dial),
-        DIFF_DIAL_BUTTON_X,DIFF_DIAL_BUTTON_Y,
+        DIFF_DIAL_BUTTON_POS,
         "Hard",
         pfs.get_font(),
         1,
@@ -63,7 +63,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_sprite(puyoFileSystem::Image::basic_button),
         mode_dial_button_cursor.get_select_status(Mode::basic),
         button_cursor.get_select_status(buttonName::mode_dial),
-        MODE_DIAL_BUTTON_X,MODE_DIAL_BUTTON_Y,
+        MODE_DIAL_BUTTON_POS,
         "Basic",
         pfs.get_font(),
         1, 
@@ -74,7 +74,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_sprite(puyoFileSystem::Image::speed_button),
         mode_dial_button_cursor.get_select_status(Mode::speed),
         button_cursor.get_select_status(buttonName::mode_dial),
-        MODE_DIAL_BUTTON_X,MODE_DIAL_BUTTON_Y,
+        MODE_DIAL_BUTTON_POS,
         "Speed-Up",
         pfs.get_font(),
         1, 
@@ -85,7 +85,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_sprite(puyoFileSystem::Image::basic_button),
         mode_dial_button_cursor.get_select_status(Mode::bomb),
         button_cursor.get_select_status(buttonName::mode_dial),
-        MODE_DIAL_BUTTON_X,MODE_DIAL_BUTTON_Y,
+        MODE_DIAL_BUTTON_POS,
         "Bomb",
         pfs.get_font(),
         1, 
@@ -97,7 +97,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::back),
-        BACK_BUTTON_X,BACK_BUTTON_Y,
+        BACK_BUTTON_POS,
         "Back",
         pfs.get_font(),
         0.9, 
@@ -107,7 +107,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::ready),
-        READY_BUTTON_X,READY_BUTTON_Y,
+        READY_BUTTON_POS,
         "Ready",
         pfs.get_font(),
         0.9,

@@ -25,13 +25,9 @@ int puyoScoreCalc::get_add_score(int puyo, int chain, vector<int> link, int colo
                 ,1))*10;
 }
 
-pair<int,int> puyoScoreCalc::get_obstruct_puyo_count(int self_obstruct_puyo_count, int curr_obstruct_puyo_count)
-{
-    const int opp_obstruct_puyo_count = max(0,self_obstruct_puyo_count-curr_obstruct_puyo_count);
-    return {self_obstruct_puyo_count,opp_obstruct_puyo_count};
-}
+int puyoScoreCalc::get_opposite_obstruct_puyo_count(int self, int opp) {return max(0,opp-self);}
 int puyoScoreCalc::to_obstruct_puyo(int score){return score/obstruct_puyo_rate;}
 
 void puyoScoreCalc::set_obstruct_puyo_rate(int v){obstruct_puyo_rate = max(v,1);}
-int puyoScoreCalc::get_all_cleared_obstruct_puyo(){return all_cleared_obstruct_puyo;}
+int puyoScoreCalc::get_all_cleared_score(){return all_cleared_obstruct_puyo*70;}
 int puyoScoreCalc::get_obstruct_puyo_for_dropping(int obstruct_puyo){return min(obstruct_puyo,30);}//30개가 넘으면 30개 단위로 떨어뜨림

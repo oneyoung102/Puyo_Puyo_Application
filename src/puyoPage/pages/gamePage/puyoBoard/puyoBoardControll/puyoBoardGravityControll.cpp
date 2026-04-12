@@ -3,6 +3,8 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 
+#include <algorithm>
+
 using namespace std;
 
 puyoBoardGravityControll::puyoBoardGravityControll()
@@ -14,7 +16,7 @@ void puyoBoardGravityControll::add(PUYO_INFO puyo) // std::move
 {
     gravity_puyos.push_back(
         puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),std::get<2>(puyo),
-        make_unique<puyoPuyoGravity>(std::get<3>(puyo),0)));
+        make_unique<puyoPuyoGravity>(std::get<3>(puyo))));
     gravity_puyos.back().let();    
 }
 void puyoBoardGravityControll::add(vector<PUYO_INFO> puyos) // std::move
@@ -26,7 +28,7 @@ const vector<puyoPuyo> &puyoBoardGravityControll::get() { return gravity_puyos;}
 
 void puyoBoardGravityControll::gravity(puyoBoard& board)
 {
-    for(int i = 0; i < gravity_puyos.size();)
+    for(int i = 0 ; i < gravity_puyos.size(); )
     {
         if(gravity_puyos[i].acting())
             gravity_puyos[i].act_let(board);
@@ -42,34 +44,11 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
             else if(board.get_puyo(iy,ix) == puyoType::blank)
                 board.insert_puyo(type,iy,ix);
 
-            std::swap(gravity_puyos[i], gravity_puyos.back());
+            std::swap(gravity_puyos[i],gravity_puyos.back());
             gravity_puyos.pop_back();
         }
         else
             ++i;
-    }
-}
-void puyoBoardGravityControll::find(puyoBoard& board)
-{
-    const auto[board_r, board_c] = board.get_size();
-    for (int i = 0; i < board_c; ++i)
-    {
-        bool push = false;
-        for (int j = board_r - 1; j >= 0; --j) // 아래에 있는 뿌요가 먼저 오게
-        {
-            const puyoType puyo = board.get_puyo(j,i);
-            if(puyo != puyoType::blank) 
-            {
-                if(push)
-                {
-                    add({i, j, puyo, puyoGameConstant::BOARD_FALL_GRAVITY_TICK});
-                    board.remove_puyo(j, i);
-                    continue;
-                }
-            }
-            else
-                push = true;
-        }
     }
 }
 

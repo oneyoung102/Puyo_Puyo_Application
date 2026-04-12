@@ -10,7 +10,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintGravityPuyo::puyoPrintGravityPuyo(const vector<puyoPuyo>& gravity_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), gravity_puyos(gravity_puyos){}
+puyoPrintGravityPuyo::puyoPrintGravityPuyo(const vector<puyoPuyo>& gravity_puyos, Sprite puyo, std::pair<int,int> pos, int life) : puyoPrintObject(puyo,pos,life), gravity_puyos(gravity_puyos){}
 
 
 void puyoPrintGravityPuyo::print(RenderWindow& w)
@@ -31,15 +31,15 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
             {
                 if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
                 {
-                    print_16x16(w,DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y,px,py-PUYO_SIZE);
-                    print_16x16(w,DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y+1,px,py);
+                    print_16x16(w,{DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y},{px,py-PUYO_SIZE});
+                    print_16x16(w,{DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y+1},{px,py});
                 }
                 else//gravity
-                    print_16x16(w,GRAVITY_PUYO_X+(int)puyo,GRAVITY_PUYO_Y,px,py);
+                    print_16x16(w,{GRAVITY_PUYO_X+(int)puyo,GRAVITY_PUYO_Y},{px,py});
                 break;
             }
             default :
-                print_puyo(w,puyo,px,py);
+                print_puyo(w,puyo,{px,py});
                 break;
         }
     }

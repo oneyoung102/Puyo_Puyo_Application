@@ -30,12 +30,6 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         if(!vanish_puyos[i].acting())
         {
             std::swap(vanish_puyos[i], vanish_puyos.back());
-            const auto [x, y] = vanish_puyos.back().get_pos();
-            const auto color = vanish_puyos.back().get_type();
-            board
-            .controll_energy()
-            .temp_add(make_tuple(x, y, color));
-
             vanish_puyos.pop_back();
             board.set_signal(puyoBoardSignal::vanished);
         }
@@ -46,9 +40,11 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         }
 }
 
-void puyoBoardVanishControll::make_vanish(puyoBoard& board, int x, int y, puyoType type, int tick)
+void puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board, PUYO_INFO puyo)
 {
+    const auto[x,y,type,tick] = puyo;
     add({x, y, type, tick});
+    board.controll_energy().add_temp({x, y, type, puyoGameConstant::BOARD_FLY_TICK});
     board.remove_puyo(y, x);
 }
 void puyoBoardVanishControll::find(puyoBoard& board)
@@ -105,7 +101,7 @@ void puyoBoardVanishControll::find(puyoBoard& board)
                 for(const auto [r, c, type] : stored_puyos)
                 {
                     const int tick = (type == puyoType::obstruct) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
-                    make_vanish(board,c,r,type,tick);
+                    to_vanish_puyo(board,{c,r,type,tick});
                 }
             }
     }

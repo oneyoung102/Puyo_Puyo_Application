@@ -2,7 +2,8 @@
 
 #include <vector>
 
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/puyoObjectSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardEnergyControll.hpp"
@@ -16,7 +17,9 @@ enum class puyoBoardSignal
 {
     chain,
     all_cleared,
-    spawn_obsp,
+    many_obsp_dropped,
+    mid_obsp_dropped,
+    less_obsp_dropped,
     vanished,
     COUNT
 };
@@ -33,13 +36,12 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         
         std::vector<std::vector<puyoType>> board;
         const int board_r, board_c; 
-        double puyo_spawn_x;
-        double puyo_spawn_y;
+        std::pair<float,float> spawn_pos;
     public :  
         puyoBoard();
 
-        void set_spawn_pos(double x, double y);
-        std::pair<double,double> get_spawn_pos() const;
+        void set_spawn_pos(std::pair<float,float> pos);
+        std::pair<float,float> get_spawn_pos() const;
         
         std::pair<int,int> get_size() const;
         bool in_row(int r) const;
@@ -52,6 +54,8 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         void remove_puyo(int r, int c);//이건 행,열
         bool empty() const;
         bool all_cleared();
+
+        std::vector<PUYO_INFO> to_gravity_puyo();
 
         puyoBoardEnergyControll& controll_energy();
         puyoBoardGravityControll& controll_gravity();

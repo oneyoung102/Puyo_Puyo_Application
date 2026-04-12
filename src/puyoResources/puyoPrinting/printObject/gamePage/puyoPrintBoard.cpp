@@ -7,7 +7,9 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintBoard::puyoPrintBoard(puyoBoard& board, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), board(board){}
+puyoPrintBoard::puyoPrintBoard(const puyoBoard& board, Sprite puyo, std::pair<int,int> pos, int life)
+    : puyoPrintObject(puyo,pos,life)
+    , board(board){}
 void puyoPrintBoard::print(RenderWindow& w)
 {
     const auto [board_r,board_c] = board.get_size();
@@ -28,11 +30,11 @@ void puyoPrintBoard::print(RenderWindow& w)
                             2*(board.in(i-1,j) && board.get_puyo(i-1,j) == puyo)+
                             4*(board.in(i,j+1) && board.get_puyo(i,j+1) == puyo)+
                             8*(board.in(i,j-1) && board.get_puyo(i,j-1) == puyo);
-                    print_16x16(w,dir,(int)puyo,x+PUYO_SIZE*j,y+PUYO_SIZE*i);
+                    print_16x16(w,{dir,(int)puyo},{x+PUYO_SIZE*j,y+PUYO_SIZE*i});
                     break;
                 }
                 default :
-                    print_puyo(w,puyo,x+PUYO_SIZE*j,y+PUYO_SIZE*i);
+                    print_puyo(w,puyo,{x+PUYO_SIZE*j,y+PUYO_SIZE*i});
                     break;
             }
         }

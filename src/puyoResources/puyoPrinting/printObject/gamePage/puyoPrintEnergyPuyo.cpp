@@ -10,7 +10,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(const vector<puyoPuyo>& energy_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), energy_puyos(energy_puyos){}
+puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(const vector<puyoPuyo>& energy_puyos, Sprite puyo, int life) : puyoPrintObject(puyo,life), energy_puyos(energy_puyos){}
 
 
 void puyoPrintEnergyPuyo::print(RenderWindow& w)
@@ -26,7 +26,7 @@ void puyoPrintEnergyPuyo::print(RenderWindow& w)
             case puyoType::yellow :
             case puyoType::green :
             case puyoType::pupple :
-                print_16x16(w,ENERGY_PUYO_X+(int)puyo,ENERGY_PUYO_Y,x+px,y+py);
+                print_16x16(w,{ENERGY_PUYO_X+(int)puyo,ENERGY_PUYO_Y},{x+px,y+py});
                 break;
             default :
                 break;

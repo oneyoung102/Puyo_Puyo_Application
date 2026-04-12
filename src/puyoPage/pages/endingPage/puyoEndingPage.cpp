@@ -24,8 +24,8 @@ puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int win_player_num, sf::Spri
     , win_player_num(win_player_num)
     , arcade(arcade)
 {
-    pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,0,0,PRINT_IMMORTAL));
-    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),0,0,PRINT_IMMORTAL));
+    pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,PRINT_IMMORTAL));
+    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),PRINT_IMMORTAL));
     proceed_count = 0;
     convert_page = false;
 }
@@ -69,7 +69,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                     break;
             };   
             pp.add_print_text(make_unique<puyoPrintText>(
-                TEXT_WINNER_X,TEXT_WINNER_Y,
+                TEXT_WINNER_POS,
                 text,
                 pfs.get_font(),
                 60,
@@ -83,7 +83,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
             pp.add_print_button(make_unique<puyoPrintButton>(
                 pfs.get_sprite(puyoFileSystem::Image::button),
                 button_cursor.get_select_status(buttonName::replay),
-                REPLAY_BUTTON_X,REPLAY_BUTTON_Y,
+                REPLAY_BUTTON_POS,
                 "Replay",
                 pfs.get_font(),
                 1,
@@ -93,7 +93,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
             pp.add_print_button(make_unique<puyoPrintButton>(
                 pfs.get_sprite(puyoFileSystem::Image::button),
                 button_cursor.get_select_status(buttonName::to_menu),
-                TO_MENU_BUTTON_X,TO_MENU_BUTTON_Y,
+                TO_MENU_BUTTON_POS,
                 "To Menu",
                 pfs.get_font(),
                 1,

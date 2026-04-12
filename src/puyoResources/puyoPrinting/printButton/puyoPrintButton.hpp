@@ -12,7 +12,7 @@ class puyoPrintButton
         const bool& selected;
         int button_x, button_y;
     public:
-        puyoPrintButton(sf::Sprite s, const bool& selected, double xx, double yy, std::string content, sf::Font& font, double scaling, sf::Color color, sf::Text::Style style, int life);
+        puyoPrintButton(sf::Sprite s, const bool& selected, sf::Vector2f pos, std::string content, sf::Font& font, float scaling, sf::Color color, sf::Text::Style style, int life);
         ~puyoPrintButton() = default;
         bool alive();
         virtual void print(sf::RenderWindow& w);

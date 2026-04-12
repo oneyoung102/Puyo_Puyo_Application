@@ -11,7 +11,7 @@ puyoBoardFutureControll::puyoBoardFutureControll(){}
 
 const vector<puyoPuyo> &puyoBoardFutureControll::get() { return future_puyos; }
 
-void puyoBoardFutureControll::set(puyoBoard& board, puyoPlayPuyo& puyo)
+void puyoBoardFutureControll::find(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     future_puyos.clear();
     for(int i = 0 ; i < 2 ; ++i)

@@ -30,5 +30,5 @@ void puyoPuyoAct::let()
         act_count = 0;
 }
 void puyoPuyoAct::halt(){act_count = -1;}
-double puyoPuyoAct::get_state(){return (double)act_count/act_count_init;}
+float puyoPuyoAct::get_state(){return (float)act_count/act_count_init;}
 int puyoPuyoAct::get_act_count_init(){return act_count_init;}

@@ -2,29 +2,29 @@
 
 #include <utility>
 #include <memory>
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
 
 class puyoBoard;
 
-using PUYO_INFO = std::tuple<double,double,puyoType,int>;
+using PUYO_INFO = std::tuple<float,float,puyoType,int>;
 
 class puyoPuyo
 {
     private :
-        double x, y;
+        float x, y;
         puyoType type;
         std::unique_ptr<puyoPuyoAct> act;
     public :
-        puyoPuyo(double x, double y, puyoType type, std::unique_ptr<puyoPuyoAct>&& act);
-        puyoPuyo(double x, double y, puyoType type);
+        puyoPuyo(float x, float y, puyoType type, std::unique_ptr<puyoPuyoAct>&& act);
+        puyoPuyo(float x, float y, puyoType type);
 
-        void move(double to_x, double to_y);
+        void move(float to_x, float to_y);
 
-        std::pair<double,double> const get_pos() const;
+        std::pair<float,float> const get_pos() const;
         puyoType const get_type() const;
 
-        double const get_state() const;
+        float const get_state() const;
         int const get_tick() const;
 
         bool const acting() const;

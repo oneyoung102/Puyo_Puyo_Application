@@ -9,7 +9,7 @@
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 
 #include <utility>
 #include <memory>
@@ -18,14 +18,16 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoPlayPuyo::puyoPlayPuyo(pair<double,double> spawn_pos, pair<puyoType,puyoType> types, int gravity_value, int stay_value)
+puyoPlayPuyo::puyoPlayPuyo(pair<float,float> spawn_pos, pair<puyoType,puyoType> types, int gravity_value, int stay_value)
     : puyoObjectSignal()
     , gravity_value(gravity_value)
     , stay_value(stay_value)
 {
+    stay = 0;
+
     for(int i = 0 ; i < 2 ; ++i)
     {
-        gravity[i] = std::move(make_unique<puyoPuyoGravity>(gravity_value,stay_value));
+        gravity[i] = std::move(make_unique<puyoPuyoGravity>(gravity_value));
         gravity[i]->let();
     }
 
@@ -53,9 +55,17 @@ void puyoPlayPuyo::act_let(puyoBoard& board)
 
 void puyoPlayPuyo::gravity_let(puyoBoard& board)
 {
-    const bool decl0 = gravity[0]->decline(board, *play_puyo[0])
-                , decl1 = gravity[1]->decline(board, *play_puyo[1]);
-    if(decl0 && decl1)
+    if(sat(board) && stay < stay_value)
+    {
+        if(stay == 0)
+            for(int i = 0 ; i < 2 ; ++i)
+            {
+                const auto[x,y] = play_puyo[i]->get_pos();
+                play_puyo[i]->move(round(x),round(y));
+            }
+        ++stay;
+    }
+    else if(gravity[0]->decline(board, *play_puyo[0]) && gravity[1]->decline(board, *play_puyo[1]))
     {
         gravity[0]->act(*play_puyo[0]);
         gravity[1]->act(*play_puyo[1]);
@@ -63,12 +73,12 @@ void puyoPlayPuyo::gravity_let(puyoBoard& board)
 }
 
 bool puyoPlayPuyo::down(){return exchange(down_taken,false);}
-bool puyoPlayPuyo::dropped(puyoBoard& board)
+bool puyoPlayPuyo::dropped(const puyoBoard& board)
 {
-    return sat(board) && (!gravity[0]->acting() || !gravity[1]->acting()) || drop_taken;
+    return (!gravity[0]->acting() || !gravity[1]->acting()) || drop_taken;
 }
 
-int puyoPlayPuyo::get_height(puyoBoard& board)
+int puyoPlayPuyo::get_height(const puyoBoard& board)
 {
     const auto[board_r,board_c] = board.get_size();
     
@@ -81,23 +91,21 @@ int puyoPlayPuyo::get_height(puyoBoard& board)
     }
     return 0;
 }
-vector<PUYO_INFO> puyoPlayPuyo::to_gravity_puyo()
+vector<PUYO_INFO> puyoPlayPuyo::to_gravity_puyo(const puyoBoard& board) const
 {
     const auto[x1,y1] = play_puyo[0]->get_pos();
     const auto[x2,y2] = play_puyo[1]->get_pos();
     const auto type1 = play_puyo[0]->get_type(), type2 = play_puyo[1]->get_type();
-    
-    vector<PUYO_INFO> gravity_puyo = {
-        {x1, y1, type1, PLAYPUYO_DROP_GRAVITY_TICK},
-        {x2, y2, type2, PLAYPUYO_DROP_GRAVITY_TICK}
+    const int tick = sat(board) ? BOARD_FALL_GRAVITY_TICK : PLAYPUYO_DROP_GRAVITY_TICK;
+    return {
+        {x1, y1, type1, tick},
+        {x2, y2, type2, tick}
     };
-    if(y1 < y2)
-        std::swap(gravity_puyo[0],gravity_puyo[1]);
-    return std::move(gravity_puyo);
 }
 const std::unique_ptr<puyoPuyo>& puyoPlayPuyo::get_each(size_t number){return play_puyo[number];}
 const decltype(puyoPlayPuyo::play_puyo)& puyoPlayPuyo::get(){return play_puyo;}
-std::tuple<double,double,double,double> puyoPlayPuyo::get_pos() const
+
+tuple<float,float,float,float> puyoPlayPuyo::get_pos() const
 {
     const auto[x1,y1] = play_puyo[0]->get_pos();
     const auto [x2,y2] = play_puyo[1]->get_pos();
@@ -109,7 +117,7 @@ std::pair<puyoType,puyoType> puyoPlayPuyo::get_type() const
     return make_pair(type1,type2);
 }
 
-bool puyoPlayPuyo::sat(puyoBoard& board)
+bool puyoPlayPuyo::sat(const puyoBoard& board) const
 {
     for(auto& puyo : play_puyo)
     {
@@ -119,7 +127,7 @@ bool puyoPlayPuyo::sat(puyoBoard& board)
     }
     return false;
 }
-bool puyoPlayPuyo::moving()
+bool puyoPlayPuyo::moving() const
 {
     for(auto& puyo : play_puyo)
         if(puyo->acting())
@@ -127,14 +135,13 @@ bool puyoPlayPuyo::moving()
     return false;
 }
 
-
 void puyoPlayPuyo::let_left()
 {
     if(moving())
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,-1,0));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,make_pair(-1,0)));
         puyo->let();
     }
 }
@@ -144,7 +151,7 @@ void puyoPlayPuyo::let_right()
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,1,0));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,make_pair(1,0)));
         puyo->let();
     }
 }
@@ -154,7 +161,7 @@ void puyoPlayPuyo::let_down()
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,0,1));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,make_pair(0,1)));
         puyo->let();
     }
     down_taken = true;

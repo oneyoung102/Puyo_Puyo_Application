@@ -1,6 +1,6 @@
 #pragma once
 
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoMode.hpp"
 #include <random>
 

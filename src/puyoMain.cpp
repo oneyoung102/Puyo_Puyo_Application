@@ -14,7 +14,7 @@ int main()
     window.setView(window.getDefaultView());
     while(window.isOpen())
     {
-        const double dt = clock.restart().asSeconds();
+        const float dt = clock.restart().asSeconds();
         page.show_page(window);
         sf::sleep(sf::microseconds(fmax(0,frame_value-dt*1000)));
     }

@@ -85,11 +85,11 @@ int puyoBotAlgorithm::get_possiblity(int puyo_count, int sum, int obstruct_puyo)
 {
     if(puyo_count == 2)// puyo_count == 2일 때 같은 색 새로운 2개 뿌요가 들어온다면 all clear
         return 100;
-    const double ratio = (puyo_count+obstruct_puyo)/(sum + 0.0);
+    const float ratio = (puyo_count+obstruct_puyo)/(sum + 0.0);
     if(ratio < 0.4)
         return 0;
-    const double k = 6.0;  //기울기
-    const double x = ratio - 0.75; //0.75 이후는 확률 100
+    const float k = 6.0;  //기울기
+    const float x = ratio - 0.75; //0.75 이후는 확률 100
     return (int)100/exp(-k * x);
 }
 

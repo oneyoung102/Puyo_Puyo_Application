@@ -10,7 +10,7 @@ puyoBoardEnergyControll::puyoBoardEnergyControll(){};
 
 
 const vector<puyoPuyo> &puyoBoardEnergyControll::get() { return energy_puyos; }
-bool puyoBoardEnergyControll::temp_empty() const {return temp_energy_puyos.empty();}
+bool puyoBoardEnergyControll::empty_temp() const {return temp_energy_puyos.empty();}
 void puyoBoardEnergyControll::fly(puyoBoard& board)
 {
     for (int i = 0; i < energy_puyos.size();)
@@ -25,21 +25,23 @@ void puyoBoardEnergyControll::fly(puyoBoard& board)
             ++i;
         }
 }
-void puyoBoardEnergyControll::find(double fx, double fy, double tx, double ty)
+void puyoBoardEnergyControll::find(std::pair<float,float> from_pos, std::pair<float,float> to_pos)
 {
     if (temp_energy_puyos.empty())
         return;
-    for (const auto [x, y, type] : temp_energy_puyos)
+    const auto[fx,fy] = from_pos;
+    const auto[tx,ty] = to_pos;
+    for (const auto [x, y, type, tick] : temp_energy_puyos)
     {
-        energy_puyos.push_back(puyoPuyo(fx + x * PUYO_SIZE, fy + y * PUYO_SIZE, type
-                    , make_unique<puyoPuyoFly>(fx + x * PUYO_SIZE, fy + y * PUYO_SIZE, tx, ty, puyoGameConstant::BOARD_FLY_TICK)));
+        energy_puyos.push_back(puyoPuyo(fx+x*PUYO_SIZE, fy+y*PUYO_SIZE, type
+                    , make_unique<puyoPuyoFly>(make_pair(fx+x*PUYO_SIZE, fy+y*PUYO_SIZE),make_pair(tx, ty), tick)));
         energy_puyos.back().let();
     }
     temp_energy_puyos.clear();
 }
 
-void puyoBoardEnergyControll::temp_add(std::tuple<int,int,puyoType> temp_energy_puyo)
+void puyoBoardEnergyControll::add_temp(PUYO_INFO temp_energy_puyo)
 {
     temp_energy_puyos.push_back(temp_energy_puyo);
 }
-void puyoBoardEnergyControll::temp_clear() { temp_energy_puyos.clear(); }
+void puyoBoardEnergyControll::clear_temp() { temp_energy_puyos.clear(); }

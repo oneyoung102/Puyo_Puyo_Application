@@ -3,24 +3,22 @@
 #include <vector>
 #include <tuple>
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 
 class puyoBoard;
 
 class puyoBoardEnergyControll
 {
     private :
-        std::vector<std::tuple<int,int,puyoType>> temp_energy_puyos; 
+        std::vector<PUYO_INFO> temp_energy_puyos; 
         std::vector<puyoPuyo> energy_puyos; 
     public :
         puyoBoardEnergyControll();
         void fly(puyoBoard& board);
-        void find(double fx, double fy, double tx, double ty);// temp_energy_puyo를 energy_puyo로
-
-        void temp_add(std::tuple<int,int,puyoType> temp_energy_puyo);
-        void temp_clear();
-
+        void find(std::pair<float,float> from_pos, std::pair<float,float> to_pos);// temp_energy_puyo를 energy_puyo로
         const std::vector<puyoPuyo>& get();
 
-        bool temp_empty() const;
+        void add_temp(PUYO_INFO temp_energy_puyo);
+        void clear_temp();
+        bool empty_temp() const;
 };

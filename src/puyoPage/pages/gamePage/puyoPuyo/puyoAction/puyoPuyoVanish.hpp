@@ -8,7 +8,7 @@ class puyoPuyo;
 class puyoPuyoVanish : public puyoPuyoAct
 {
     private :
-        double dist;
+        float dist;
     public :
         puyoPuyoVanish(int amount);
         void act(puyoPuyo& puyo) override;

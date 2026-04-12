@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, double x, double y, string content, Font& font, double scaling, sf::Color color, sf::Text::Style style, int life)
+puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, sf::Vector2f pos, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
     , selected(selected)
     , sprite(s)
@@ -27,7 +27,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, double x, d
         bounds0.position.x + bounds0.size.x / 2.f,
         bounds0.position.y + bounds0.size.y / 2.f
     });
-    text.setPosition({(float)x, (float)y});
+    text.setPosition(pos);
 
     const auto [X,Y] = sprite.getTexture().getSize();
     button_x = X;
@@ -38,7 +38,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, double x, d
         bounds1.position.x + bounds1.size.x / 2.f,
         bounds1.position.y + bounds1.size.y / 2.f
     });
-    sprite.setPosition({(float)x, (float)y});
+    sprite.setPosition(pos);
 }
 
 bool puyoPrintButton::alive(){return life != 0;}

@@ -5,13 +5,8 @@
 using namespace puyoImageConstant;
 using namespace sf;
 
-puyoPrintScreen::puyoPrintScreen(int player_count, Sprite screen, int x, int y, int life) : puyoPrintObject(screen,x,y,life)
+puyoPrintScreen::puyoPrintScreen(int player_count, Sprite screen, int life) : puyoPrintObject(screen,std::make_pair(0,0),life)
 {
     this->player_count = player_count;
     sprite.setTextureRect(IntRect({static_cast<int>(SCREEN_X)*(2-player_count), 0}, {static_cast<int>(SCREEN_X),static_cast<int>(SCREEN_Y)})); 
-}
-
-void puyoPrintScreen::print(RenderWindow& w)
-{
-    print_sprite(w,x,y);
 }

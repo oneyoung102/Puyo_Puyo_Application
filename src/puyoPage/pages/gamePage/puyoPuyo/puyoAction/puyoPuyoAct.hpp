@@ -21,6 +21,6 @@ class puyoPuyoAct
         bool acting();
         void let();
         void halt();
-        double get_state();
+        float get_state();
         int get_act_count_init();
 };

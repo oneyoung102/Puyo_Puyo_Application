@@ -1,11 +1,16 @@
+#pragma once
+
 #include <vector>
 #include <utility>
+
+#include <SFML/Graphics.hpp>
 
 namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련한 클래스
 {
     //puyo_board.png
         //gamePage
         const unsigned int SCREEN_X = 640, SCREEN_Y = 444;
+        const sf::Vector2f SCREEN_CENTER = {SCREEN_X/2.0,SCREEN_Y/2.0};
         const std::vector<std::pair<int,int>> PLAYER_BOARD_POS = {std::make_pair(31,35),std::make_pair(386+31,35)};
         const int BOARD_HEIGHT = 12;
 
@@ -20,7 +25,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         //gamePage
         const int PUYO_SIZE = 32;
 
-        const double FUTURE_PUYO_ALPHA_VALUE = 0.7;
+        const float FUTURE_PUYO_ALPHA_VALUE = 0.7;
 
         const int DROPPING_PUYO_X = 4, DROPPING_PUYO_Y = 13;
         const int GRAVITY_PUYO_X = 5, GRAVITY_PUYO_Y = 11;
@@ -45,33 +50,33 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
     //Text
         //gamePage
-        const std::vector<std::pair<int,int>> TEXT_PLAYER_CHAIN_POS = {std::make_pair(126,205),std::make_pair(386+126,205)};
-        const std::vector<std::pair<int,int>> TEXT_PLAYER_ALL_CLEAR_POS = {std::make_pair(126,241),std::make_pair(386+126,241)};
+        const std::vector<sf::Vector2f> TEXT_PLAYER_CHAIN_POS = {{126,205},{386+126,205}};
+        const std::vector<sf::Vector2f> TEXT_PLAYER_ALL_CLEAR_POS = {{126,241},{386+126,241}};
             //speed up mode
-            const int TEXT_SPEED_UP_X = SCREEN_X/2, TEXT_SPEED_UP_Y = 310;
+            const sf::Vector2f TEXT_SPEED_UP_POS = {SCREEN_X/2.0,310};
         //openingPage
-        const int TEXT_PRESS_ENTER_X = SCREEN_X/2, TEXT_PRESS_ENTER_Y = SCREEN_Y/2+20;
+        const sf::Vector2f TEXT_PRESS_ENTER_POS = {SCREEN_X/2.0,SCREEN_Y/2.0+20};
         //menuPage
-        const int TEXT_ARCADE_X = SCREEN_X/2, TEXT_ARCADE_Y = SCREEN_Y/2-120;
+        const sf::Vector2f TEXT_ARCADE_POS = {SCREEN_X/2.0f, SCREEN_Y/2.0f-120};
         //endingPage
-        const int TEXT_WINNER_X = SCREEN_X/2, TEXT_WINNER_Y = SCREEN_Y/2-35;
+        const sf::Vector2f TEXT_WINNER_POS = {SCREEN_X/2.0f, SCREEN_Y/2.0f-35};
     
     //button
         const int TEXT_SIZE_IN_BUTTON = 31;//5글자 기준 기본 텍스트 사이즈
         //menuPage
-        const int SOLO_BUTTON_X = SCREEN_X/2-170, SOLO_BUTTON_Y = SCREEN_Y/2+23;
-        const int DUAL_BUTTON_X = SCREEN_X/2, DUAL_BUTTON_Y = SCREEN_Y/2+23;
-        const int BOT_BUTTON_X = SCREEN_X/2+170, BOT_BUTTON_Y = SCREEN_Y/2+23;
+        const sf::Vector2f SOLO_BUTTON_POS = {SCREEN_X/2.0f-170, SCREEN_Y/2.0f+23};
+        const sf::Vector2f DUAL_BUTTON_POS = {SCREEN_X/2.0f, SCREEN_Y/2.0f+23};
+        const sf::Vector2f BOT_BUTTON_POS = {SCREEN_X/2.0f+170, SCREEN_Y/2.0f+23};
         //openingPage
         //optionPage
-        const int DIFF_DIAL_BUTTON_X = SCREEN_X / 2-130, DIFF_DIAL_BUTTON_Y = SCREEN_Y/2-5;
-        const int MODE_DIAL_BUTTON_X = SCREEN_X / 2+130, MODE_DIAL_BUTTON_Y = SCREEN_Y/2-5;
+        const sf::Vector2f DIFF_DIAL_BUTTON_POS = {SCREEN_X / 2.0f-130, SCREEN_Y/2.0f-5};
+        const sf::Vector2f MODE_DIAL_BUTTON_POS = {SCREEN_X / 2.0f+130, SCREEN_Y/2.0f-5};
 
-        const int BACK_BUTTON_X = SCREEN_X / 2 - 190, BACK_BUTTON_Y = SCREEN_Y / 2 + 153;
-        const int READY_BUTTON_X = SCREEN_X / 2 + 190, READY_BUTTON_Y = SCREEN_Y / 2 + 153;
+        const sf::Vector2f BACK_BUTTON_POS = {SCREEN_X / 2.0f - 190, SCREEN_Y / 2.0f + 153};
+        const sf::Vector2f READY_BUTTON_POS = {SCREEN_X / 2.0f + 190, SCREEN_Y / 2.0f + 153};
         //endingPage
-            const int REPLAY_BUTTON_X = SCREEN_X/2-85, REPLAY_BUTTON_Y = SCREEN_Y/2+70;
-            const int TO_MENU_BUTTON_X = SCREEN_X/2+85, TO_MENU_BUTTON_Y = SCREEN_Y/2+70;
+        const sf::Vector2f REPLAY_BUTTON_POS = {SCREEN_X/2.0f-85, SCREEN_Y/2.0f+70};
+        const sf::Vector2f TO_MENU_BUTTON_POS = {SCREEN_X/2.0f+85, SCREEN_Y/2.0f+70};
 
     const int PRINT_IMMORTAL = -1;
 };

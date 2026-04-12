@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPrintVanishPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoBoard/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
@@ -11,7 +11,9 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintVanishPuyo::puyoPrintVanishPuyo(const vector<puyoPuyo>& vanish_puyos, Sprite puyo, int x, int y, int life) : puyoPrintObject(puyo,x,y,life), vanish_puyos(vanish_puyos){}
+puyoPrintVanishPuyo::puyoPrintVanishPuyo(const vector<puyoPuyo>& vanish_puyos, Sprite puyo, std::pair<float,float> pos, int life)
+    : puyoPrintObject(puyo,pos,life)
+    , vanish_puyos(vanish_puyos){}
 
 
 void puyoPrintVanishPuyo::print(RenderWindow& w)
@@ -31,17 +33,17 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
             case puyoType::mid_bomb :
             case puyoType::big_bomb :
             case puyoType::danger_bomb :
-                print_16x16(w,VANISH_OTHER_X,VANISH_OTHER_Y,px,py);
+                print_16x16(w,{VANISH_OTHER_X,VANISH_OTHER_Y},{px,py});
                 break;
             default :
             {
-                const double prop = vanish_puyo.get_state();
+                const float prop = vanish_puyo.get_state();
                 if(prop <= puyoGameConstant::VANISH_STAY_PROP)
-                    print_16x16(w,VANISH_STAY_PUYO_X+2*(int)puyo,VANISH_STAY_PUYO_Y,px,py);
+                    print_16x16(w,{VANISH_STAY_PUYO_X+2*(int)puyo,VANISH_STAY_PUYO_Y},{px,py});
                 else if(prop <= puyoGameConstant::VANISH_SOON_PROP)
-                    print_16x16(w,VANISH_SOON_PUYO_X+2*(int)puyo,VANISH_SOON_PUYO_Y,px,py);
+                    print_16x16(w,{VANISH_SOON_PUYO_X+2*(int)puyo,VANISH_SOON_PUYO_Y},{px,py});
                 else
-                    print_16x16(w,VANISH_SOON_PUYO_X+2*(int)puyo+1,VANISH_SOON_PUYO_Y,px,py);
+                    print_16x16(w,{VANISH_SOON_PUYO_X+2*(int)puyo+1,VANISH_SOON_PUYO_Y},{px,py});
                 break;
             }
         }

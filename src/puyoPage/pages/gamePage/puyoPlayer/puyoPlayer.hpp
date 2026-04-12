@@ -22,10 +22,10 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         std::unique_ptr<puyoPlayPuyo> puyo;
         const int player_num; // 0 또는 1
         
-        int score, opposite_obstruct_puyo_count/*상대에게 보낼 방해 뿌요*/;
+        int score;
         int new_puyo_count;//새 뿌요를 받은 횟수
 
-        bool player_is_bot;
+        const bool player_is_bot;
         std::unique_ptr<puyoBotAlgorithm> bot_algorithm;
 
     public :
@@ -37,11 +37,8 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 
         const int& get_score();
         void add_score(int s);
-        int get_opposite_obstruct_puyo_count();
-        void add_opposite_obstruct_puyo_count(int c);
-        void clear_opposite_obstruct_puyo_count();
 
-        void give_new_puyos(std::pair<puyoType,puyoType> colors, int puyo_gravity_value, int puyo_stay_value);
+        void give_new_puyos(std::pair<puyoType,puyoType> types, int puyo_gravity_value, int puyo_stay_value);
         const int& get_new_puyo_count();
 
         std::function<void()> get_let_left();

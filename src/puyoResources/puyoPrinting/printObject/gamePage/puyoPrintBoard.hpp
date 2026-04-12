@@ -6,8 +6,8 @@
 class puyoPrintBoard : public puyoPrintObject
 {
     private :
-        puyoBoard& board;
+        const puyoBoard& board;
     public :
-        puyoPrintBoard(puyoBoard& board, sf::Sprite puyo, int x, int y, int life);
+        puyoPrintBoard(const puyoBoard& board, sf::Sprite puyo, std::pair<int,int> pos, int life);
         void print(sf::RenderWindow& w);
 };

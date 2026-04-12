@@ -19,11 +19,11 @@ using namespace puyoImageConstant;
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     : button_cursor(puyoButtonCursor<1,3,Arcade>({{Arcade::solo,Arcade::dual,Arcade::bot}}))
 {
-    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),0,0,-1));
+    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),-1));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
 
     pp.add_print_text(make_unique<puyoPrintTextZoom>(
-        TEXT_ARCADE_X, TEXT_ARCADE_Y,
+        TEXT_ARCADE_POS,
         "Select Arcade!!!",
         pfs.get_font(),
         58,
@@ -35,7 +35,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::solo),
-        SOLO_BUTTON_X,SOLO_BUTTON_Y,
+        SOLO_BUTTON_POS,
         "Solo",
         pfs.get_font(),
         1.3,
@@ -45,7 +45,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::dual),
-        DUAL_BUTTON_X,DUAL_BUTTON_Y,
+        DUAL_BUTTON_POS,
         "Dual",
         pfs.get_font(),
         1.3,
@@ -55,7 +55,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::bot),
-        BOT_BUTTON_X,BOT_BUTTON_Y,
+        BOT_BUTTON_POS,
         "Bot",
         pfs.get_font(),
         1.3,

@@ -6,6 +6,5 @@ class puyoPrintScreenbar : public puyoPrintObject
 {
     private :
     public :
-        puyoPrintScreenbar(int player_count, sf::Sprite screen, int x, int y, int life);
-        void print(sf::RenderWindow& w);
+        puyoPrintScreenbar(int player_count, sf::Sprite screen, int life);
 };
