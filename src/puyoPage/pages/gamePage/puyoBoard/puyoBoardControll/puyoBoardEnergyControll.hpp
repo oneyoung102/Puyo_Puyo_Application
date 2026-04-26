@@ -15,7 +15,7 @@ class puyoBoardEnergyControll
     public :
         puyoBoardEnergyControll();
         void fly(puyoBoard& board);
-        void find(std::pair<float,float> from_pos, std::pair<float,float> to_pos);// temp_energy_puyo를 energy_puyo로
+        void to_energy_puyo(int from_player_num, int to_player_num);// temp_energy_puyo를 energy_puyo로
         const std::vector<puyoPuyo>& get();
 
         void add_temp(PUYO_INFO temp_energy_puyo);

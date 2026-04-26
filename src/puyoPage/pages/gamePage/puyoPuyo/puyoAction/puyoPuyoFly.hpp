@@ -1,7 +1,7 @@
 #pragma once
 
 #include "puyoPuyoAct.hpp"
-#include <utility>
+#include "puyoPos.hpp"
 
 class puyoBoard;
 class puyoPuyo; 
@@ -9,9 +9,9 @@ class puyoPuyo;
 class puyoPuyoFly : public puyoPuyoAct
 {
     private :
-        const float from_x, from_y, to_x, to_y;
+        const POS dpos;
         void arrive(puyoPuyo& puyo) override;
     public :
-        puyoPuyoFly(std::pair<float,float> from_pos,std::pair<float,float> to_pos,int amount);
+        puyoPuyoFly(POS from_pos, POS to_pos, int amount);
         void act(puyoPuyo& puyo) override;
 };

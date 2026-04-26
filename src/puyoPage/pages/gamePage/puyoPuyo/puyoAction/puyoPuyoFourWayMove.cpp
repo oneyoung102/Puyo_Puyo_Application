@@ -7,22 +7,19 @@
 using namespace std;
 
 
-bool puyoPuyoFourWayMove::test(puyoBoard& board, puyoPuyo& puyo)
+bool puyoPuyoFourWayMove::test(const puyoBoard& board, puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
-    return !board.touched(ceil(y)+dy,round(x)+dx) && !board.touched(floor(y)+dy,round(x)+dx);
+    return !board.touched(ceil(y)+dpos.y,round(x)+dpos.x) && !board.touched(floor(y)+dpos.y,round(x)+dpos.x);
 }
 
-puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, std::pair<float,float> delta)
+puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, POS delta)
     : puyoPuyoAct(amount)
-    , dx(delta.first)
-    , dy(delta.second)
+    , dpos(delta)
 {}
 
 void puyoPuyoFourWayMove::act(puyoPuyo& puyo)
 {
-    const auto[x,y] = puyo.get_pos();
-    const float ddx = (dx+0.0)/act_count_init, ddy = (dy+0.0)/act_count_init;
-    puyo.move(x+ddx,y+ddy);
+    puyo.move(dpos/act_count_init+puyo.get_pos());
     ++act_count;
 };

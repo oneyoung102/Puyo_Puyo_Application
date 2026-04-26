@@ -1,6 +1,5 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardGravityControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
-#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 
 #include <algorithm>
@@ -15,8 +14,8 @@ puyoBoardGravityControll::puyoBoardGravityControll()
 void puyoBoardGravityControll::add(PUYO_INFO puyo) // std::move
 {
     gravity_puyos.push_back(
-        puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),std::get<2>(puyo),
-        make_unique<puyoPuyoGravity>(std::get<3>(puyo))));
+        puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),
+        make_unique<puyoPuyoGravity>(std::get<2>(puyo))));
     gravity_puyos.back().let();    
 }
 void puyoBoardGravityControll::add(vector<PUYO_INFO> puyos) // std::move
@@ -41,7 +40,7 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
 
             if (!board.in(iy,ix))
                 gravity_puyo_is_out_of_board = true; // 배치할 뿌요가 범위를 나감
-            else if(board.get_puyo(iy,ix) == puyoType::blank)
+            else if(board.empty(iy,ix))
                 board.insert_puyo(type,iy,ix);
 
             std::swap(gravity_puyos[i],gravity_puyos.back());

@@ -31,15 +31,15 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
     public :
         puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board ,bool player_is_bot);
 
-        int get_player_num();
+        int get_player_num() const;
         puyoBoard& get_board();
         puyoPlayPuyo& get_puyo();
 
-        const int& get_score();
+        const int& get_score() const;
         void add_score(int s);
 
         void give_new_puyos(std::pair<puyoType,puyoType> types, int puyo_gravity_value, int puyo_stay_value);
-        const int& get_new_puyo_count();
+        const int& get_new_puyo_count() const;
 
         std::function<void()> get_let_left();
         std::function<void()> get_let_right();
@@ -47,8 +47,8 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         std::function<void()> get_let_turn();
         std::function<void()> get_let_drop();
 
-        void sign_puyo_dropped();
+        void signal_puyo_drop();
 
-        bool is_bot();
-        void act_bot_let();
+        bool is_bot() const;
+        void act_bot_let() const;
 };

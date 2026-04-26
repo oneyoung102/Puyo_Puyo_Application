@@ -2,15 +2,13 @@
 #include "puyoPrintSpawnspot.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
-#include <utility>
-
 using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, std::pair<float,float> pos, int life)
+puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, POS pos, int life)
     : puyoPrintObject(puyo,pos,life)
-    , SPAWN_SPOT_CYCLE(800)
+    , SPAWN_SPOT_CYCLE(80)
     , player_num(player_num)
 {
     spawn_spot_state = 0;

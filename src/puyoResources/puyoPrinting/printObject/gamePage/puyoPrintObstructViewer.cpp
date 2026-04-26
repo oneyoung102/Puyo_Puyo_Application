@@ -8,7 +8,7 @@ using namespace puyoGameConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintObstructViewer::puyoPrintObstructViewer(const int& obstruct_puyo, Sprite puyo, std::pair<int,int> pos, int life)
+puyoPrintObstructViewer::puyoPrintObstructViewer(const int& obstruct_puyo, Sprite puyo, POS pos, int life)
     : puyoPrintObject(puyo,pos,life),
     obstruct_puyo(obstruct_puyo)
 {}

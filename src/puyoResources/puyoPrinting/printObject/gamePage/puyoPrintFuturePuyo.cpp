@@ -9,7 +9,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintFuturePuyo::puyoPrintFuturePuyo(const vector<puyoPuyo>& future_puyos, Sprite puyo, std::pair<int,int> pos, int life)
+puyoPrintFuturePuyo::puyoPrintFuturePuyo(const vector<puyoPuyo>& future_puyos, Sprite puyo, POS pos, int life)
     : puyoPrintObject(puyo,pos,life)
     , future_puyos(future_puyos)
 {

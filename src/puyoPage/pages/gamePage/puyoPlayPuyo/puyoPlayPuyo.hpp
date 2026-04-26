@@ -32,7 +32,7 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         bool down_taken, drop_taken;//명령 접수 여부
 
     public :
-        puyoPlayPuyo(std::pair<float,float> spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
+        puyoPlayPuyo(POS spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
 
         void act_let(puyoBoard& board);
         void gravity_let(puyoBoard& board);

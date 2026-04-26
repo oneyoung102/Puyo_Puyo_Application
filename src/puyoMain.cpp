@@ -7,16 +7,17 @@ using namespace puyoImageConstant;
 
 int main()
 {   
-    sf::Clock clock;
-    const int frame_value = 60;
+    Clock clock;
+    const int frame_value = 1200;
+
     puyoPageManager page;
-    RenderWindow window(VideoMode({SCREEN_X, SCREEN_Y}),"Puyo Puyo"); //창 설정
+    RenderWindow window(VideoMode(SCREEN_SIZE),"Puyo Puyo"); //창 설정
     window.setView(window.getDefaultView());
     while(window.isOpen())
     {
         const float dt = clock.restart().asSeconds();
         page.show_page(window);
-        sf::sleep(sf::microseconds(fmax(0,frame_value-dt*1000)));
+        sleep(sf::microseconds(fmax(0,frame_value-dt*1000)));
     }
     return 0;
 }

@@ -10,6 +10,6 @@ class puyoPrintFuturePuyo : public puyoPrintObject
     private :
         const std::vector<puyoPuyo>& future_puyos;
     public :
-        puyoPrintFuturePuyo(const std::vector<puyoPuyo>& future_puyos, sf::Sprite puyo, std::pair<int,int> pos, int life);
+        puyoPrintFuturePuyo(const std::vector<puyoPuyo>& future_puyos, sf::Sprite puyo, POS pos, int life);
         void print(sf::RenderWindow& w);
 };

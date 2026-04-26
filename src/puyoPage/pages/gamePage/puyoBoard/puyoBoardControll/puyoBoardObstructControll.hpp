@@ -23,4 +23,5 @@ class puyoBoardObstructControll
 
         void approve_spawn();
         void disapprove_spawn();
+        bool spawn_approved() const;
 };

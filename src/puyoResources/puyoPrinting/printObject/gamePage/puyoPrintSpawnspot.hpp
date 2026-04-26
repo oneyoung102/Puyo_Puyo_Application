@@ -10,6 +10,6 @@ class puyoPrintSpawnspot : public puyoPrintObject
         int spawn_spot_state;
         bool spawn_spot_rotate_dir;
     public :
-        puyoPrintSpawnspot(int player_num, sf::Sprite screen, std::pair<float,float> pos, int life);
+        puyoPrintSpawnspot(int player_num, sf::Sprite screen, POS pos, int life);
         void print(sf::RenderWindow &w) override;
 };

@@ -5,18 +5,15 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
-#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
-
 using namespace std;
-using namespace puyoImageConstant;
 
 puyoBoard::puyoBoard() : board_r(13), board_c(6), puyoObjectSignal()
 {
     board = vector<vector<puyoType>>(board_r, vector<puyoType>(board_c, puyoType::blank));
 }
 
-pair<float, float> puyoBoard::get_spawn_pos() const {return spawn_pos;}
-void puyoBoard::set_spawn_pos(std::pair<float,float> pos)
+POS puyoBoard::get_spawn_pos() const {return spawn_pos;}
+void puyoBoard::set_spawn_pos(POS pos)
 {
     spawn_pos = pos;
 };
@@ -27,7 +24,7 @@ bool puyoBoard::in_col(int c) const { return 0 <= c && c < board_c; }
 bool puyoBoard::in(int r, int c) const {return in_row(r) && in_col(c);} // 이건 행,열
 bool puyoBoard::touched(int r, int c) const// 이건 행,열
 {
-    return r >= 0 && (!in(r,c) || get_puyo(r,c) != puyoType::blank)
+    return r >= 0 && (!in(r,c) || !empty(r,c))
         || r < 0 && !in_col(c);
 }
 
@@ -42,6 +39,7 @@ bool puyoBoard::empty() const
             return false;
     return true;
 }
+bool puyoBoard::empty(int r, int c) const {return get_puyo(r,c) == puyoType::blank;}
 bool puyoBoard::all_cleared(){
     if(!empty())
         return false;
@@ -57,12 +55,11 @@ vector<PUYO_INFO> puyoBoard::to_gravity_puyo()
         bool floating = false;
         for(int i = board_r-1 ; i >= 0 ; --i)
         {
-            const puyoType puyo = get_puyo(i,j);
-            if(puyo == puyoType::blank)
+            if(empty(i,j))
                 floating = true;
             else if(floating)
             {
-                gravity_puyos.push_back({j,i, puyo, puyoGameConstant::BOARD_FALL_GRAVITY_TICK});
+                gravity_puyos.push_back({POS(j,i), get_puyo(i,j), puyoGameConstant::BOARD_FALL_GRAVITY_TICK});
                 remove_puyo(i,j);
                 continue;
             }

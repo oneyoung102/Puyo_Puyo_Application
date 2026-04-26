@@ -36,12 +36,12 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         
         std::vector<std::vector<puyoType>> board;
         const int board_r, board_c; 
-        std::pair<float,float> spawn_pos;
+        POS spawn_pos;
     public :  
         puyoBoard();
 
-        void set_spawn_pos(std::pair<float,float> pos);
-        std::pair<float,float> get_spawn_pos() const;
+        void set_spawn_pos(POS pos);
+        POS get_spawn_pos() const;
         
         std::pair<int,int> get_size() const;
         bool in_row(int r) const;
@@ -53,6 +53,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         void insert_puyo(puyoType puyo, int r, int c);//이건 행,열
         void remove_puyo(int r, int c);//이건 행,열
         bool empty() const;
+        bool empty(int r, int c) const;
         bool all_cleared();
 
         std::vector<PUYO_INFO> to_gravity_puyo();

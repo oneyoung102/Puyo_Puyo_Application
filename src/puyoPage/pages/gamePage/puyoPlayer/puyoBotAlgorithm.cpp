@@ -93,16 +93,15 @@ int puyoBotAlgorithm::get_possiblity(int puyo_count, int sum, int obstruct_puyo)
     return (int)100/exp(-k * x);
 }
 
-puyoBotAlgorithm::puyoBotAlgorithm() : gen(random_device{}()) {}
+puyoBotAlgorithm::puyoBotAlgorithm()
+    : gen(random_device{}())
+    , dir({{1,0},{-1,0},{0,1},{0,-1}})
+{}
 
 
 void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
 {
     uniform_int_distribution<> dist(0,99);
-
-    const vector<pair<int,int>> dir = {
-        {1,0},{-1,0},{0,1},{0,-1}
-    };
     
     const auto[spawn_x,spawn_y] = board.get_spawn_pos();
     const auto[board_r,board_c] = board.get_size();
@@ -167,7 +166,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
         }
         
         const int temp_bottom_y = max(y1,y2);
-        if(cluster_size < puyoGameConstant::PUYO_VANISH_CONDITION || fire_chain)
+        if(cluster_size < board.controll_vanish().get_condition()|| fire_chain)
             if(max_cluster_size < cluster_size
                 || max_cluster_size == cluster_size && max_cluster_size_sum < cluster_size_sum
                 || max_cluster_size == cluster_size && max_cluster_size_sum == cluster_size_sum &&  bottom_y < temp_bottom_y)

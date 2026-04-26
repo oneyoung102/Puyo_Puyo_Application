@@ -12,6 +12,7 @@
 class puyoBotAlgorithm
 {
     private :
+        const std::vector<std::pair<int,int>> dir;
         std::vector<std::function<void()>> lets;
         std::vector<std::pair<int,int>> calc_all_probablities(puyoBoard& board); //{좌우이동, 화전수}
         std::tuple<int,int,int,int> to_coord(std::pair<int,int> probablity, puyoPlayPuyo& puyo); //가능성을 좌표로 변환

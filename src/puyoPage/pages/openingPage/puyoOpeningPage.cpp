@@ -21,7 +21,7 @@ puyoOpeningPage::puyoOpeningPage(puyoFileSystem& pfs)
 {
     opening_printed = false;
     opening_end = false;
-    pp.add_print_object(make_unique<puyoPrintObject>(SEGA_SPRITE,9500));
+    pp.add_print_object(make_unique<puyoPrintObject>(SEGA_SPRITE,950));
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::sega_intro));
 }
 puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
@@ -47,7 +47,7 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
             Color::White,
             Text::Style::Regular,
             PRINT_IMMORTAL,
-            1200));
+            120));
         opening_printed = true;
         pl.allot_key((int)(Keyboard::Key::Enter),[this](){return let_start();});
     }

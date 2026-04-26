@@ -40,8 +40,8 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
                 phase.set_signal(puyoModeSignal::bomb_explode);
                 for(int i = 0 ; i < r ; ++i)
                     for(int j = 0 ; j < c ; ++j)
-                        if(board.get_puyo(i,j) != puyoType::blank)
-                            cv.to_vanish_puyo(board,{j,i,board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK});                                                 
+                        if(!board.empty(i,j))
+                            cv.to_vanish_puyo(board,{POS(j,i),board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK});                                                 
                 bomb_tick = -1;
             }
             else if(cv.empty())
@@ -58,7 +58,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
                 const auto puyo = board.get_puyo(i,bomb_c);
                 if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                 {
-                    cv.to_vanish_puyo(board,{bomb_c,i,puyo,BOMB_VANISH_TICK});
+                    cv.to_vanish_puyo(board,{POS(bomb_c,i),puyo,BOMB_VANISH_TICK});
                     break;
                 }
             }
@@ -107,7 +107,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
         std::uniform_int_distribution<> dist(0, board.get_size().second-1);
         bomb_c = dist(gen);
         bomb_appearance = puyoType::tiny_bomb;
-        cg.add({bomb_c, OBSTRUCT_PUYO_SPAWN_Y,bomb_appearance, BOARD_FALL_GRAVITY_TICK});
+        cg.add({POS(bomb_c, OBSTRUCT_PUYO_SPAWN_Y),bomb_appearance, BOARD_FALL_GRAVITY_TICK});
         bomb_tick = BOMB_MAX_TICK;
         bomb_is_spawned = true;
         phase.set_signal(puyoModeSignal::bomb_fused);

@@ -9,13 +9,13 @@ class puyoPuyoAct
         const int act_count_init;
         int act_count;
 
-        virtual bool test(puyoBoard& board,puyoPuyo& puyo);
+        virtual bool test(const puyoBoard& board, puyoPuyo& puyo);
         virtual void arrive(puyoPuyo& puyo);
     public :
         puyoPuyoAct(int amount);
         virtual ~puyoPuyoAct() = default;
 
-        virtual bool decline(puyoBoard& board,puyoPuyo& puyo);
+        virtual bool decide(const puyoBoard& board,puyoPuyo& puyo);
         virtual void act(puyoPuyo& puyo) = 0;
               
         bool acting();

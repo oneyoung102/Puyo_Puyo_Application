@@ -7,7 +7,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintPlayPuyo::puyoPrintPlayPuyo(puyoPlayer& player, Sprite puyo, std::pair<int,int> pos, int life) : puyoPrintObject(puyo,pos,life), player(player){}
+puyoPrintPlayPuyo::puyoPrintPlayPuyo(puyoPlayer& player, Sprite puyo, POS pos, int life) : puyoPrintObject(puyo,pos,life), player(player){}
 
 void puyoPrintPlayPuyo::print(RenderWindow& w)
 {

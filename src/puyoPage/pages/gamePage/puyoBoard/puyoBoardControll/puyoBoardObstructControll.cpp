@@ -20,9 +20,8 @@ void puyoBoardObstructControll::add(int count)
 }
 std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
 {
-    if(!approvement_spawn || obstruct_puyo_for_dropping == 0)
+    if(obstruct_puyo_for_dropping <= 0)
         return {};
-    approvement_spawn = false;
 
     if(obstruct_puyo_for_dropping >= OBSTRUCT_PUYO_MANY)
         board.set_signal(puyoBoardSignal::many_obsp_dropped);
@@ -36,9 +35,9 @@ std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boa
     vector<PUYO_INFO> gravity_puyos;
     for(int i = board_r-1; i >= 0 ; --i)
         for(int j = 0; j < board_c ; ++j)
-            if(board.get_puyo(i,j) == puyoType::blank)
+            if(board.empty(i,j))
             {
-                gravity_puyos.push_back({j,-obstruct_puyo_height[j] + OBSTRUCT_PUYO_SPAWN_Y, puyoType::obstruct, BOARD_FALL_GRAVITY_TICK});
+                gravity_puyos.push_back({{(float)j,-obstruct_puyo_height[j] + OBSTRUCT_PUYO_SPAWN_Y}, puyoType::obstruct, BOARD_FALL_GRAVITY_TICK});
                 ++obstruct_puyo_height[j];
                 --obstruct_puyo_for_dropping;
                 --obstruct_puyo;
@@ -57,3 +56,4 @@ void puyoBoardObstructControll::clear_opp(){opposite_obstruct_puyo = 0;}
 
 void puyoBoardObstructControll::approve_spawn() {approvement_spawn = true;}
 void puyoBoardObstructControll::disapprove_spawn() {approvement_spawn = false;}
+bool puyoBoardObstructControll::spawn_approved() const  {return approvement_spawn;}

@@ -11,7 +11,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintVanishPuyo::puyoPrintVanishPuyo(const vector<puyoPuyo>& vanish_puyos, Sprite puyo, std::pair<float,float> pos, int life)
+puyoPrintVanishPuyo::puyoPrintVanishPuyo(const vector<puyoPuyo>& vanish_puyos, Sprite puyo, POS pos, int life)
     : puyoPrintObject(puyo,pos,life)
     , vanish_puyos(vanish_puyos){}
 
@@ -39,11 +39,11 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
             {
                 const float prop = vanish_puyo.get_state();
                 if(prop <= puyoGameConstant::VANISH_STAY_PROP)
-                    print_16x16(w,{VANISH_STAY_PUYO_X+2*(int)puyo,VANISH_STAY_PUYO_Y},{px,py});
+                    print_16x16(w,POS(VANISH_STAY_PUYO_X+2*(int)puyo,VANISH_STAY_PUYO_Y),{px,py});
                 else if(prop <= puyoGameConstant::VANISH_SOON_PROP)
-                    print_16x16(w,{VANISH_SOON_PUYO_X+2*(int)puyo,VANISH_SOON_PUYO_Y},{px,py});
+                    print_16x16(w,POS(VANISH_SOON_PUYO_X+2*(int)puyo,VANISH_SOON_PUYO_Y),{px,py});
                 else
-                    print_16x16(w,{VANISH_SOON_PUYO_X+2*(int)puyo+1,VANISH_SOON_PUYO_Y},{px,py});
+                    print_16x16(w,POS(VANISH_SOON_PUYO_X+2*(int)puyo+1,VANISH_SOON_PUYO_Y),{px,py});
                 break;
             }
         }

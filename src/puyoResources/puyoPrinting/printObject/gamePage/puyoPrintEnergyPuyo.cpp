@@ -26,7 +26,7 @@ void puyoPrintEnergyPuyo::print(RenderWindow& w)
             case puyoType::yellow :
             case puyoType::green :
             case puyoType::pupple :
-                print_16x16(w,{ENERGY_PUYO_X+(int)puyo,ENERGY_PUYO_Y},{x+px,y+py});
+                print_16x16(w,POS(ENERGY_PUYO_X+(int)puyo,ENERGY_PUYO_Y),{x+px,y+py});
                 break;
             default :
                 break;

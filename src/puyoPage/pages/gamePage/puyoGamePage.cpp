@@ -27,7 +27,6 @@
 
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
-#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/puyoLet.hpp"
 
 #include <memory>
@@ -35,7 +34,6 @@
 using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
-using namespace puyoGameConstant;
 
 puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode mode) 
     : PUYO_SPRITE(pfs.get_sprite(puyoFileSystem::Image::puyo))
@@ -54,8 +52,6 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     phase.add_player(std::move(player0));
     switch(arcade)
     {   
-        case Arcade::solo :
-            break;
         case Arcade::dual :
         {
             auto player1 = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),false);
@@ -73,7 +69,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
             phase.add_player(std::move(bot));
             break;
         }
-        case Arcade::NONE :
+        default :
             break;
     };
     phase.set_game(diff,mode);
@@ -86,7 +82,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         const int player_num = player->get_player_num();
         const auto [player_board_x,player_board_y] = PLAYER_BOARD_POS[player_num];
         const int board_printing_y = player_board_y + PUYO_SIZE*(BOARD_HEIGHT - board.get_size().first);
-        const auto board_print_pos = make_pair(player_board_x,board_printing_y);
+        const POS board_print_pos = POS(player_board_x,board_printing_y);
 
         pp.add_print_object(make_unique<puyoPrintSpawnspot>(player_num,PUYO_SPRITE,board.get_spawn_pos(),PRINT_IMMORTAL));
         pp.add_print_object(make_unique<puyoPrintFuturePuyo>(board.controll_future().get(),PUYO_SPRITE,board_print_pos,PRINT_IMMORTAL));
@@ -108,8 +104,8 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     }
 
 //////준비 전 단계
-    pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,8200)); //검은색 반투명 배경
-    pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Ready?",pfs.get_font(),60,Color::White,Text::Style::Bold,4000));
+    pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,820)); //검은색 반투명 배경
+    pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Ready?",pfs.get_font(),60,Color::White,Text::Style::Bold,400));
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::ready));
     ready_status = Ready_status::ready;
 }
@@ -125,14 +121,14 @@ void puyoGamePage::receive_phase_signal(puyoFileSystem& pfs)
         if(board.get_signal(puyoBoardSignal::chain))
         {
             const int chain_count = board.controll_score().get_chain_count();
-            pp.add_print_text(make_unique<puyoPrintText>(TEXT_PLAYER_CHAIN_POS[player_num],to_string(chain_count)+" chain",pfs.get_font(),29,Color::Red,Text::Style::Bold,1500));
+            pp.add_print_text(make_unique<puyoPrintText>(TEXT_PLAYER_CHAIN_POS[player_num],to_string(chain_count)+" chain",pfs.get_font(),29,Color::Red,Text::Style::Bold,150));
             
             const int sound_number = min((int)puyoFileSystem::Sound::chain1+chain_count-1,(int)puyoFileSystem::Sound::chain7high);
             ps.play_sound(pfs.get_buffer((puyoFileSystem::Sound)sound_number));
         }
         if(board.get_signal(puyoBoardSignal::all_cleared))
         {
-            pp.add_print_text(make_unique<puyoPrintText>(TEXT_PLAYER_ALL_CLEAR_POS[player_num],"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,4500));
+            pp.add_print_text(make_unique<puyoPrintText>(TEXT_PLAYER_ALL_CLEAR_POS[player_num],"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,450));
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::all_clear));
         }
         if(board.get_signal(puyoBoardSignal::many_obsp_dropped))
@@ -157,7 +153,7 @@ void puyoGamePage::receive_mode_signal(puyoFileSystem& pfs)
         case Mode::speed :
             if(phase.get_signal(puyoModeSignal::speed_up))
             {
-                pp.add_print_text(make_unique<puyoPrintText>(TEXT_SPEED_UP_POS,"Speed Up!!!",pfs.get_font(),38,Color::Yellow,Text::Style::Bold,3300));
+                pp.add_print_text(make_unique<puyoPrintText>(TEXT_SPEED_UP_POS,"Speed Up!!!",pfs.get_font(),38,Color::Yellow,Text::Style::Bold,330));
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::speed_up));
             }
             break;
@@ -183,7 +179,7 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
         case Ready_status::ready :
             if(pp.print_texts_empty())
             {
-                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,4200));
+                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,420));
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::start));
                 ps.play_music(pfs.get_random_music());
                 ready_status = Ready_status::start;

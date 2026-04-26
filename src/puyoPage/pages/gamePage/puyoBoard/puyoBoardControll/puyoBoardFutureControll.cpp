@@ -11,19 +11,18 @@ puyoBoardFutureControll::puyoBoardFutureControll(){}
 
 const vector<puyoPuyo> &puyoBoardFutureControll::get() { return future_puyos; }
 
-void puyoBoardFutureControll::find(puyoBoard& board, puyoPlayPuyo& puyo)
+void puyoBoardFutureControll::update(const puyoBoard& board, puyoPlayPuyo& puyo)
 {
     future_puyos.clear();
     for(int i = 0 ; i < 2 ; ++i)
     {
-        const auto[x,y] = puyo.get_each(i)->get_pos();
-        const auto type = puyo.get_each(i)->get_type();
-        future_puyos.push_back(puyoPuyo(x,y,type,
-            std::move(make_unique<puyoPuyoFall>(board,*puyo.get_each(i),*puyo.get_each(i^1)))));
+        const auto& one_puyo = puyo.get_each(i);
+        future_puyos.push_back(puyoPuyo(one_puyo->get_pos(),one_puyo->get_type(),
+            std::move(make_unique<puyoPuyoFall>(board,*one_puyo,*puyo.get_each(i^1)))));
     }
 }
 
-void puyoBoardFutureControll::fall(puyoBoard& board)
+void puyoBoardFutureControll::fall(const puyoBoard& board)
 {
     for(auto& future_puyo : future_puyos)
         future_puyo.act_let(board);

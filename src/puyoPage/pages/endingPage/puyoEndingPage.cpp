@@ -37,10 +37,10 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
     pp.print_all_texts(window);
     pp.print_all_buttons(window);
 
-    proceed_count = min(proceed_count+1,6501);
+    proceed_count = min(proceed_count+1,651);
     switch(proceed_count)
     {
-        case 3000 : 
+        case 300 : 
         {
             string text = "";
             switch(arcade)
@@ -78,7 +78,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                 PRINT_IMMORTAL));
             break;
         }
-        case 6500:
+        case 650:
         {
             pp.add_print_button(make_unique<puyoPrintButton>(
                 pfs.get_sprite(puyoFileSystem::Image::button),

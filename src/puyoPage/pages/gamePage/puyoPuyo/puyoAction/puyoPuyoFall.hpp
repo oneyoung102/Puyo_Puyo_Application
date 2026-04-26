@@ -13,6 +13,6 @@ class puyoPuyoFall : public puyoPuyoAct
         const puyoBoard& board;
     public :
         puyoPuyoFall(const puyoBoard& board, const puyoPuyo& puyo1, const puyoPuyo& puyo2);
-        bool decline(puyoBoard& board, puyoPuyo& puyo) override;
+        bool decide(const puyoBoard& board, puyoPuyo& puyo) override;
         void act(puyoPuyo& puyo) override;
 };

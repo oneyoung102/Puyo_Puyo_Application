@@ -6,7 +6,7 @@
 
 using namespace std;
 
-bool puyoPuyoFall::decline(puyoBoard& board, puyoPuyo& puyo)
+bool puyoPuyoFall::decide(const puyoBoard& board, puyoPuyo& puyo)
 {
     return true;
 }
@@ -27,7 +27,7 @@ void puyoPuyoFall::act(puyoPuyo& puyo)
             const auto[_,y2] = puyo2.get_pos();
             if(round(y1) < round(y2))
                 --y; // 실제로 뿌요를 배치하지 않기에 보정
-            puyo.move(round(x1),y);
+            puyo.move({round(x1),(float)y});
             break;
         }
 };

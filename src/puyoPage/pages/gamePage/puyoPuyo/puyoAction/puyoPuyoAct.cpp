@@ -4,11 +4,11 @@
 void puyoPuyoAct::arrive(puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
-    puyo.move(round(x),y);
+    puyo.move({round(x),y});
 }
-bool puyoPuyoAct::test(puyoBoard& board, puyoPuyo& puyo){return true;}
+bool puyoPuyoAct::test(const puyoBoard& board, puyoPuyo& puyo){return true;}
 
-bool puyoPuyoAct::decline(puyoBoard& board, puyoPuyo& puyo)
+bool puyoPuyoAct::decide(const puyoBoard& board, puyoPuyo& puyo)
 {
     if(act_count == 0)
     {
@@ -16,9 +16,12 @@ bool puyoPuyoAct::decline(puyoBoard& board, puyoPuyo& puyo)
             return true;
     }
     else if(acting())
+    {
+        if(act_count == act_count_init)
+            arrive(puyo);
         return true;
+    }
     halt();
-    arrive(puyo);
     return false;
 }
 

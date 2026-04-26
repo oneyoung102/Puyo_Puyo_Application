@@ -30,7 +30,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         Color::Green,
         Text::Style::Bold,
         PRINT_IMMORTAL,
-        1150
+        115
     ));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),

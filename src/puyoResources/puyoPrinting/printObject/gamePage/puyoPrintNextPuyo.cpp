@@ -9,7 +9,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintNextPuyo::puyoPrintNextPuyo(int player_num, const int& new_puyo_count, const vector<pair<puyoType,puyoType>>& new_colors, Sprite puyo, std::pair<int,int> pos, int life)
+puyoPrintNextPuyo::puyoPrintNextPuyo(int player_num, const int& new_puyo_count, const vector<pair<puyoType,puyoType>>& new_colors, Sprite puyo, POS pos, int life)
     : puyoPrintObject(puyo,pos,life),
     new_colors(new_colors),
     new_puyo_count(new_puyo_count)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <utility>
+#include "puyoPos.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -10,16 +10,18 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
     //puyo_board.png
         //gamePage
         const unsigned int SCREEN_X = 640, SCREEN_Y = 444;
+        const sf::Vector2u SCREEN_SIZE = {SCREEN_X,SCREEN_Y};
         const sf::Vector2f SCREEN_CENTER = {SCREEN_X/2.0,SCREEN_Y/2.0};
-        const std::vector<std::pair<int,int>> PLAYER_BOARD_POS = {std::make_pair(31,35),std::make_pair(386+31,35)};
+        const std::vector<POS> PLAYER_BOARD_POS = {POS(31,35),POS(386+31,35)};
         const int BOARD_HEIGHT = 12;
 
-        const std::vector<std::pair<int,int>> PLAYER_NEXT_PUYO_VIEWER_POS = {std::make_pair(244,62),std::make_pair(367,62)};
+        const std::vector<POS> PLAYER_NEXT_PUYO_VIEWER_POS = {POS(244,62),POS(367,62)};
         const int NEXT_PUYO_VIEWER_BREADTH = 36;
 
         const int SCREEN_BAR_FROM_X = 302, SCREEN_BAR_FROM_Y = 60, SCREEN_BAR_TO_X = 38, SCREEN_BAR_TO_Y = 100;
+        const POS SCREEN_BAR_FROM_POS = POS(SCREEN_BAR_FROM_X,SCREEN_BAR_FROM_Y), SCREEN_BAR_TO_POS = POS(SCREEN_BAR_TO_X,SCREEN_BAR_TO_Y);
 
-        const std::vector<std::pair<int,int>> PLAYER_OBSTRUCT_VIEWER_POS = {std::make_pair(31,2),std::make_pair(386+31,2)};
+        const std::vector<POS> PLAYER_OBSTRUCT_VIEWER_POS = {POS(31,2),POS(386+31,2)};
 
     //puyos.png
         //gamePage
@@ -46,7 +48,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
     //puyo_num.png
         //gamePage
         const int NUM_SIZE_X = 18, NUM_SIZE_Y = 29;
-        const std::vector<std::pair<int,int>> PLAYER_SCORE_POS = {std::make_pair(246,204),std::make_pair(255,256)};
+        const std::vector<POS> PLAYER_SCORE_POS = {POS(246,204),POS(255,256)};
 
     //Text
         //gamePage

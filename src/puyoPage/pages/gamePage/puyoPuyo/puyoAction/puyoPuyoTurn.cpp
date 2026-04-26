@@ -11,105 +11,94 @@
 
 using namespace std;
 
-bool puyoPuyoTurn::test(puyoBoard& board, puyoPuyo& puyo)
+bool puyoPuyoTurn::test(const puyoBoard& board, puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
-    switch(dir)
+    bool able = false;
+    switch(turn_dir)
     {
-        case Direction::UP :
-            return !board.touched(floor(y),x-1) && !board.touched(ceil(y),x-1) && !board.touched(y+1,x-1);
-        case Direction::DOWN :
-            return !board.touched(floor(y),x+1) && !board.touched(ceil(y),x+1) && !board.touched(y-1,x+1) ;
-        case Direction::RIGHT :
-            return !board.touched(floor(y)-1,x) && !board.touched(ceil(y)-1,x) && !board.touched(floor(y)-1,x-1);
         case Direction::LEFT :
-            return !board.touched(floor(y)+1,x) && !board.touched(ceil(y)+1,x) && !board.touched(ceil(y)+1,x+1);
+            able = !board.touched(y,x-1) && !board.touched(ceil(y),x-1) && !board.touched(ceil(y)+1,x-1);
+            break;
+        case Direction::RIGHT :
+            able = !board.touched(y,x+1) && !board.touched(ceil(y),x+1) && !board.touched(y-1,x+1);
+            break;
+        case Direction::UP :
+            able = !board.touched(y-1,x) && !board.touched(ceil(y)-1,x) && !board.touched(y-1,x-1);
+            break;
+        case Direction::DOWN :
+            able = !board.touched(y+1,x) && !board.touched(ceil(y)+1,x) && !board.touched(ceil(y)+1,x+1);
+            break;
     }
-    return false;
-}
-bool puyoPuyoTurn::decline(puyoBoard& board,puyoPuyo& puyo)
-{
-    if(act_count == 0)
-    {
-        if(test(board,puyo))
-            return true;
-        else
-        {
-            const auto[x,y] = puyo.get_pos();
-            array<unique_ptr<puyoPuyoFourWayMove>,2> acts;
-            for(int i = 0 ; i < 2 ; ++i)
-            {
-                switch(dir)
-                {
-                    case Direction::UP :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(1,0)));
-                        break;
-                    case Direction::DOWN :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(-1,0)));
-                        break;
-                    case Direction::RIGHT :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(0,1)));
-                        break;
-                    case Direction::LEFT :
-                        acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),make_pair(0,-1)));
-                        break;
-                }
-                acts[i]->let();
-            }
-            if(acts[0]->decline(board,puyo) && acts[1]->decline(board,center))
-            {
-                sub_acts[0] = std::move(acts[0]);
-                sub_acts[1] = std::move(acts[1]);
-                return true;
-            }
-        }
-    }
-    else if(acting())
+    if(able)
         return true;
-    halt();
-    arrive(puyo);
+////// 반작용
+    array<unique_ptr<puyoPuyoFourWayMove>,2> acts;
+    for(int i = 0 ; i < 2 ; ++i)
+    {
+        switch(turn_dir)
+        {
+            case Direction::LEFT :
+                acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),POS(1,0)));
+                break;
+            case Direction::RIGHT :
+                acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),POS(-1,0)));
+                break;
+            case Direction::UP :
+                acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),POS(0,1)));
+                break;
+            case Direction::DOWN :
+                acts[i] = std::move(make_unique<puyoPuyoFourWayMove>(get_act_count_init(),POS(0,-1)));
+                break;
+        }
+        acts[i]->let();
+    }
+    if(acts[0]->decide(board,puyo) && acts[1]->decide(board,center))
+    {
+        sub_acts = std::move(acts);
+        return true;
+    }
     return false;
 }
 
 void puyoPuyoTurn::arrive(puyoPuyo& puyo)
 {
     const auto[center_x,center_y] = center.get_pos();
-    switch(dir)
+    switch(turn_dir)
     {
-        case Direction::UP :
-            puyo.move(center_x-1,center_y);
-            break;
-        case Direction::DOWN :
-            puyo.move(center_x+1,center_y);
+        case Direction::LEFT :
+            puyo.move({center_x-1,center_y});
             break;
         case Direction::RIGHT :
-            puyo.move(center_x,center_y-1);
+            puyo.move({center_x+1,center_y});
             break;
-        case Direction::LEFT :
-            puyo.move(center_x,center_y+1);
+        case Direction::UP :
+            puyo.move({center_x,center_y-1});
+            break;
+        case Direction::DOWN :
+            puyo.move({center_x,center_y+1});
             break;
     }
 }
 
-puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, std::pair<float,float> turning)
+puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, POS turning)
     : puyoPuyoAct(amount)
     , rad(-M_PI/2/act_count_init), c(cos(rad)),s(sin(rad))//시계 반대방향
     , center(center)
 {
     const auto[x,y] = turning;
     const auto[center_x,center_y] = center.get_pos();
-    if(round(center_x) == round(x))
-        dir = (y < center_y) ? Direction::UP : Direction::DOWN;
+    if(round(center_x) == round(x)) // 어느 방향으로 회전할지
+        turn_dir = (y < center_y) ? Direction::LEFT : Direction::RIGHT;
     else if(round(center_y) == round(y))
-        dir = (x < center_x) ? Direction::LEFT : Direction::RIGHT;
+        turn_dir = (x < center_x) ? Direction::DOWN : Direction::UP;
 }
 
 void puyoPuyoTurn::act(puyoPuyo& puyo)
 {
-    const auto[x,y] = puyo.get_pos();
     const auto[center_x,center_y] = center.get_pos();
-    const float dx = x-center_x, dy = y-center_y;
-    puyo.move(center_x + dx*c - dy*s, center_y + dx*s + dy*c);
+    const POS dpos = puyo.get_pos()-center.get_pos();
+    puyo.move({center_x + dpos.x*c - dpos.y*s, center_y + dpos.x*s + dpos.y*c});
     if(sub_acts[0] && sub_acts[1]) 
     {
         sub_acts[0]->act(puyo);

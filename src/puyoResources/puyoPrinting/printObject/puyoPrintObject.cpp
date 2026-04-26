@@ -6,11 +6,11 @@
 using namespace puyoImageConstant;
 using namespace sf;
 
-puyoPrintObject::puyoPrintObject(Sprite s, std::pair<float,float> pos, int life) : sprite(s)
+puyoPrintObject::puyoPrintObject(Sprite s, POS pos, int life) : sprite(s)
 {
     this->life = life; // life == -1 일 때는 영생
-    x = pos.first;
-    y = pos.second;
+    x = pos.x;
+    y = pos.y;
 }
 puyoPrintObject::puyoPrintObject(Sprite s, int life) : sprite(s)
 {
@@ -21,9 +21,9 @@ puyoPrintObject::puyoPrintObject(Sprite s, int life) : sprite(s)
 
 bool puyoPrintObject::alive(){return life != 0;}
 
-void puyoPrintObject::print_16x16(RenderWindow& w, std::pair<int,int> img_pos, Vector2f screen_pos)
+void puyoPrintObject::print_16x16(RenderWindow& w, POS img_pos, Vector2f screen_pos)
 {
-    sprite.setTextureRect(IntRect({img_pos.first*PUYO_SIZE,img_pos.second*PUYO_SIZE}, {PUYO_SIZE, PUYO_SIZE})); 
+    sprite.setTextureRect(IntRect({(int)img_pos.x*PUYO_SIZE,(int)img_pos.y*PUYO_SIZE}, {PUYO_SIZE, PUYO_SIZE})); 
     print_sprite(w,screen_pos);
 }
 void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, Vector2f screen_pos)
@@ -39,10 +39,10 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, Vector2f screen
         case puyoType::mid_bomb :
         case puyoType::big_bomb :
         case puyoType::danger_bomb :
-            print_16x16(w,{BOMB_X-(int)puyoType::tiny_bomb+(int)type,BOMB_Y},screen_pos);
+            print_16x16(w,POS(BOMB_X-(int)puyoType::tiny_bomb+(int)type,BOMB_Y),screen_pos);
             break;
         default ://일반 색깔 뿌요
-            print_16x16(w,{0,(int)type},screen_pos);
+            print_16x16(w,POS(0,(int)type),screen_pos);
             break;
     }
 }
