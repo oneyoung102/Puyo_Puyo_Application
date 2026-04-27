@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "puyoPage/pages/endingPage/puyoEndingConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoEndingPage.hpp"
@@ -9,14 +10,13 @@
 #include "puyoResources/puyoPrinting/printText/puyoPrintText.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
-#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 #include "puyoPage/puyoLet.hpp"
 #include <memory>
 
 using namespace std;
 using namespace sf;
-using namespace puyoImageConstant;
+using namespace puyoEndingConstant;
 
 
 puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int win_player_num, sf::Sprite capture_sprite, Arcade arcade)
@@ -24,8 +24,8 @@ puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int win_player_num, sf::Spri
     , win_player_num(win_player_num)
     , arcade(arcade)
 {
-    pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite,PRINT_IMMORTAL));
-    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back),PRINT_IMMORTAL));
+    pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite));
+    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back)));
     proceed_count = 0;
     convert_page = false;
 }
@@ -37,10 +37,10 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
     pp.print_all_texts(window);
     pp.print_all_buttons(window);
 
-    proceed_count = min(proceed_count+1,651);
+    proceed_count = min(proceed_count,BUTTON_APPEAR_TICK)+1;
     switch(proceed_count)
     {
-        case 300 : 
+        case TEXT_APPEAR_TICK : 
         {
             string text = "";
             switch(arcade)
@@ -72,13 +72,12 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                 TEXT_WINNER_POS,
                 text,
                 pfs.get_font(),
-                60,
+                TEXT_WINNER_SIZE,
                 Color::White,
-                (Text::Style)(Text::Style::Underlined | Text::Style::Bold),
-                PRINT_IMMORTAL));
+                (Text::Style)(Text::Style::Underlined | Text::Style::Bold)));
             break;
         }
-        case 650:
+        case BUTTON_APPEAR_TICK:
         {
             pp.add_print_button(make_unique<puyoPrintButton>(
                 pfs.get_sprite(puyoFileSystem::Image::button),
@@ -86,20 +85,14 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                 REPLAY_BUTTON_POS,
                 "Replay",
                 pfs.get_font(),
-                1,
-                Color::White,
-                Text::Style::Bold,
-                PRINT_IMMORTAL));
+                REPLAY_BUTTON_SCALE));
             pp.add_print_button(make_unique<puyoPrintButton>(
                 pfs.get_sprite(puyoFileSystem::Image::button),
                 button_cursor.get_select_status(buttonName::to_menu),
                 TO_MENU_BUTTON_POS,
                 "To Menu",
                 pfs.get_font(),
-                1,
-                Color::White,
-                Text::Style::Bold,
-                PRINT_IMMORTAL));
+                TO_MENU_BUTTON_SCALE));
             pl.allot_key((int)(Keyboard::Key::Enter),[this](){return button_cursor.let_select();});
             pl.allot_key((int)(Keyboard::Key::Left),[this](){return button_cursor.let_choose_left();});
             pl.allot_key((int)(Keyboard::Key::Right),[this](){return button_cursor.let_choose_right();});

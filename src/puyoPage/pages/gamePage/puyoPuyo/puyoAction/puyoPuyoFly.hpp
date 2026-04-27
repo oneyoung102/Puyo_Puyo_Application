@@ -9,9 +9,9 @@ class puyoPuyo;
 class puyoPuyoFly : public puyoPuyoAct
 {
     private :
-        const POS dpos;
+        const POSf dpos, from_pos;
         void arrive(puyoPuyo& puyo) override;
     public :
-        puyoPuyoFly(POS from_pos, POS to_pos, int amount);
+        puyoPuyoFly(POSf from_pos, POSf to_pos, int amount);
         void act(puyoPuyo& puyo) override;
 };

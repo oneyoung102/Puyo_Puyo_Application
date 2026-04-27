@@ -1,14 +1,15 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPrintSpawnspot.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
+using namespace puyoGameConstant;
 
-puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, POS pos, int life)
+puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, POSf pos, int life)
     : puyoPrintObject(puyo,pos,life)
-    , SPAWN_SPOT_CYCLE(80)
     , player_num(player_num)
 {
     spawn_spot_state = 0;
@@ -17,22 +18,21 @@ puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, POS pos, int
 
 void puyoPrintSpawnspot::print(RenderWindow& w)
 {
-    if(spawn_spot_state == SPAWN_SPOT_STATE_MAX*SPAWN_SPOT_CYCLE-1 || spawn_spot_state == -1)
+    if(spawn_spot_state == SPAWN_SPOT_STATE_MAX*SPAWN_SPOT_CYCLE_TICK-1 || spawn_spot_state == -1)
         spawn_spot_rotate_dir ^= 1;
-    const auto [player_board_x,player_board_y] = PLAYER_BOARD_POS[player_num];
-    const int img_x = PUYO_SIZE*(SPAWN_SPOT_STATE_X+spawn_spot_state/SPAWN_SPOT_CYCLE), img_y = PUYO_SIZE*SPAWN_SPOT_STATE_Y;
+    const auto img_pos = (SPAWN_SPOT_POS+POSi(spawn_spot_state/SPAWN_SPOT_CYCLE_TICK,0))*PUYO_SIZE;
     
-    sprite.setTextureRect(IntRect({img_x, img_y}, {PUYO_SIZE, PUYO_SIZE})); 
+    sprite.setTextureRect(IntRect({img_pos.x, img_pos.y}, {PUYO_SIZE, PUYO_SIZE})); 
     if(spawn_spot_rotate_dir)
     {
         sprite.setScale({1, 1});
         ++spawn_spot_state;
-        print_sprite(w,{player_board_x + PUYO_SIZE*x,player_board_y + PUYO_SIZE*max(y,0.0f)});
+        print_sprite(w,PLAYER_BOARD_POS[player_num]+POS(pos.x,max(pos.y,0.0f))*PUYO_SIZE);
     }
     else
     {
         sprite.setScale({-1, 1});
         --spawn_spot_state;
-        print_sprite(w,{player_board_x + PUYO_SIZE*(x+1),player_board_y + PUYO_SIZE*max(y,0.0f)});//반전 때문에 +1
+        print_sprite(w,PLAYER_BOARD_POS[player_num]+POS(pos.x+1,max(pos.y,0.0f))*PUYO_SIZE);//반전 때문에 +1
     }
 }

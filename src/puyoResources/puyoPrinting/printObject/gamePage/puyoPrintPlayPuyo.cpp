@@ -7,13 +7,13 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintPlayPuyo::puyoPrintPlayPuyo(puyoPlayer& player, Sprite puyo, POS pos, int life) : puyoPrintObject(puyo,pos,life), player(player){}
+puyoPrintPlayPuyo::puyoPrintPlayPuyo(puyoPlayer& player, Sprite puyo, POSf pos, int life) : puyoPrintObject(puyo,pos,life), player(player){}
 
 void puyoPrintPlayPuyo::print(RenderWindow& w)
 {
     const auto& play_puyo = player.get_puyo();
-    const auto[px1,py1,px2,py2] = play_puyo.get_pos();
+    const auto[pos1,pos2] = play_puyo.get_pos();
     const auto[type1,type2] = play_puyo.get_type();
-    print_puyo(w,type1,{x+PUYO_SIZE*px1,y+PUYO_SIZE*py1});
-    print_puyo(w,type2,{x+PUYO_SIZE*px2,y+PUYO_SIZE*py2});
+    print_puyo(w,type1,pos+pos1*PUYO_SIZE);
+    print_puyo(w,type2,pos+pos2*PUYO_SIZE);
 }

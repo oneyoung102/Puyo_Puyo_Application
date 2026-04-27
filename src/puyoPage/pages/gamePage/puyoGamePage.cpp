@@ -24,6 +24,7 @@
 #include "puyoResources/puyoPrinting/printObject/gamePage/puyoPrintObstructViewer.hpp"
 #include "puyoResources/puyoPrinting/printObject/gamePage/puyoPrintEnergyPuyo.hpp"
 #include "puyoResources/puyoPrinting/printText/puyoPrintText.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
@@ -33,6 +34,7 @@
 
 using namespace std;
 using namespace sf;
+using namespace puyoGameConstant;
 using namespace puyoImageConstant;
 
 puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode mode) 
@@ -75,37 +77,35 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     phase.set_game(diff,mode);
 
 //////출력 객체
-    pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),BOARD_SPRITE,PRINT_IMMORTAL));
+    pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),BOARD_SPRITE));
     for(const auto& player : phase.get_players())
     {
         auto& board = player->get_board();
         const int player_num = player->get_player_num();
-        const auto [player_board_x,player_board_y] = PLAYER_BOARD_POS[player_num];
-        const int board_printing_y = player_board_y + PUYO_SIZE*(BOARD_HEIGHT - board.get_size().first);
-        const POS board_print_pos = POS(player_board_x,board_printing_y);
+        const POSf board_print_pos = PLAYER_BOARD_POS[player_num]+POSf(0,PUYO_SIZE*(BOARD_HEIGHT - board.get_size().y));
 
-        pp.add_print_object(make_unique<puyoPrintSpawnspot>(player_num,PUYO_SPRITE,board.get_spawn_pos(),PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintFuturePuyo>(board.controll_future().get(),PUYO_SPRITE,board_print_pos,PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintVanishPuyo>(board.controll_vanish().get(),PUYO_SPRITE,board_print_pos,PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintGravityPuyo>(board.controll_gravity().get(),PUYO_SPRITE,board_print_pos,PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintEnergyPuyo>(board.controll_energy().get(),PUYO_SPRITE,PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintBoard>(board,PUYO_SPRITE,board_print_pos,PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintPlayPuyo>(*player,PUYO_SPRITE,board_print_pos,PRINT_IMMORTAL));
+        pp.add_print_object(make_unique<puyoPrintSpawnspot>(player_num,PUYO_SPRITE,board.get_spawn_pos()));
+        pp.add_print_object(make_unique<puyoPrintFuturePuyo>(board.controll_future().get(),PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintVanishPuyo>(board.controll_vanish().get(),PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintGravityPuyo>(board.controll_gravity().get(),PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintEnergyPuyo>(board.controll_energy().get(),PUYO_SPRITE));
+        pp.add_print_object(make_unique<puyoPrintBoard>(board,PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintPlayPuyo>(*player,PUYO_SPRITE,board_print_pos));
 
-        pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player->get_new_puyo_count(),phase.get_new_types(),PUYO_SPRITE,PLAYER_NEXT_PUYO_VIEWER_POS[player_num],PRINT_IMMORTAL));
-        pp.add_print_object(make_unique<puyoPrintScore>(player_num,player->get_score(),NUM_SPRITE,PLAYER_SCORE_POS[player_num],PRINT_IMMORTAL));
+        pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player->get_new_puyo_count(),phase.get_new_types(),PUYO_SPRITE,NEXT_PUYO_VIEWER_POS[player_num]));
+        pp.add_print_object(make_unique<puyoPrintScore>(player_num,player->get_score(),NUM_SPRITE,SCORE_POS[player_num]));
     }
-    pp.add_print_object(make_unique<puyoPrintScreenhead>(BOARD_SPRITE,PRINT_IMMORTAL));
-    pp.add_print_object(make_unique<puyoPrintScreenbar>(phase.get_player_count(),BOARD_SPRITE,PRINT_IMMORTAL));
+    pp.add_print_object(make_unique<puyoPrintScreenhead>(BOARD_SPRITE));
+    pp.add_print_object(make_unique<puyoPrintScreenbar>(phase.get_player_count(),BOARD_SPRITE));
     for(const auto& player : phase.get_players())
     {
         const int player_num = player->get_player_num();
-        pp.add_print_object(make_unique<puyoPrintObstructViewer>(player->get_board().controll_obstuct().get(),PUYO_SPRITE,PLAYER_OBSTRUCT_VIEWER_POS[player_num],PRINT_IMMORTAL));
+        pp.add_print_object(make_unique<puyoPrintObstructViewer>(player->get_board().controll_obstuct().get(),PUYO_SPRITE,OBSTRUCT_VIEWER_POS[player_num]));
     }
 
 //////준비 전 단계
-    pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,820)); //검은색 반투명 배경
-    pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Ready?",pfs.get_font(),60,Color::White,Text::Style::Bold,400));
+    pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,BLACK_BACK_TICK)); //검은색 반투명 배경
+    pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Ready?",pfs.get_font(),TEXT_READY_SIZE,Color::White,Text::Style::Bold,TEXT_READY_TICK));
     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::ready));
     ready_status = Ready_status::ready;
 }
@@ -121,14 +121,14 @@ void puyoGamePage::receive_phase_signal(puyoFileSystem& pfs)
         if(board.get_signal(puyoBoardSignal::chain))
         {
             const int chain_count = board.controll_score().get_chain_count();
-            pp.add_print_text(make_unique<puyoPrintText>(TEXT_PLAYER_CHAIN_POS[player_num],to_string(chain_count)+" chain",pfs.get_font(),29,Color::Red,Text::Style::Bold,150));
+            pp.add_print_text(make_unique<puyoPrintText>(TEXT_CHAIN_POS[player_num],to_string(chain_count)+" chain",pfs.get_font(),TEXT_CHAIN_SIZE,Color::Red,Text::Style::Bold,TEXT_CHAIN_TICK));
             
             const int sound_number = min((int)puyoFileSystem::Sound::chain1+chain_count-1,(int)puyoFileSystem::Sound::chain7high);
             ps.play_sound(pfs.get_buffer((puyoFileSystem::Sound)sound_number));
         }
         if(board.get_signal(puyoBoardSignal::all_cleared))
         {
-            pp.add_print_text(make_unique<puyoPrintText>(TEXT_PLAYER_ALL_CLEAR_POS[player_num],"All Clear!",pfs.get_font(),31,Color::Red,Text::Style::Bold,450));
+            pp.add_print_text(make_unique<puyoPrintText>(TEXT_ALL_CLEAR_POS[player_num],"All Clear!",pfs.get_font(),TEXT_ALL_CLEAR_SIZE,Color::Red,Text::Style::Bold,TEXT_ALL_CLEAR_TICK));
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::all_clear));
         }
         if(board.get_signal(puyoBoardSignal::many_obsp_dropped))
@@ -153,7 +153,7 @@ void puyoGamePage::receive_mode_signal(puyoFileSystem& pfs)
         case Mode::speed :
             if(phase.get_signal(puyoModeSignal::speed_up))
             {
-                pp.add_print_text(make_unique<puyoPrintText>(TEXT_SPEED_UP_POS,"Speed Up!!!",pfs.get_font(),38,Color::Yellow,Text::Style::Bold,330));
+                pp.add_print_text(make_unique<puyoPrintText>(TEXT_SPEED_UP_POS,"Speed Up!!!",pfs.get_font(),TEXT_SPEED_UP_SIZE,Color::Yellow,Text::Style::Bold,TEXT_SPEED_UP_TICK));
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::speed_up));
             }
             break;
@@ -179,7 +179,7 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
         case Ready_status::ready :
             if(pp.print_texts_empty())
             {
-                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,420));
+                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,TEXT_START_TICK));
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::start));
                 ps.play_music(pfs.get_random_music());
                 ready_status = Ready_status::start;

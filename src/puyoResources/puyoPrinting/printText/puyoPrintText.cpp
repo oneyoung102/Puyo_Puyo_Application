@@ -5,7 +5,7 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintText::puyoPrintText(Vector2f pos, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life)
+puyoPrintText::puyoPrintText(POSf pos, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
 {
     this->life = life; // life == -1 일 때는 영생
@@ -20,7 +20,7 @@ puyoPrintText::puyoPrintText(Vector2f pos, string content, Font& font, int size,
         bounds.position.x + bounds.size.x / 2.f,
         bounds.position.y + bounds.size.y / 2.f
     });
-    text.setPosition(pos);
+    text.setPosition(Vector2f(pos.x,pos.y));
 }
 
 bool puyoPrintText::alive(){return life != 0;}

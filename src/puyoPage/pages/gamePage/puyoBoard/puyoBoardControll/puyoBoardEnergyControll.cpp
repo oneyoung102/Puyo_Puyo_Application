@@ -2,9 +2,11 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFly.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 using namespace std;
 using namespace puyoImageConstant;
+using namespace puyoGameConstant;
 
 puyoBoardEnergyControll::puyoBoardEnergyControll(){};
 
@@ -28,12 +30,11 @@ void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_
 {
     if (temp_energy_puyos.empty())
         return;
-    const auto[fx,fy] = PLAYER_BOARD_POS[from_player_num];
     for (const auto [pos, type, tick] : temp_energy_puyos)
     {
-        const POS screen_pos = PLAYER_BOARD_POS[from_player_num]+pos*PUYO_SIZE;
+        const POSf screen_pos = PLAYER_BOARD_POS[from_player_num]+pos*PUYO_SIZE;
         energy_puyos.push_back(puyoPuyo(screen_pos, type
-                    , make_unique<puyoPuyoFly>(screen_pos,PLAYER_OBSTRUCT_VIEWER_POS[to_player_num], tick)));
+                    , make_unique<puyoPuyoFly>(screen_pos,OBSTRUCT_VIEWER_POS[to_player_num], tick)));
         energy_puyos.back().let();
     }
     temp_energy_puyos.clear();

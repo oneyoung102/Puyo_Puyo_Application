@@ -17,8 +17,7 @@ void puyoPrintEnergyPuyo::print(RenderWindow& w)
 {
     for(auto& energy_puyo : energy_puyos)
     {
-        const auto puyo = energy_puyo.get_type();
-        const auto [px,py]= energy_puyo.get_pos();      
+        const auto puyo = energy_puyo.get_type();  
         switch(puyo)
         {
             case puyoType::blue :
@@ -26,7 +25,7 @@ void puyoPrintEnergyPuyo::print(RenderWindow& w)
             case puyoType::yellow :
             case puyoType::green :
             case puyoType::pupple :
-                print_16x16(w,POS(ENERGY_PUYO_X+(int)puyo,ENERGY_PUYO_Y),{x+px,y+py});
+                print_16x16(w,ENERGY_PUYO_POS+POSi((int)puyo,0),pos+energy_puyo.get_pos());
                 break;
             default :
                 break;

@@ -5,11 +5,6 @@
 using namespace std;
 
 
-puyoPhaseStatement::puyoPhaseStatement()
-{
-    curr_phases = vector<Phase>(0,Phase::play);
-    delay_times = vector<int>(0,0);
-}
 puyoPhaseStatement::puyoPhaseStatement(int player_count)
 {
     curr_phases = vector<Phase>(player_count,Phase::play);

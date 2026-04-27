@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
+#include "puyoPage/pages/menuPage/puyoMenuConstant.hpp"
 #include "puyoPage/pages/puyoButtonCursor.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoMenuPage.hpp"
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
-#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 #include "puyoResources/puyoPrinting/printButton/puyoPrintButton.hpp"
 #include "puyoResources/puyoPrinting/printText/puyoPrintTextZoom.hpp"
@@ -14,7 +14,7 @@
 
 using namespace std;
 using namespace sf;
-using namespace puyoImageConstant;
+using namespace puyoMenuConstant;
 
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     : button_cursor(puyoButtonCursor<1,3,Arcade>({{Arcade::solo,Arcade::dual,Arcade::bot}}))
@@ -25,43 +25,31 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pp.add_print_text(make_unique<puyoPrintTextZoom>(
         TEXT_ARCADE_POS,
         "Select Arcade!!!",
+        TEXT_ARCADE_CYCLE,
         pfs.get_font(),
-        58,
-        Color::Green,
-        Text::Style::Bold,
-        PRINT_IMMORTAL,
-        115
-    ));
+        TEXT_ARCADE_SIZE,
+        Color::Green));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::solo),
         SOLO_BUTTON_POS,
         "Solo",
         pfs.get_font(),
-        1.3,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::dual),
         DUAL_BUTTON_POS,
         "Dual",
         pfs.get_font(),
-        1.3,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::bot),
         BOT_BUTTON_POS,
         "Bot",
         pfs.get_font(),
-        1.3,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        DIFF_BUTTON_SCALE));
     pl.allot_key((int)(Keyboard::Key::Left),[this](){return button_cursor.let_choose_left();});
     pl.allot_key((int)(Keyboard::Key::Right),[this](){return button_cursor.let_choose_right();});
     pl.allot_key((int)(Keyboard::Key::Enter),[this](){return button_cursor.let_select();});

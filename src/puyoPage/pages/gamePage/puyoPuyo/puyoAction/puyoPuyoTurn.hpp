@@ -25,6 +25,6 @@ class puyoPuyoTurn : public puyoPuyoAct
         bool test(const puyoBoard& board, puyoPuyo& puyo) override;
         void arrive(puyoPuyo& puyo) override;
     public :
-        puyoPuyoTurn(int amount, puyoPuyo& center, POS turning);
+        puyoPuyoTurn(int amount, puyoPuyo& center, POSf turning);
         void act(puyoPuyo& puyo) override;
 };

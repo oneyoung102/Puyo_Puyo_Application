@@ -9,9 +9,9 @@ class puyoPlayPuyo;
 class puyoPuyoFourWayMove : public puyoPuyoAct
 {
     private :
-        const POS dpos;
+        const POSf dpos;
         bool test(const puyoBoard& board, puyoPuyo& puyo) override;
     public :
-        puyoPuyoFourWayMove(int amount, POS delta);
+        puyoPuyoFourWayMove(int amount, POSf delta);
         void act(puyoPuyo& puyo) override;
 };

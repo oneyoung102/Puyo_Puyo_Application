@@ -1,7 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "puyoPos.hpp"
 #include "puyoPrintText.hpp"
+#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include <string>
 
 class puyoPrintTextFlash : public puyoPrintText
@@ -11,6 +13,7 @@ class puyoPrintTextFlash : public puyoPrintText
         int cycle_count;
         bool cycle_back;
     public:
-        puyoPrintTextFlash(sf::Vector2f pos, std::string content, sf::Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle);
+        puyoPrintTextFlash(POSf pos, std::string content, int cycle, sf::Font& font, int size,
+            sf::Color color = sf::Color::White, sf::Text::Style style = sf::Text::Style::Bold, int life = puyoImageConstant::PRINT_IMMORTAL);
         void print(sf::RenderWindow& w);
 };

@@ -17,7 +17,7 @@ puyoModeBomb::puyoModeBomb(int player_count)
     std::uniform_int_distribution<> dist(0, player_count-1);
     bomb_have_player_num = dist(gen);
     bomb_is_spawned = false;
-    bomb_c = -1;
+    bomb_x = -1;
 
 }
 void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
@@ -29,7 +29,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
     auto& cs = board.controll_score();
     auto& cg = board.controll_gravity();
 
-    const auto[r,c] = board.get_size();
+    const auto bsize = board.get_size();
     const int opposite = bomb_have_player_num^1;
     if(bomb_is_spawned)
     {
@@ -38,10 +38,10 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             if(bomb_tick == 0)
             {
                 phase.set_signal(puyoModeSignal::bomb_explode);
-                for(int i = 0 ; i < r ; ++i)
-                    for(int j = 0 ; j < c ; ++j)
-                        if(!board.empty(i,j))
-                            cv.to_vanish_puyo(board,{POS(j,i),board.get_puyo(i,j), BOARD_BASIC_VANISH_TICK});                                                 
+                for(int i = 0 ; i < bsize.r ; ++i)
+                    for(int j = 0 ; j < bsize.c ; ++j)
+                        if(!board.empty({j, i}))
+                            cv.to_vanish_puyo(board,{POSf(j,i),board.get_puyo({j, i}), BOARD_BASIC_VANISH_TICK});                                                 
                 bomb_tick = -1;
             }
             else if(cv.empty())
@@ -53,12 +53,12 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
         else if(board.controll_score().get_chain_count() >= BOMB_DISSOLVE_CHAIN)// 폭탄 해체
         {
             bomb_is_spawned = false;
-            for(int i = r-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
+            for(int i = bsize.r-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
             {
-                const auto puyo = board.get_puyo(i,bomb_c);
+                const auto puyo = board.get_puyo({bomb_x, i});
                 if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                 {
-                    cv.to_vanish_puyo(board,{POS(bomb_c,i),puyo,BOMB_VANISH_TICK});
+                    cv.to_vanish_puyo(board,{POSf(bomb_x,i),puyo,BOMB_VANISH_TICK});
                     break;
                 }
             }
@@ -90,12 +90,12 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             }
             if(appearance_change)
             {
-                for(int i = r-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
+                for(int i = bsize.r-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
                 {
-                    const auto puyo = board.get_puyo(i,bomb_c);
+                    const auto puyo = board.get_puyo({bomb_x, i});
                     if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                     {
-                        board.insert_puyo(bomb_appearance,i,bomb_c);
+                        board.insert_puyo(bomb_appearance, {bomb_x, i});
                         break;
                     }
                 }
@@ -104,10 +104,10 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
     }
     else if(cv.empty() && cg.empty())//폭탄 소환
     {
-        std::uniform_int_distribution<> dist(0, board.get_size().second-1);
-        bomb_c = dist(gen);
+        std::uniform_int_distribution<> dist(0, board.get_size().x-1);
+        bomb_x = dist(gen);
         bomb_appearance = puyoType::tiny_bomb;
-        cg.add({POS(bomb_c, OBSTRUCT_PUYO_SPAWN_Y),bomb_appearance, BOARD_FALL_GRAVITY_TICK});
+        cg.add({POSf(bomb_x, OBSTRUCT_PUYO_SPAWN_Y),bomb_appearance, BOARD_FALL_GRAVITY_TICK});
         bomb_tick = BOMB_MAX_TICK;
         bomb_is_spawned = true;
         phase.set_signal(puyoModeSignal::bomb_fused);

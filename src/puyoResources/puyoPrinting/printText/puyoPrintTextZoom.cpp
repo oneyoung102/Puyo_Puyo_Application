@@ -1,4 +1,5 @@
 #include "puyoPrintText.hpp"
+#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoPrintTextZoom.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -6,11 +7,11 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintTextZoom::puyoPrintTextZoom(Vector2f pos, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life, int cycle)
+puyoPrintTextZoom::puyoPrintTextZoom(POSf pos, string content, int cycle, Font& font, int size, sf::Color color, sf::Text::Style style, int life)
     : puyoPrintText(pos,content,font,size,color,style,life)
     , cycle(cycle)
-    , dsize(max(1,size/30))
-    , dcycle(max(1,cycle/15))
+    , dsize(max(1,size/puyoImageConstant::TEXT_ZOOM_SIZE_PROP))
+    , dcycle(max(1,cycle/puyoImageConstant::TEXT_ZOOM_CYCLE_PROP))
 {
     cycle_count = 0;
     cycle_back = true;

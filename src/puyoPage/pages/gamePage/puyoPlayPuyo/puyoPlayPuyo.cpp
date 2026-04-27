@@ -18,7 +18,7 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoPlayPuyo::puyoPlayPuyo(POS spawn_pos, pair<puyoType,puyoType> types, int gravity_value, int stay_value)
+puyoPlayPuyo::puyoPlayPuyo(POSf spawn_pos, pair<puyoType,puyoType> types, int gravity_value, int stay_value)
     : puyoObjectSignal()
     , gravity_value(gravity_value)
     , stay_value(stay_value)
@@ -80,36 +80,31 @@ bool puyoPlayPuyo::dropped(const puyoBoard& board)
 
 int puyoPlayPuyo::get_height(const puyoBoard& board)
 {
-    const auto[board_r,board_c] = board.get_size();
-    
+    const auto bsize = board.get_size();
     for(const auto& puyo : play_puyo)
     {
-        const auto[x,y] = puyo->get_pos();
-        for(int dy = 1 ; dy < board_r ; ++dy)
-            if(board.touched(y+dy,x))
+        for(int dy = 1 ; dy < bsize.r ; ++dy)
+            if(board.touched(puyo->get_pos()+POSi(0,dy)))
                 return dy-1;
     }
     return 0;
 }
 vector<PUYO_INFO> puyoPlayPuyo::to_gravity_puyo(const puyoBoard& board) const
 {
-    const auto[x1,y1] = play_puyo[0]->get_pos();
-    const auto[x2,y2] = play_puyo[1]->get_pos();
+    const auto[pos1,pos2] = get_pos();
     const auto type1 = play_puyo[0]->get_type(), type2 = play_puyo[1]->get_type();
     const int tick = sat(board) ? BOARD_FALL_GRAVITY_TICK : PLAYPUYO_DROP_GRAVITY_TICK;
     return {
-        {{x1, y1}, type1, tick},
-        {{x2, y2}, type2, tick}
+        {pos1, type1, tick},
+        {pos2, type2, tick}
     };
 }
 const std::unique_ptr<puyoPuyo>& puyoPlayPuyo::get_each(size_t number){return play_puyo[number];}
 const decltype(puyoPlayPuyo::play_puyo)& puyoPlayPuyo::get(){return play_puyo;}
 
-tuple<float,float,float,float> puyoPlayPuyo::get_pos() const
+tuple<POSf,POSf> puyoPlayPuyo::get_pos() const
 {
-    const auto[x1,y1] = play_puyo[0]->get_pos();
-    const auto [x2,y2] = play_puyo[1]->get_pos();
-    return make_tuple(x1,y1,x2,y2);
+    return make_tuple(play_puyo[0]->get_pos(),play_puyo[1]->get_pos());
 }
 std::pair<puyoType,puyoType> puyoPlayPuyo::get_type() const
 {
@@ -122,7 +117,7 @@ bool puyoPlayPuyo::sat(const puyoBoard& board) const
     for(auto& puyo : play_puyo)
     {
         const auto[x,y] = puyo->get_pos();
-        if(board.touched(floor(y)+1,round(x)))
+        if(board.touched(POSi(round(x), floor(y)+1)))
             return true;
     }
     return false;
@@ -141,7 +136,7 @@ void puyoPlayPuyo::let_left()
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POS(-1,0)));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POSf(-1,0)));
         puyo->let();
     }
 }
@@ -151,7 +146,7 @@ void puyoPlayPuyo::let_right()
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POS(1,0)));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POSf(1,0)));
         puyo->let();
     }
 }
@@ -161,7 +156,7 @@ void puyoPlayPuyo::let_down()
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POS(0,1)));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POSf(0,1)));
         puyo->let();
     }
     down_taken = true;

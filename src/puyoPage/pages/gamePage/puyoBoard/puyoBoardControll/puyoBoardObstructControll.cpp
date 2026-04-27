@@ -16,13 +16,12 @@ puyoBoardObstructControll::puyoBoardObstructControll()
 
 void puyoBoardObstructControll::add(int count)
 {
-    obstruct_puyo = min(max(0, obstruct_puyo + count), OBSTRUCT_PUYO_VIEWER_UNIT.back() * 6);
+    obstruct_puyo = min(max(0, obstruct_puyo + count), OBSTRUCT_VIEWER_UNIT.back() * OBSTRUCT_VIEWER_UPPER);
 }
 std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
 {
     if(obstruct_puyo_for_dropping <= 0)
         return {};
-
     if(obstruct_puyo_for_dropping >= OBSTRUCT_PUYO_MANY)
         board.set_signal(puyoBoardSignal::many_obsp_dropped);
     else if(obstruct_puyo_for_dropping >= OBSTRUCT_PUYO_MID)
@@ -30,17 +29,17 @@ std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boa
     else
         board.set_signal(puyoBoardSignal::less_obsp_dropped);
     
-    const auto[board_r, board_c] = board.get_size();
-    vector<int> obstruct_puyo_height(board_c, 0);
+    const auto bsize = board.get_size();
+    vector<int> obstruct_puyo_height(bsize.c, 0);
     vector<PUYO_INFO> gravity_puyos;
-    for(int i = board_r-1; i >= 0 ; --i)
-        for(int j = 0; j < board_c ; ++j)
-            if(board.empty(i,j))
+    for(int i = bsize.r-1; i >= 0 ; --i)
+        for(int j = 0; j < bsize.c ; ++j)
+            if(board.empty({j, i}))
             {
                 gravity_puyos.push_back({{(float)j,-obstruct_puyo_height[j] + OBSTRUCT_PUYO_SPAWN_Y}, puyoType::obstruct, BOARD_FALL_GRAVITY_TICK});
                 ++obstruct_puyo_height[j];
-                --obstruct_puyo_for_dropping;
                 --obstruct_puyo;
+                --obstruct_puyo_for_dropping;
                 if(obstruct_puyo_for_dropping <= 0)
                     return std::move(gravity_puyos);
             }

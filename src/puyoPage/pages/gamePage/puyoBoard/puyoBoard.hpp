@@ -35,25 +35,25 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         puyoBoardFutureControll future_controll;
         
         std::vector<std::vector<puyoType>> board;
-        const int board_r, board_c; 
-        POS spawn_pos;
+        const POSi size; 
+        POSf spawn_pos;
     public :  
         puyoBoard();
 
-        void set_spawn_pos(POS pos);
-        POS get_spawn_pos() const;
+        void set_spawn_pos(POSf pos);
+        POSf get_spawn_pos() const;
         
-        std::pair<int,int> get_size() const;
+        POSi get_size() const;
         bool in_row(int r) const;
         bool in_col(int c) const;
-        bool in(int r, int c) const;
-        bool touched(int r, int c) const;
+        bool in(POSi pos) const;
+        bool touched(POSi pos) const;
 
-        puyoType get_puyo(int r, int c) const;//이건 행,열
-        void insert_puyo(puyoType puyo, int r, int c);//이건 행,열
-        void remove_puyo(int r, int c);//이건 행,열
+        puyoType get_puyo(POSi pos) const;//이건 행,열
+        void insert_puyo(puyoType puyo, POSi pos);//이건 행,열
+        void remove_puyo(POSi pos);//이건 행,열
         bool empty() const;
-        bool empty(int r, int c) const;
+        bool empty(POSi pos) const;
         bool all_cleared();
 
         std::vector<PUYO_INFO> to_gravity_puyo();

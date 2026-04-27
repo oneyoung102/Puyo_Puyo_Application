@@ -2,6 +2,7 @@
 
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 #include <utility>
 #include <vector>
@@ -13,6 +14,6 @@ class puyoPrintNextPuyo : public puyoPrintObject
         const int& new_puyo_count;
         const std::vector<std::pair<puyoType,puyoType>>& new_colors;
     public :
-        puyoPrintNextPuyo(int player_num, const int& new_puyo_count, const std::vector<std::pair<puyoType,puyoType>>& new_colors, sf::Sprite puyo, POS pos, int life);
+        puyoPrintNextPuyo(int player_num, const int& new_puyo_count, const std::vector<std::pair<puyoType,puyoType>>& new_colors, sf::Sprite puyo, POSf pos, int life = puyoImageConstant::PRINT_IMMORTAL);
         void print(sf::RenderWindow& w);
 };

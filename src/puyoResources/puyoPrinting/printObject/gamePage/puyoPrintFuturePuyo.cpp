@@ -9,7 +9,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintFuturePuyo::puyoPrintFuturePuyo(const vector<puyoPuyo>& future_puyos, Sprite puyo, POS pos, int life)
+puyoPrintFuturePuyo::puyoPrintFuturePuyo(const vector<puyoPuyo>& future_puyos, Sprite puyo, POSf pos, int life)
     : puyoPrintObject(puyo,pos,life)
     , future_puyos(future_puyos)
 {
@@ -21,7 +21,6 @@ void puyoPrintFuturePuyo::print(RenderWindow& w)
     for(auto&& future_puyo : future_puyos)
     {
         const auto puyo = future_puyo.get_type();
-        const auto [px,py] = future_puyo.get_pos();
-        print_puyo(w,puyo,{x+PUYO_SIZE*px,y +PUYO_SIZE*py});
+        print_puyo(w,puyo,pos+future_puyo.get_pos()*PUYO_SIZE);
     }
 }

@@ -12,7 +12,7 @@ puyoPuyoGravity::puyoPuyoGravity(int amount)
 bool puyoPuyoGravity::test(const puyoBoard& board, puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
-    return !board.touched(floor(y)+1,round(x));
+    return !board.touched(POSi(round(x), floor(y)+1));
 }
 void puyoPuyoGravity::arrive(puyoPuyo& puyo)
 {
@@ -29,8 +29,7 @@ bool puyoPuyoGravity::decide(const puyoBoard& board, puyoPuyo& puyo)
 }
 void puyoPuyoGravity::act(puyoPuyo& puyo)
 {
-    const auto[x,y] = puyo.get_pos();
     const float dy = 1.0/act_count_init;
-    puyo.move({x,y+dy});
+    puyo.move(puyo.get_pos()+POSf(0,dy));
 };
 

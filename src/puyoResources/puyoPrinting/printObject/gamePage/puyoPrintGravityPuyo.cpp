@@ -10,7 +10,7 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintGravityPuyo::puyoPrintGravityPuyo(const vector<puyoPuyo>& gravity_puyos, Sprite puyo, POS pos, int life)
+puyoPrintGravityPuyo::puyoPrintGravityPuyo(const vector<puyoPuyo>& gravity_puyos, Sprite puyo, POSf pos, int life)
 : puyoPrintObject(puyo,pos,life)
 , gravity_puyos(gravity_puyos)
 {}
@@ -20,11 +20,9 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
 {
     for(auto& gravity_puyo : gravity_puyos)
     {
-        const auto puyo = gravity_puyo.get_type();
-        auto [px,py]= gravity_puyo.get_pos();
-        px = x + PUYO_SIZE*px;
-        py = y + PUYO_SIZE*py;
-        switch(puyo)
+        const auto type = gravity_puyo.get_type();
+        const auto screen_pos = pos+gravity_puyo.get_pos()*PUYO_SIZE;
+        switch(type)
         {
             case puyoType::blue :
             case puyoType::red :
@@ -34,15 +32,15 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
             {
                 if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
                 {
-                    print_16x16(w,POS(DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y),{px,py-PUYO_SIZE});
-                    print_16x16(w,POS(DROPPING_PUYO_X+(int)puyo,DROPPING_PUYO_Y+1),{px,py});
+                    print_16x16(w,DROPPING_PUYO_POS+POSi((int)type,0),screen_pos-POSf(0,PUYO_SIZE));
+                    print_16x16(w,DROPPING_PUYO_POS+POSi((int)type,1),screen_pos);
                 }
                 else//gravity
-                    print_16x16(w,POS(GRAVITY_PUYO_X+(int)puyo,GRAVITY_PUYO_Y),{px,py});
+                    print_16x16(w,GRAVITY_PUYO_POS+POSi((int)type,0),screen_pos);
                 break;
             }
             default :
-                print_puyo(w,puyo,{px,py});
+                print_puyo(w,type,screen_pos);
                 break;
         }
     }

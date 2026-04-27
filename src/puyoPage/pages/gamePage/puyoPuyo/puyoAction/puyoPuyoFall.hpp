@@ -1,8 +1,6 @@
 #pragma once
 
 #include "puyoPuyoAct.hpp"
-#include <array>
-
 
 class puyoBoard;
 

@@ -10,10 +10,10 @@ using namespace std;
 bool puyoPuyoFourWayMove::test(const puyoBoard& board, puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
-    return !board.touched(ceil(y)+dpos.y,round(x)+dpos.x) && !board.touched(floor(y)+dpos.y,round(x)+dpos.x);
+    return !board.touched(POSi(round(x), ceil(y))+dpos) && !board.touched(POSi(round(x), floor(y))+dpos);
 }
 
-puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, POS delta)
+puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, POSf delta)
     : puyoPuyoAct(amount)
     , dpos(delta)
 {}

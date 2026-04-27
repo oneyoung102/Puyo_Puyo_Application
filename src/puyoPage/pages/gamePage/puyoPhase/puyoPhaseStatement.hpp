@@ -14,8 +14,7 @@ class puyoPhaseStatement
         std::vector<Phase> curr_phases;
         std::vector<int> delay_times;
     public :
-        puyoPhaseStatement();
-        puyoPhaseStatement(int player_count);
+        puyoPhaseStatement(int player_count = 0);
         
         Phase get_phase(int player_num) const;
         void set_phase(int player_num, Phase phase);

@@ -1,10 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <tuple>
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
-
 class puyoBoard;
 
 class puyoBoardEnergyControll

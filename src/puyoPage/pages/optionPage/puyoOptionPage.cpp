@@ -31,10 +31,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         DIFF_DIAL_BUTTON_POS,
         "Easy",
         pfs.get_font(),
-        1,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        DIFF_DIAL_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintDialButton>(
         pfs.get_sprite(puyoFileSystem::Image::normal_button),
         diff_dial_button_cursor.get_select_status(Diff::normal),
@@ -42,10 +39,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         DIFF_DIAL_BUTTON_POS,
         "Normal",
         pfs.get_font(),
-        1,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        DIFF_DIAL_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintDialButton>(
         pfs.get_sprite(puyoFileSystem::Image::hard_button),
         diff_dial_button_cursor.get_select_status(Diff::hard),
@@ -53,10 +47,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         DIFF_DIAL_BUTTON_POS,
         "Hard",
         pfs.get_font(),
-        1,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        DIFF_DIAL_BUTTON_SCALE));
     
     //모드
     pp.add_print_button(make_unique<puyoPrintDialButton>(
@@ -66,10 +57,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         MODE_DIAL_BUTTON_POS,
         "Basic",
         pfs.get_font(),
-        1, 
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        MODE_DIAL_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintDialButton>(
         pfs.get_sprite(puyoFileSystem::Image::speed_button),
         mode_dial_button_cursor.get_select_status(Mode::speed),
@@ -77,10 +65,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         MODE_DIAL_BUTTON_POS,
         "Speed-Up",
         pfs.get_font(),
-        1, 
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        MODE_DIAL_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintDialButton>(//임시
         pfs.get_sprite(puyoFileSystem::Image::basic_button),
         mode_dial_button_cursor.get_select_status(Mode::bomb),
@@ -88,10 +73,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         MODE_DIAL_BUTTON_POS,
         "Bomb",
         pfs.get_font(),
-        1, 
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        MODE_DIAL_BUTTON_SCALE));
 
     //
     pp.add_print_button(make_unique<puyoPrintButton>(
@@ -100,20 +82,14 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         BACK_BUTTON_POS,
         "Back",
         pfs.get_font(),
-        0.9, 
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        BACK_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(buttonName::ready),
         READY_BUTTON_POS,
         "Ready",
         pfs.get_font(),
-        0.9,
-        Color::White,
-        Text::Style::Bold,
-        PRINT_IMMORTAL));
+        READY_BUTTON_SCALE));
     pl.allot_key((int)(Keyboard::Key::Left),[this]() { return button_cursor.let_choose_left(); });
     pl.allot_key((int)(Keyboard::Key::Right),[this]() { return button_cursor.let_choose_right(); });
     pl.allot_key((int)(Keyboard::Key::Up),[this]() { return button_cursor.let_choose_up(); });

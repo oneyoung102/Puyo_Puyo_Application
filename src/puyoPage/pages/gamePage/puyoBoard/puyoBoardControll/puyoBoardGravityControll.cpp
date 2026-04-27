@@ -27,6 +27,8 @@ const vector<puyoPuyo> &puyoBoardGravityControll::get() { return gravity_puyos;}
 
 void puyoBoardGravityControll::gravity(puyoBoard& board)
 {
+    if(gravity_puyo_is_out_of_board)
+        return;
     for(int i = 0 ; i < gravity_puyos.size(); )
     {
         if(gravity_puyos[i].acting())
@@ -35,13 +37,14 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
         if(!gravity_puyos[i].acting())
         {
             const auto[x,y] = gravity_puyos[i].get_pos();
-            const int ix = round(x), iy = round(y);
-            const puyoType type = gravity_puyos[i].get_type();
-
-            if (!board.in(iy,ix))
+            const auto pos = POSi(round(x), round(y));
+            if(!board.in(pos))
+            {
                 gravity_puyo_is_out_of_board = true; // 배치할 뿌요가 범위를 나감
-            else if(board.empty(iy,ix))
-                board.insert_puyo(type,iy,ix);
+                break;
+            }
+            else if(board.empty(pos))
+                board.insert_puyo(gravity_puyos[i].get_type(), pos);
 
             std::swap(gravity_puyos[i],gravity_puyos.back());
             gravity_puyos.pop_back();

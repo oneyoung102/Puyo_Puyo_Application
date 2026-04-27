@@ -11,7 +11,7 @@ class puyoModeBomb : public puyoMode
         bool bomb_is_spawned;
         int bomb_tick;
         puyoType bomb_appearance;
-        int bomb_c;//폭탄이 위치한 열
+        int bomb_x;//폭탄이 위치한 x
 
         std::mt19937 gen;
     public :

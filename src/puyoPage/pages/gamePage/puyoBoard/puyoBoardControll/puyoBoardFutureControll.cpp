@@ -1,7 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardFutureControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFall.hpp"
-#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include <memory>
 

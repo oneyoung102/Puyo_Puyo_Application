@@ -4,22 +4,22 @@
 
 using namespace std;
 
-puyoPuyo::puyoPuyo(POS pos, puyoType type, unique_ptr<puyoPuyoAct>&& act)
+puyoPuyo::puyoPuyo(POSf pos, puyoType type, unique_ptr<puyoPuyoAct>&& act)
 {  
     this->pos = pos;
     this->type = type;
     this->act = std::move(act);
 }
-puyoPuyo::puyoPuyo(POS pos, puyoType type)
+puyoPuyo::puyoPuyo(POSf pos, puyoType type)
 {
     this->pos = pos;
     this->type = type;
     this->act = nullptr;
 }
 
-void puyoPuyo::move(POS to_pos) {pos = to_pos;}
+void puyoPuyo::move(POSf to_pos) {pos = to_pos;}
 
-POS const puyoPuyo::get_pos() const {return pos;}
+POSf const puyoPuyo::get_pos() const {return pos;}
 puyoType const puyoPuyo::get_type() const {return type;}
 
 int const puyoPuyo::get_tick() const

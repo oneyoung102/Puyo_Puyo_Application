@@ -6,6 +6,7 @@
 #include <array>
 #include <utility>
 #include "puyoPage/puyoObjectSignal.hpp"
+#include "puyoPos.hpp"
 
 enum class puyoButtonCursorSignal
 {
@@ -19,75 +20,73 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
 {
     private : 
         std::array<std::array<std::pair<buttonName,bool>,C>,R> selected;
-        int cursor_r, cursor_c;
+        POSi cursor;
 
-        const std::vector<std::pair<int,int>> dir = {
+        const std::vector<POSi> dir = {
             {-1,0},{1,0},{0,-1},{0,1}
         };
         void move_vertical(int amount)
         {
-            selected[cursor_r][cursor_c].second = false;
-            if(selected[cursor_r+amount][cursor_c].first != buttonName::NONE)
-                cursor_r += amount;
+            selected[cursor.r][cursor.c].second = false;
+            if(selected[cursor.r+amount][cursor.c].first != buttonName::NONE)
+                cursor.r += amount;
             else
             {
                 std::vector<std::vector<bool>> visited(R,std::vector<bool>(C,false));
-                std::queue<std::pair<int,int>> coords;
-                coords.push(std::make_pair(cursor_r+amount,cursor_c));
+                std::queue<POSi> coords;
+                coords.push(cursor+POSi(0,amount));
                 while(!coords.empty())
                 {
-                    const auto [r,c] = coords.front();
+                    const auto pos = coords.front();
                     coords.pop();
-                    visited[r][c] = true;
-                    if(selected[r][c].first != buttonName::NONE)
+                    visited[pos.r][pos.c] = true;
+                    if(selected[pos.r][pos.c].first != buttonName::NONE)
                     {
-                        cursor_r = r;
-                        cursor_c = c;
+                        cursor = pos;
                         break;
                     }
-                    for(const auto[dr,dc] : dir)
+                    for(const auto dpos : dir)
                     {
-                        const int nr = r+dr, nc = c+dc;
-                        if(0 <= nr && nr < R && 0 <= nc && nc < C
-                            && nc != cursor_c && selected[nr][nc].first != buttonName::NONE && !visited[nr][nc])
-                            coords.push(std::make_pair(nr,nc));
+                        const auto npos = pos+dpos;
+                        if(0 <= npos.r && npos.r < R && 0 <= npos.c && npos.c < C
+                            && npos.c != cursor.c && selected[npos.r][npos.c].first != buttonName::NONE && !visited[npos.r][npos.c])
+                            coords.push(npos);
                     }
                 }
             }
-            selected[cursor_r][cursor_c].second = true;
+            selected[cursor.r][cursor.c].second = true;
             set_signal(puyoButtonCursorSignal::cursor);
         }
         void move_horizontal(int amount)
         {
-            selected[cursor_r][cursor_c].second = false;
-            if(selected[cursor_r][cursor_c+amount].first != buttonName::NONE)
-                cursor_c += amount;
+            selected[cursor.r][cursor.c].second = false;
+            if(selected[cursor.r][cursor.c+amount].first != buttonName::NONE)
+                cursor.c += amount;
             else
             {
                 std::vector<std::vector<bool>> visited(R,std::vector<bool>(C,false));
-                std::queue<std::pair<int,int>> coords;
-                coords.push(std::make_pair(cursor_r,cursor_c+amount));
+                std::queue<POSi> coords;
+                coords.push(cursor+POSi(amount,0));
                 while(!coords.empty())
                 {
-                    const auto [r,c] = coords.front();
+                    const auto pos = coords.front();
                     coords.pop();
-                    visited[r][c] = true;
-                    if(selected[r][c].first != buttonName::NONE)
+                    visited[pos.r][pos.c] = true;
+                    if(selected[pos.r][pos.c].first != buttonName::NONE)
                     {
-                        cursor_r = r;
-                        cursor_c = c;
+                        cursor = pos;
                         break;
                     }
-                    for(const auto[dr,dc] : dir)
+                    for(const auto dpos : dir)
                     {
-                        const int nr = r+dr, nc = c+dc;
-                        if(0 <= nr && nr < R && 0 <= nc && nc < C
-                            && nr != cursor_r && selected[nr][nc].first != buttonName::NONE && !visited[nr][nc])
-                            coords.push(std::make_pair(nr,nc));
+                        const auto npos = pos+dpos;
+                        if(0 <= npos.r && npos.r < R && 0 <= npos.c && npos.c < C
+                            && npos.r != cursor.r && selected[npos.r][npos.c].first != buttonName::NONE && !visited[npos.r][npos.c])
+                            coords.push(npos);
                     }
                 }
             }
-            selected[cursor_r][cursor_c].second = true;
+            selected[cursor.r][cursor.c].second = true;
             set_signal(puyoButtonCursorSignal::cursor);
 
         }
@@ -102,8 +101,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
                     if(!init_found && allocated[i][j] != buttonName::NONE)
                     {
                         selected[i][j] = std::make_pair(allocated[i][j],true);
-                        cursor_r = i;
-                        cursor_c = j;
+                        cursor = {j,i};
                         init_found = true;
                     }
                     else
@@ -114,22 +112,22 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         void let_select(){set_signal(puyoButtonCursorSignal::select);}
         void let_choose_left()
         {
-            if(cursor_c > 0)
+            if(cursor.c > 0)
                 move_horizontal(-1);
         }
         void let_choose_right()
         {
-            if(cursor_c < C-1)
+            if(cursor.c < C-1)
                 move_horizontal(1);
         }
         void let_choose_up()
         {
-            if(cursor_r > 0)
+            if(cursor.r > 0)
                 move_vertical(-1);
         }
         void let_choose_down()
         {
-            if(cursor_r < R-1)
+            if(cursor.r < R-1)
                 move_vertical(1);
         }
         const bool& get_select_status(buttonName type)
@@ -141,5 +139,5 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             throw std::runtime_error("factor of function get_select_status is not valid.");
             return selected[0][0].second;
         }
-        buttonName get_selected_button(){return selected[cursor_r][cursor_c].first;}
+        buttonName get_selected_button(){return selected[cursor.r][cursor.c].first;}
 };

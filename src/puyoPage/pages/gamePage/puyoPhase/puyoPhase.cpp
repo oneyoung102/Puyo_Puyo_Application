@@ -197,11 +197,13 @@ void puyoPhase::calc_obstruct(const std::unique_ptr<puyoPlayer>& player, int& ad
         {
             const int player_num = player->get_player_num(), opposite = player_num^1;
             const int opp = calc.get_opposite_obstruct_puyo_count(co.get(),co.get_opp());
+
+            const int to_player_num = (co.get() > 0) ? player_num : opposite;
+            ce.to_energy_puyo(player_num,to_player_num);//에너지 뿌요 생성
+
             co.add(-co.get_opp());
             co.clear_opp();
             players[opposite]->get_board().controll_obstuct().add(opp);
-
-            ce.to_energy_puyo(player_num,opposite);//에너지 뿌요 생성
         }
     } 
     else
@@ -246,7 +248,7 @@ void puyoPhase::proceed_game()
         else
             board.controll_energy().clear_temp(); 
 /////////게임 종료
-        if(board.controll_gravity().out() && board.controll_gravity().empty())//게임 종료
+        if(board.controll_gravity().out())//게임 종료
         {
             const int opposite = player_num^1;
             win_player_num = opposite;

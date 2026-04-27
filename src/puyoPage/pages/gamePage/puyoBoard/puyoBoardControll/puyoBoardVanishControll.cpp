@@ -43,51 +43,51 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
 void puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board, PUYO_INFO puyo)
 {
     const auto[pos,type,tick] = puyo;
-    add({pos, type, tick});
+    add(puyo);
     board.controll_energy().add_temp({pos, type, puyoGameConstant::BOARD_FLY_TICK});
-    board.remove_puyo(pos.y, pos.x);
+    board.remove_puyo(pos);
 }
 void puyoBoardVanishControll::find(puyoBoard& board)
 {
-    const auto[board_r, board_c] = board.get_size();
-    vector<vector<bool>> visited(board_r, vector<bool>(board_c, false));
-    for (int i = 0; i < board_r; ++i)
-        for (int j = 0; j < board_c; ++j)
+    const auto bsize = board.get_size();
+    vector<vector<bool>> visited(bsize.r, vector<bool>(bsize.c, false));
+    for (int i = 0; i < bsize.r; ++i)
+        for (int j = 0; j < bsize.c; ++j)
         {
             if(visited[i][j])
                 continue;
-            const puyoType puyo = board.get_puyo(i,j);
+            const puyoType puyo = board.get_puyo({j, i});
             if(puyo < puyoType::red || puyoType::pupple < puyo)
                 continue;
 
             int other_puyos = 0;
-            vector<tuple<int, int, puyoType>> stored_puyos;
-            queue<pair<int, int>> coords;
-            coords.push(make_pair(i, j));
+            vector<tuple<POSi, puyoType>> stored_puyos;
+            queue<POSi> coords;
+            coords.push({j, i});
             while(!coords.empty())
             {
-                const auto [r, c] = coords.front();
+                const auto pos = coords.front();
                 coords.pop();
-                if(visited[r][c])
+                if(visited[pos.r][pos.c])
                     continue;
-                visited[r][c] = true;
+                visited[pos.r][pos.c] = true;
 
-                const puyoType curr_puyo = board.get_puyo(r, c);
-                stored_puyos.push_back(make_tuple(r, c, curr_puyo));
+                const puyoType curr_puyo = board.get_puyo(pos);
+                stored_puyos.push_back(make_tuple(pos, curr_puyo));
                 
                 if(curr_puyo == puyoType::obstruct)
                 {
                     ++other_puyos;
                     continue;
                 }
-                for (const auto [dr, dc] : dir)
+                for (const auto dpos: dir)
                 {
-                    const int nr = r + dr, nc = c + dc;
-                    if (!board.in(nr, nc))
+                    const auto npos = pos+dpos;
+                    if (!board.in(npos))
                         continue;
-                    const puyoType npuyo = board.get_puyo(nr, nc);
-                    if ((npuyo == puyo || npuyo == puyoType::obstruct) && !visited[nr][nc])
-                        coords.push(make_pair(nr, nc));
+                    const puyoType npuyo = board.get_puyo(npos);
+                    if ((npuyo == puyo || npuyo == puyoType::obstruct) && !visited[npos.r][npos.c])
+                        coords.push(npos);
                 }
             }
             const int color_puyo_count = stored_puyos.size() - other_puyos;
@@ -98,10 +98,10 @@ void puyoBoardVanishControll::find(puyoBoard& board)
                 cs.add_link_count(color_puyo_count);
                 cs.add_color_count(puyo); // 방해 뿌요는 종류에 포함 안 시킴
 
-                for(const auto [r, c, type] : stored_puyos)
+                for(const auto [pos, type] : stored_puyos)
                 {
                     const int tick = (type == puyoType::obstruct) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
-                    to_vanish_puyo(board,{POS(c,r),type,tick});
+                    to_vanish_puyo(board,{pos,type,tick});
                 }
             }
     }

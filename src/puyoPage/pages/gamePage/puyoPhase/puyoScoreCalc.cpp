@@ -29,5 +29,5 @@ int puyoScoreCalc::get_opposite_obstruct_puyo_count(int self, int opp) {return m
 int puyoScoreCalc::to_obstruct_puyo(int score){return score/obstruct_puyo_rate;}
 
 void puyoScoreCalc::set_obstruct_puyo_rate(int v){obstruct_puyo_rate = max(v,1);}
-int puyoScoreCalc::get_all_cleared_score(){return all_cleared_obstruct_puyo*70;}
+int puyoScoreCalc::get_all_cleared_score(){return all_cleared_obstruct_puyo*obstruct_puyo_rate;}
 int puyoScoreCalc::get_obstruct_puyo_for_dropping(int obstruct_puyo){return min(obstruct_puyo,30);}//30개가 넘으면 30개 단위로 떨어뜨림

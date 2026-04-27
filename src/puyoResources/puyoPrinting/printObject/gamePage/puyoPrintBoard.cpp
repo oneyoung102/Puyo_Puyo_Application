@@ -7,17 +7,18 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintBoard::puyoPrintBoard(const puyoBoard& board, Sprite puyo, POS pos, int life)
+puyoPrintBoard::puyoPrintBoard(const puyoBoard& board, Sprite puyo, POSf pos, int life)
     : puyoPrintObject(puyo,pos,life)
     , board(board){}
 void puyoPrintBoard::print(RenderWindow& w)
 {
-    const auto [board_r,board_c] = board.get_size();
+    const auto bsize = board.get_size();
     
-    for(int i = 0 ; i < board_r ; ++i)
-        for(int j = 0 ; j < board_c ; ++j)
+    for(int i = 0 ; i < bsize.r ; ++i)
+        for(int j = 0 ; j < bsize.c ; ++j)
         {
-            const puyoType puyo = board.get_puyo(i,j);
+            const auto board_pos = POSf(j, i);
+            const puyoType puyo = board.get_puyo(board_pos);
             switch(puyo)
             {
                 case puyoType::blue :
@@ -26,15 +27,15 @@ void puyoPrintBoard::print(RenderWindow& w)
                 case puyoType::green :
                 case puyoType::pupple :
                 {
-                    const int dir = 1*(board.in(i+1,j) && board.get_puyo(i+1,j) == puyo)+
-                            2*(board.in(i-1,j) && board.get_puyo(i-1,j) == puyo)+
-                            4*(board.in(i,j+1) && board.get_puyo(i,j+1) == puyo)+
-                            8*(board.in(i,j-1) && board.get_puyo(i,j-1) == puyo);
-                    print_16x16(w,POS(dir,(int)puyo),{x+PUYO_SIZE*j,y+PUYO_SIZE*i});
+                    const int dir = 1*(board.in({j, i+1}) && board.get_puyo({j, i+1}) == puyo)+
+                            2*(board.in({j, i-1}) && board.get_puyo({j, i-1}) == puyo)+
+                            4*(board.in({j+1, i}) && board.get_puyo({j+1, i}) == puyo)+
+                            8*(board.in({j-1, i}) && board.get_puyo({j-1, i}) == puyo);
+                    print_16x16(w,POSi(dir,(int)puyo),pos+board_pos*PUYO_SIZE);
                     break;
                 }
                 default :
-                    print_puyo(w,puyo,{x+PUYO_SIZE*j,y+PUYO_SIZE*i});
+                    print_puyo(w,puyo,pos+board_pos*PUYO_SIZE);
                     break;
             }
         }

@@ -7,21 +7,21 @@
 
 class puyoBoard;
 
-using PUYO_INFO = std::tuple<POS,puyoType,int>; // {POS,TYPE,TICK}
+using PUYO_INFO = std::tuple<POSf,puyoType,int>; // {POSf,TYPE,TICK}
 
 class puyoPuyo
 {
     private :
-        POS pos;
+        POSf pos;
         puyoType type;
         std::unique_ptr<puyoPuyoAct> act;
     public :
-        puyoPuyo(POS pos, puyoType type, std::unique_ptr<puyoPuyoAct>&& act);
-        puyoPuyo(POS pos, puyoType type);
+        puyoPuyo(POSf pos, puyoType type, std::unique_ptr<puyoPuyoAct>&& act);
+        puyoPuyo(POSf pos, puyoType type);
 
-        void move(POS to_pos);
+        void move(POSf to_pos);
 
-        POS const get_pos() const;
+        POSf const get_pos() const;
         puyoType const get_type() const;
 
         float const get_state() const;
