@@ -1,7 +1,7 @@
 #pragma once
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include <SFML/Graphics.hpp>
 

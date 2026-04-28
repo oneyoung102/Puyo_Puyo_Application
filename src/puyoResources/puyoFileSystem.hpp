@@ -98,8 +98,8 @@ class puyoFileSystem
 
         };
         sf::Sprite get_sprite(Image name);
-        sf::Font& get_font();
+        const sf::Font& get_font();
         sf::SoundBuffer& get_buffer(Sound name);
-        std::filesystem::path& get_music(Music name);
-        std::filesystem::path& get_random_music();
+        const std::filesystem::path& get_music(Music name);
+        const std::filesystem::path& get_random_music();
 };

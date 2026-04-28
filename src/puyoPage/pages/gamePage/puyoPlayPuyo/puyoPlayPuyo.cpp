@@ -25,7 +25,7 @@ puyoPlayPuyo::puyoPlayPuyo(POSf spawn_pos, pair<puyoType,puyoType> types, int gr
 {
     stay = 0;
 
-    for(int i = 0 ; i < 2 ; ++i)
+    for(size_t i = 0 ; i < 2 ; ++i)
     {
         gravity[i] = std::move(make_unique<puyoPuyoGravity>(gravity_value));
         gravity[i]->let();
@@ -58,7 +58,7 @@ void puyoPlayPuyo::gravity_let(puyoBoard& board)
     if(sat(board) && stay < stay_value)
     {
         if(stay == 0)
-            for(int i = 0 ; i < 2 ; ++i)
+            for(size_t i = 0 ; i < 2 ; ++i)
             {
                 const auto[x,y] = play_puyo[i]->get_pos();
                 play_puyo[i]->move({round(x),round(y)});
@@ -130,37 +130,19 @@ bool puyoPlayPuyo::moving() const
     return false;
 }
 
-void puyoPlayPuyo::let_left()
+void puyoPlayPuyo::let_fourway(Direction dir)
 {
     if(moving())
         return;
     for(auto& puyo : play_puyo)
     {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POSf(-1,0)));
+        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,DIR[dir]));
         puyo->let();
     }
 }
-void puyoPlayPuyo::let_right()
-{
-    if(moving())
-        return;
-    for(auto& puyo : play_puyo)
-    {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POSf(1,0)));
-        puyo->let();
-    }
-}
-void puyoPlayPuyo::let_down()
-{
-    if(moving())
-        return;
-    for(auto& puyo : play_puyo)
-    {
-        puyo->set_act(make_unique<puyoPuyoFourWayMove>(PLAYPUYO_FOURWAYMOVE_TICK,POSf(0,1)));
-        puyo->let();
-    }
-    down_taken = true;
-}
+void puyoPlayPuyo::let_left(){let_fourway(LEFT);}
+void puyoPlayPuyo::let_right(){let_fourway(RIGHT);}
+void puyoPlayPuyo::let_down(){let_fourway(DOWN);}
 void puyoPlayPuyo::let_turn()
 {
     if(moving())

@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <memory>
+#include <vector>
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
@@ -9,6 +10,8 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 #include "puyoPage/puyoObjectSignal.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoTool/puyoPos.hpp"
+#include "puyoTool/puyoDir.hpp"
 
 
 class puyoPuyoGravity;
@@ -31,6 +34,7 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         
         bool down_taken, drop_taken;//명령 접수 여부
 
+        void let_fourway(Direction dir);
     public :
         puyoPlayPuyo(POSf spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
 

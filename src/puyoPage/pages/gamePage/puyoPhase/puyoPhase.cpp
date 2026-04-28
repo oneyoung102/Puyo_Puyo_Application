@@ -142,7 +142,7 @@ void puyoPhase::proceed_gravity(const unique_ptr<puyoPlayer>& player, int& added
             else
             {
                 pstate.set_phase(player_num,puyoPhaseStatement::Phase::play);
-                pstate.delay(player_num,150);
+                pstate.delay(player_num,PHASE_SET_TICK);
             }
         }
         else
@@ -173,7 +173,7 @@ void puyoPhase::proceed_vanish(const unique_ptr<puyoPlayer>& player, int& added_
             if(board.all_cleared())
                 added_score += calc.get_all_cleared_score();//올클리어 보너스
             pstate.set_phase(player_num,puyoPhaseStatement::Phase::play);
-            pstate.delay(player_num,150);
+            pstate.delay(player_num,PHASE_SET_TICK);
         }
         else
             pstate.set_phase(player_num,puyoPhaseStatement::Phase::gravity);
@@ -216,7 +216,6 @@ void puyoPhase::proceed_game()
     {
         auto& board = player->get_board();
         const int player_num = player->get_player_num();
-      
 /////////////////봇이라면 행동
         if(player->is_bot())
             if(pstate.is_phase(player_num,puyoPhaseStatement::Phase::play) && !pstate.delayed(player_num))
@@ -253,13 +252,14 @@ void puyoPhase::proceed_game()
             const int opposite = player_num^1;
             win_player_num = opposite;
             end_game(); 
+            break;
         }        
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-int puyoPhase::get_player_count() const {return (int)players.size();}
+int puyoPhase::get_player_count() const {return players.size();}
 const vector<unique_ptr<puyoPlayer>>& puyoPhase::get_players() const {return players;}
 void puyoPhase::add_player(unique_ptr<puyoPlayer>&& player)
 {
@@ -282,3 +282,5 @@ int puyoPhase::get_win_player_num() const
     return win_player_num;
 }
 void puyoPhase::set_win_player_num(int num){win_player_num = num;}
+
+puyoPhaseStatement& puyoPhase::get_pstate(){return pstate;}

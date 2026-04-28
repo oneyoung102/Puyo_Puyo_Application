@@ -9,5 +9,5 @@ class puyoModeSpeed : public puyoMode
         const int gravity_delta, gravity_min;
     public :
         puyoModeSpeed(int init_gravity_value);
-        void proceed_mode(puyoPhase& phase, puyoPlayer& player) override;
+        void proceed_mode(puyoPhase& phase, const puyoPlayer& player) override;
 };

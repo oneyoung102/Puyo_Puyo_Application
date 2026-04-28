@@ -49,11 +49,11 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         bool in(POSi pos) const;
         bool touched(POSi pos) const;
 
-        puyoType get_puyo(POSi pos) const;//이건 행,열
-        void insert_puyo(puyoType puyo, POSi pos);//이건 행,열
-        void remove_puyo(POSi pos);//이건 행,열
+        puyoType get_puyo(POSs pos) const;//이건 행,열
+        void insert_puyo(puyoType puyo, POSs pos);//이건 행,열
+        void remove_puyo(POSs pos);//이건 행,열
         bool empty() const;
-        bool empty(POSi pos) const;
+        bool empty(POSs pos) const;
         bool all_cleared();
 
         std::vector<PUYO_INFO> to_gravity_puyo();
@@ -64,4 +64,11 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         puyoBoardObstructControll& controll_obstuct();
         puyoBoardVanishControll& controll_vanish();
         puyoBoardFutureControll& controll_future();
+
+        const puyoBoardEnergyControll& controll_energy() const;
+        const puyoBoardGravityControll& controll_gravity() const;
+        const puyoBoardScoreControll& controll_score() const;
+        const puyoBoardObstructControll& controll_obstuct() const;
+        const puyoBoardVanishControll& controll_vanish() const;
+        const puyoBoardFutureControll& controll_future() const;
 };

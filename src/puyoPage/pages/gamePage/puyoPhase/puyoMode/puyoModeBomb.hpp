@@ -11,10 +11,10 @@ class puyoModeBomb : public puyoMode
         bool bomb_is_spawned;
         int bomb_tick;
         puyoType bomb_appearance;
-        int bomb_x;//폭탄이 위치한 x
+        size_t bomb_x;//폭탄이 위치한 x
 
         std::mt19937 gen;
     public :
         puyoModeBomb(int player_count);
-        void proceed_mode(puyoPhase& phase, puyoPlayer& player) override;
+        void proceed_mode(puyoPhase& phase, const puyoPlayer& player) override;
 };

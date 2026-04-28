@@ -1,5 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.hpp"
 
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseStatement.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
@@ -20,7 +21,7 @@ puyoModeBomb::puyoModeBomb(int player_count)
     bomb_x = -1;
 
 }
-void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
+void puyoModeBomb::proceed_mode(puyoPhase& phase, const puyoPlayer& player)
 {
     if(bomb_have_player_num != player.get_player_num())
         return;
@@ -38,11 +39,12 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             if(bomb_tick == 0)
             {
                 phase.set_signal(puyoModeSignal::bomb_explode);
-                for(int i = 0 ; i < bsize.r ; ++i)
-                    for(int j = 0 ; j < bsize.c ; ++j)
-                        if(!board.empty({j, i}))
-                            cv.to_vanish_puyo(board,{POSf(j,i),board.get_puyo({j, i}), BOARD_BASIC_VANISH_TICK});                                                 
+                for(size_t i = 0 ; i < bsize.r ; ++i)
+                    for(size_t j = 0 ; j < bsize.c ; ++j)
+                        if(!board.empty(POSi(j, i)))
+                            cv.to_vanish_puyo(board,{POSf(j,i),board.get_puyo(POSi(j, i)), BOARD_BASIC_VANISH_TICK});                                                 
                 bomb_tick = -1;
+                phase.get_pstate().set_phase(bomb_have_player_num,puyoPhaseStatement::Phase::vanish);
             }
             else if(cv.empty())
             {
@@ -55,7 +57,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             bomb_is_spawned = false;
             for(int i = bsize.r-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
             {
-                const auto puyo = board.get_puyo({bomb_x, i});
+                const auto puyo = board.get_puyo(POSs(bomb_x, i));
                 if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                 {
                     cv.to_vanish_puyo(board,{POSf(bomb_x,i),puyo,BOMB_VANISH_TICK});
@@ -90,12 +92,12 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             }
             if(appearance_change)
             {
-                for(int i = bsize.r-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
+                for(int i = bsize.y-1 ; i >= 0 ; --i)//효율적으로 아래에서부터 찾음
                 {
-                    const auto puyo = board.get_puyo({bomb_x, i});
+                    const auto puyo = board.get_puyo(POSs(bomb_x, i));
                     if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                     {
-                        board.insert_puyo(bomb_appearance, {bomb_x, i});
+                        board.insert_puyo(bomb_appearance, POSs(bomb_x, i));
                         break;
                     }
                 }

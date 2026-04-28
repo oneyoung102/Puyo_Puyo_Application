@@ -4,6 +4,7 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 #include <vector>
 
@@ -37,11 +38,11 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
             {
                 const float prop = vanish_puyo.get_state();
                 if(prop <= puyoGameConstant::VANISH_STAY_PROP)
-                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*(int)puyo,0),screen_pos);
+                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
                 else if(prop <= puyoGameConstant::VANISH_SOON_PROP)
-                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*(int)puyo,0),screen_pos);
+                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
                 else
-                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*(int)puyo,0),screen_pos);
+                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
                 break;
             }
         }

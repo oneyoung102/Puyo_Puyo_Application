@@ -3,20 +3,13 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFourWayMove.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include <memory>
-
+#include "puyoTool/puyoDir.hpp"
 
 class puyoBoard;
 
 class puyoPuyoTurn : public puyoPuyoAct
 {
     private :
-        enum class Direction
-        {
-            UP,
-            RIGHT,
-            DOWN,
-            LEFT
-        };
         Direction turn_dir;
         const float rad, c, s;
         puyoPuyo& center;

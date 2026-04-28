@@ -1,7 +1,7 @@
 #pragma once
 
 #include "puyoPuyoAct.hpp"
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 
 class puyoBoard;
 class puyoPuyo; 

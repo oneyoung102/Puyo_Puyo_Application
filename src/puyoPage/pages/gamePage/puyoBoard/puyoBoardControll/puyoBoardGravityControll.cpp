@@ -11,14 +11,14 @@ puyoBoardGravityControll::puyoBoardGravityControll()
     gravity_puyo_is_out_of_board = false;
 }
 
-void puyoBoardGravityControll::add(PUYO_INFO puyo) // std::move
+void puyoBoardGravityControll::add(const PUYO_INFO& puyo) // std::move
 {
     gravity_puyos.push_back(
         puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),
         make_unique<puyoPuyoGravity>(std::get<2>(puyo))));
     gravity_puyos.back().let();    
 }
-void puyoBoardGravityControll::add(vector<PUYO_INFO> puyos) // std::move
+void puyoBoardGravityControll::add(const vector<PUYO_INFO>& puyos) // std::move
 {
     for(const auto& puyo : puyos)
         add(puyo);
@@ -29,7 +29,7 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
 {
     if(gravity_puyo_is_out_of_board)
         return;
-    for(int i = 0 ; i < gravity_puyos.size(); )
+    for(size_t i = 0 ; i < gravity_puyos.size(); )
     {
         if(gravity_puyos[i].acting())
             gravity_puyos[i].act_let(board);

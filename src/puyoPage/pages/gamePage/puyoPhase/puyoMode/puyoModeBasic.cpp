@@ -4,4 +4,4 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 
 puyoModeBasic::puyoModeBasic(){}
-void puyoModeBasic::proceed_mode(puyoPhase& phase, puyoPlayer& player){}
+void puyoModeBasic::proceed_mode(puyoPhase& phase, const puyoPlayer& player){}

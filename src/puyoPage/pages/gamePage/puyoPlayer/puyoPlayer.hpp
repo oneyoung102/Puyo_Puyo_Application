@@ -29,11 +29,11 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         std::unique_ptr<puyoBotAlgorithm> bot_algorithm;
 
     public :
-        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board ,bool player_is_bot);
+        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board, bool player_is_bot);
 
         int get_player_num() const;
-        puyoBoard& get_board();
-        puyoPlayPuyo& get_puyo();
+        puyoBoard& get_board() const;
+        puyoPlayPuyo& get_puyo() const;
 
         const int& get_score() const;
         void add_score(int s);

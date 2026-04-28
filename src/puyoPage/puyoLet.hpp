@@ -13,6 +13,7 @@ class puyoLet
     public :
         puyoLet();
         void act_keyboard_let(const std::optional<sf::Event>& event);
-        void allot_key(int key, std::function<void()> func);
+        void allot_key(sf::Keyboard::Key key, std::function<void()> func);
         void clear();
 };
+#define FUNCFY(x) [this](){return x();}

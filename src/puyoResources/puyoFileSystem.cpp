@@ -7,6 +7,7 @@
 #include <string>
 
 #include "puyoFileSystem.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 using namespace sf;
 using namespace std;
@@ -88,12 +89,12 @@ puyoFileSystem::puyoFileSystem() : gen(random_device{}())
     getAllSound();
     getAllMusicPath();
 }
-Sprite puyoFileSystem::get_sprite(puyoFileSystem::Image name){return sprites[(int)name];}
-Font& puyoFileSystem::get_font(){return font;}
-sf::SoundBuffer& puyoFileSystem::get_buffer(puyoFileSystem::Sound name){return buffers[(int)name];}
-fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name){return musics[(int)name];}
-fs::path& puyoFileSystem::get_random_music()
+Sprite puyoFileSystem::get_sprite(puyoFileSystem::Image name){return sprites[CASTs(name)];}
+const Font& puyoFileSystem::get_font(){return font;}
+sf::SoundBuffer& puyoFileSystem::get_buffer(puyoFileSystem::Sound name){return buffers[CASTs(name)];}
+const fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name){return musics[CASTs(name)];}
+const fs::path& puyoFileSystem::get_random_music()
 {
-    uniform_int_distribution<> dist((int)Music::game_music1, (int)Music::game_music11);
+    uniform_int_distribution<> dist(CASTi(Music::game_music1), CASTi(Music::game_music11));
     return musics[dist(gen)];
 }

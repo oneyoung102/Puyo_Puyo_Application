@@ -2,10 +2,9 @@
 
 class puyoPhase;
 class puyoPlayer;
-
 class puyoMode
 {
     public :
         virtual ~puyoMode() = default;
-        virtual void proceed_mode(puyoPhase& phase, puyoPlayer& player) = 0;
+        virtual void proceed_mode(puyoPhase& phase, const puyoPlayer& player) = 0;
 };  

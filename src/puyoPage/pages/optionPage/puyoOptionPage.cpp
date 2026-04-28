@@ -90,11 +90,11 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         "Ready",
         pfs.get_font(),
         READY_BUTTON_SCALE));
-    pl.allot_key((int)(Keyboard::Key::Left),[this]() { return button_cursor.let_choose_left(); });
-    pl.allot_key((int)(Keyboard::Key::Right),[this]() { return button_cursor.let_choose_right(); });
-    pl.allot_key((int)(Keyboard::Key::Up),[this]() { return button_cursor.let_choose_up(); });
-    pl.allot_key((int)(Keyboard::Key::Down),[this]() { return button_cursor.let_choose_down(); });
-    pl.allot_key((int)(Keyboard::Key::Enter),[this]() { return button_cursor.let_select(); });
+    pl.allot_key(Keyboard::Key::Left,FUNCFY(button_cursor.let_choose_left));
+    pl.allot_key(Keyboard::Key::Right,FUNCFY(button_cursor.let_choose_right));
+    pl.allot_key(Keyboard::Key::Up,FUNCFY(button_cursor.let_choose_up));
+    pl.allot_key(Keyboard::Key::Down,FUNCFY(button_cursor.let_choose_down));
+    pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
     convert_page = false;
 }
 puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &window) {
@@ -122,14 +122,14 @@ puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &wi
                     convert_page = true;
                     break;
                 case buttonName::diff_dial:
-                    pl.allot_key((int)(Keyboard::Key::Left), [this]() {return diff_dial_button_cursor.let_choose_left();});
-                    pl.allot_key((int)(Keyboard::Key::Right), [this]() {return diff_dial_button_cursor.let_choose_right();});
-                    pl.allot_key((int)(Keyboard::Key::Enter),[this]() { return diff_dial_button_cursor.let_select(); });
+                    pl.allot_key(Keyboard::Key::Left, FUNCFY(diff_dial_button_cursor.let_choose_left));
+                    pl.allot_key(Keyboard::Key::Right, FUNCFY(diff_dial_button_cursor.let_choose_right));
+                    pl.allot_key(Keyboard::Key::Enter, FUNCFY(diff_dial_button_cursor.let_select));
                     break;
                 case buttonName::mode_dial:
-                    pl.allot_key((int)(Keyboard::Key::Left), [this]() {return mode_dial_button_cursor.let_choose_left();});
-                    pl.allot_key((int)(Keyboard::Key::Right), [this]() {return mode_dial_button_cursor.let_choose_right();});
-                    pl.allot_key((int)(Keyboard::Key::Enter),[this]() { return mode_dial_button_cursor.let_select(); });
+                    pl.allot_key(Keyboard::Key::Left, FUNCFY(mode_dial_button_cursor.let_choose_left));
+                    pl.allot_key(Keyboard::Key::Right, FUNCFY(mode_dial_button_cursor.let_choose_right));
+                    pl.allot_key(Keyboard::Key::Enter, FUNCFY(mode_dial_button_cursor.let_select));
                     break;
                 case buttonName::NONE:
                     break;
@@ -139,11 +139,11 @@ puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &wi
         else if(diff_dial_button_cursor.get_signal(puyoButtonCursorSignal::select)
                 || mode_dial_button_cursor.get_signal(puyoButtonCursorSignal::select))
         {
-            pl.allot_key((int)(Keyboard::Key::Left),[this]() { return button_cursor.let_choose_left(); });
-            pl.allot_key((int)(Keyboard::Key::Right),[this]() { return button_cursor.let_choose_right(); });
-            pl.allot_key((int)(Keyboard::Key::Up),[this]() { return button_cursor.let_choose_up(); });
-            pl.allot_key((int)(Keyboard::Key::Down), [this]() { return button_cursor.let_choose_down(); });
-            pl.allot_key((int)(Keyboard::Key::Enter),[this]() { return button_cursor.let_select(); });
+            pl.allot_key(Keyboard::Key::Left, FUNCFY(button_cursor.let_choose_left));
+            pl.allot_key(Keyboard::Key::Right, FUNCFY(button_cursor.let_choose_right));
+            pl.allot_key(Keyboard::Key::Up, FUNCFY(button_cursor.let_choose_up));
+            pl.allot_key(Keyboard::Key::Down, FUNCFY(button_cursor.let_choose_down));
+            pl.allot_key(Keyboard::Key::Enter, FUNCFY(button_cursor.let_select));
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cancel));
         }
     }

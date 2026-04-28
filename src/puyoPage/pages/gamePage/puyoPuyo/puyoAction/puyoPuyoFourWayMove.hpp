@@ -1,7 +1,7 @@
 #pragma once
 
 #include "puyoPuyoAct.hpp"
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 
 class puyoBoard;
 class puyoPlayPuyo; 
@@ -12,6 +12,6 @@ class puyoPuyoFourWayMove : public puyoPuyoAct
         const POSf dpos;
         bool test(const puyoBoard& board, puyoPuyo& puyo) override;
     public :
-        puyoPuyoFourWayMove(int amount, POSf delta);
+        puyoPuyoFourWayMove(int amount, POSf dpos);
         void act(puyoPuyo& puyo) override;
 };

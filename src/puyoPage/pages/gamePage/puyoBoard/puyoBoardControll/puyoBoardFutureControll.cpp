@@ -13,7 +13,7 @@ const vector<puyoPuyo> &puyoBoardFutureControll::get() { return future_puyos; }
 void puyoBoardFutureControll::update(const puyoBoard& board, puyoPlayPuyo& puyo)
 {
     future_puyos.clear();
-    for(int i = 0 ; i < 2 ; ++i)
+    for(size_t i = 0 ; i < 2 ; ++i)
     {
         const auto& one_puyo = puyo.get_each(i);
         future_puyos.push_back(puyoPuyo(one_puyo->get_pos(),one_puyo->get_type(),

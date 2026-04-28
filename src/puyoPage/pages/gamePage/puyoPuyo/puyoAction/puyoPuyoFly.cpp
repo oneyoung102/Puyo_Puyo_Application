@@ -1,4 +1,5 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
+#include "puyoTool/puyoCast.hpp"
 #include "puyoPuyoFly.hpp"
 
 using namespace std;
@@ -15,7 +16,7 @@ void puyoPuyoFly::arrive(puyoPuyo& puyo){}
 
 void puyoPuyoFly::act(puyoPuyo& puyo)
 {
-    const float progress = (float)act_count/act_count_init;
-    puyo.move(from_pos+POSf(dpos.x*progress,dpos.y*progress*progress));//제곱 맞음
+    const float progress = CASTf(act_count)/act_count_init;
+    puyo.move(from_pos+dpos*POSf(progress,progress*progress));//제곱 맞음
     ++act_count;
 };

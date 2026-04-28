@@ -46,22 +46,22 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
 
 ////////Arcade
     auto player0 = make_unique<puyoPlayer>(0, make_unique<puyoBoard>(),false);
-    pl.allot_key((int)(Keyboard::Key::A),player0->get_let_left());
-    pl.allot_key((int)(Keyboard::Key::S),player0->get_let_down());
-    pl.allot_key((int)(Keyboard::Key::D),player0->get_let_right());
-    pl.allot_key((int)(Keyboard::Key::W),player0->get_let_turn());
-    pl.allot_key((int)(Keyboard::Key::LShift),player0->get_let_drop());
+    pl.allot_key(Keyboard::Key::A,player0->get_let_left());
+    pl.allot_key(Keyboard::Key::S,player0->get_let_down());
+    pl.allot_key(Keyboard::Key::D,player0->get_let_right());
+    pl.allot_key(Keyboard::Key::W,player0->get_let_turn());
+    pl.allot_key(Keyboard::Key::LShift,player0->get_let_drop());
     phase.add_player(std::move(player0));
     switch(arcade)
     {   
         case Arcade::dual :
         {
             auto player1 = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),false);
-            pl.allot_key((int)(Keyboard::Key::Left),player1->get_let_left());
-            pl.allot_key((int)(Keyboard::Key::Down),player1->get_let_down());
-            pl.allot_key((int)(Keyboard::Key::Right),player1->get_let_right());
-            pl.allot_key((int)(Keyboard::Key::Up),player1->get_let_turn());
-            pl.allot_key((int)(Keyboard::Key::RShift),player1->get_let_drop());
+            pl.allot_key(Keyboard::Key::Left,player1->get_let_left());
+            pl.allot_key(Keyboard::Key::Down,player1->get_let_down());
+            pl.allot_key(Keyboard::Key::Right,player1->get_let_right());
+            pl.allot_key(Keyboard::Key::Up,player1->get_let_turn());
+            pl.allot_key(Keyboard::Key::RShift,player1->get_let_drop());
             phase.add_player(std::move(player1));
             break;
         }

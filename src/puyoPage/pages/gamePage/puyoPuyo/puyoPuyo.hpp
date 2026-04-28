@@ -3,7 +3,7 @@
 #include <memory>
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 
 class puyoBoard;
 

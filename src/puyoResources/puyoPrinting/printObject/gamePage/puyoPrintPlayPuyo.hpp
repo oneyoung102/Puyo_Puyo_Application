@@ -7,8 +7,8 @@
 class puyoPrintPlayPuyo : public puyoPrintObject
 {
     private :
-        puyoPlayer& player;
+        const puyoPlayer& player;
     public :
-        puyoPrintPlayPuyo(puyoPlayer& player, sf::Sprite puyo, POSf pos, int life = puyoImageConstant::PRINT_IMMORTAL);
+        puyoPrintPlayPuyo(const puyoPlayer& player, sf::Sprite puyo, POSf pos, int life = puyoImageConstant::PRINT_IMMORTAL);
         void print(sf::RenderWindow& w);
 };

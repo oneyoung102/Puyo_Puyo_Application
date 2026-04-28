@@ -3,6 +3,7 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 #include <vector>
 
@@ -25,7 +26,7 @@ void puyoPrintEnergyPuyo::print(RenderWindow& w)
             case puyoType::yellow :
             case puyoType::green :
             case puyoType::pupple :
-                print_16x16(w,ENERGY_PUYO_POS+POSi((int)puyo,0),pos+energy_puyo.get_pos());
+                print_16x16(w,ENERGY_PUYO_POS+POSi(CASTi(puyo),0),pos+energy_puyo.get_pos());
                 break;
             default :
                 break;

@@ -6,10 +6,11 @@
 #include <queue>
 #include <utility>
 
+#include "puyoTool/puyoDir.hpp"
+
 using namespace std;
 
 puyoBoardVanishControll::puyoBoardVanishControll()
-    : dir({{1, 0}, {-1, 0}, {0, 1}, {0, -1}})
 {}
 
 void puyoBoardVanishControll::add(PUYO_INFO puyo)
@@ -40,7 +41,7 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         }
 }
 
-void puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board, PUYO_INFO puyo)
+void puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board, const PUYO_INFO& puyo)
 {
     const auto[pos,type,tick] = puyo;
     add(puyo);
@@ -51,8 +52,8 @@ void puyoBoardVanishControll::find(puyoBoard& board)
 {
     const auto bsize = board.get_size();
     vector<vector<bool>> visited(bsize.r, vector<bool>(bsize.c, false));
-    for (int i = 0; i < bsize.r; ++i)
-        for (int j = 0; j < bsize.c; ++j)
+    for (size_t i = 0; i < bsize.r; ++i)
+        for (size_t j = 0; j < bsize.c; ++j)
         {
             if(visited[i][j])
                 continue;
@@ -61,8 +62,8 @@ void puyoBoardVanishControll::find(puyoBoard& board)
                 continue;
 
             int other_puyos = 0;
-            vector<tuple<POSi, puyoType>> stored_puyos;
-            queue<POSi> coords;
+            vector<tuple<POSs, puyoType>> stored_puyos;
+            queue<POSs> coords;
             coords.push({j, i});
             while(!coords.empty())
             {
@@ -80,7 +81,7 @@ void puyoBoardVanishControll::find(puyoBoard& board)
                     ++other_puyos;
                     continue;
                 }
-                for (const auto dpos: dir)
+                for (const auto dpos: DIR)
                 {
                     const auto npos = pos+dpos;
                     if (!board.in(npos))

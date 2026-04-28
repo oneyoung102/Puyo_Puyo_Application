@@ -1,4 +1,3 @@
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPuyoVanish.hpp"
 

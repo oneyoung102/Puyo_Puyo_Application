@@ -13,9 +13,9 @@ bool puyoPuyoFourWayMove::test(const puyoBoard& board, puyoPuyo& puyo)
     return !board.touched(POSi(round(x), ceil(y))+dpos) && !board.touched(POSi(round(x), floor(y))+dpos);
 }
 
-puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, POSf delta)
+puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, POSf dpos)
     : puyoPuyoAct(amount)
-    , dpos(delta)
+    , dpos(dpos)
 {}
 
 void puyoPuyoFourWayMove::act(puyoPuyo& puyo)

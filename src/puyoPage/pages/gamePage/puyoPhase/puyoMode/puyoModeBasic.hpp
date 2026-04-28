@@ -6,5 +6,5 @@ class puyoModeBasic : public puyoMode
 {
     public :
         puyoModeBasic();
-        void proceed_mode(puyoPhase& phase, puyoPlayer& player) override;
+        void proceed_mode(puyoPhase& phase, const puyoPlayer& player) override;
 };

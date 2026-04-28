@@ -1,21 +1,23 @@
 #include "puyoBotAlgorithm.hpp"
+#include "puyoTool/puyoCast.hpp"
+#include "puyoTool/puyoDir.hpp"
 #include <random>
 #include <cmath>
 #include <queue>
 
 using namespace std;
 
-vector<pair<int,int>> puyoBotAlgorithm::calc_all_probablities(puyoBoard& board)
+vector<pair<int,int>> puyoBotAlgorithm::calc_all_probablities(const puyoBoard& board)
 {
     vector<pair<int,int>> all_probablities;
     const auto bsize = board.get_size();
     const auto[spawn_x,_] = board.get_spawn_pos();
-    for(int c = 0 ; c < bsize.c ; ++c)
+    for(size_t c = 0 ; c < bsize.c ; ++c)
         for(int t = 0 ; t < 4 ; ++t)//4방위
             all_probablities.push_back(make_pair(c-spawn_x,t));
     return all_probablities;
 }
-tuple<POSi,POSi> puyoBotAlgorithm::to_coord(pair<int,int> probablity, puyoPlayPuyo& puyo)
+tuple<POSi,POSi> puyoBotAlgorithm::to_coord(pair<int,int> probablity, const puyoPlayPuyo& puyo)
 {
     auto[pos1,pos2] = puyo.get_pos();
     const auto[move_count,turn_count] = probablity;
@@ -75,15 +77,15 @@ int puyoBotAlgorithm::get_possiblity(int puyo_count, int sum, int obstruct_puyo)
     const float ratio = (puyo_count+obstruct_puyo)/(sum + 0.0);
     if(ratio < 0.4)
         return 0;
-    const float k = 6.0;  //기울기
-    const float x = ratio - 0.75; //0.75 이후는 확률 100
-    return (int)100/exp(-k * x);
+    const float k = 6.0, x = ratio - 0.75; //0.75 이후는 확률 100
+    return CASTi(100/exp(-k * x));
 }
 
 puyoBotAlgorithm::puyoBotAlgorithm()
     : gen(random_device{}())
-    , dir({{1,0},{-1,0},{0,1},{0,-1}})
-{}
+{
+    act_time = 0;
+}
 
 
 void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
@@ -93,8 +95,8 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
     int puyo_count = 0;
     const auto bsize = board.get_size();
     vector<vector<puyoType>> simulate_board(bsize.r,vector<puyoType>(bsize.c));
-    for(int i = 0 ; i < bsize.r ; ++i)
-        for(int j = 0 ; j < bsize.c ; ++j)
+    for(size_t i = 0 ; i < bsize.r ; ++i)
+        for(size_t j = 0 ; j < bsize.c ; ++j)
         {
             simulate_board[i][j] = board.get_puyo({j, i});
             if(simulate_board[i][j] != puyoType::blank)
@@ -137,7 +139,7 @@ void puyoBotAlgorithm::think_perfect_lets(puyoBoard& board, puyoPlayPuyo& puyo)
                     continue;
                 visited[cpos.r][cpos.c] = true;
                 ++temp_cluster_size;
-                for(const auto dpos : dir)
+                for(const auto dpos : DIR)
                 {
                     const auto npos = cpos+dpos;
                     if(!board.in(npos))
@@ -172,6 +174,13 @@ void puyoBotAlgorithm::let_bot_act()
 {
     if(lets.empty())
         return;
+    if(act_time > 0)
+    {
+        --act_time;
+        return;
+    }
+    else
+        act_time = 80;
     lets.back()();
     lets.pop_back();
 }

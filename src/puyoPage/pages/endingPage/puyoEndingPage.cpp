@@ -93,9 +93,9 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                 "To Menu",
                 pfs.get_font(),
                 TO_MENU_BUTTON_SCALE));
-            pl.allot_key((int)(Keyboard::Key::Enter),[this](){return button_cursor.let_select();});
-            pl.allot_key((int)(Keyboard::Key::Left),[this](){return button_cursor.let_choose_left();});
-            pl.allot_key((int)(Keyboard::Key::Right),[this](){return button_cursor.let_choose_right();});
+            pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
+            pl.allot_key(Keyboard::Key::Left,FUNCFY(button_cursor.let_choose_left));
+            pl.allot_key(Keyboard::Key::Right,FUNCFY(button_cursor.let_choose_right));
             break;
         }
         default :

@@ -25,9 +25,9 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pp.add_print_text(make_unique<puyoPrintTextZoom>(
         TEXT_ARCADE_POS,
         "Select Arcade!!!",
-        TEXT_ARCADE_CYCLE,
         pfs.get_font(),
         TEXT_ARCADE_SIZE,
+        TEXT_ARCADE_CYCLE,
         Color::Green));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
@@ -50,9 +50,9 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         "Bot",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));
-    pl.allot_key((int)(Keyboard::Key::Left),[this](){return button_cursor.let_choose_left();});
-    pl.allot_key((int)(Keyboard::Key::Right),[this](){return button_cursor.let_choose_right();});
-    pl.allot_key((int)(Keyboard::Key::Enter),[this](){return button_cursor.let_select();});
+    pl.allot_key(Keyboard::Key::Left,FUNCFY(button_cursor.let_choose_left));
+    pl.allot_key(Keyboard::Key::Right,FUNCFY(button_cursor.let_choose_right));
+    pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
     convert_page = false;
 }
 puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& window)

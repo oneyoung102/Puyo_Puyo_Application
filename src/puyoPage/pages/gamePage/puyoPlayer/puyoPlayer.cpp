@@ -1,5 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
+#include "puyoPage/puyoLet.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 
 #include <functional>
@@ -25,8 +26,8 @@ puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool playe
 }
 
 int puyoPlayer::get_player_num() const {return player_num;}
-puyoBoard& puyoPlayer::get_board(){return *board;}
-puyoPlayPuyo& puyoPlayer::get_puyo(){return *puyo;}
+puyoBoard& puyoPlayer::get_board() const {return *board;}
+puyoPlayPuyo& puyoPlayer::get_puyo() const {return *puyo;}
 
 const int& puyoPlayer::get_score() const {return score;}
 void puyoPlayer::add_score(int s){score += s;}
@@ -36,17 +37,17 @@ void puyoPlayer::give_new_puyos(pair<puyoType,puyoType> types, int puyo_gravity_
     puyo = std::move(make_unique<puyoPlayPuyo>(board->get_spawn_pos(),types,puyo_gravity_value,puyo_stay_value));
     ++new_puyo_count;
 }
-const int& puyoPlayer::get_new_puyo_count() const{return new_puyo_count;}
+const int& puyoPlayer::get_new_puyo_count() const {return new_puyo_count;}
 
-function<void()> puyoPlayer::get_let_left(){return [this](){return get_puyo().let_left();};}
-function<void()> puyoPlayer::get_let_right(){return [this](){return get_puyo().let_right();};}
-function<void()> puyoPlayer::get_let_down(){return [this](){return get_puyo().let_down();};}
-function<void()> puyoPlayer::get_let_turn(){return [this](){return get_puyo().let_turn();};}
-function<void()> puyoPlayer::get_let_drop(){return [this](){return get_puyo().let_drop();};}
+function<void()> puyoPlayer::get_let_left(){return FUNCFY(get_puyo().let_left);}
+function<void()> puyoPlayer::get_let_right(){return FUNCFY(get_puyo().let_right);}
+function<void()> puyoPlayer::get_let_down(){return FUNCFY(get_puyo().let_down);}
+function<void()> puyoPlayer::get_let_turn(){return FUNCFY(get_puyo().let_turn);}
+function<void()> puyoPlayer::get_let_drop(){return FUNCFY(get_puyo().let_drop);}
 
 void puyoPlayer::signal_puyo_drop(){set_signal(puyoPlayerSignal::puyo_dropped);}
 
-bool puyoPlayer::is_bot() const{return player_is_bot;}
+bool puyoPlayer::is_bot() const {return player_is_bot;}
 void puyoPlayer::act_bot_let() const
 {
     if(bot_algorithm->bot_lets_empty())

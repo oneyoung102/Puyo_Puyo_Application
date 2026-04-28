@@ -3,6 +3,8 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
+#include "puyoTool/puyoDir.hpp"
+
 using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
@@ -14,8 +16,8 @@ void puyoPrintBoard::print(RenderWindow& w)
 {
     const auto bsize = board.get_size();
     
-    for(int i = 0 ; i < bsize.r ; ++i)
-        for(int j = 0 ; j < bsize.c ; ++j)
+    for(size_t i = 0 ; i < bsize.r ; ++i)
+        for(size_t j = 0 ; j < bsize.c ; ++j)
         {
             const auto board_pos = POSf(j, i);
             const puyoType puyo = board.get_puyo(board_pos);
@@ -27,11 +29,10 @@ void puyoPrintBoard::print(RenderWindow& w)
                 case puyoType::green :
                 case puyoType::pupple :
                 {
-                    const int dir = 1*(board.in({j, i+1}) && board.get_puyo({j, i+1}) == puyo)+
-                            2*(board.in({j, i-1}) && board.get_puyo({j, i-1}) == puyo)+
-                            4*(board.in({j+1, i}) && board.get_puyo({j+1, i}) == puyo)+
-                            8*(board.in({j-1, i}) && board.get_puyo({j-1, i}) == puyo);
-                    print_16x16(w,POSi(dir,(int)puyo),pos+board_pos*PUYO_SIZE);
+                    int dir = 0;
+                    for(size_t i = 0 ; i < 4 ; ++i)
+                        dir += (1<<i)*(board.in(board_pos + DIR[i]) && board.get_puyo(board_pos + DIR[i]) == puyo);
+                    print_16x16(w,POSi(dir,static_cast<int>(puyo)),pos+board_pos*PUYO_SIZE);
                     break;
                 }
                 default :

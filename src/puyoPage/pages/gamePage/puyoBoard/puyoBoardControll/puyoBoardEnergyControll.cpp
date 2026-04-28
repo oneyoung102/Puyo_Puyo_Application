@@ -28,7 +28,7 @@ void puyoBoardEnergyControll::fly(puyoBoard& board)
 }
 void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_num)
 {
-    if (temp_energy_puyos.empty())
+    if(temp_energy_puyos.empty())
         return;
     for (const auto [pos, type, tick] : temp_energy_puyos)
     {
@@ -40,7 +40,7 @@ void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_
     temp_energy_puyos.clear();
 }
 
-void puyoBoardEnergyControll::add_temp(PUYO_INFO temp_energy_puyo)
+void puyoBoardEnergyControll::add_temp(const PUYO_INFO& temp_energy_puyo)
 {
     temp_energy_puyos.push_back(temp_energy_puyo);
 }

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-puyoBoard::puyoBoard() : size({6,13}), puyoObjectSignal()
+puyoBoard::puyoBoard() : size(puyoGameConstant::BOARD_BASIC_SIZE), puyoObjectSignal()
 {
     board = vector<vector<puyoType>>(size.r, vector<puyoType>(size.c, puyoType::blank));
 }
@@ -25,9 +25,9 @@ bool puyoBoard::touched(POSi pos) const// 이건 행,열
         || pos.r < 0 && !in_col(pos.c);
 }
 
-puyoType puyoBoard::get_puyo(POSi pos) const {return board[pos.r][pos.c];} // 이건 행,열
-void puyoBoard::insert_puyo(puyoType puyo, POSi pos) {board[pos.r][pos.c] = puyo;} // 이건 행,열
-void puyoBoard::remove_puyo(POSi pos) {board[pos.r][pos.c] = puyoType::blank;} // 이건 행,열
+puyoType puyoBoard::get_puyo(POSs pos) const {return board[pos.r][pos.c];} // 이건 행,열
+void puyoBoard::insert_puyo(puyoType puyo, POSs pos) {board[pos.r][pos.c] = puyo;} // 이건 행,열
+void puyoBoard::remove_puyo(POSs pos) {board[pos.r][pos.c] = puyoType::blank;} // 이건 행,열
 
 bool puyoBoard::empty() const
 {
@@ -36,7 +36,7 @@ bool puyoBoard::empty() const
             return false;
     return true;
 }
-bool puyoBoard::empty(POSi pos) const {return get_puyo(pos) == puyoType::blank;}
+bool puyoBoard::empty(POSs pos) const {return get_puyo(pos) == puyoType::blank;}
 bool puyoBoard::all_cleared(){
     if(!empty())
         return false;
@@ -47,7 +47,7 @@ bool puyoBoard::all_cleared(){
 vector<PUYO_INFO> puyoBoard::to_gravity_puyo()
 {
     vector<PUYO_INFO> gravity_puyos;
-    for(int j = 0 ; j < size.c; ++j)
+    for(size_t j = 0 ; j < size.c; ++j)
     {
         bool floating = false;
         for(int i = size.r-1 ; i >= 0 ; --i)
@@ -72,6 +72,13 @@ puyoBoardScoreControll& puyoBoard::controll_score(){return score_controll;}
 puyoBoardObstructControll& puyoBoard::controll_obstuct(){return obstuct_controll;}
 puyoBoardVanishControll& puyoBoard::controll_vanish(){return vanish_controll;}
 puyoBoardFutureControll& puyoBoard::controll_future(){return future_controll;}
+
+const puyoBoardEnergyControll& puyoBoard::controll_energy() const {return energy_controll;}
+const puyoBoardGravityControll& puyoBoard::controll_gravity() const {return gravity_controll;}
+const puyoBoardScoreControll& puyoBoard::controll_score() const {return score_controll;}
+const puyoBoardObstructControll& puyoBoard::controll_obstuct() const {return obstuct_controll;}
+const puyoBoardVanishControll& puyoBoard::controll_vanish() const {return vanish_controll;}
+const puyoBoardFutureControll& puyoBoard::controll_future() const {return future_controll;}
 
 
 

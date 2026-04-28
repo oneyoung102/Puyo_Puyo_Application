@@ -73,4 +73,6 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 
         int get_win_player_num() const;
         void set_win_player_num(int num);
+
+        puyoPhaseStatement& get_pstate();
 };

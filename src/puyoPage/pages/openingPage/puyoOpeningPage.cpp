@@ -42,13 +42,13 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
         pp.add_print_text(make_unique<puyoPrintTextFlash>(
             TEXT_PRESS_ENTER_POS,
             "Press Enter",
-            TEXT_PRESS_ENTER_CYCLE,
             pfs.get_font(),
             TEXT_PRESS_ENTER_SIZE,
+            TEXT_PRESS_ENTER_CYCLE,
             Color::White,
             Text::Style::Regular));
         opening_printed = true;
-        pl.allot_key((int)(Keyboard::Key::Enter),[this](){return let_start();});
+        pl.allot_key(Keyboard::Key::Enter,FUNCFY(let_start));
     }
     return signal;
 }

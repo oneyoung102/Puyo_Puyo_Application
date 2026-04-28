@@ -13,6 +13,6 @@ class puyoSounding
         puyoSounding();
         void manage_all_sounds();
         void play_sound(sf::SoundBuffer& buffer);
-        void play_music(std::filesystem::path& path);
+        void play_music(const std::filesystem::path& path);
         bool sounds_empty();
 };

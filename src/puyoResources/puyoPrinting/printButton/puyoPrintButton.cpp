@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 using namespace puyoImageConstant;
 
-puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, string content, Font& font, float scaling, sf::Color color, sf::Text::Style style, int life)
+puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, const string& content, const Font& font, float scaling, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
     , selected(selected)
     , sprite(s)

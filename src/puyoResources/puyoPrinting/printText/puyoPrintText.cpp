@@ -5,7 +5,7 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintText::puyoPrintText(POSf pos, string content, Font& font, int size, sf::Color color, sf::Text::Style style, int life)
+puyoPrintText::puyoPrintText(POSf pos, const string& content, const Font& font, int size, sf::Color color, sf::Text::Style style, int life)
     : text(Text(font))
 {
     this->life = life; // life == -1 일 때는 영생

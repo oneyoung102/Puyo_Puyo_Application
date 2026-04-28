@@ -1,6 +1,6 @@
 #pragma once
 
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include <SFML/Graphics.hpp>
 

@@ -3,6 +3,7 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 #include <vector>
 
@@ -32,11 +33,11 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
             {
                 if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
                 {
-                    print_16x16(w,DROPPING_PUYO_POS+POSi((int)type,0),screen_pos-POSf(0,PUYO_SIZE));
-                    print_16x16(w,DROPPING_PUYO_POS+POSi((int)type,1),screen_pos);
+                    print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),0),screen_pos-POSf(0,PUYO_SIZE));
+                    print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),1),screen_pos);
                 }
                 else//gravity
-                    print_16x16(w,GRAVITY_PUYO_POS+POSi((int)type,0),screen_pos);
+                    print_16x16(w,GRAVITY_PUYO_POS+POSi(CASTi(type),0),screen_pos);
                 break;
             }
             default :

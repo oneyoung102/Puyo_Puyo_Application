@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 #include "puyoPrintText.hpp"
 #include <string>
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
@@ -14,7 +14,7 @@ class puyoPrintTextZoom : public puyoPrintText
         int cycle_count;
         bool cycle_back = true;
     public:
-        puyoPrintTextZoom(POSf pos, std::string content, int cycle, sf::Font& font, int size,
+        puyoPrintTextZoom(POSf pos, const std::string& content, const sf::Font& font, int size, int cycle,
             sf::Color color = sf::Color::White, sf::Text::Style style = sf::Text::Style::Bold, int life = puyoImageConstant::PRINT_IMMORTAL);
         virtual void print(sf::RenderWindow& w);
 };

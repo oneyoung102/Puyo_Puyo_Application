@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 using namespace puyoImageConstant;
 using namespace sf;
@@ -21,7 +22,8 @@ bool puyoPrintObject::alive(){return life != 0;}
 
 void puyoPrintObject::print_16x16(RenderWindow& w, POSi img_pos, POSf screen_pos)
 {
-    sprite.setTextureRect(IntRect({(int)img_pos.x*PUYO_SIZE,(int)img_pos.y*PUYO_SIZE}, {PUYO_SIZE, PUYO_SIZE})); 
+    img_pos *= PUYO_SIZE;
+    sprite.setTextureRect(IntRect({img_pos.x,img_pos.y}, {PUYO_SIZE, PUYO_SIZE})); 
     print_sprite(w,screen_pos);
 }
 void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos)
@@ -37,10 +39,10 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos
         case puyoType::mid_bomb :
         case puyoType::big_bomb :
         case puyoType::danger_bomb :
-            print_16x16(w,BOMB_POS-POSi((int)puyoType::tiny_bomb+(int)type,0),screen_pos);
+            print_16x16(w,BOMB_POS+POSi(-CASTi(puyoType::tiny_bomb)+CASTi(type),0),screen_pos);
             break;
         default ://일반 색깔 뿌요
-            print_16x16(w,POSi(0,(int)type),screen_pos);
+            print_16x16(w,POSi(0,CASTi(type)),screen_pos);
             break;
     }
 }

@@ -8,7 +8,7 @@ using namespace sf;
 puyoSounding::puyoSounding(){}
 void puyoSounding::manage_all_sounds()
 {
-    for(int i = 0 ; i < sounds.size() ; )
+    for(size_t i = 0 ; i < sounds.size() ; )
         if(sounds[i]->getStatus() == Sound::Status::Stopped)
         {
             std::swap(sounds[i], sounds.back());
@@ -23,7 +23,7 @@ void puyoSounding::play_sound(SoundBuffer& buffer)
     sounds.back()->play();
 }
 
-void puyoSounding::play_music(filesystem::path& path)
+void puyoSounding::play_music(const filesystem::path& path)
 {
     music = Music(path);
     music.setLooping(true);

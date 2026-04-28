@@ -1,6 +1,6 @@
 #pragma once
 
-#include "puyoPos.hpp"
+#include "puyoTool/puyoPos.hpp"
 #include <SFML/Graphics.hpp>
 
 namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련한 클래스
@@ -29,7 +29,6 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         const auto ENERGY_PUYO_POS = POSi(11,11);//이미지 위치 
 
         const auto BOMB_POS = POSi(12,15); //이미지 위치 ..12~15
-        const auto BOMB_VANISH_POS = POSi(0,5);
 
     //puyo_num.png
         const auto NUM_SIZE = POSi(18,29);
