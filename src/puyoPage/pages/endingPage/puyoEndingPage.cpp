@@ -23,11 +23,10 @@ puyoEndingPage::puyoEndingPage(puyoFileSystem& pfs, int win_player_num, sf::Spri
     : button_cursor(puyoButtonCursor<1,2,buttonName>({{buttonName::replay,buttonName::to_menu}}))
     , win_player_num(win_player_num)
     , arcade(arcade)
+    , proceed_count(0)
 {
     pp.add_print_object(make_unique<puyoPrintObject>(capture_sprite));
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::black_back)));
-    proceed_count = 0;
-    convert_page = false;
 }
 puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
@@ -49,7 +48,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
                     text = "Game Over!";
                     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::lose));
                     break;
-                case Arcade::dual :
+                case Arcade::duel :
                     text = "Player"+to_string(win_player_num+1)+" WIN!!!";
                     ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::victory));
                     break;
@@ -108,6 +107,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         convert_page = button_cursor.get_signal(puyoButtonCursorSignal::select);
         if(convert_page)
         {
+            ps.clear_back();
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::select));
             pl.clear();
         }

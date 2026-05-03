@@ -5,10 +5,10 @@
 using namespace std;
 using namespace sf;
 
-puyoPrintText::puyoPrintText(POSf pos, const string& content, const Font& font, int size, sf::Color color, sf::Text::Style style, int life)
+puyoPrintText::puyoPrintText(POSf pos, const string& content, const Font& font, int size, Color color, Text::Style style, int life)
     : text(Text(font))
+    , life(life)
 {
-    this->life = life; // life == -1 일 때는 영생
     text.setString(content);
     text.setFillColor(color);
     text.setStyle(style);
@@ -20,10 +20,11 @@ puyoPrintText::puyoPrintText(POSf pos, const string& content, const Font& font, 
         bounds.position.x + bounds.size.x / 2.f,
         bounds.position.y + bounds.size.y / 2.f
     });
-    text.setPosition(Vector2f(pos.x,pos.y));
+    text.setPosition({pos.x,pos.y});
 }
 
 bool puyoPrintText::alive(){return life != 0;}
+bool puyoPrintText::is_immortal(){return life == puyoImageConstant::PRINT_IMMORTAL;}
 
 void puyoPrintText::print(RenderWindow& window)
 {

@@ -14,6 +14,7 @@ class puyoPage
         puyoLet pl;
         puyoPrinting pp;
         puyoSounding ps;
+        bool convert_page;
     public :
         puyoPage();
         virtual ~puyoPage() = default;

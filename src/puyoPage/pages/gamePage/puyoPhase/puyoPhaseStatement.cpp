@@ -6,10 +6,9 @@ using namespace std;
 
 
 puyoPhaseStatement::puyoPhaseStatement(int player_count)
-{
-    curr_phases = vector<Phase>(player_count,Phase::play);
-    delay_times = vector<int>(player_count,0);
-}
+    : curr_phases(player_count,Phase::play)
+    , delay_times(player_count,0)
+{}
 
 puyoPhaseStatement::Phase puyoPhaseStatement::get_phase(int player_num) const {return curr_phases[player_num];}
 void puyoPhaseStatement::set_phase(int player_num, Phase phase){curr_phases[player_num] = phase;}

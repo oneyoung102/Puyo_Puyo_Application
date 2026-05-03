@@ -12,7 +12,7 @@ class puyoPrintTextZoom : public puyoPrintText
         int size;
         const int cycle, dsize, dcycle;
         int cycle_count;
-        bool cycle_back = true;
+        bool size_bigger;
     public:
         puyoPrintTextZoom(POSf pos, const std::string& content, const sf::Font& font, int size, int cycle,
             sf::Color color = sf::Color::White, sf::Text::Style style = sf::Text::Style::Bold, int life = puyoImageConstant::PRINT_IMMORTAL);

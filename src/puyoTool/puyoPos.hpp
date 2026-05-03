@@ -13,53 +13,52 @@ class POS
             struct{T c, r;};
         };
 
+        constexpr POS(T x = static_cast<T>(0), T y = static_cast<T>(0))
+            : x(x), y(y)
+        {}
         template<class P>
-        POS(const POS<P>& other)
+        constexpr POS(const POS<P>& other)
+            : x(static_cast<T>(other.x))
+            , y(static_cast<T>(other.y))
         {
             static_assert(std::is_arithmetic<T>() && std::is_arithmetic<P>(),"POS explicit type change is impossible");
-            this->x = static_cast<T>(other.x);
-            this->y = static_cast<T>(other.y);
         }
-        POS(T x = static_cast<T>(0), T y = static_cast<T>(0))
-        {
-            this->x = x;
-            this->y = y;
-        }
-        POS operator+(const POS& other) const { return POS(x + other.x, y + other.y); }
-        POS operator-(const POS& other) const { return POS(x - other.x, y - other.y); }
-        POS operator*(T num) const { return POS(x * num, y * num); }
-        POS operator*(const POS& other) const { return POS(x * other.x, y * other.y); }
-        POS operator/(T num) const
+        
+        constexpr POS operator+(const POS& other) const { return POS(x + other.x, y + other.y); }
+        constexpr POS operator-(const POS& other) const { return POS(x - other.x, y - other.y); }
+        constexpr POS operator*(T num) const { return POS(x * num, y * num); }
+        constexpr POS operator*(const POS& other) const { return POS(x * other.x, y * other.y); }
+        constexpr POS operator/(T num) const
         {
             if(num == 0)
                 throw std::runtime_error("POS zero division is impossible");
             return POS(x / num, y / num);
         }
-        POS operator/(const POS& other) const
+        constexpr POS operator/(const POS& other) const
         {
             if(other == POS())
                 throw std::runtime_error("POS zero division is impossible");
             return POS(x / other.x, y / other.y);
         }
-        POS operator+=(const POS& other)
+        constexpr POS operator+=(const POS& other)
         {
             this->x += other.x;
             this->y += other.y;
             return *this;
         }
-        POS operator-=(const POS& other)
+        constexpr POS operator-=(const POS& other)
         {
             this->x -= other.x;
             this->y == other.y;
             return *this;
         }
-        POS operator*=(T num)
+        constexpr POS operator*=(T num)
         {
             this->x *= num;
             this->y *= num;
             return *this;
         }
-        POS operator/=(T num) const
+        constexpr POS operator/=(T num) const
         {
             if(num == 0)
                 throw std::runtime_error("POS zero division is impossible");
@@ -67,10 +66,12 @@ class POS
             this->y /= num;
             return *this;
         }
-        bool operator<(const POS& other) const { return other.x < this->x && other.y < this->y; }
-        bool operator>(const POS& other) const { return other.x > this->x && other.y > this->y; }
-        bool operator<=(const POS& other) const { return other.x <= this->x && other.y <= this->y; }
-        bool operator>=(const POS& other) const { return other.x >= this->x && other.y >= this->y; }
+        constexpr bool operator==(const POS& other) const { return other.x == this->x && other.y == this->y; }
+        constexpr bool operator!=(const POS& other) const { return other.x != this->x || other.y != this->y; }
+        constexpr bool operator<(const POS& other) const { return other.x < this->x && other.y < this->y; }
+        constexpr bool operator>(const POS& other) const { return other.x > this->x && other.y > this->y; }
+        constexpr bool operator<=(const POS& other) const { return other.x <= this->x && other.y <= this->y; }
+        constexpr bool operator>=(const POS& other) const { return other.x >= this->x && other.y >= this->y; }
 };
 
 using POSs = POS<size_t>;
@@ -78,14 +79,14 @@ using POSi = POS<int>;
 using POSf = POS<float>;
 
 template<std::size_t I, class T>
-auto& get(POS<T>& p)
+constexpr auto& get(POS<T>& p)
 {
     if constexpr (I == 0) return p.x;
     else return p.y;
 }
 
 template<std::size_t I, class T>
-const auto& get(const POS<T>& p)
+constexpr const auto& get(const POS<T>& p)
 {
     if constexpr (I == 0) return p.x;
     else return p.y;

@@ -14,7 +14,8 @@ using namespace sf;
 
 puyoPrintVanishPuyo::puyoPrintVanishPuyo(const vector<puyoPuyo>& vanish_puyos, Sprite puyo, POSf pos, int life)
     : puyoPrintObject(puyo,pos,life)
-    , vanish_puyos(vanish_puyos){}
+    , vanish_puyos(vanish_puyos)
+{}
 
 
 void puyoPrintVanishPuyo::print(RenderWindow& w)
@@ -40,9 +41,9 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
                 if(prop <= puyoGameConstant::VANISH_STAY_PROP)
                     print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
                 else if(prop <= puyoGameConstant::VANISH_SOON_PROP)
-                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
+                    print_16x16(w,VANISH_SOON_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
                 else
-                    print_16x16(w,VANISH_STAY_PUYO_POS+POSi(2*CASTi(puyo),0),screen_pos);
+                    print_16x16(w,VANISH_SOON_PUYO_POS+POSi(2*CASTi(puyo)+1,0),screen_pos);
                 break;
             }
         }

@@ -3,7 +3,8 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/puyoObjectSignal.hpp"
-#include "puyoBotAlgorithm.hpp"
+
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
 
 #include <utility>
 #include <functional>
@@ -26,10 +27,11 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         int new_puyo_count;//새 뿌요를 받은 횟수
 
         const bool player_is_bot;
-        std::unique_ptr<puyoBotAlgorithm> bot_algorithm;
+        std::unique_ptr<puyoBot> bot_algorithm;
 
     public :
-        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board, bool player_is_bot);
+        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board,
+                    bool player_is_bot = false, int model = 1, unsigned int init_act_tick = 0);
 
         int get_player_num() const;
         puyoBoard& get_board() const;

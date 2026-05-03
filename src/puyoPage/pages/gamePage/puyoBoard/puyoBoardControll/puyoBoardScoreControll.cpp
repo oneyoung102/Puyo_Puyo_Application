@@ -4,10 +4,11 @@
 using namespace std;
 
 puyoBoardScoreControll::puyoBoardScoreControll()
-{
-    puyo_count = 0;
-    chain_count = 0;
-}
+    : puyo_count(0)
+    , chain_count(0)
+    , link_count(vector<int>())
+    , color_count(set<puyoType>())
+{}
 
 int puyoBoardScoreControll::get_chain_count() { return chain_count; }
 void puyoBoardScoreControll::add_chain_count(puyoBoard& board)
@@ -27,6 +28,7 @@ vector<int> puyoBoardScoreControll::get_link_count()
     return temp;
 }
 void puyoBoardScoreControll::add_link_count(int count){link_count.push_back(count);}
+void puyoBoardScoreControll::add_link_count(const vector<int>& counts){link_count.insert(link_count.end(), counts.begin(), counts.end());}
 
 int puyoBoardScoreControll::get_color_count()
 {
@@ -35,3 +37,4 @@ int puyoBoardScoreControll::get_color_count()
     return temp;
 }
 void puyoBoardScoreControll::add_color_count(puyoType type){color_count.insert(type);}
+void puyoBoardScoreControll::add_color_count(const vector<puyoType>& types){color_count.insert(types.begin(), types.end());}

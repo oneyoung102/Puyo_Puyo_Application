@@ -7,7 +7,9 @@
 
 using namespace std;
 
-puyoBoard::puyoBoard() : size(puyoGameConstant::BOARD_BASIC_SIZE), puyoObjectSignal()
+puyoBoard::puyoBoard()
+    : size(puyoGameConstant::BOARD_BASIC_SIZE)
+    , puyoObjectSignal()
 {
     board = vector<vector<puyoType>>(size.r, vector<puyoType>(size.c, puyoType::blank));
 }

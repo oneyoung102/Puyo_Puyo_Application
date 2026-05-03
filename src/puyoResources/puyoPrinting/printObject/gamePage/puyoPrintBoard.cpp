@@ -3,6 +3,7 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
+#include "puyoTool/puyoCast.hpp"
 #include "puyoTool/puyoDir.hpp"
 
 using namespace puyoImageConstant;
@@ -11,7 +12,8 @@ using namespace sf;
 
 puyoPrintBoard::puyoPrintBoard(const puyoBoard& board, Sprite puyo, POSf pos, int life)
     : puyoPrintObject(puyo,pos,life)
-    , board(board){}
+    , board(board)
+{}
 void puyoPrintBoard::print(RenderWindow& w)
 {
     const auto bsize = board.get_size();
@@ -30,9 +32,9 @@ void puyoPrintBoard::print(RenderWindow& w)
                 case puyoType::pupple :
                 {
                     int dir = 0;
-                    for(size_t i = 0 ; i < 4 ; ++i)
+                    for(size_t i = 0 ; i < DIR.size() ; ++i)
                         dir += (1<<i)*(board.in(board_pos + DIR[i]) && board.get_puyo(board_pos + DIR[i]) == puyo);
-                    print_16x16(w,POSi(dir,static_cast<int>(puyo)),pos+board_pos*PUYO_SIZE);
+                    print_16x16(w,POSi(dir,CASTi(puyo)),pos+board_pos*PUYO_SIZE);
                     break;
                 }
                 default :

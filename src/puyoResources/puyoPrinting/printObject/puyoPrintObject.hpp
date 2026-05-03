@@ -19,5 +19,6 @@ class puyoPrintObject
         puyoPrintObject(sf::Sprite s, int life = puyoImageConstant::PRINT_IMMORTAL);
         virtual ~puyoPrintObject() = default;
         bool alive();
+        bool is_immortal();
         virtual void print(sf::RenderWindow& w);
 };

@@ -6,7 +6,7 @@ class puyoPuyo;
 class puyoPuyoAct
 {
     protected :
-        const int act_count_init;
+        const int act_count_init, halted;
         int act_count;
 
         virtual bool test(const puyoBoard& board, puyoPuyo& puyo);

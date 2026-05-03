@@ -31,3 +31,10 @@ void puyoSounding::play_music(const filesystem::path& path)
 }
 
  bool puyoSounding::sounds_empty(){return sounds.empty();}
+
+void puyoSounding::clear_back(){sounds.pop_back();}
+bool puyoSounding::back_alive()
+{
+    return !sounds.empty()
+        && sounds.back()->getStatus() == Sound::Status::Playing;
+}

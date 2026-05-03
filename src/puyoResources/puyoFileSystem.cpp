@@ -21,14 +21,14 @@ fs::path puyoFileSystem::getExecutablePath()
         throw runtime_error("Unable to get executable path");
     return fs::canonical(path);
 }
-fs::path puyoFileSystem::getResourcesPath(string resource)
+fs::path puyoFileSystem::getFolderPath(const string& folder)
 {
-    return getExecutablePath().parent_path().parent_path() / ("Resources/assets/"+resource);
+    return getExecutablePath().parent_path().parent_path() / folder;
 }
 
 void puyoFileSystem::getAllTexture()
 {
-    const fs::path imgPath = getResourcesPath("img");
+    const fs::path imgPath = getFolderPath("Resources/assets")/"img";
     vector<fs::path> files;
     for (const auto& entry : fs::directory_iterator(imgPath))
         if (entry.path().extension() == ".png")
@@ -50,14 +50,14 @@ void puyoFileSystem::getAllSprite()
 
 void puyoFileSystem::getFont()
 {
-    const fs::path fontPath = getResourcesPath("font/puyo_font.ttf");
+    const fs::path fontPath = getFolderPath("Resources/assets")/"font/puyo_font.ttf";
     if (!font.openFromFile(fontPath.string()))
         throw runtime_error("Unable to load image");
 }
 
 void puyoFileSystem::getAllSound()
 {
-    const fs::path soundPath = getResourcesPath("sound");
+    const fs::path soundPath = getFolderPath("Resources/assets")/"sound";
     vector<fs::path> files;
     for (const auto& entry : fs::directory_iterator(soundPath))
         if (entry.path().extension() == ".mp3")
@@ -74,7 +74,7 @@ void puyoFileSystem::getAllSound()
 
 void puyoFileSystem::getAllMusicPath()
 {
-    const fs::path soundPath = getResourcesPath("music");
+    const fs::path soundPath = getFolderPath("Resources/assets")/"music";
     for (const auto& entry : fs::directory_iterator(soundPath))
         if (entry.path().extension() == ".mp3")
             musics.push_back(entry.path());

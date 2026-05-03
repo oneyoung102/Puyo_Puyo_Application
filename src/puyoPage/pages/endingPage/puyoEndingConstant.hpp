@@ -6,11 +6,11 @@
 
 namespace puyoEndingConstant
 {
-    const int TEXT_APPEAR_TICK = 300, BUTTON_APPEAR_TICK = 650;
-    const POSf TEXT_WINNER_POS = puyoImageConstant::SCREEN_CENTER+POSf(0,-35);
-    const int TEXT_WINNER_SIZE = 60;
+    constexpr int TEXT_APPEAR_TICK = 300, BUTTON_APPEAR_TICK = 650;
+    constexpr POSf TEXT_WINNER_POS = puyoImageConstant::SCREEN_CENTER+POSf(0,-35);
+    constexpr int TEXT_WINNER_SIZE = 60;
 
-    const POSf REPLAY_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(-85, 70);
-    const POSf TO_MENU_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(85,70);
-    const float REPLAY_BUTTON_SCALE = 1, TO_MENU_BUTTON_SCALE = 1;
+    constexpr POSf REPLAY_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(-85, 70);
+    constexpr POSf TO_MENU_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(85,70);
+    constexpr float REPLAY_BUTTON_SCALE = 1, TO_MENU_BUTTON_SCALE = 1;
 }

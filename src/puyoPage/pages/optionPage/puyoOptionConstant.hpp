@@ -6,13 +6,13 @@
 
 namespace puyoOptionConstant
 {
-    const POSf DIFF_DIAL_BUTTON_POS = puyoImageConstant::SCREEN_CENTER-POSf(130,5);
-    const float DIFF_DIAL_BUTTON_SCALE = 1;
+    constexpr POSf DIFF_DIAL_BUTTON_POS = puyoImageConstant::SCREEN_CENTER-POSf(130,5);
+    constexpr float DIFF_DIAL_BUTTON_SCALE = 1;
 
-    const POSf MODE_DIAL_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(130,-5);
-    const float MODE_DIAL_BUTTON_SCALE = 1;
+    constexpr POSf MODE_DIAL_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(130,-5);
+    constexpr float MODE_DIAL_BUTTON_SCALE = 1;
 
-    const POSf BACK_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(-190,153);
-    const POSf READY_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(190,153);
-    const float BACK_BUTTON_SCALE = 0.9, READY_BUTTON_SCALE = 0.9;
+    constexpr POSf BACK_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(-190,153);
+    constexpr POSf READY_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(190,153);
+    constexpr float BACK_BUTTON_SCALE = 0.9, READY_BUTTON_SCALE = 0.9;
 }

@@ -24,7 +24,9 @@ class puyoBoardScoreControll
 
         std::vector<int> get_link_count();
         void add_link_count(int count);
+        void add_link_count(const std::vector<int>& counts);
 
         int get_color_count();
         void add_color_count(puyoType type);
+        void add_color_count(const std::vector<puyoType>& types);
 };

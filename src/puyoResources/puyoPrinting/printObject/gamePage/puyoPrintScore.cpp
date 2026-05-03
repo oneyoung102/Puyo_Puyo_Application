@@ -9,12 +9,11 @@ using namespace sf;
 
 
 puyoPrintScore::puyoPrintScore(int player_num, const int& score, Sprite num, POSf pos, int life)
-    : puyoPrintObject(num,pos,life),
-        to_score(score)
-{
-    from_score = score;
-    this->player_num = player_num;
-}
+    : puyoPrintObject(num,pos,life)
+    , to_score(score)
+    , from_score(score)
+    , player_num(player_num)
+{}
 
 void puyoPrintScore::print_num(RenderWindow& w, int img_x, POSf screen_pos)
 {
@@ -25,7 +24,8 @@ void puyoPrintScore::print_num(RenderWindow& w, int img_x, POSf screen_pos)
 
 void puyoPrintScore::print(RenderWindow& w)
 {
-    from_score = min(++from_score,to_score);
+    from_score += 3;
+    from_score = min(from_score,to_score);
     int tens = 1e7;
     for(float px = pos.x ; tens != 0 ; tens /= 10)
     {

@@ -13,7 +13,7 @@ enum class Arcade
 {
     NONE,
     solo,
-    dual,
+    duel,
     bot
 };
 enum class Diff

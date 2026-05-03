@@ -9,18 +9,18 @@ using namespace sf;
 puyoPrintTextFlash::puyoPrintTextFlash(POSf pos, const string& content, const Font& font, int size, int cycle, sf::Color color, sf::Text::Style style, int life)
     : puyoPrintText(pos,content,font,size,color,style,life)
     , cycle(cycle)
-{
-    cycle_count = 0;
-    cycle_back = true;
-}
+    , cycle_count(0)
+    , show(true)
+{}
+
 void puyoPrintTextFlash::print(RenderWindow& window)
 {
     if(++cycle_count >= cycle)
     {
-        cycle_back ^= 1;
+        show = !show;
         cycle_count = 0;
     }
-    if(cycle_back)
+    if(show)
         window.draw(text);
     if(alive())
         --life;

@@ -17,7 +17,7 @@ using namespace sf;
 using namespace puyoMenuConstant;
 
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
-    : button_cursor(puyoButtonCursor<1,3,Arcade>({{Arcade::solo,Arcade::dual,Arcade::bot}}))
+    : button_cursor(puyoButtonCursor<1,3,Arcade>({{Arcade::solo,Arcade::duel,Arcade::bot}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),-1));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
@@ -38,9 +38,9 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(Arcade::dual),
-        DUAL_BUTTON_POS,
-        "Dual",
+        button_cursor.get_select_status(Arcade::duel),
+        duel_BUTTON_POS,
+        "duel",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
@@ -53,7 +53,6 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pl.allot_key(Keyboard::Key::Left,FUNCFY(button_cursor.let_choose_left));
     pl.allot_key(Keyboard::Key::Right,FUNCFY(button_cursor.let_choose_right));
     pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
-    convert_page = false;
 }
 puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& window)
 {

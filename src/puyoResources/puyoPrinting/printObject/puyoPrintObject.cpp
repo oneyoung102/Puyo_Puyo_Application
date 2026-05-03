@@ -19,6 +19,7 @@ puyoPrintObject::puyoPrintObject(Sprite s, int life) : sprite(s)
 }
 
 bool puyoPrintObject::alive(){return life != 0;}
+bool puyoPrintObject::is_immortal(){return life == PRINT_IMMORTAL;}
 
 void puyoPrintObject::print_16x16(RenderWindow& w, POSi img_pos, POSf screen_pos)
 {

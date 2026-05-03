@@ -11,19 +11,18 @@ using namespace puyoGameConstant;
 puyoPrintSpawnspot::puyoPrintSpawnspot(int player_num, Sprite puyo, POSf pos, int life)
     : puyoPrintObject(puyo,pos,life)
     , player_num(player_num)
-{
-    spawn_spot_state = 0;
-    spawn_spot_rotate_dir = false;//왼쪽
-}
+    , spawn_spot_state(0)
+    , rotate_dir(LEFT)
+{}
 
 void puyoPrintSpawnspot::print(RenderWindow& w)
 {
     if(spawn_spot_state == SPAWN_SPOT_STATE_MAX*SPAWN_SPOT_CYCLE_TICK-1 || spawn_spot_state == -1)
-        spawn_spot_rotate_dir ^= 1;
+        rotate_dir = ~rotate_dir;
     const auto img_pos = (SPAWN_SPOT_POS+POSi(spawn_spot_state/SPAWN_SPOT_CYCLE_TICK,0))*PUYO_SIZE;
     
     sprite.setTextureRect(IntRect({img_pos.x, img_pos.y}, {PUYO_SIZE, PUYO_SIZE})); 
-    if(spawn_spot_rotate_dir)
+    if(rotate_dir == LEFT)
     {
         sprite.setScale({1, 1});
         ++spawn_spot_state;

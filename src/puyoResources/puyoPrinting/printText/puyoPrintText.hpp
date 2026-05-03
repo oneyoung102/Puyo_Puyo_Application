@@ -15,5 +15,6 @@ class puyoPrintText
             sf::Color color = sf::Color::White, sf::Text::Style style = sf::Text::Style::Bold, int life = puyoImageConstant::PRINT_IMMORTAL);
         virtual ~puyoPrintText() = default;
         bool alive();
+        bool is_immortal();
         virtual void print(sf::RenderWindow& w);
 };

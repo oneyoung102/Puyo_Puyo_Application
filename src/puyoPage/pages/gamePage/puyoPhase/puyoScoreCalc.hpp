@@ -7,7 +7,7 @@ class puyoScoreCalc
     private : 
         int obstruct_puyo_rate;
         int all_cleared_obstruct_puyo;
-        std::vector<int> chain_bonus, link_bonus, color_bonus;
+        const std::vector<int> chain_bonus, link_bonus, color_bonus;
     public : 
         puyoScoreCalc();
         int get_add_score(int puyo, int chain, const std::vector<int>& link, int color);

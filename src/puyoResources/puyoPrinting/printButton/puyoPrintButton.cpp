@@ -12,8 +12,8 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, c
     : text(Text(font))
     , selected(selected)
     , sprite(s)
+    , life(life)
 {
-    this->life = life; // life == -1 일 때는 영생
     text.setString(content);
     text.setFillColor(color);
     text.setStyle(style);
@@ -32,6 +32,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, c
     const auto [X,Y] = sprite.getTexture().getSize();
     img_pos = POSf(X,ceil(Y/2.0));
     sprite.setTextureRect(IntRect({0,0}, {img_pos.x,img_pos.y}));
+    
     auto bounds1 = sprite.getLocalBounds();
     sprite.setOrigin({
         bounds1.position.x + bounds1.size.x / 2.f,
@@ -41,6 +42,7 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, c
 }
 
 bool puyoPrintButton::alive(){return life != 0;}
+bool puyoPrintButton::is_immortal(){return life == puyoImageConstant::PRINT_IMMORTAL;}
 
 void puyoPrintButton::print(RenderWindow& window)
 {

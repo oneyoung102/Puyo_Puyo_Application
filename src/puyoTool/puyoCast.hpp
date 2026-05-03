@@ -1,5 +1,12 @@
 #pragma once
 
-#define CASTi(x) static_cast<int>(x)
-#define CASTf(x) static_cast<float>(x)
-#define CASTs(x) static_cast<size_t>(x)
+#include <cstddef>
+
+template <typename T>
+inline constexpr int CASTi(T x) { return static_cast<int>(x); }
+
+template <typename T>
+inline constexpr float CASTf(T x) { return static_cast<float>(x); }
+
+template <typename T>
+inline constexpr size_t CASTs(T x) { return static_cast<size_t>(x); }

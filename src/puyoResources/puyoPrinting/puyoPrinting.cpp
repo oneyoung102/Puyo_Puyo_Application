@@ -59,3 +59,27 @@ void puyoPrinting::add_print_button(unique_ptr<puyoPrintButton>&& button){print_
 bool puyoPrinting::print_objects_empty(){return print_objects.empty();}
 bool puyoPrinting::print_texts_empty(){return print_texts.empty();}
 bool puyoPrinting::print_buttons_empty(){return print_buttons.empty();}
+
+void puyoPrinting::clear_object_back(){print_objects.pop_back();}
+void puyoPrinting::clear_text_back(){print_texts.pop_back();}
+void puyoPrinting::clear_button_back(){print_buttons.pop_back();}
+
+bool puyoPrinting::object_back_alive()
+{
+    return !print_objects.empty()
+        && print_objects.back()->alive()
+        && !print_objects.back()->is_immortal();
+}
+bool puyoPrinting::text_back_alive()
+{
+    return !print_texts.empty()
+        && print_texts.back()->alive()
+        && !print_texts.back()->is_immortal();
+}
+bool puyoPrinting::button_back_alive()
+{
+    return !print_buttons.empty()
+        && print_buttons.back()->alive()
+        && !print_buttons.back()->is_immortal();
+}
+

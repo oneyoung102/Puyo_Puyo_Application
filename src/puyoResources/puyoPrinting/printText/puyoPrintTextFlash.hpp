@@ -11,7 +11,7 @@ class puyoPrintTextFlash : public puyoPrintText
     private:
         const int cycle;//옵션 주기
         int cycle_count;
-        bool cycle_back;
+        bool show;
     public:
         puyoPrintTextFlash(POSf pos, const std::string& content, const sf::Font& font, int size, int cycle, 
             sf::Color color = sf::Color::White, sf::Text::Style style = sf::Text::Style::Bold, int life = puyoImageConstant::PRINT_IMMORTAL);

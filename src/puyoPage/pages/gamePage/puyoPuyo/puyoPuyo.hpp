@@ -16,8 +16,7 @@ class puyoPuyo
         puyoType type;
         std::unique_ptr<puyoPuyoAct> act;
     public :
-        puyoPuyo(POSf pos, puyoType type, std::unique_ptr<puyoPuyoAct>&& act);
-        puyoPuyo(POSf pos, puyoType type);
+        puyoPuyo(POSf pos, puyoType type, std::unique_ptr<puyoPuyoAct>&& act = nullptr);
 
         void move(POSf to_pos);
 

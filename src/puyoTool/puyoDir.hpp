@@ -1,6 +1,5 @@
 #pragma once
 
-#include "puyoTool/puyoCast.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include <array>
 
@@ -11,8 +10,8 @@ enum Direction : size_t
     RIGHT = 2,
     LEFT = 3
 };
-inline Direction operator~(Direction d)
+inline constexpr Direction operator~(Direction d)
 {
-    return static_cast<Direction>(CASTs(d) ^ 1);
+    return static_cast<Direction>(static_cast<size_t>(d) ^ 1);
 }
-inline const std::array<POSi, 4> DIR = {POSi(0, 1), POSi(0, -1), POSi(1, 0), POSi(-1, 0)};
+inline constexpr const std::array<POSi, 4> DIR = {POSi(0, 1), POSi(0, -1), POSi(1, 0), POSi(-1, 0)};

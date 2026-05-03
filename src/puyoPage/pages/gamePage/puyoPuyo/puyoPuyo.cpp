@@ -5,18 +5,10 @@
 using namespace std;
 
 puyoPuyo::puyoPuyo(POSf pos, puyoType type, unique_ptr<puyoPuyoAct>&& act)
-{  
-    this->pos = pos;
-    this->type = type;
-    this->act = std::move(act);
-}
-puyoPuyo::puyoPuyo(POSf pos, puyoType type)
-{
-    this->pos = pos;
-    this->type = type;
-    this->act = nullptr;
-}
-
+    : pos(pos)
+    , type(type)
+    , act(std::move(act))
+{}
 void puyoPuyo::move(POSf to_pos) {pos = to_pos;}
 
 POSf const puyoPuyo::get_pos() const {return pos;}

@@ -23,12 +23,9 @@ using namespace puyoGameConstant;
 
 puyoPhase::puyoPhase()
     : gen(random_device{}())
-{
-    game_end = false;
-    color_count = 0;
-    win_player_num = NO_WINNER;
-    calc = puyoScoreCalc();
-}
+    , game_end(false)
+    , win_player_num(NO_WINNER)
+{}
 
 pair<puyoType,puyoType> puyoPhase::get_new_puyos (int count)
 {
@@ -130,7 +127,11 @@ void puyoPhase::proceed_gravity(const unique_ptr<puyoPlayer>& player, int& added
     if(cg.empty())
     {             
         auto& cv = board.controll_vanish();
-        cv.find(board); 
+        auto& cs = board.controll_score();
+        const auto [puyo_count, link_count, color_count] = cv.to_vanish_puyo(board); 
+        cs.add_puyo_count(puyo_count);
+        cs.add_link_count(link_count);
+        cs.add_color_count(color_count);
         if(cv.empty()) //파괴할 뿌요가 없으면
         {
             auto& co = board.controll_obstuct();
@@ -247,7 +248,7 @@ void puyoPhase::proceed_game()
         else
             board.controll_energy().clear_temp(); 
 /////////게임 종료
-        if(board.controll_gravity().out())//게임 종료
+        if(board.controll_gravity().out() && board.controll_gravity().empty())//게임 종료
         {
             const int opposite = player_num^1;
             win_player_num = opposite;

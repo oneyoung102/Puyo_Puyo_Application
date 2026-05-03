@@ -29,6 +29,7 @@
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
 #include "puyoPage/puyoLet.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 #include <memory>
 
@@ -37,15 +38,20 @@ using namespace sf;
 using namespace puyoGameConstant;
 using namespace puyoImageConstant;
 
+void puyoGamePage::let_skip(){skip = true;}
+
 puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode mode) 
     : PUYO_SPRITE(pfs.get_sprite(puyoFileSystem::Image::puyo))
     , NUM_SPRITE(pfs.get_sprite(puyoFileSystem::Image::num))
     , BOARD_SPRITE(pfs.get_sprite(puyoFileSystem::Image::board))
+    , NOTICE_SPRITE(pfs.get_sprite(puyoFileSystem::Image::notice))
     , COUNT_DOWN_BACK_SPRITE(pfs.get_sprite(puyoFileSystem::Image::black_back))
+    , skip(false)
+    , status(Status::init)
 {
 
 ////////Arcade
-    auto player0 = make_unique<puyoPlayer>(0, make_unique<puyoBoard>(),false);
+    auto player0 = make_unique<puyoPlayer>(0, make_unique<puyoBoard>());
     pl.allot_key(Keyboard::Key::A,player0->get_let_left());
     pl.allot_key(Keyboard::Key::S,player0->get_let_down());
     pl.allot_key(Keyboard::Key::D,player0->get_let_right());
@@ -54,9 +60,9 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     phase.add_player(std::move(player0));
     switch(arcade)
     {   
-        case Arcade::dual :
+        case Arcade::duel :
         {
-            auto player1 = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),false);
+            auto player1 = make_unique<puyoPlayer>(1, make_unique<puyoBoard>());
             pl.allot_key(Keyboard::Key::Left,player1->get_let_left());
             pl.allot_key(Keyboard::Key::Down,player1->get_let_down());
             pl.allot_key(Keyboard::Key::Right,player1->get_let_right());
@@ -67,7 +73,22 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         }
         case Arcade::bot :
         {
-            auto bot = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),true);
+            unsigned int init_act_tick = 0;
+            switch(diff)
+            {
+                case Diff::easy : 
+                    init_act_tick = EASY_BOT_INIT_ACT_TICK;
+                    break;
+                case Diff::normal :
+                    init_act_tick = NORMAL_BOT_INIT_ACT_TICK;
+                    break;
+                case Diff::hard :
+                    init_act_tick = HARD_BOT_INIT_ACT_TICK;
+                    break;
+                default : 
+                    break;
+            }
+            auto bot = make_unique<puyoPlayer>(1, make_unique<puyoBoard>(),true,2,init_act_tick);
             phase.add_player(std::move(bot));
             break;
         }
@@ -102,12 +123,6 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         const int player_num = player->get_player_num();
         pp.add_print_object(make_unique<puyoPrintObstructViewer>(player->get_board().controll_obstuct().get(),PUYO_SPRITE,OBSTRUCT_VIEWER_POS[player_num]));
     }
-
-//////준비 전 단계
-    pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,BLACK_BACK_TICK)); //검은색 반투명 배경
-    pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Ready?",pfs.get_font(),TEXT_READY_SIZE,Color::White,Text::Style::Bold,TEXT_READY_TICK));
-    ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::ready));
-    ready_status = Ready_status::ready;
 }
 
 ////////////////////신호 받기
@@ -123,7 +138,7 @@ void puyoGamePage::receive_phase_signal(puyoFileSystem& pfs)
             const int chain_count = board.controll_score().get_chain_count();
             pp.add_print_text(make_unique<puyoPrintText>(TEXT_CHAIN_POS[player_num],to_string(chain_count)+" chain",pfs.get_font(),TEXT_CHAIN_SIZE,Color::Red,Text::Style::Bold,TEXT_CHAIN_TICK));
             
-            const int sound_number = min((int)puyoFileSystem::Sound::chain1+chain_count-1,(int)puyoFileSystem::Sound::chain7high);
+            const int sound_number = min(CASTi(puyoFileSystem::Sound::chain1)+chain_count-1,CASTi(puyoFileSystem::Sound::chain7high));
             ps.play_sound(pfs.get_buffer((puyoFileSystem::Sound)sound_number));
         }
         if(board.get_signal(puyoBoardSignal::all_cleared))
@@ -174,33 +189,52 @@ puyoPageSignal puyoGamePage::proceed_page(puyoFileSystem& pfs, RenderWindow& win
     ps.manage_all_sounds();
     pp.print_all_objects(window);
     pp.print_all_texts(window);
-    switch(ready_status)
+    switch(status)
     {
-        case Ready_status::ready :
-            if(pp.print_texts_empty())
+        case Status::init :
+            pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),NOTICE_SPRITE,NOTICE_TICK));
+            status = Status::notice;
+            pl.allot_key(sf::Keyboard::Key::Enter,FUNCFY(let_skip));
+            break;
+        case Status::notice :
+            if(!pp.object_back_alive() || skip)
+            {
+                if(skip)
+                    pp.clear_object_back();
+                pp.add_print_object(make_unique<puyoPrintObject>(COUNT_DOWN_BACK_SPRITE,BLACK_BACK_TICK)); //검은색 반투명 배경
+                pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Ready?",pfs.get_font(),TEXT_READY_SIZE,Color::White,Text::Style::Bold,TEXT_READY_TICK));
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::ready));
+                status = Status::ready;
+                skip = false;
+                pl.clear(sf::Keyboard::Key::Enter);
+            }
+            break;
+        case Status::ready :
+            if(!pp.text_back_alive())
             {
                 pp.add_print_text(make_unique<puyoPrintText>(SCREEN_CENTER,"Start!",pfs.get_font(),60,Color::White,Text::Style::Bold,TEXT_START_TICK));
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::start));
                 ps.play_music(pfs.get_random_music());
-                ready_status = Ready_status::start;
+                status = Status::start;
             }
             break;
-        case Ready_status::start :   
-            if(pp.print_texts_empty())
-                ready_status = Ready_status::play;
+        case Status::start :   
+            if(!pp.text_back_alive())
+                status = Status::play;
             break;
-        case Ready_status::play :
+        case Status::play :
+//////////////게임 진행
             receive_phase_signal(pfs);
             receive_mode_signal(pfs);
-//////////////게임 진행
             phase.proceed_game();
-            if(phase.game_ended())
-            {
-                signal.win_player_num = phase.get_win_player_num();
-                signal.request_capture = true;
-                signal.next_page = Page::ending;
-            }
+            convert_page = phase.game_ended();
             break;
     };
+    if(convert_page)
+    {
+        signal.win_player_num = phase.get_win_player_num();
+        signal.request_capture = true;
+        signal.next_page = Page::ending;
+    }
     return signal;
 }

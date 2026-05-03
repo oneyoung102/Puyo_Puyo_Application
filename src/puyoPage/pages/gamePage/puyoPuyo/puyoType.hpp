@@ -14,3 +14,8 @@ enum class puyoType
     big_bomb,
     danger_bomb,
 };
+
+inline constexpr bool is_colored(puyoType type)
+{
+    return puyoType::red <= type && type <= puyoType::pupple;
+}

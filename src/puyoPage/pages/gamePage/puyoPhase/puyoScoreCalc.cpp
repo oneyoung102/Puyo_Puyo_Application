@@ -5,13 +5,12 @@
 using namespace std;
 
 puyoScoreCalc::puyoScoreCalc()
-{
-    obstruct_puyo_rate = 70;
-    all_cleared_obstruct_puyo = 30;
-    chain_bonus = {0,0,8,16,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512};
-    link_bonus = {0,0,0,0,0,2,3,4,5,6,7,10}; // 11개 이상은 항상 10
-    color_bonus = {0,0,3,6,12,24};
-}
+    : obstruct_puyo_rate(70)
+    , all_cleared_obstruct_puyo(30)
+    , chain_bonus({0,0,8,16,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512})
+    , link_bonus({0,0,0,0,0,2,3,4,5,6,7,10}) // 11개 이상은 항상 10
+    , color_bonus({0,0,3,6,12,24})
+{}
 int puyoScoreCalc::get_add_score(int puyo, int chain, const vector<int>& link, int color)
 {
     int accum = 0;

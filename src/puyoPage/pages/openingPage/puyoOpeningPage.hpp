@@ -8,7 +8,13 @@
 class puyoOpeningPage : public puyoPage
 {
     private :
-        bool opening_printed, opening_end;
+        enum class Status
+        {
+            init,
+            intro,
+            opening
+        };
+        Status status;
         const sf::Sprite SEGA_SPRITE, OPENING_SPRITE;
         void let_start();
     public :

@@ -15,10 +15,11 @@ using namespace puyoImageConstant;
 using namespace puyoOptionConstant;
 
 puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
-    : button_cursor(puyoButtonCursor<2, 2, buttonName>({{buttonName::diff_dial, buttonName::mode_dial},
+    : puyoPage()
+    , button_cursor(puyoButtonCursor<2, 2, buttonName>({{buttonName::diff_dial, buttonName::mode_dial},
                                                                     {buttonName::back, buttonName::ready}}))
-    ,  diff_dial_button_cursor(puyoButtonCursor<1, 3, Diff>({{Diff::easy, Diff::normal, Diff::hard}})),
-      mode_dial_button_cursor(puyoButtonCursor<1, 3, Mode>({{Mode::basic,Mode::speed,Mode::bomb}}))
+    ,  diff_dial_button_cursor(puyoButtonCursor<1, 3, Diff>({{Diff::easy, Diff::normal, Diff::hard}}))
+    ,  mode_dial_button_cursor(puyoButtonCursor<1, 3, Mode>({{Mode::basic,Mode::speed,Mode::bomb}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),puyoImageConstant::PRINT_IMMORTAL));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::option_page));
@@ -95,7 +96,6 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     pl.allot_key(Keyboard::Key::Up,FUNCFY(button_cursor.let_choose_up));
     pl.allot_key(Keyboard::Key::Down,FUNCFY(button_cursor.let_choose_down));
     pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
-    convert_page = false;
 }
 puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &window) {
     puyoPageSignal signal;

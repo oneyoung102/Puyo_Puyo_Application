@@ -10,7 +10,6 @@ class puyoMenuPage : public puyoPage
 {
     private :
         puyoButtonCursor<1,3,Arcade> button_cursor;
-        bool convert_page;
     public :
         puyoMenuPage(puyoFileSystem& pfs);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);

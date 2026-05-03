@@ -4,16 +4,17 @@
 
 #include <optional>
 #include <functional>
-#include <vector>
+#include <array>
 
 class puyoLet
 {
     private :
-        std::vector<std::function<void()>> key_allot;
+        std::array<std::function<void()>, 101> key_allot;
     public :
         puyoLet();
         void act_keyboard_let(const std::optional<sf::Event>& event);
         void allot_key(sf::Keyboard::Key key, std::function<void()> func);
         void clear();
+        void clear(sf::Keyboard::Key key);
 };
 #define FUNCFY(x) [this](){return x();}

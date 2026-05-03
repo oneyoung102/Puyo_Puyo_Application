@@ -18,5 +18,6 @@ class puyoPrintButton
             float scaling = 1.0, sf::Color color = sf::Color::White, sf::Text::Style style = sf::Text::Style::Bold, int life = puyoImageConstant::PRINT_IMMORTAL);
         ~puyoPrintButton() = default;
         bool alive();
+        bool is_immortal();
         virtual void print(sf::RenderWindow& w);
 };

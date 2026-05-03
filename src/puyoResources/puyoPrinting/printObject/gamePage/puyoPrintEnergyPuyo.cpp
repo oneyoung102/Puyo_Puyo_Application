@@ -11,7 +11,10 @@ using namespace puyoImageConstant;
 using namespace std;
 using namespace sf;
 
-puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(const vector<puyoPuyo>& energy_puyos, Sprite puyo, int life) : puyoPrintObject(puyo,life), energy_puyos(energy_puyos){}
+puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(const vector<puyoPuyo>& energy_puyos, Sprite puyo, int life)
+    : puyoPrintObject(puyo,life)
+    , energy_puyos(energy_puyos)
+{}
 
 
 void puyoPrintEnergyPuyo::print(RenderWindow& w)

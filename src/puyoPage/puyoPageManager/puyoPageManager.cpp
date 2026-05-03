@@ -46,8 +46,8 @@ void puyoPageManager::capture_window(sf::RenderWindow& window)
 
 puyoPageManager::puyoPageManager()
     : capture_sprite(Sprite(capture_texture))
+    , signal{Page::opening,Arcade::NONE,Diff::NONE,Mode::NONE,puyoGameConstant::NO_WINNER,false}
 {
-    signal = puyoPageSignal{Page::opening,Arcade::NONE,Diff::NONE,Mode::NONE,puyoGameConstant::NO_WINNER,false};
     change_page(*signal.next_page);
 }
 

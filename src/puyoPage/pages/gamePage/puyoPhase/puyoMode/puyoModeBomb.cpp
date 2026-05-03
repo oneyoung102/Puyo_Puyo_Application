@@ -14,12 +14,11 @@ using namespace puyoGameConstant;
 
 puyoModeBomb::puyoModeBomb(int player_count)
     : gen(random_device()())
+    , bomb_is_spawned(false)
+    , bomb_x(-1)
 {
     std::uniform_int_distribution<> dist(0, player_count-1);
     bomb_have_player_num = dist(gen);
-    bomb_is_spawned = false;
-    bomb_x = -1;
-
 }
 void puyoModeBomb::proceed_mode(puyoPhase& phase, const puyoPlayer& player)
 {
@@ -42,7 +41,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const puyoPlayer& player)
                 for(size_t i = 0 ; i < bsize.r ; ++i)
                     for(size_t j = 0 ; j < bsize.c ; ++j)
                         if(!board.empty(POSi(j, i)))
-                            cv.to_vanish_puyo(board,{POSf(j,i),board.get_puyo(POSi(j, i)), BOARD_BASIC_VANISH_TICK});                                                 
+                            cv.to_vanish_puyo_each(board,{POSf(j,i),board.get_puyo(POSi(j, i)), BOARD_BASIC_VANISH_TICK});                                                 
                 bomb_tick = -1;
                 phase.get_pstate().set_phase(bomb_have_player_num,puyoPhaseStatement::Phase::vanish);
             }
@@ -60,7 +59,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const puyoPlayer& player)
                 const auto puyo = board.get_puyo(POSs(bomb_x, i));
                 if(puyoType::tiny_bomb <= puyo && puyo <= puyoType::danger_bomb)
                 {
-                    cv.to_vanish_puyo(board,{POSf(bomb_x,i),puyo,BOMB_VANISH_TICK});
+                    cv.to_vanish_puyo_each(board,{POSf(bomb_x,i),puyo,BOMB_VANISH_TICK});
                     break;
                 }
             }

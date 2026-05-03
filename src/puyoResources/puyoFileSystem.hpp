@@ -21,8 +21,6 @@ class puyoFileSystem
         std::mt19937 gen;
 
         sf::Font font;
-        std::filesystem::path getExecutablePath();
-        std::filesystem::path getResourcesPath(std::string resource);
 
         void getAllTexture();
         void getAllSprite();
@@ -32,9 +30,13 @@ class puyoFileSystem
         
     public :
         puyoFileSystem();
+        static std::filesystem::path getExecutablePath();
+        static std::filesystem::path getFolderPath(const std::string& folder);
+        
         enum class Image{//이미지 명
             board = 0,
             puyo,
+            notice,
             num,
             sega,
             opening,

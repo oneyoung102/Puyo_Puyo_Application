@@ -22,9 +22,10 @@ puyoPlayPuyo::puyoPlayPuyo(POSf spawn_pos, pair<puyoType,puyoType> types, int gr
     : puyoObjectSignal()
     , gravity_value(gravity_value)
     , stay_value(stay_value)
+    , stay(0)
+    , down_taken(false)
+    , drop_taken(false)
 {
-    stay = 0;
-
     for(size_t i = 0 ; i < 2 ; ++i)
     {
         gravity[i] = std::move(make_unique<puyoPuyoGravity>(gravity_value));
@@ -35,8 +36,6 @@ puyoPlayPuyo::puyoPlayPuyo(POSf spawn_pos, pair<puyoType,puyoType> types, int gr
     play_puyo[0] = std::move(make_unique<puyoPuyo>(spawn_pos,type1));
     spawn_pos.y -= 1;
     play_puyo[1] = std::move(make_unique<puyoPuyo>(spawn_pos,type2));
-    down_taken = false;
-    drop_taken = false;
 }
 
 
