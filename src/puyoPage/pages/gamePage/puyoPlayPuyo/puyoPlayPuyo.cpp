@@ -9,7 +9,7 @@
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 
 #include <utility>
 #include <memory>
@@ -32,7 +32,7 @@ puyoPlayPuyo::puyoPlayPuyo(POSf spawn_pos, pair<puyoType,puyoType> types, int gr
         gravity[i]->let();
     }
 
-    const auto[type1,type2] = types;
+    const auto& [type1,type2] = types;
     play_puyo[0] = std::move(make_unique<puyoPuyo>(spawn_pos,type1));
     spawn_pos.y -= 1;
     play_puyo[1] = std::move(make_unique<puyoPuyo>(spawn_pos,type2));
@@ -91,7 +91,7 @@ int puyoPlayPuyo::get_height(const puyoBoard& board)
 vector<PUYO_INFO> puyoPlayPuyo::to_gravity_puyo(const puyoBoard& board) const
 {
     const auto[pos1,pos2] = get_pos();
-    const auto type1 = play_puyo[0]->get_type(), type2 = play_puyo[1]->get_type();
+    const auto& type1 = play_puyo[0]->get_type(), &type2 = play_puyo[1]->get_type();
     const int tick = sat(board) ? BOARD_FALL_GRAVITY_TICK : PLAYPUYO_DROP_GRAVITY_TICK;
     return {
         {pos1, type1, tick},
@@ -103,12 +103,12 @@ const decltype(puyoPlayPuyo::play_puyo)& puyoPlayPuyo::get(){return play_puyo;}
 
 tuple<POSf,POSf> puyoPlayPuyo::get_pos() const
 {
-    return make_tuple(play_puyo[0]->get_pos(),play_puyo[1]->get_pos());
+    return {play_puyo[0]->get_pos(),play_puyo[1]->get_pos()};
 }
 std::pair<puyoType,puyoType> puyoPlayPuyo::get_type() const
 {
-    const auto type1 = play_puyo[0]->get_type(), type2 = play_puyo[1]->get_type();
-    return make_pair(type1,type2);
+    const auto& type1 = play_puyo[0]->get_type(), &type2 = play_puyo[1]->get_type();
+    return {type1,type2};
 }
 
 bool puyoPlayPuyo::sat(const puyoBoard& board) const

@@ -35,7 +35,7 @@ std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boa
         for(size_t j = 0; j < bsize.c ; ++j)
             if(!board.in_row(i) || board.empty(POSi(j, i)))
             {
-                gravity_puyos.push_back({POSf(j,-obstruct_puyo_height[j] + OBSTRUCT_PUYO_SPAWN_Y), puyoType::obstruct, BOARD_FALL_GRAVITY_TICK});
+                gravity_puyos.push_back({POSf(j,-obstruct_puyo_height[j] + OBSTRUCT_PUYO_SPAWN_Y), puyoType(P_OBSTRUCT), BOARD_FALL_GRAVITY_TICK});
                 ++obstruct_puyo_height[j];
                 --obstruct_puyo;
                 --obstruct_puyo_for_dropping;

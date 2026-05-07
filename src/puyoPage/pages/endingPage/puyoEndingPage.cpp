@@ -107,7 +107,8 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
         convert_page = button_cursor.get_signal(puyoButtonCursorSignal::select);
         if(convert_page)
         {
-            ps.clear_back();
+            if(!ps.sounds_empty())
+                ps.clear_back();
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::select));
             pl.clear();
         }

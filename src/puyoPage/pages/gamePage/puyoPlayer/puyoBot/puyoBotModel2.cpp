@@ -1,7 +1,7 @@
 #include "puyoBotModel2.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
 
 #include <climits>
@@ -159,7 +159,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_column_diversity(const vector<POSi>
         {
             ++count;
             const auto type = simulate_board.get_puyo(POSs(pos.c, r-1));
-            if(type == puyoType::blank)
+            if(type.empty())
                 break;
             if(simulate_board.get_puyo(POSs(pos.c, r)) != type)
                 ++temp_diversity;
@@ -175,7 +175,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_row_height(const vector<POSi>& depl
     const int R = bsize.r, C = bsize.c;
     for(size_t c = 0 ; c < C ; ++c)
         for(size_t r = 0 ; r <= R ; ++r)
-            if(r == R || simulate_board.get_puyo(POSs(c, r)) != puyoType::blank)
+            if(r == R || !simulate_board.get_puyo(POSs(c, r)).empty())
             {
                 row_height_sum += r;
                 break;
@@ -216,7 +216,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_flatness(const vector<POSi>& deploy
                 continue;
             }
             for(size_t r = 0 ; r <= R ; ++r)
-                if(r == R || simulate_board.get_puyo(POSs(c, r)) != puyoType::blank)
+                if(r == R || !simulate_board.get_puyo(POSs(c, r)).empty())
                 {
                     several_flatness += fabs(static_cast<PARAM_TYPE>(r)-pos.r);
                     break;
@@ -243,7 +243,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_isolated(const vector<pair<POSi,puy
                 ++temp_isolated;
                 continue;
             }
-            if(simulate_board.get_puyo(POSs(npos.c, npos.r)) == puyoType::blank)
+            if(simulate_board.get_puyo(POSs(npos.c, npos.r)).empty())
                 --count;
             else if(simulate_board.get_puyo(POSs(npos.c, npos.r)) != type)
                 ++temp_isolated;
@@ -278,7 +278,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::is_activated(PARAM_TYPE value){return v
 void puyoBotModel2::backpropagation(int color_puyo_sum)
 {
     const int dscore = curr_score-prev_score;
-    if(dscore <= simulate_board.get_size().r) // 낙하 점수 보너스로 얻는 점수 변화량 무시
+    if(dscore <= simulate_board.get_size().r || simulate_board.all_cleared()) // 낙하 점수 보너스 또는 올클리어로 얻는 점수 변화량 무시
     {
         prev_score = curr_score;
         return;
@@ -352,7 +352,7 @@ int puyoBotModel2::simulate_chain(POSi simul_drop_pos, int vanish_condition)
             for(size_t c = 0; c < bsize.c; ++c)
             {
                 const puyoType type = board.get_puyo(POSs(c,r));
-                if(type == puyoType::blank || visited[r][c] || !is_colored(type))
+                if(type.empty() || visited[r][c] || !type.is_colored())
                     continue;
 
                 const auto [color_puyo_count, stored_puyos] = board.controll_vanish().fire_cluster(board, POSs(c,r), visited);
@@ -368,7 +368,7 @@ int puyoBotModel2::simulate_chain(POSi simul_drop_pos, int vanish_condition)
     return vanished_puyo;
 }
 
-int puyoBotModel2::get_potential(int vanish_condition)
+int puyoBotModel2::get_potential(int vanish_condition, const std::vector<POSi>& deployed_puyos)
 {
     const auto bsize = simulate_board.get_size();
     int max_potential = 0;
@@ -378,12 +378,18 @@ int puyoBotModel2::get_potential(int vanish_condition)
         size_t drop_r = 0;
         while(drop_r < bsize.r && simulate_board.empty(POSs(c, drop_r)))
             ++drop_r;
-        if(drop_r == bsize.r || !is_colored(simulate_board.get_puyo(POSs(c, drop_r))))
+        if(drop_r == bsize.r || !simulate_board.get_puyo(POSs(c, drop_r)).is_colored())
             continue;
 
         const auto vanish_count = simulate_chain(POSi(c,drop_r), vanish_condition);
         max_potential = max(max_potential, vanish_count);
     } 
+    for(const auto& pos : deployed_puyos)
+        if(simulate_board.in_row(pos.r-1) && !simulate_board.empty(pos+POSi(0,-1)))// 위가 가려진 플레이뿌요 터뜨림
+        {
+            const auto vanish_count = simulate_chain(pos, vanish_condition);
+            max_potential = max(max_potential, vanish_count);
+        }
     return max_potential;
 }
 
@@ -404,7 +410,7 @@ void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
             if(!simulate_board.empty(pos))
             {
                 ++all_puyo_sum;
-                if(is_colored(simulate_board.get_puyo(pos)))
+                if(simulate_board.get_puyo(pos).is_colored())
                     ++color_puyo_sum;
             }
         }
@@ -457,7 +463,7 @@ void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                 best_parameters = current_parameters; 
             }
 
-            const int potential = get_potential(condition);
+            const int potential = get_potential(condition,{pos1,pos2});
             if(potential > max_potential)
                 if(!fire_ask || max_cluster_size >= condition)
                 {

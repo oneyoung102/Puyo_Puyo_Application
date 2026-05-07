@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoPage/puyoObjectSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardEnergyControll.hpp"

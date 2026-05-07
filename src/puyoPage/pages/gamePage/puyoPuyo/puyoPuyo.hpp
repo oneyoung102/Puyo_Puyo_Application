@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
 #include "puyoTool/puyoPos.hpp"
 
@@ -21,7 +21,7 @@ class puyoPuyo
         void move(POSf to_pos);
 
         POSf const get_pos() const;
-        puyoType const get_type() const;
+        puyoType get_type() const;
 
         float const get_state() const;
         int const get_tick() const;

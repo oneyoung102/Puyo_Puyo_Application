@@ -27,11 +27,10 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         int new_puyo_count;//새 뿌요를 받은 횟수
 
         const bool player_is_bot;
-        std::unique_ptr<puyoBot> bot_algorithm;
+        std::unique_ptr<puyoBot> bot_model;
 
     public :
-        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board,
-                    bool player_is_bot = false, int model = 1, unsigned int init_act_tick = 0);
+        puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board, bool player_is_bot = false, int model = 1, unsigned int init_act_tick = 0, const std::vector<std::pair<puyoType,puyoType>>& new_types = {});
 
         int get_player_num() const;
         puyoBoard& get_board() const;

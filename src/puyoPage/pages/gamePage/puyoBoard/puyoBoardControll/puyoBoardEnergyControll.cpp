@@ -30,7 +30,7 @@ void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_
 {
     if(temp_energy_puyos.empty())
         return;
-    for (const auto [pos, type, tick] : temp_energy_puyos)
+    for (const auto& [pos, type, tick] : temp_energy_puyos)
     {
         const POSf screen_pos = PLAYER_BOARD_POS[from_player_num]+pos*PUYO_SIZE;
         energy_puyos.push_back(puyoPuyo(screen_pos, type

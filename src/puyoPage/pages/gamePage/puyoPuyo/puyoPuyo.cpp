@@ -12,7 +12,7 @@ puyoPuyo::puyoPuyo(POSf pos, puyoType type, unique_ptr<puyoPuyoAct>&& act)
 void puyoPuyo::move(POSf to_pos) {pos = to_pos;}
 
 POSf const puyoPuyo::get_pos() const {return pos;}
-puyoType const puyoPuyo::get_type() const {return type;}
+puyoType puyoPuyo::get_type() const {return type;}
 
 int const puyoPuyo::get_tick() const
 {

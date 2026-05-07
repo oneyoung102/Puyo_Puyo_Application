@@ -3,7 +3,7 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include <vector>
 #include <utility>
@@ -60,7 +60,7 @@ class puyoBotModel2 : public puyoBot
         void backpropagation(int color_puyo_sum);
 
         int simulate_chain(POSi simul_droos, int vanish_condition);
-        int get_potential(int vanish_condition);
+        int get_potential(int vanish_condition, const std::vector<POSi>& deployed_puyos);
     public :
         puyoBotModel2(const int& curr_score, POSi bsize, unsigned int act_time_unit = 0);     
         ~puyoBotModel2() override; 

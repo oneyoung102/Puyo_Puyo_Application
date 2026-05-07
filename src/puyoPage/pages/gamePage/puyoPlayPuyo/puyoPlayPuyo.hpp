@@ -9,7 +9,7 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 #include "puyoPage/puyoObjectSignal.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include "puyoTool/puyoDir.hpp"
 

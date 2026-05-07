@@ -38,13 +38,14 @@ void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
         const auto [pos1,pos2] = simulate_drop({{temp_pos1,type1},{temp_pos2,type2}});
         if(board.in(pos1) && board.in(pos2))
         {
-            simulate_board.insert_puyo(type1, POSs(pos1.c, pos1.r));
-            simulate_board.insert_puyo(type2, POSs(pos2.c, pos2.r));
+            simulate_board.insert_puyo(type1, pos1);
+            simulate_board.insert_puyo(type2, pos2);
+
             int cluster_size = 0, cluster_size_sum = 0;
             vector<vector<bool>> visited(bsize.r,vector<bool>(bsize.c,false));
             vector<pair<POSi,puyoType>> changed;
-            changed.push_back({temp_pos1,type1});
-            changed.push_back({temp_pos2,type2});
+            changed.push_back({pos1,type1});
+            changed.push_back({pos2,type2});
 
             for(const auto[pos,curr_puyo] : changed)
             {
@@ -73,7 +74,7 @@ void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                 cluster_size_sum += temp_cluster_size;
             }
             
-            const int temp_bottom_y = max(temp_pos1.y,temp_pos2.y);
+            const int temp_bottom_y = max(pos1.y,pos2.y);
             if(cluster_size < board.controll_vanish().get_condition()|| fire_chain)
                 if(max_cluster_size < cluster_size
                 || max_cluster_size == cluster_size && max_cluster_size_sum < cluster_size_sum
@@ -85,8 +86,8 @@ void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                     bottom_y = temp_bottom_y;
                 }
         }
-        simulate_board.remove_puyo(POSs(temp_pos1.c, temp_pos1.r)); //복구
-        simulate_board.remove_puyo(POSs(temp_pos2.c, temp_pos2.r));
+        simulate_board.remove_puyo(pos1); //복구
+        simulate_board.remove_puyo(pos2);
     }
     to_let(perfect_probablity,const_cast<puyoPlayPuyo&>(puyo));
 }

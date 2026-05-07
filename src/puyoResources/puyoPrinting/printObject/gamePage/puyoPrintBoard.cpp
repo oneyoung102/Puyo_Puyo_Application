@@ -22,23 +22,26 @@ void puyoPrintBoard::print(RenderWindow& w)
         for(size_t j = 0 ; j < bsize.c ; ++j)
         {
             const auto board_pos = POSf(j, i);
-            const puyoType puyo = board.get_puyo(board_pos);
-            switch(puyo)
+            const auto puyo_type = board.get_puyo(board_pos);
+            if(puyo_type.empty())
+                continue;
+            const auto type = puyo_type.get();
+            switch(type)
             {
-                case puyoType::blue :
-                case puyoType::red :
-                case puyoType::yellow :
-                case puyoType::green :
-                case puyoType::pupple :
+                case _puyoType::Type::blue :
+                case _puyoType::Type::red :
+                case _puyoType::Type::yellow :
+                case _puyoType::Type::green :
+                case _puyoType::Type::pupple :
                 {
                     int dir = 0;
                     for(size_t i = 0 ; i < DIR.size() ; ++i)
-                        dir += (1<<i)*(board.in(board_pos + DIR[i]) && board.get_puyo(board_pos + DIR[i]) == puyo);
-                    print_16x16(w,POSi(dir,CASTi(puyo)),pos+board_pos*PUYO_SIZE);
+                        dir += (1<<i)*(board.in(board_pos + DIR[i]) && board.get_puyo(board_pos + DIR[i]) == puyo_type);
+                    print_16x16(w,POSi(dir,CASTi(type)),pos+board_pos*PUYO_SIZE);
                     break;
                 }
                 default :
-                    print_puyo(w,puyo,pos+board_pos*PUYO_SIZE);
+                    print_puyo(w,puyo_type,pos+board_pos*PUYO_SIZE);
                     break;
             }
         }

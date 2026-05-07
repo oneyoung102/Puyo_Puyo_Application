@@ -40,7 +40,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::duel),
         duel_BUTTON_POS,
-        "duel",
+        "Duel",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(

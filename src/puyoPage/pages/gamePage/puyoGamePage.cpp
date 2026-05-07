@@ -3,6 +3,7 @@
 #include "puyoGamePage.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
+
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
@@ -51,6 +52,8 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
 {
 
 ////////Arcade
+    // auto bot = make_unique<puyoPlayer>(0, make_unique<puyoBoard>(),true,1,NORMAL_BOT_INIT_ACT_TICK);
+    // phase.add_player(std::move(bot));
     auto player0 = make_unique<puyoPlayer>(0, make_unique<puyoBoard>());
     pl.allot_key(Keyboard::Key::A,player0->get_let_left());
     pl.allot_key(Keyboard::Key::S,player0->get_let_down());

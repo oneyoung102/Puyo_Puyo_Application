@@ -2,7 +2,7 @@
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 
 using namespace std;
@@ -11,7 +11,7 @@ puyoBoard::puyoBoard()
     : size(puyoGameConstant::BOARD_BASIC_SIZE)
     , puyoObjectSignal()
 {
-    board = vector<vector<puyoType>>(size.r, vector<puyoType>(size.c, puyoType::blank));
+    board = vector<vector<puyoType>>(size.r, vector<puyoType>(size.c, puyoType()));
 }
 
 POSf puyoBoard::get_spawn_pos() const {return spawn_pos;}
@@ -29,16 +29,16 @@ bool puyoBoard::touched(POSi pos) const// 이건 행,열
 
 puyoType puyoBoard::get_puyo(POSs pos) const {return board[pos.r][pos.c];} // 이건 행,열
 void puyoBoard::insert_puyo(puyoType puyo, POSs pos) {board[pos.r][pos.c] = puyo;} // 이건 행,열
-void puyoBoard::remove_puyo(POSs pos) {board[pos.r][pos.c] = puyoType::blank;} // 이건 행,열
+void puyoBoard::remove_puyo(POSs pos) {board[pos.r][pos.c] = puyoType();} // 이건 행,열
 
 bool puyoBoard::empty() const
 {
-    for (const auto puyo : board.back())
-        if (puyo != puyoType::blank)
+    for (const auto& puyo : board.back())
+        if(puyo.empty())
             return false;
     return true;
 }
-bool puyoBoard::empty(POSs pos) const {return get_puyo(pos) == puyoType::blank;}
+bool puyoBoard::empty(POSs pos) const {return board[pos.r][pos.c].empty();}
 bool puyoBoard::all_cleared(){
     if(!empty())
         return false;

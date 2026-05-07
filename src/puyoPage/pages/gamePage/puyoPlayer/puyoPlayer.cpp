@@ -1,38 +1,38 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
-#include "puyoPage/puyoLet.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
-
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBotModel1.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBotModel2.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBotModel3.hpp"
 
 #include <functional>
 
 using namespace std;
 
-puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick)
+puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick, const std::vector<std::pair<puyoType,puyoType>>& new_types)
     : board(std::move(board))
     , puyoObjectSignal()
     , player_num(player_num)
     , player_is_bot(player_is_bot)
     , score(0)
     , new_puyo_count(0)
-    , bot_algorithm(nullptr)
 {
     if(player_num != 0 && player_num != 1)
         throw runtime_error("Player number is neither 0 nor 1");
-    if(player_is_bot)
-        switch(model)
-        {
-            case 1 : 
-                bot_algorithm = std::move(make_unique<puyoBotModel1>(this->board->get_size(),init_act_tick));
-                break;
-            case 2 : 
-                bot_algorithm = std::move(make_unique<puyoBotModel2>(score,this->board->get_size(),init_act_tick));
-                break;
-            default : 
-                throw runtime_error("Bot model is invalid");
-        }
+    switch(model)
+    {
+        case 1 :
+            bot_model = make_unique<puyoBotModel1>(this->board->get_size(), init_act_tick);
+            break;
+        case 2 :
+            bot_model = make_unique<puyoBotModel2>(score,this->board->get_size(), init_act_tick);
+            break;
+        case 3 :
+            bot_model = make_unique<puyoBotModel3>(new_types,new_puyo_count, this->board->get_size(), init_act_tick);
+            break;
+        default :
+            throw runtime_error("Model number is not 1, 2, or 3");
+    }
 }
 
 int puyoPlayer::get_player_num() const {return player_num;}
@@ -60,8 +60,8 @@ void puyoPlayer::signal_puyo_drop(){set_signal(puyoPlayerSignal::puyo_dropped);}
 bool puyoPlayer::is_bot() const {return player_is_bot;}
 void puyoPlayer::act_bot_let() const
 {
-    if(bot_algorithm->bot_lets_empty())
-        bot_algorithm->think_perfect_lets(*board, *puyo);
+    if(bot_model->bot_lets_empty())
+        bot_model->think_perfect_lets(*board, *puyo);
     else if(!puyo->moving())
-        bot_algorithm->let_bot_act();
+        bot_model->let_bot_act();
 }

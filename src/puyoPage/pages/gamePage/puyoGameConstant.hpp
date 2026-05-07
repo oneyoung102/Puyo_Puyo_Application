@@ -29,6 +29,8 @@ namespace puyoGameConstant
     constexpr std::array<int,7> OBSTRUCT_VIEWER_UNIT = {1,6,30,180,360,720,1440};
     constexpr int OBSTRUCT_VIEWER_UPPER = 6;
 
+    constexpr int NEXT_PUYO_COUNT_DISPLAY = 2;
+
     constexpr int NO_WINNER = -1;
 
     //delay
@@ -46,7 +48,7 @@ namespace puyoGameConstant
     //모드
     constexpr int BOMB_VANISH_TICK = 100;
     constexpr int BOMB_MAX_TICK = 16000;//0이면 안 됨
-    constexpr int BOMB_UPDATED1 = 10000, BOMB_UPDATED2 = 5000, BOMB_UPDATED3 = 1600;
+    constexpr float BOMB_UPDATED1 = 0.6, BOMB_UPDATED2 = 0.3, BOMB_UPDATED3 = 0.1;
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
 
 

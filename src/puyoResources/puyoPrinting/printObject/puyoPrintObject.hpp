@@ -1,6 +1,6 @@
 #pragma once
 
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include <SFML/Graphics.hpp>

@@ -1,4 +1,5 @@
 #include "puyoBot.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoTool/puyoDir.hpp"
 #include "puyoTool/puyoCast.hpp"
 #include <algorithm>
@@ -8,14 +9,14 @@ using namespace std;
 
 bool puyoBot::get_fire(int puyo_count, int obstruct_puyo)
 {
-    if(puyo_count == 2)// puyo_count == 2일 때 같은 색 새로운 2개 뿌요가 들어온다면 all clear
+    if(obstruct_puyo >= puyoGameConstant::OBSTRUCT_PUYO_MID)
         return true;
     const auto bsize = simulate_board.get_size();
     const float ratio = (puyo_count+obstruct_puyo)/CASTf(bsize.r * bsize.c);
     if(ratio < 0.4)
         return false;
-    const float k = 6.5, x = ratio - 0.70; //0.70 이후는 확률 100
 
+    const float k = 6.5, x = ratio - 0.70; //0.70 이후는 확률 100
     uniform_int_distribution<> dist(0,99);
     return dist(gen) < CASTi(100/exp(-k * x));
 }
@@ -55,15 +56,15 @@ pair<POSi,POSi> puyoBot::simulate_drop(const vector<pair<POSi,puyoType>>& puyos)
         auto& [pos, type] = temp_puyos[i];
         while(pos.r + 1 < simulate_board.get_size().r)
         {
-            if(pos.r + 1 >= 0 && simulate_board.get_puyo(POSs(pos.c, pos.r + 1)) != puyoType::blank)
+            if(pos.r + 1 >= 0 && !simulate_board.empty(pos+POSi(0,1)))
                 break;
             ++pos.r;
         }
         if(i == 0 && pos.r >= 0)
-            simulate_board.insert_puyo(type, POSs(pos.c, pos.r));
+            simulate_board.insert_puyo(type, pos);
     }
     if(temp_puyos[0].first.r >= 0)
-        simulate_board.remove_puyo(POSs(temp_puyos[0].first.c, temp_puyos[0].first.r));
+        simulate_board.remove_puyo(temp_puyos[0].first);
 
     if(swapped)
         swap(temp_puyos[0],temp_puyos[1]);

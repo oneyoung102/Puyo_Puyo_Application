@@ -7,7 +7,7 @@ puyoBoardScoreControll::puyoBoardScoreControll()
     : puyo_count(0)
     , chain_count(0)
     , link_count(vector<int>())
-    , color_count(set<puyoType>())
+    , color_count(set<_puyoType::Type>())
 {}
 
 int puyoBoardScoreControll::get_chain_count() { return chain_count; }
@@ -36,5 +36,5 @@ int puyoBoardScoreControll::get_color_count()
     color_count.clear();
     return temp;
 }
-void puyoBoardScoreControll::add_color_count(puyoType type){color_count.insert(type);}
-void puyoBoardScoreControll::add_color_count(const vector<puyoType>& types){color_count.insert(types.begin(), types.end());}
+void puyoBoardScoreControll::add_color_count(_puyoType::Type type){color_count.insert(type);}
+void puyoBoardScoreControll::add_color_count(const vector<_puyoType::Type>& types){color_count.insert(types.begin(), types.end());}

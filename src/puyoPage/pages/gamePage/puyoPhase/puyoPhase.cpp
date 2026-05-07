@@ -7,6 +7,10 @@
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
+
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/_puyoType.hpp"
+
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
@@ -29,11 +33,13 @@ puyoPhase::puyoPhase()
 
 pair<puyoType,puyoType> puyoPhase::get_new_puyos (int count)
 {
-    while(new_types.size() < count+3)//다음에 나올 뿌요를 보여주기 위해 +3
+    while(new_types.size() < count+1+NEXT_PUYO_COUNT_DISPLAY) //다음에 나올 뿌요를 보여주기 위해 NEXT_PUYO_COUNT_DISPLAY개수 더 더하기
     {
         uniform_int_distribution<> dist1(0, color_count-1);
         uniform_int_distribution<> dist2(0, color_count-1);
-        new_types.push_back(make_pair((puyoType)dist1(gen),(puyoType)dist2(gen)));
+        new_types.push_back({
+            puyoType(make_unique<puyoColor>((_puyoType::Type)dist1(gen))),
+            puyoType(make_unique<puyoColor>((_puyoType::Type)dist2(gen)))});
     }
     return new_types[count];
 }

@@ -1,6 +1,7 @@
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
 #include <SFML/Graphics.hpp>
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoTool/puyoCast.hpp"
 
@@ -29,21 +30,24 @@ void puyoPrintObject::print_16x16(RenderWindow& w, POSi img_pos, POSf screen_pos
 }
 void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos)
 {
-    switch(type)
+    if(type.empty())
+        return;
+    switch(type.get())
     {
-        case puyoType::blank :
-            break;
-        case puyoType::obstruct : 
+        case _puyoType::Type::obstruct : 
             print_16x16(w,OBSTRUCT_PUYO_POS,screen_pos);
             break;
-        case puyoType::tiny_bomb :
-        case puyoType::mid_bomb :
-        case puyoType::big_bomb :
-        case puyoType::danger_bomb :
-            print_16x16(w,BOMB_POS+POSi(-CASTi(puyoType::tiny_bomb)+CASTi(type),0),screen_pos);
+        case _puyoType::Type::bomb :
+        {
+            const float state = type.get_bomb_state();
+            const int idx = (state <= puyoGameConstant::BOMB_UPDATED1)
+                            +(state <= puyoGameConstant::BOMB_UPDATED2)
+                            +(state <= puyoGameConstant::BOMB_UPDATED3);  
+            print_16x16(w,BOMB_POS-POSi(idx,0),screen_pos);
             break;
+        }
         default ://일반 색깔 뿌요
-            print_16x16(w,POSi(0,CASTi(type)),screen_pos);
+            print_16x16(w,POSi(0,CASTi(type.get())),screen_pos);
             break;
     }
 }
