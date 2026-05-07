@@ -23,9 +23,13 @@ class puyoType
         bool is_linkable(const puyoType& other) const;
         bool empty() const;
 
-        int get_bomb_state() const;
+        float get_bomb_state() const;
         void proceed_bomb();
         bool is_exploded() const;
+
+        void freeze();
+        void unfreeze();
+        bool is_frozen() const;
 };
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoColor.hpp"

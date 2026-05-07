@@ -32,6 +32,11 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos
 {
     if(type.empty())
         return;
+    if(type.is_frozen())
+    {
+        print_16x16(w,FROZEN_PUYO_POS,screen_pos);
+        return;
+    }
     switch(type.get())
     {
         case _puyoType::Type::obstruct : 
@@ -39,11 +44,11 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos
             break;
         case _puyoType::Type::bomb :
         {
-            const float state = type.get_bomb_state();
-            const int idx = (state <= puyoGameConstant::BOMB_UPDATED1)
-                            +(state <= puyoGameConstant::BOMB_UPDATED2)
-                            +(state <= puyoGameConstant::BOMB_UPDATED3);  
-            print_16x16(w,BOMB_POS-POSi(idx,0),screen_pos);
+            const auto state = type.get_bomb_state();
+            const int idx = (state >= puyoGameConstant::BOMB_UPDATED1)
+                            +(state >= puyoGameConstant::BOMB_UPDATED2)
+                            +(state >= puyoGameConstant::BOMB_UPDATED3);  
+            print_16x16(w,BOMB_POS+POSi(idx,0),screen_pos);
             break;
         }
         default ://일반 색깔 뿌요

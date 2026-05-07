@@ -42,10 +42,13 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
 
 void puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo)
 {
-    const auto[pos,type,tick] = puyo;
+    const auto [pos,type,tick] = puyo;
     add(puyo);
     board.controll_energy().add_temp({pos, type, puyoGameConstant::BOARD_FLY_TICK});
-    board.remove_puyo(pos);
+    if(type.is_frozen())
+        board.ref_puyo(pos).unfreeze();
+    else 
+        board.remove_puyo(pos);
 }
 pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, POSs fire_pos, vector<vector<bool>>& visited)
 {
@@ -66,7 +69,7 @@ pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(con
         const puyoType curr_puyo = board.get_puyo(pos);
         stored_puyos.push_back(make_tuple(pos, curr_puyo));
         
-        if(curr_puyo == puyoType(P_OBSTRUCT))
+        if(!curr_puyo.is_colored())
         {
             ++other_puyos;
             continue;

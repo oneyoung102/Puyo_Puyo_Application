@@ -10,7 +10,7 @@ class puyoColor : public _puyoType
     private :
         static const std::vector<Type> links;
     public :
-        puyoColor(Type color);
+        puyoColor(Type color, bool is_frozen = false);
         std::unique_ptr<_puyoType> clone() const override;
         bool is_colored() const override;
 

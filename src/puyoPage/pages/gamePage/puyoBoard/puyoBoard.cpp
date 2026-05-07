@@ -20,21 +20,22 @@ void puyoBoard::set_spawn_pos(POSf pos){spawn_pos = pos;};
 POSi puyoBoard::get_size() const {return size;}
 bool puyoBoard::in_row(int r) const { return 0 <= r && r < size.r; }
 bool puyoBoard::in_col(int c) const { return 0 <= c && c < size.c; }
-bool puyoBoard::in(POSi pos) const {return in_row(pos.r) && in_col(pos.c);} // 이건 행,열
-bool puyoBoard::touched(POSi pos) const// 이건 행,열
+bool puyoBoard::in(POSi pos) const {return in_row(pos.r) && in_col(pos.c);}
+bool puyoBoard::touched(POSi pos) const
 {
     return pos.r >= 0 && (!in(pos) || !empty(pos))
         || pos.r < 0 && !in_col(pos.c);
 }
 
-puyoType puyoBoard::get_puyo(POSs pos) const {return board[pos.r][pos.c];} // 이건 행,열
-void puyoBoard::insert_puyo(puyoType puyo, POSs pos) {board[pos.r][pos.c] = puyo;} // 이건 행,열
-void puyoBoard::remove_puyo(POSs pos) {board[pos.r][pos.c] = puyoType();} // 이건 행,열
+puyoType puyoBoard::get_puyo(POSs pos) const {return board[pos.r][pos.c];}
+puyoType& puyoBoard::ref_puyo(POSs pos) {return board[pos.r][pos.c];}
+void puyoBoard::insert_puyo(puyoType puyo, POSs pos) {board[pos.r][pos.c] = puyo;}
+void puyoBoard::remove_puyo(POSs pos) {board[pos.r][pos.c] = puyoType();}
 
 bool puyoBoard::empty() const
 {
     for (const auto& puyo : board.back())
-        if(puyo.empty())
+        if(!puyo.empty())
             return false;
     return true;
 }

@@ -49,9 +49,10 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         bool in(POSi pos) const;
         bool touched(POSi pos) const;
 
-        puyoType get_puyo(POSs pos) const;//이건 행,열
-        void insert_puyo(puyoType puyo, POSs pos);//이건 행,열
-        void remove_puyo(POSs pos);//이건 행,열
+        puyoType get_puyo(POSs pos) const;
+        puyoType& ref_puyo(POSs pos);
+        void insert_puyo(puyoType puyo, POSs pos);
+        void remove_puyo(POSs pos);
         bool empty() const;
         bool empty(POSs pos) const;
         bool all_cleared();

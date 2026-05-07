@@ -2,15 +2,15 @@
 
 using namespace std;
 
-puyoColor::puyoColor(Type color)
+puyoColor::puyoColor(Type color, bool is_frozen)
     : _puyoType(
         Type::red <= color && color <= Type::pupple
         ? color
-        : throw runtime_error("Invalid color"))
+        : throw runtime_error("Invalid color"), is_frozen)
 {}
 const vector<_puyoType::Type> puyoColor::links = {_puyoType::Type::obstruct};
 
-std::unique_ptr<_puyoType> puyoColor::clone() const {return std::make_unique<puyoColor>(this->type);}
+std::unique_ptr<_puyoType> puyoColor::clone() const {return std::make_unique<puyoColor>(this->type,_is_frozen);}
 bool puyoColor::is_colored() const {return true;}
 
 bool puyoColor::is_linkable(const _puyoType& other) const

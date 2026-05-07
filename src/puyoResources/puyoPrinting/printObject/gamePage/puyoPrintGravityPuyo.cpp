@@ -31,16 +31,17 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
             case _puyoType::Type::yellow :
             case _puyoType::Type::green :
             case _puyoType::Type::pupple :
-            {
-                if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
+                if(!puyo_type.is_frozen()) //의도적으로 break 안 함
                 {
-                    print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),0),screen_pos-POSf(0,PUYO_SIZE));
-                    print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),1),screen_pos);
+                    if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
+                    {
+                        print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),0),screen_pos-POSf(0,PUYO_SIZE));
+                        print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),1),screen_pos);
+                    }
+                    else//gravity
+                        print_16x16(w,GRAVITY_PUYO_POS+POSi(CASTi(type),0),screen_pos);
+                    break;
                 }
-                else//gravity
-                    print_16x16(w,GRAVITY_PUYO_POS+POSi(CASTi(type),0),screen_pos);
-                break;
-            }
             default :
                 print_puyo(w,puyo_type,screen_pos);
                 break;

@@ -6,7 +6,7 @@
 class puyoObstruct : public _puyoType
 {
     public :
-        puyoObstruct();
+        puyoObstruct(bool is_frozen = false);
         std::unique_ptr<_puyoType> clone() const override;
         bool is_colored() const override;
         bool is_linkable(const _puyoType& other) const override;

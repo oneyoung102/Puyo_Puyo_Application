@@ -29,6 +29,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         constexpr auto ENERGY_PUYO_POS = POSi(11,11);//이미지 위치 
 
         constexpr auto BOMB_POS = POSi(12,15); //이미지 위치 ..12~15
+        constexpr auto FROZEN_PUYO_POS = POSi(13,9); //13~15
 
     //puyo_num.png
         constexpr auto NUM_SIZE = POSi(18,29);

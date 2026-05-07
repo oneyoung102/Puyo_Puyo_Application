@@ -48,8 +48,9 @@ namespace puyoGameConstant
     //모드
     constexpr int BOMB_VANISH_TICK = 100;
     constexpr int BOMB_MAX_TICK = 16000;//0이면 안 됨
-    constexpr float BOMB_UPDATED1 = 0.6, BOMB_UPDATED2 = 0.3, BOMB_UPDATED3 = 0.1;
+    constexpr float BOMB_UPDATED1 = 0.4, BOMB_UPDATED2 = 0.7, BOMB_UPDATED3 = 0.9;
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
+    constexpr int FREEZE_TICK = 1700;
 
 
     // printing

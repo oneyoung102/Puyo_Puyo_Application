@@ -29,6 +29,7 @@ enum class Mode
     basic,
     speed,
     bomb,
+    frozen,
 };
 
 class puyoPageSignal

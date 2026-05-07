@@ -45,7 +45,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const puyoPlayer& player)
     {
         for(int r = bsize.r-1 ; r >= 0 ; --r)//효율적으로 아래에서부터 찾음
         {
-            auto puyo = board.get_puyo(POSs(bomb_c, r));
+            const auto puyo = board.get_puyo(POSs(bomb_c, r));
             if(puyo != puyoType(P_BOMB(0)))
                 continue;
             if(puyo.is_exploded())//폭탄 터짐 종료
@@ -70,13 +70,13 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const puyoPlayer& player)
                     bomb_have_player_num = opposite;
             }
             else if(cv.empty() && cg.empty())//폭탄 진행
-                puyo.proceed_bomb();
+                board.ref_puyo(POSs(bomb_c, r)).proceed_bomb();
             break;
         }
     }
     else if(cv.empty() && cg.empty())//폭탄 소환
     {
-        std::uniform_int_distribution<> dist(0, board.get_size().x-1);
+        std::uniform_int_distribution<> dist(0, board.get_size().c-1);
         bomb_c = dist(gen);
         cg.add({POSf(bomb_c,OBSTRUCT_PUYO_SPAWN_Y), puyoType(P_BOMB(BOMB_MAX_TICK)), BOARD_FALL_GRAVITY_TICK});
         bomb_is_spawned = true;

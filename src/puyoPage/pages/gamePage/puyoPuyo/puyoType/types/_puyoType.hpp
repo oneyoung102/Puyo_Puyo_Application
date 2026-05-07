@@ -17,8 +17,9 @@ class _puyoType
         };
     protected :
         const Type type;
+        bool _is_frozen;
     public :
-        _puyoType(Type type) : type(type) {}
+        _puyoType(Type type, bool _is_frozen = false) : type(type), _is_frozen(_is_frozen) {}
         virtual ~_puyoType() = default;
         virtual std::unique_ptr<_puyoType> clone() const = 0;
 
@@ -31,4 +32,8 @@ class _puyoType
         virtual float get_bomb_state() const {return 0;}
         virtual void proceed_bomb(){};
         virtual bool is_exploded() const {return false;};
+
+        void freeze() {_is_frozen = true;} 
+        void unfreeze() {_is_frozen = false;} 
+        bool is_frozen() const {return _is_frozen;} 
 };

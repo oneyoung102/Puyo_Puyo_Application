@@ -25,6 +25,15 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
         const auto screen_pos = pos+vanish_puyo.get_pos()*PUYO_SIZE;
         const auto puyo_type = vanish_puyo.get_type();
         const auto type = puyo_type.get();
+        if(puyo_type.is_frozen())
+        {
+            const float prop = vanish_puyo.get_state();
+            if(prop <= puyoGameConstant::VANISH_STAY_PROP)
+                print_16x16(w,FROZEN_PUYO_POS+POSi(1,0),screen_pos);
+            else
+                print_16x16(w,FROZEN_PUYO_POS+POSi(2,0),screen_pos);
+            continue;
+        }
         switch(type)
         {
             case _puyoType::Type::obstruct :

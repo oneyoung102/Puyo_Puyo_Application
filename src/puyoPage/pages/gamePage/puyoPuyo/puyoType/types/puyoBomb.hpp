@@ -9,7 +9,7 @@ class puyoBomb : public _puyoType
         int bomb_tick;
         const int bomb_tick_init;
     public :
-        puyoBomb(int bomb_tick_init, int bomb_tick = 0);
+        puyoBomb(int bomb_tick_init, int bomb_tick = 0, bool is_frozen = false);
         std::unique_ptr<_puyoType> clone() const override;
         bool is_colored() const override;
         bool is_linkable(const _puyoType& other) const override;
