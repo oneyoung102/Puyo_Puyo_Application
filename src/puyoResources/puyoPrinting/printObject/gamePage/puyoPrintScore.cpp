@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPrintScore.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
 
 using namespace std;
@@ -26,10 +27,10 @@ void puyoPrintScore::print(RenderWindow& w)
 {
     from_score += 3;
     from_score = min(from_score,to_score);
-    int tens = 1e7;
-    for(float px = pos.x ; tens != 0 ; tens /= 10)
+    int decimal = puyoGameConstant::SCORE_UPPER/10;
+    for(float px = pos.x ; decimal != 0 ; decimal /= 10)
     {
-        print_num(w,(from_score/tens)%10,{px,pos.y});
+        print_num(w,(from_score/decimal)%10,{px,pos.y});
         px += NUM_SIZE.x;
     }
 }

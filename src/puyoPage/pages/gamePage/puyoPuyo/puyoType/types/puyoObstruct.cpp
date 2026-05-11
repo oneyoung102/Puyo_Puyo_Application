@@ -3,7 +3,7 @@
 using namespace std;
 
 puyoObstruct::puyoObstruct(bool is_frozen)
-    : _puyoType(Type::obstruct,is_frozen)
+    : _puyoType(Type::obstruct,typeState::none,is_frozen)
 {}
 std::unique_ptr<_puyoType> puyoObstruct::clone() const {return std::make_unique<puyoObstruct>(_is_frozen);}
 

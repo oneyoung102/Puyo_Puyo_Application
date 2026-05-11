@@ -6,7 +6,7 @@
 
 namespace puyoEndingConstant
 {
-    constexpr int TEXT_APPEAR_TICK = 300, BUTTON_APPEAR_TICK = 650;
+    constexpr int TEXT_APPEAR_TICK = 60, BUTTON_APPEAR_TICK = 130;
     constexpr POSf TEXT_WINNER_POS = puyoImageConstant::SCREEN_CENTER+POSf(0,-35);
     constexpr int TEXT_WINNER_SIZE = 60;
 

@@ -33,6 +33,7 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         puyoPlayer(int player_num, std::unique_ptr<puyoBoard>&& board, bool player_is_bot = false, int model = 1, unsigned int init_act_tick = 0, const std::vector<std::pair<puyoType,puyoType>>& new_types = {});
 
         int get_player_num() const;
+        int get_opposite() const;
         puyoBoard& get_board() const;
         puyoPlayPuyo& get_puyo() const;
 

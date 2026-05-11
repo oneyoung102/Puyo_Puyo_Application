@@ -155,6 +155,8 @@ void puyoGamePage::receive_phase_signal(puyoFileSystem& pfs)
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::mid_obsp_dropped));
         else if(board.get_signal(puyoBoardSignal::less_obsp_dropped))
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::less_obsp_dropped));
+        if(board.get_signal(puyoBoardSignal::unfreeze))
+            ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::unfreeze));
         if(board.get_signal(puyoBoardSignal::vanished))
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_vanished));
         if(puyo.get_signal(puyoPlayPuyoSignal::puyo_move))
@@ -181,6 +183,9 @@ void puyoGamePage::receive_mode_signal(puyoFileSystem& pfs)
             if(phase.get_signal(puyoModeSignal::bomb_explode))
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::bomb_explode));
             break;
+        case Mode::frozen :
+            if(phase.get_signal(puyoModeSignal::freeze))
+                ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::freeze));
         default :
             break;
     }

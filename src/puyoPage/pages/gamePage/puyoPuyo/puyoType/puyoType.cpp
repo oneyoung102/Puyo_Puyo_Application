@@ -41,9 +41,8 @@ bool puyoType::is_colored() const {return !empty() && type->is_colored();}
 bool puyoType::is_linkable(const puyoType& other) const {return !empty() && !other.empty() && type->is_linkable(*other.type);}
 bool puyoType::empty() const {return type == nullptr;}
 
-float puyoType::get_bomb_state() const {return empty() ? 0 : type->get_bomb_state();}
-void puyoType::proceed_bomb(){ if(!empty()) type->proceed_bomb(); }
-bool puyoType::is_exploded() const {return !empty() && type->is_exploded();}
+void puyoType::update(){ if(!empty()) type->update();}
+_puyoType::typeState puyoType::get_state() const { return empty() ? _puyoType::typeState::none : type->get_state();}
 
 void puyoType::freeze(){ if(!empty()) type->freeze(); }
 void puyoType::unfreeze(){ if(!empty()) type->unfreeze(); }

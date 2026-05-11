@@ -112,7 +112,7 @@ bool puyoBotModel3::fire_able(int vanish_condition, const std::vector<POSi>& dep
 pair<int,puyoBotModel3::PROBABLITY> puyoBotModel3::beam_search(const puyoBoard& board, const puyoPlayPuyo& puyo, const vector<pair<puyoType,puyoType>>& next_types, int count, const bool fire)
 {
     const auto condition = board.controll_vanish().get_condition();
-    const bool first_turn = count == 0, last_turn = count == puyoGameConstant::NEXT_PUYO_COUNT_DISPLAY;
+    const bool first_turn = count == 0, last_turn = count == puyoGameConstant::DISPLAYED_NEXT_PUYO_COUNT;
 
     PROBABLITY best_probablity;
     int max_potential = INT_MIN;

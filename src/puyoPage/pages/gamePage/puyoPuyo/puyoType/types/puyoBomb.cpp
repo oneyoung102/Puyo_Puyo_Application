@@ -1,17 +1,30 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoBomb.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoTool/puyoCast.hpp"
 
 using namespace std;
 
-puyoBomb::puyoBomb(int bomb_tick_init, int bomb_tick, bool is_frozen)
-    : _puyoType(Type::bomb,is_frozen)
+puyoBomb::puyoBomb(typeState state, bool is_frozen, int bomb_tick_init, int bomb_tick)
+    : _puyoType(Type::bomb,state,is_frozen)
     , bomb_tick(bomb_tick)
     , bomb_tick_init(fmax(bomb_tick_init,1))
 {}
-std::unique_ptr<_puyoType> puyoBomb::clone() const {return std::make_unique<puyoBomb>(bomb_tick_init,bomb_tick,_is_frozen);}
+std::unique_ptr<_puyoType> puyoBomb::clone() const {return std::make_unique<puyoBomb>(state,_is_frozen,bomb_tick_init,bomb_tick);}
 bool puyoBomb::is_colored() const {return true;}
 bool puyoBomb::is_linkable(const _puyoType& other) const {return false;}
 
-float puyoBomb::get_bomb_state() const {return CASTf(bomb_tick)/bomb_tick_init;}
-void puyoBomb::proceed_bomb() {++bomb_tick;}
-bool puyoBomb::is_exploded() const {return bomb_tick >= bomb_tick_init;}
+void puyoBomb::update()
+{
+    ++bomb_tick;
+    const float prop = CASTf(bomb_tick)/bomb_tick_init;
+    if(prop < puyoGameConstant::BOMB_UPDATED1)
+        state = typeState::explode_stay1;
+    else if(prop < puyoGameConstant::BOMB_UPDATED2)
+        state = typeState::explode_stay2;
+    else if(prop < puyoGameConstant::BOMB_UPDATED3)
+        state = typeState::explode_soon1;
+    else if(prop < 1)
+        state = typeState::explode_soon2;
+    else
+        state = typeState::exploded;
+}

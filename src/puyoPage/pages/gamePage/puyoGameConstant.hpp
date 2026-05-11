@@ -8,20 +8,20 @@
 
 namespace puyoGameConstant
 {
-    constexpr POSi BOARD_BASIC_SIZE = POSi(6,13);
+    constexpr POSi BOARD_BASIC_SIZE = POSi(6,14);
 
-    constexpr int PLAYPUYO_FOURWAYMOVE_TICK = 40;
-    constexpr int PLAYPUYO_TURN_TICK = 36;
-    constexpr int PLAYPUYO_DROP_GRAVITY_TICK = 15;
-    constexpr int GRAVITY_TICK_STANDARD = 25;
+    constexpr int PLAYPUYO_FOURWAYMOVE_TICK = 8;
+    constexpr int PLAYPUYO_TURN_TICK = 7;
+    constexpr int PLAYPUYO_DROP_GRAVITY_TICK = 3;
+    constexpr int GRAVITY_TICK_THRESHOLD = 5; // 빠르고 느림을 구분
 
-    constexpr int BOARD_FALL_GRAVITY_TICK = 31;
-    constexpr int BOARD_BASIC_VANISH_TICK = 185;
+    constexpr int BOARD_FALL_GRAVITY_TICK = 6;
+    constexpr int BOARD_BASIC_VANISH_TICK = 37;
     constexpr float VANISH_SOON_PROP = 0.85, VANISH_STAY_PROP = 0.7;
-    constexpr int BOARD_OBSTRUCT_VANISH_TICK = 60;
-    constexpr int BOARD_FLY_TICK = 197;
+    constexpr int BOARD_OBSTRUCT_VANISH_TICK = 12;
+    constexpr int BOARD_FLY_TICK = 39;
 
-    constexpr POSf PLAYPUYO_IN_BOARD_SPAWN_POS = POSf(2,-0.9);
+    constexpr POSf PLAYPUYO_IN_BOARD_SPAWN_POS = POSf(2,-1);
 
     constexpr float OBSTRUCT_PUYO_SPAWN_Y = -2;
 
@@ -29,35 +29,37 @@ namespace puyoGameConstant
     constexpr std::array<int,7> OBSTRUCT_VIEWER_UNIT = {1,6,30,180,360,720,1440};
     constexpr int OBSTRUCT_VIEWER_UPPER = 6;
 
-    constexpr int NEXT_PUYO_COUNT_DISPLAY = 2;
+    constexpr int DISPLAYED_NEXT_PUYO_COUNT = 2;
 
     constexpr int NO_WINNER = -1;
+    constexpr int SCORE_UPPER = 1e8; // 이 스코어 미만
 
     //delay
-    constexpr int PHASE_SET_TICK = 150;
+    constexpr int PHASE_SET_TICK = 30;
     //난이도
     constexpr int PUYO_VANISH_CONDITION = 4;
-    constexpr int EASY_DIFF_GRAVITY = 217, EASY_DIFF_STAY = 385, EASY_DIFF_COLORS = 3;
-    constexpr std::tuple<int,int,int> EASY_DIFF_SETTING = std::make_tuple(EASY_DIFF_GRAVITY,EASY_DIFF_STAY,EASY_DIFF_COLORS); // gravity,stay,colors
-    constexpr int NORMAL_DIFF_GRAVITY = 180, NORMAL_DIFF_STAY = 285, NORMAL_DIFF_COLORS = 4;
-    constexpr std::tuple<int,int,int> NORMAL_DIFF_SETTING = std::make_tuple(NORMAL_DIFF_GRAVITY,NORMAL_DIFF_STAY,NORMAL_DIFF_COLORS);
-    constexpr int HARD_DIFF_GRAVITY = 135, HARD_DIFF_STAY = 190, HARD_DIFF_COLORS = 5;
-    constexpr std::tuple<int,int,int> HARD_DIFF_SETTING = std::make_tuple(HARD_DIFF_GRAVITY,HARD_DIFF_STAY,HARD_DIFF_COLORS);
+    constexpr int EASY_DIFF_GRAVITY_TICK = 43, EASY_DIFF_STAY_TICK = 77, EASY_DIFF_COLORS = 3;
+    constexpr std::tuple<int,int,int> EASY_DIFF_SETTING = std::make_tuple(EASY_DIFF_GRAVITY_TICK,EASY_DIFF_STAY_TICK,EASY_DIFF_COLORS); // gravity,stay,colors
+    constexpr int NORMAL_DIFF_GRAVITY_TICK = 36, NORMAL_DIFF_STAY_TICK = 57, NORMAL_DIFF_COLORS = 4;
+    constexpr std::tuple<int,int,int> NORMAL_DIFF_SETTING = std::make_tuple(NORMAL_DIFF_GRAVITY_TICK,NORMAL_DIFF_STAY_TICK,NORMAL_DIFF_COLORS);
+    constexpr int HARD_DIFF_GRAVITY_TICK = 27, HARD_DIFF_STAY_TICK = 38, HARD_DIFF_COLORS = 5;
+    constexpr std::tuple<int,int,int> HARD_DIFF_SETTING = std::make_tuple(HARD_DIFF_GRAVITY_TICK,HARD_DIFF_STAY_TICK,HARD_DIFF_COLORS);
 
-    constexpr int EASY_BOT_INIT_ACT_TICK = 45, NORMAL_BOT_INIT_ACT_TICK = 25, HARD_BOT_INIT_ACT_TICK = 10;
+    constexpr int EASY_BOT_INIT_ACT_TICK = 9, NORMAL_BOT_INIT_ACT_TICK = 5, HARD_BOT_INIT_ACT_TICK = 2;
     //모드
-    constexpr int BOMB_VANISH_TICK = 100;
-    constexpr int BOMB_MAX_TICK = 16000;//0이면 안 됨
+    constexpr int BOMB_VANISH_TICK = 20;
+    constexpr int BOMB_MAX_TICK = 3200;//0이면 안 됨
     constexpr float BOMB_UPDATED1 = 0.4, BOMB_UPDATED2 = 0.7, BOMB_UPDATED3 = 0.9;
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
-    constexpr int FREEZE_TICK = 1700;
+    constexpr int FREEZE_TICK = 550;
+    constexpr int PROB_FREEZE_ONCE = 30, PROB_FREEZE_TWICE = 10;
 
 
     // printing
-    constexpr int NOTICE_TICK = 1300;
-    constexpr int BLACK_BACK_TICK = 820;
-    constexpr int TEXT_READY_SIZE = 60, TEXT_READY_TICK = 400;
-    constexpr int TEXT_START_SIZE = 60, TEXT_START_TICK = 420;
+    constexpr int NOTICE_TICK = 260;
+    constexpr int BLACK_BACK_TICK = 164;
+    constexpr int TEXT_READY_SIZE = 60, TEXT_READY_TICK = 80;
+    constexpr int TEXT_START_SIZE = 60, TEXT_START_TICK = 84;
 
     constexpr int TWO_BOARD_BREADTH = 386;
     constexpr std::array<POSf,2> PLAYER_BOARD_POS = {POSf(31,35),POSf(TWO_BOARD_BREADTH+31,35)};
@@ -74,10 +76,10 @@ namespace puyoGameConstant
     constexpr std::array<POSf,2> SCORE_POS = {POSf(246,204),POSf(255,256)};
 
     constexpr std::array<POSf,2> TEXT_CHAIN_POS = {POSf(126,205),POSf(TWO_BOARD_BREADTH+126,205)};
-    constexpr int TEXT_CHAIN_SIZE = 29, TEXT_CHAIN_TICK = 150;
+    constexpr int TEXT_CHAIN_SIZE = 29, TEXT_CHAIN_TICK = 30;
     constexpr std::array<POSf,2> TEXT_ALL_CLEAR_POS = {POSf(126,241),POSf(TWO_BOARD_BREADTH+126,241)};
-    constexpr int TEXT_ALL_CLEAR_SIZE = 31, TEXT_ALL_CLEAR_TICK = 450;
+    constexpr int TEXT_ALL_CLEAR_SIZE = 31, TEXT_ALL_CLEAR_TICK = 90;
     //모드
     constexpr POSf TEXT_SPEED_UP_POS = {puyoImageConstant::SCREEN_X/2.0,310};
-    constexpr int TEXT_SPEED_UP_SIZE = 38, TEXT_SPEED_UP_TICK = 330;
+    constexpr int TEXT_SPEED_UP_SIZE = 38, TEXT_SPEED_UP_TICK = 66;
 };

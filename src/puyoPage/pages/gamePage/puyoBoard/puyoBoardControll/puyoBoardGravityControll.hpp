@@ -10,7 +10,6 @@ class puyoBoardGravityControll
 {
     private :
         std::vector<puyoPuyo> gravity_puyos;
-        bool gravity_puyo_is_out_of_board;
     public :
         puyoBoardGravityControll();
 
@@ -18,8 +17,7 @@ class puyoBoardGravityControll
         void add(const PUYO_INFO& puyo);
         void add(const std::vector<PUYO_INFO>& puyos);
         
-        const std::vector<puyoPuyo>& get();
+        const std::vector<puyoPuyo>& get() const;
 
         bool empty() const;
-        bool out() const;
 };

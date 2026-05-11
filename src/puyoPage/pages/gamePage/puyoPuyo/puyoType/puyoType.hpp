@@ -23,9 +23,8 @@ class puyoType
         bool is_linkable(const puyoType& other) const;
         bool empty() const;
 
-        float get_bomb_state() const;
-        void proceed_bomb();
-        bool is_exploded() const;
+        void update();
+        _puyoType::typeState get_state() const;
 
         void freeze();
         void unfreeze();
@@ -43,4 +42,4 @@ class puyoType
 #define P_YELLOW = P_COLOR(yellow)
 #define P_PUPPLE = P_COLOR(pupple)
 #define P_OBSTRUCT std::make_unique<puyoObstruct>()
-#define P_BOMB(x) std::make_unique<puyoBomb>(x)
+#define P_BOMB(x) std::make_unique<puyoBomb>(_puyoType::typeState::explode_stay1,false,x)

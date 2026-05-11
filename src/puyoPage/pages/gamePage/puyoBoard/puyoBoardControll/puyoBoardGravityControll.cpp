@@ -7,7 +7,6 @@
 using namespace std;
 
 puyoBoardGravityControll::puyoBoardGravityControll()
-    : gravity_puyo_is_out_of_board(false)
 {}
 
 void puyoBoardGravityControll::add(const PUYO_INFO& puyo) // std::move
@@ -22,7 +21,7 @@ void puyoBoardGravityControll::add(const vector<PUYO_INFO>& puyos) // std::move
     for(const auto& puyo : puyos)
         add(puyo);
 }
-const vector<puyoPuyo> &puyoBoardGravityControll::get() { return gravity_puyos;}
+const vector<puyoPuyo>& puyoBoardGravityControll::get() const { return gravity_puyos;}
 
 void puyoBoardGravityControll::gravity(puyoBoard& board)
 {
@@ -35,11 +34,9 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
         {
             const auto[x,y] = gravity_puyos[i].get_pos();
             const auto pos = POSi(round(x), round(y));
-            if(!board.in(pos))
-                gravity_puyo_is_out_of_board = true; // 배치할 뿌요가 범위를 나감
-            else if(board.empty(pos))
+            if(board.in(pos) && board.empty(pos))
                 board.insert_puyo(gravity_puyos[i].get_type(), pos);
-
+            
             std::swap(gravity_puyos[i],gravity_puyos.back());
             gravity_puyos.pop_back();
         }
@@ -49,4 +46,3 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
 }
 
 bool puyoBoardGravityControll::empty() const { return gravity_puyos.empty(); }
-bool puyoBoardGravityControll::out() const { return gravity_puyo_is_out_of_board; }

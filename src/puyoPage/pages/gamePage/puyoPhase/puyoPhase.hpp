@@ -18,6 +18,7 @@ enum class puyoModeSignal
     speed_up,//스피드 업 모드
     bomb_fused,//폭탄 모드
     bomb_explode,
+    freeze,//프로즌 모드
     COUNT
 };
  
@@ -28,6 +29,8 @@ class puyoBoard;
 class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 {
     private :
+        friend puyoMode;
+        
         std::vector<std::unique_ptr<puyoPlayer>> players;
         std::mt19937 gen;
         std::vector<std::pair<puyoType,puyoType>> new_types;
@@ -35,7 +38,7 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         puyoScoreCalc calc;
         puyoPhaseStatement pstate;
 
-        bool game_end;
+        bool game_end, game_end_ask;
         int win_player_num;
 
         std::unique_ptr<puyoMode> curr_mode; 
@@ -45,19 +48,24 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         void proceed_play(const std::unique_ptr<puyoPlayer>& player, int& added_score);
         void proceed_gravity(const std::unique_ptr<puyoPlayer>& player, int& added_score);
         void proceed_vanish(const std::unique_ptr<puyoPlayer>& player, int& added_score);
-        void calc_obstruct(const std::unique_ptr<puyoPlayer>& player, int& added_score);
-
+        void manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int& added_score);
+        void manage_game_end(const std::unique_ptr<puyoPlayer>& player);
+        void proceed_event(const std::unique_ptr<puyoPlayer>& player); // puyoType에서 발생하는 이벤트 처리
+        
+        void end_game();////
     public :
         puyoPhase();
 
-        void end_game();////
+        void ask_end_game();
+        bool game_end_asked() const;
+        bool game_ended() const;
 
         std::pair<puyoType,puyoType> get_new_puyos(int count);
         const std::vector<std::pair<puyoType,puyoType>>& get_new_types() const;
+        std::vector<std::pair<puyoType,puyoType>>& get_new_types();
 
         void set_game(Diff diff, Mode mode);
         void proceed_game();
-        bool game_ended() const;
 
         int get_player_count() const;
         const std::vector<std::unique_ptr<puyoPlayer>>& get_players() const;

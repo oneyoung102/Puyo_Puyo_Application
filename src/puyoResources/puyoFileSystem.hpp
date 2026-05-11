@@ -72,6 +72,8 @@ class puyoFileSystem
             speed_up,
             bomb_fused,
             bomb_explode,
+            unfreeze,
+            freeze,
             //게임 종료 후 사운드
             victory,
             lose,

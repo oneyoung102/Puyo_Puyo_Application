@@ -6,7 +6,7 @@ puyoColor::puyoColor(Type color, bool is_frozen)
     : _puyoType(
         Type::red <= color && color <= Type::pupple
         ? color
-        : throw runtime_error("Invalid color"), is_frozen)
+        : throw runtime_error("Invalid color"), typeState::none,is_frozen)
 {}
 const vector<_puyoType::Type> puyoColor::links = {_puyoType::Type::obstruct};
 

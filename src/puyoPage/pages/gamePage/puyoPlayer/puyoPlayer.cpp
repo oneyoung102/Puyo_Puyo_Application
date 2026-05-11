@@ -5,6 +5,8 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBotModel2.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBotModel3.hpp"
 
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+
 #include <functional>
 
 using namespace std;
@@ -36,11 +38,12 @@ puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool playe
 }
 
 int puyoPlayer::get_player_num() const {return player_num;}
+int puyoPlayer::get_opposite() const {return player_num^1;};
 puyoBoard& puyoPlayer::get_board() const {return *board;}
 puyoPlayPuyo& puyoPlayer::get_puyo() const {return *puyo;}
 
 const int& puyoPlayer::get_score() const {return score;}
-void puyoPlayer::add_score(int s){score += s;}
+void puyoPlayer::add_score(int s){score = min(puyoGameConstant::SCORE_UPPER-1,score+s);}
 
 void puyoPlayer::give_new_puyos(pair<puyoType,puyoType> types, int puyo_gravity_value, int puyo_stay_value)
 {

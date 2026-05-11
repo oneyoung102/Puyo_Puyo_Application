@@ -44,10 +44,7 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos
             break;
         case _puyoType::Type::bomb :
         {
-            const auto state = type.get_bomb_state();
-            const int idx = (state >= puyoGameConstant::BOMB_UPDATED1)
-                            +(state >= puyoGameConstant::BOMB_UPDATED2)
-                            +(state >= puyoGameConstant::BOMB_UPDATED3);  
+            const int idx = CASTi(type.get_state())-CASTi(_puyoType::typeState::explode_stay1);
             print_16x16(w,BOMB_POS+POSi(idx,0),screen_pos);
             break;
         }

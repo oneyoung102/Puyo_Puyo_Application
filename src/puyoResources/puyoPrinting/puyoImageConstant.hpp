@@ -21,7 +21,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
         constexpr int SPAWN_SPOT_STATE_MAX = 5; 
         constexpr auto SPAWN_SPOT_POS = POSi(11,12);  //이미지 위치 
-        constexpr int SPAWN_SPOT_CYCLE_TICK = 80;
+        constexpr int SPAWN_SPOT_CYCLE_TICK = 16;
 
         constexpr auto OBSTRUCT_PUYO_POS = POSi(10,12);//이미지 위치 
         constexpr auto OBSTRUCT_VIEWER_PUYO_POS = POSi(6,15); //방해 뿌요 뷰어에 사용되는 이미지

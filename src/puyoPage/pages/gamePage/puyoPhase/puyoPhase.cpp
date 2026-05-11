@@ -29,12 +29,14 @@ using namespace puyoGameConstant;
 puyoPhase::puyoPhase()
     : gen(random_device{}())
     , game_end(false)
+    , game_end_ask(false)
     , win_player_num(NO_WINNER)
+    , color_count(1)
 {}
 
 pair<puyoType,puyoType> puyoPhase::get_new_puyos (int count)
 {
-    while(new_types.size() < count+1+NEXT_PUYO_COUNT_DISPLAY) //다음에 나올 뿌요를 보여주기 위해 NEXT_PUYO_COUNT_DISPLAY개수 더 더하기
+    while(new_types.size() < count+1+DISPLAYED_NEXT_PUYO_COUNT) //다음에 나올 뿌요를 보여주기 위해 NEXT_PUYO_COUNT_DISPLAY개수 더 더하기
     {
         uniform_int_distribution<> dist1(0, color_count-1);
         uniform_int_distribution<> dist2(0, color_count-1);
@@ -45,9 +47,16 @@ pair<puyoType,puyoType> puyoPhase::get_new_puyos (int count)
     return new_types[count];
 }
 const vector<pair<puyoType,puyoType>>& puyoPhase::get_new_types() const {return new_types;}
+vector<pair<puyoType,puyoType>>& puyoPhase::get_new_types() {return new_types;}
 
 bool puyoPhase::game_ended() const {return game_end;}
-void puyoPhase::end_game(){game_end = true;}
+bool puyoPhase::game_end_asked() const {return game_end_ask;}
+void puyoPhase::end_game()
+{
+    if(game_end_ask)
+        game_end = true;
+}
+void puyoPhase::ask_end_game() {game_end_ask = game_end_ask || true;}
 
 void puyoPhase::set_game(Diff diff, Mode mode)
 {
@@ -123,10 +132,8 @@ void puyoPhase::proceed_play(const unique_ptr<puyoPlayer>& player, int& added_sc
     else if(puyo.dropped(board))
     {
         added_score += puyo.get_height(board);
-        auto& cs = board.controll_score();
         auto& co = board.controll_obstuct();
         auto& cg = board.controll_gravity();
-        cs.reset_chain_count();
         cg.add(puyo.to_gravity_puyo(board));
         player->give_new_puyos(this->get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
         cf.update(board,player->get_puyo());
@@ -162,11 +169,11 @@ void puyoPhase::proceed_gravity(const unique_ptr<puyoPlayer>& player, int& added
             {
                 pstate.set_phase(player_num,puyoPhaseStatement::Phase::play);
                 pstate.delay(player_num,PHASE_SET_TICK);
+                cs.reset_chain_count();
             }
         }
         else
         {
-            auto& cs = board.controll_score();
             cs.add_chain_count(board);
             added_score += calc.get_add_score(cs.get_puyo_count(),cs.get_chain_count(),cs.get_link_count(),cs.get_color_count());
             pstate.set_phase(player_num,puyoPhaseStatement::Phase::vanish);
@@ -188,18 +195,18 @@ void puyoPhase::proceed_vanish(const unique_ptr<puyoPlayer>& player, int& added_
         if(cg.empty()) //파괴 후, 드롭할 뿌요가 없으면
         {
             auto& cs = board.controll_score();
-            cs.reset_chain_count();
             if(board.all_cleared())
                 added_score += calc.get_all_cleared_score();//올클리어 보너스
             pstate.set_phase(player_num,puyoPhaseStatement::Phase::play);
             pstate.delay(player_num,PHASE_SET_TICK);
+            cs.reset_chain_count();
         }
         else
             pstate.set_phase(player_num,puyoPhaseStatement::Phase::gravity);
     }
 }
 
-void puyoPhase::calc_obstruct(const std::unique_ptr<puyoPlayer>& player, int& added_score)
+void puyoPhase::manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int& added_score)
 {
     if(players.size() == 1)
         throw runtime_error("Obstruct puyo spawn is prohibited in Solo");
@@ -214,7 +221,7 @@ void puyoPhase::calc_obstruct(const std::unique_ptr<puyoPlayer>& player, int& ad
         auto& cv = board.controll_vanish();
         if(cv.empty())
         {
-            const int player_num = player->get_player_num(), opposite = player_num^1;
+            const int player_num = player->get_player_num(), opposite = player->get_opposite();
             const int opp = calc.get_opposite_obstruct_puyo_count(co.get(),co.get_opp());
 
             const int to_player_num = (co.get() > 0) ? player_num : opposite;
@@ -227,6 +234,48 @@ void puyoPhase::calc_obstruct(const std::unique_ptr<puyoPlayer>& player, int& ad
     } 
     else
         ce.clear_temp(); 
+}
+void puyoPhase::manage_game_end(const std::unique_ptr<puyoPlayer>& player)
+{
+    if(!game_end_asked())
+    {
+        if(player->get_score() == SCORE_UPPER-1)
+        {
+            ask_end_game();
+            set_win_player_num(player->get_player_num());
+        }
+        else if(!player->get_board().spawn_able())
+        {
+            ask_end_game();
+            set_win_player_num(player->get_opposite());
+        }
+    }
+    else if(pstate.is_phase(win_player_num^1,puyoPhaseStatement::Phase::play))//게임 종료
+        end_game(); 
+}
+
+void puyoPhase::proceed_event(const unique_ptr<puyoPlayer>& player)
+{   
+    auto& board = player->get_board();
+    for(const auto state : board.update())
+        switch(state)
+        {
+            case _puyoType::typeState::exploded :
+            {
+                const auto bsize = board.get_size();
+                set_signal(puyoModeSignal::bomb_explode);
+                for(size_t i = 0 ; i < bsize.r ; ++i)
+                    for(size_t j = 0 ; j < bsize.c ; ++j)
+                        if(!board.empty(POSi(j, i)))
+                            board.controll_vanish().to_vanish_puyo_each(board,{POSf(j,i),board.get_puyo(POSi(j, i)), puyoGameConstant::BOARD_BASIC_VANISH_TICK});                                                 
+                pstate.set_phase(player->get_player_num(),puyoPhaseStatement::Phase::vanish);
+                ask_end_game();
+                set_win_player_num(player->get_opposite());
+                break;
+            }
+            default :
+                break;
+        }
 }
 
 void puyoPhase::proceed_game()
@@ -241,6 +290,7 @@ void puyoPhase::proceed_game()
                 player->act_bot_let(); 
 /////////////////모드 진행
         curr_mode->proceed_mode(*this, *player);
+        proceed_event(player);
 
         board.controll_energy().fly(board);
         int added_score = 0;
@@ -262,17 +312,13 @@ void puyoPhase::proceed_game()
         };
         player->add_score(added_score);
         if(get_player_count() == 2)
-            calc_obstruct(player,added_score);
+            manage_obstruct(player,added_score);
         else
             board.controll_energy().clear_temp(); 
 /////////게임 종료
-        if(board.controll_gravity().out() && board.controll_gravity().empty())//게임 종료
-        {
-            const int opposite = player_num^1;
-            win_player_num = opposite;
-            end_game(); 
-            break;
-        }        
+        manage_game_end(player);
+        if(game_ended())
+            return;
     }
 }
 

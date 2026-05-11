@@ -17,16 +17,13 @@ bool puyoPuyoAct::decide(const puyoBoard& board, puyoPuyo& puyo)
             return true;
     }
     else if(acting())
-    {
-        if(act_count == act_count_init)
-            arrive(puyo);
         return true;
-    }
     halt();
+    arrive(puyo);
     return false;
 }
 
-bool puyoPuyoAct::acting(){return halted < act_count && act_count <= act_count_init;}
+bool puyoPuyoAct::acting(){return halted < act_count && act_count < act_count_init;}
 puyoPuyoAct::puyoPuyoAct(int amount)
     : act_count_init(amount)
     , halted(-1)

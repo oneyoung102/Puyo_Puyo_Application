@@ -1,4 +1,5 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardVanishControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
@@ -46,7 +47,10 @@ void puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const PUYO_I
     add(puyo);
     board.controll_energy().add_temp({pos, type, puyoGameConstant::BOARD_FLY_TICK});
     if(type.is_frozen())
+    {
         board.ref_puyo(pos).unfreeze();
+        board.set_signal(puyoBoardSignal::unfreeze);
+    }
     else 
         board.remove_puyo(pos);
 }

@@ -21,6 +21,7 @@ enum class puyoBoardSignal
     mid_obsp_dropped,
     less_obsp_dropped,
     vanished,
+    unfreeze,
     COUNT
 };
 
@@ -42,6 +43,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 
         void set_spawn_pos(POSf pos);
         POSf get_spawn_pos() const;
+        bool spawn_able() const;
         
         POSi get_size() const;
         bool in_row(int r) const;
@@ -56,6 +58,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         bool empty() const;
         bool empty(POSs pos) const;
         bool all_cleared();
+        std::vector<_puyoType::typeState> update();
 
         std::vector<PUYO_INFO> to_gravity_puyo();
 

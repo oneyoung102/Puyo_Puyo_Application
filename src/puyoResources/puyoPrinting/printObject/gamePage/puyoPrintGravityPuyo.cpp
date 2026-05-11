@@ -33,7 +33,7 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
             case _puyoType::Type::pupple :
                 if(!puyo_type.is_frozen()) //의도적으로 break 안 함
                 {
-                    if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_STANDARD)//dropping
+                    if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_THRESHOLD)//dropping
                     {
                         print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),0),screen_pos-POSf(0,PUYO_SIZE));
                         print_16x16(w,DROPPING_PUYO_POS+POSi(CASTi(type),1),screen_pos);

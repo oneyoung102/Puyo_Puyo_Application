@@ -11,7 +11,7 @@ int main()
     RenderWindow window(VideoMode(SCREEN_SIZE), "Puyo Puyo"); // 창 설정
     window.setView(window.getDefaultView());
 
-    window.setFramerateLimit(600); 
+    window.setFramerateLimit(120); 
     while(window.isOpen())
     {
         page.show_page(window);

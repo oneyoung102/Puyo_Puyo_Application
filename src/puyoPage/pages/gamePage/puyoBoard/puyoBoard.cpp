@@ -16,6 +16,7 @@ puyoBoard::puyoBoard()
 
 POSf puyoBoard::get_spawn_pos() const {return spawn_pos;}
 void puyoBoard::set_spawn_pos(POSf pos){spawn_pos = pos;};
+bool puyoBoard::spawn_able() const {return empty(spawn_pos);}
 
 POSi puyoBoard::get_size() const {return size;}
 bool puyoBoard::in_row(int r) const { return 0 <= r && r < size.r; }
@@ -60,13 +61,29 @@ vector<PUYO_INFO> puyoBoard::to_gravity_puyo()
                 floating = true;
             else if(floating)
             {
-                gravity_puyos.push_back({pos, get_puyo(pos), puyoGameConstant::BOARD_FALL_GRAVITY_TICK});
+                gravity_puyos.push_back({pos, ref_puyo(pos), puyoGameConstant::BOARD_FALL_GRAVITY_TICK});
                 remove_puyo(pos);
                 continue;
             }
         }
     }
     return std::move(gravity_puyos);
+}
+vector<_puyoType::typeState> puyoBoard::update()
+{
+    vector<_puyoType::typeState> states;
+    for(size_t c = 0 ; c < size.c ; ++c)
+        for(int r = size.r-1 ; r >= 0 ; --r)
+        {
+            auto& puyo = ref_puyo(POSs(c,r));
+            if(puyo.empty())
+                break;
+            puyo.update();
+            if(puyo.get_state() == _puyoType::typeState::none)
+                continue;
+            states.push_back(puyo.get_state());
+        }
+    return std::move(states);
 }
 
 puyoBoardEnergyControll& puyoBoard::controll_energy(){return energy_controll;}

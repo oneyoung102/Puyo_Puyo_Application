@@ -7,7 +7,7 @@ class puyoModeBomb : public puyoMode
 {
     private :
         int bomb_have_player_num;
-        bool bomb_is_spawned, bomb_is_exploded;
+        bool bomb_is_spawned;
         size_t bomb_c;
 
         std::mt19937 gen;
