@@ -1,12 +1,15 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <vector>
 #include <utility>
 #include <random>
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
+
+class puyoPlayer;
 
 class puyoBot
 {
@@ -28,7 +31,7 @@ class puyoBot
     public :
         puyoBot(POSi bsize, unsigned int init_act_tick = 0);     
         virtual ~puyoBot() = default; 
-        virtual void think_perfect_lets(const puyoBoard& board, const puyoPlayPuyo& puyo) = 0;
+        virtual void think_perfect_lets(const puyoPlayer& player) = 0;
         bool bot_lets_empty();
         void let_bot_act();
 };

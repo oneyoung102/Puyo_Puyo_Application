@@ -1,4 +1,4 @@
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardFutureControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardFutureControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFall.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
@@ -8,7 +8,7 @@ using namespace std;
 
 puyoBoardFutureControll::puyoBoardFutureControll(){}
 
-const vector<puyoPuyo> &puyoBoardFutureControll::get() { return future_puyos; }
+const vector<puyoPuyo> &puyoBoardFutureControll::get() const { return future_puyos; }
 
 void puyoBoardFutureControll::update(const puyoBoard& board, puyoPlayPuyo& puyo)
 {

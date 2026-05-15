@@ -17,6 +17,8 @@ class puyoOpeningPage : public puyoPage
         Status status;
         const sf::Sprite SEGA_SPRITE, OPENING_SPRITE;
         void let_start();
+        void let_skip();
+        bool skip;
     public :
         puyoOpeningPage(puyoFileSystem& pfs);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);

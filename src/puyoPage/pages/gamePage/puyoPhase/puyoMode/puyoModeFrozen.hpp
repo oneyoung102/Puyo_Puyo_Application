@@ -11,5 +11,5 @@ class puyoModeFrozen : public puyoMode
         std::mt19937 gen;
     public :
         puyoModeFrozen(int player_count);
-        void proceed_mode(puyoPhase& phase, const puyoPlayer& player) override;
+        void proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlayer>& player) override;
 };

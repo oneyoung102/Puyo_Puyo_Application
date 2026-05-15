@@ -64,7 +64,21 @@ bool puyoPlayer::is_bot() const {return player_is_bot;}
 void puyoPlayer::act_bot_let() const
 {
     if(bot_model->bot_lets_empty())
-        bot_model->think_perfect_lets(*board, *puyo);
+        bot_model->think_perfect_lets(*this);
     else if(!puyo->moving())
         bot_model->let_bot_act();
 }
+
+puyoBoardEnergyControll& puyoPlayer::controll_energy(){return energy_controll;}
+puyoBoardGravityControll& puyoPlayer::controll_gravity(){return gravity_controll;}
+puyoBoardScoreControll& puyoPlayer::controll_score(){return score_controll;}
+puyoBoardObstructControll& puyoPlayer::controll_obstuct(){return obstuct_controll;}
+puyoBoardVanishControll& puyoPlayer::controll_vanish(){return vanish_controll;}
+puyoBoardFutureControll& puyoPlayer::controll_future(){return future_controll;}
+
+const puyoBoardEnergyControll& puyoPlayer::controll_energy() const {return energy_controll;}
+const puyoBoardGravityControll& puyoPlayer::controll_gravity() const {return gravity_controll;}
+const puyoBoardScoreControll& puyoPlayer::controll_score() const {return score_controll;}
+const puyoBoardObstructControll& puyoPlayer::controll_obstuct() const {return obstuct_controll;}
+const puyoBoardVanishControll& puyoPlayer::controll_vanish() const {return vanish_controll;}
+const puyoBoardFutureControll& puyoPlayer::controll_future() const {return future_controll;}

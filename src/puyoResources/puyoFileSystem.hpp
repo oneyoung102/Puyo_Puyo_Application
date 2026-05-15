@@ -91,7 +91,7 @@ class puyoFileSystem
             game_music3, // in the middle of stroll
             game_music4, // i'm the greatest ever
             game_music5, // the twin ghosts are super
-            game_music6, // doens't matter who it is 
+            game_music6, // doesn't matter who it is 
             game_music7, // let's dancing together
             game_music8, // Chearful Puyo
             game_music9, // Rising Comet!
@@ -101,9 +101,9 @@ class puyoFileSystem
             victory,//99번
 
         };
-        sf::Sprite get_sprite(Image name);
-        const sf::Font& get_font();
+        sf::Sprite get_sprite(Image name) const;
+        const sf::Font& get_font() const;
         sf::SoundBuffer& get_buffer(Sound name);
-        const std::filesystem::path& get_music(Music name);
+        const std::filesystem::path& get_music(Music name) const;
         const std::filesystem::path& get_random_music();
 };

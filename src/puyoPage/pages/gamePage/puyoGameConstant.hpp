@@ -34,6 +34,9 @@ namespace puyoGameConstant
     constexpr int NO_WINNER = -1;
     constexpr int SCORE_UPPER = 1e8; // 이 스코어 미만
 
+    constexpr int BOT_PENALTY = -100000;
+    constexpr float MIN_LEARNING_RATE = 0.02, MIN_WEIGHT = 0.02;
+
     //delay
     constexpr int PHASE_SET_TICK = 30;
     //난이도

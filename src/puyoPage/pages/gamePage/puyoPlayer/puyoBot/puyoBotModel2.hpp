@@ -1,8 +1,6 @@
 #pragma once
 
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
-#include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include <vector>
@@ -44,6 +42,7 @@ class puyoBotModel2 : public puyoBot
         std::vector<int> expected_mean_count;
 
         PARAM_TYPE get_ratio(ParameterName name, PARAM_TYPE x);
+        PARAM_TYPE get_new_mean(ParameterName name, PARAM_TYPE x);
         PARAM_TYPE get_new_stdev(ParameterName name, PARAM_TYPE old_mean, PARAM_TYPE x);
         PARAM_TYPE get_bias();
 
@@ -59,8 +58,8 @@ class puyoBotModel2 : public puyoBot
         PARAM_TYPE is_activated(PARAM_TYPE value);
         void backpropagation(int color_puyo_sum);
 
-        int simulate_chain(POSi simul_droos, int vanish_condition);
-        int get_potential(int vanish_condition, const std::vector<POSi>& deployed_puyos);
+        int simulate_chain(const puyoPlayer& player, POSi simul_droos);
+        int get_potential(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos);
     public :
         puyoBotModel2(const int& curr_score, POSi bsize, unsigned int act_time_unit = 0);     
         ~puyoBotModel2() override; 
@@ -68,5 +67,5 @@ class puyoBotModel2 : public puyoBot
         void saveModel(const std::string& filename);
         void loadModel(const std::string& filename);
 
-        void think_perfect_lets(const puyoBoard& board, const puyoPlayPuyo& puyo) override;
+        void think_perfect_lets(const puyoPlayer& player) override;
 };

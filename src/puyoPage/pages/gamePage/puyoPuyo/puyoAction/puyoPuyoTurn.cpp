@@ -20,10 +20,10 @@ bool puyoPuyoTurn::test(const puyoBoard& board, puyoPuyo& puyo)
             turn_able = !board.touched(POSi(x-1, y)) && !board.touched(POSi(x-1, ceil(y))) && !board.touched(POSi(x-1, ceil(y)+1));
             break;
         case Direction::RIGHT :
-            turn_able = !board.touched(POSi(x+1, y)) && !board.touched(POSi(x+1, ceil(y))) && !board.touched(POSi(x+1, y-1));
+            turn_able = !board.touched(POSi(x+1, y)) && !board.touched(POSi(x+1, ceil(y))) && !board.touched(POSi(x+1, ceil(y)-1));
             break;
         case Direction::UP :
-            turn_able = !board.touched(POSi(x, y-1)) && !board.touched(POSi(x, ceil(y)-1)) && !board.touched(POSi(x-1, y-1));
+            turn_able = !board.touched(POSi(x, y-1)) && !board.touched(POSi(x, ceil(y)-1)) && !board.touched(POSi(x-1, ceil(y)-1));
             break;
         case Direction::DOWN :
             turn_able = !board.touched(POSi(x, y+1)) && !board.touched(POSi(x, ceil(y)+1)) && !board.touched(POSi(x+1, ceil(y)+1));

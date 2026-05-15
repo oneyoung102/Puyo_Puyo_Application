@@ -28,7 +28,11 @@ class puyoPuyo
 
         bool const acting() const;
         bool have_act() const;
+
+        bool decide(const puyoBoard& board);
+        void act_let();
         void act_let(const puyoBoard& board);
+        
         void set_act(std::unique_ptr<puyoPuyoAct>&& act);
         void set_act();
         void let();   

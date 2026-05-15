@@ -6,6 +6,13 @@
 
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
 
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardEnergyControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardGravityControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardScoreControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardVanishControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardFutureControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardObstructControll.hpp"
+
 #include <utility>
 #include <functional>
 #include <memory>
@@ -20,6 +27,13 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 {
     private :
         std::unique_ptr<puyoBoard> board;
+        puyoBoardEnergyControll energy_controll;
+        puyoBoardGravityControll gravity_controll;
+        puyoBoardScoreControll score_controll;
+        puyoBoardObstructControll obstuct_controll;
+        puyoBoardVanishControll vanish_controll;
+        puyoBoardFutureControll future_controll;
+
         std::unique_ptr<puyoPlayPuyo> puyo;
         const int player_num; // 0 또는 1
         
@@ -53,4 +67,18 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 
         bool is_bot() const;
         void act_bot_let() const;
+
+        puyoBoardEnergyControll& controll_energy();
+        puyoBoardGravityControll& controll_gravity();
+        puyoBoardScoreControll& controll_score();
+        puyoBoardObstructControll& controll_obstuct();
+        puyoBoardVanishControll& controll_vanish();
+        puyoBoardFutureControll& controll_future();
+
+        const puyoBoardEnergyControll& controll_energy() const;
+        const puyoBoardGravityControll& controll_gravity() const;
+        const puyoBoardScoreControll& controll_score() const;
+        const puyoBoardObstructControll& controll_obstuct() const;
+        const puyoBoardVanishControll& controll_vanish() const;
+        const puyoBoardFutureControll& controll_future() const;
 };

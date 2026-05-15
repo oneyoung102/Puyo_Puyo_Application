@@ -38,18 +38,16 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
     public :
         puyoPlayPuyo(POSf spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
 
-        void act_let(puyoBoard& board);
-        void gravity_let(puyoBoard& board);
+        void act_let(const puyoBoard& board);
+        void gravity_let(const puyoBoard& board);
         
         bool down();
         bool dropped(const puyoBoard& board);
 
-        int get_height(const puyoBoard& board);
-
         std::vector<PUYO_INFO> to_gravity_puyo(const puyoBoard& board) const;
         const std::unique_ptr<puyoPuyo>& get_each(size_t number);
         const decltype(play_puyo)& get();
-        std::tuple<POSf,POSf> get_pos() const;
+        std::pair<POSf,POSf> get_pos() const;
         std::pair<puyoType,puyoType> get_type() const;
 
         bool sat(const puyoBoard& board) const; 

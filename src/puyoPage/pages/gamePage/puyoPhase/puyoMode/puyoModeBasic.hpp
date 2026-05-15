@@ -6,5 +6,5 @@ class puyoModeBasic : public puyoMode
 {
     public :
         puyoModeBasic();
-        void proceed_mode(puyoPhase& phase, const puyoPlayer& player) override;
+        void proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlayer>&  player) override;
 };

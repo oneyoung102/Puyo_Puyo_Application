@@ -10,12 +10,12 @@ class puyoBoardVanishControll
     private :
         int condition_for_vanish;
         std::vector<puyoPuyo> vanish_puyos;
-        void add(PUYO_INFO puyo);
+        void add(const PUYO_INFO& puyo);
     public :
         puyoBoardVanishControll();
-        void to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo);
-        std::pair<int, std::vector<std::pair<POSs, puyoType>>> fire_cluster(const puyoBoard& board, POSs fire_pos, std::vector<std::vector<bool>>& visited);
-        std::tuple<int, std::vector<int>, std::vector<_puyoType::Type>> to_vanish_puyo(puyoBoard& board);
+        PUYO_INFO to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo);
+        std::pair<int, std::vector<std::pair<POSs, puyoType>>> fire_cluster(const puyoBoard& board, POSs fire_pos, std::vector<std::vector<bool>>& visited) const;
+        std::tuple<int, std::vector<int>, std::vector<_puyoType::Type>,std::vector<PUYO_INFO>> to_vanish_puyo(puyoBoard& board);
         void vanish(puyoBoard& board);
 
         void set_condition(int amount);

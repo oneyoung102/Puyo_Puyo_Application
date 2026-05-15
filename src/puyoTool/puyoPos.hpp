@@ -21,7 +21,7 @@ class POS
             : x(static_cast<T>(other.x))
             , y(static_cast<T>(other.y))
         {
-            static_assert(std::is_arithmetic<T>() && std::is_arithmetic<P>(),"POS explicit type change is impossible");
+            static_assert(std::is_arithmetic<T>() && std::is_arithmetic<P>(),"POS non-number type cast is impossible");
         }
         
         constexpr POS operator+(const POS& other) const { return POS(x + other.x, y + other.y); }
@@ -36,7 +36,7 @@ class POS
         }
         constexpr POS operator/(const POS& other) const
         {
-            if(other == POS())
+            if(other.x == 0 || other.y == 0)
                 throw std::runtime_error("POS zero division is impossible");
             return POS(x / other.x, y / other.y);
         }

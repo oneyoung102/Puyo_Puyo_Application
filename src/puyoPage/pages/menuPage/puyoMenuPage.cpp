@@ -27,7 +27,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         "Select Arcade!!!",
         pfs.get_font(),
         TEXT_ARCADE_SIZE,
-        TEXT_ARCADE_CYCLE,
+        TEXT_ARCADE_CYCLE_TICK,
         Color::Green));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
@@ -39,7 +39,7 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
         button_cursor.get_select_status(Arcade::duel),
-        duel_BUTTON_POS,
+        DUEL_BUTTON_POS,
         "Duel",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));

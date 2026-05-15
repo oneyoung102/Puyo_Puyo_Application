@@ -49,7 +49,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
                         cursor = pos;
                         break;
                     }
-                    for(const auto dpos : DIR)
+                    for(const auto& dpos : DIR)
                     {
                         const auto npos = pos+dpos;
                         if(POSi() <= npos && npos < POSi(C,R) && selected[npos.r][npos.c].first != buttonName::NONE && !visited[npos.r][npos.c])

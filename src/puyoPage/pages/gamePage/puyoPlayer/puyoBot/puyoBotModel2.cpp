@@ -1,4 +1,6 @@
 #include "puyoBotModel2.hpp"
+#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
@@ -96,6 +98,10 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_ratio(ParameterName name, PARAM_TYP
     const PARAM_TYPE norm_value = (1.0 + erf(z * M_SQRT1_2))/2.0;
     return (signs[name] > 0) ? norm_value : (1.0 - norm_value);
 }
+puyoBotModel2::PARAM_TYPE puyoBotModel2::get_new_mean(ParameterName name, PARAM_TYPE x)
+{
+    return (parameters_mean[name] * (N_count - 1) + x) / N_count;
+}
 puyoBotModel2::PARAM_TYPE puyoBotModel2::get_new_stdev(ParameterName name, PARAM_TYPE old_mean, PARAM_TYPE x)
 {
     if (N_count <= 1) return 0.1; 
@@ -133,7 +139,7 @@ pair<puyoBotModel2::PARAM_TYPE,puyoBotModel2::PARAM_TYPE> puyoBotModel2::get_clu
                 continue;
             visited[cpos.r][cpos.c] = true;
             ++cluster_size;
-            for(const auto dpos : DIR)
+            for(const auto& dpos : DIR)
             {
                 const auto npos = cpos+dpos;
                 if(npos.r < 0 || npos.r >= R || npos.c < 0 || npos.c >= C)
@@ -151,7 +157,7 @@ pair<puyoBotModel2::PARAM_TYPE,puyoBotModel2::PARAM_TYPE> puyoBotModel2::get_clu
 puyoBotModel2::PARAM_TYPE puyoBotModel2::get_column_diversity(const vector<POSi>& deployed_puyos)
 {
     PARAM_TYPE diversity = 0;
-    for(const auto pos : deployed_puyos)
+    for(const auto& pos : deployed_puyos)
     {
         PARAM_TYPE temp_diversity = 0;
         int count = 0;
@@ -203,7 +209,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_flatness(const vector<POSi>& deploy
     const auto bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     PARAM_TYPE flatness = 0.0;
-    for(const auto pos : deployed_puyos)
+    for(const auto& pos : deployed_puyos)
     {
         int count = 2; // LEFT,RIGHT 두 방향
         PARAM_TYPE several_flatness = 0.0;
@@ -286,11 +292,12 @@ void puyoBotModel2::backpropagation(int color_puyo_sum)
 
     // for(size_t i = 0 ; i < COUNT ; ++i)
     //     std::cout << weights[i] << " ";
-    // std::cout << std::endl;
+    // std::cout << std::endl;MIN_LEARNING_RATE
 
     const PARAM_TYPE expected_mean_dscore = get_expected_mean_score(color_puyo_sum,dscore);
     const PARAM_TYPE SCORE_VALUE = sigmoid(dscore,expected_mean_dscore); // 시그모이드 함수
-    const PARAM_TYPE DELTA = (1.0/(COUNT*sqrt(N_count+1.0)))*is_activated(SCORE_VALUE);
+    const PARAM_TYPE LEARNING_RATE = fmax(1.0/(N_count+1.0),puyoGameConstant::MIN_LEARNING_RATE);
+    const PARAM_TYPE DELTA = LEARNING_RATE*is_activated(SCORE_VALUE);
 
     PARAM_TYPE parameters_sum_total = 0.0;
     for(size_t i = 0 ; i < COUNT ; ++i)
@@ -302,7 +309,7 @@ void puyoBotModel2::backpropagation(int color_puyo_sum)
     {
         const PARAM_TYPE DVALUE = DELTA*parameters_sum[i]/parameters_sum_total;
         weights[i] += DVALUE; 
-        weights[i] = fmax(weights[i], 0.02); 
+        weights[i] = fmax(weights[i], puyoGameConstant::MIN_WEIGHT); 
         weight_sum += weights[i];
     }
     weight_sum = max(weight_sum,MIN_VALUE);
@@ -313,7 +320,7 @@ void puyoBotModel2::backpropagation(int color_puyo_sum)
     prev_score = curr_score;
 }
 
-int puyoBotModel2::simulate_chain(POSi simul_drop_pos, int vanish_condition)
+int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
 {
     const POSf bsize = simulate_board.get_size();
     puyoBoard board;
@@ -325,7 +332,7 @@ int puyoBotModel2::simulate_chain(POSi simul_drop_pos, int vanish_condition)
     bool continue_vanish = true;
 
     vector<vector<bool>> temp_visited(bsize.r, vector<bool>(bsize.c, false));
-    const auto [_, initial_stored] = board.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
+    const auto [_, initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
     vanished_puyo += initial_stored.size();
     for(const auto& p : initial_stored)
         board.remove_puyo(p.first);
@@ -355,8 +362,8 @@ int puyoBotModel2::simulate_chain(POSi simul_drop_pos, int vanish_condition)
                 if(type.empty() || visited[r][c] || !type.is_colored())
                     continue;
 
-                const auto [color_puyo_count, stored_puyos] = board.controll_vanish().fire_cluster(board, POSs(c,r), visited);
-                if(color_puyo_count >= vanish_condition)
+                const auto [color_puyo_count, stored_puyos] = player.controll_vanish().fire_cluster(board, POSs(c,r), visited);
+                if(color_puyo_count >= player.controll_vanish().get_condition())
                 { 
                     vanished_puyo += stored_puyos.size();
                     for(const auto& p : stored_puyos)
@@ -368,7 +375,7 @@ int puyoBotModel2::simulate_chain(POSi simul_drop_pos, int vanish_condition)
     return vanished_puyo;
 }
 
-int puyoBotModel2::get_potential(int vanish_condition, const std::vector<POSi>& deployed_puyos)
+int puyoBotModel2::get_potential(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos)
 {
     const auto bsize = simulate_board.get_size();
     int max_potential = 0;
@@ -381,25 +388,28 @@ int puyoBotModel2::get_potential(int vanish_condition, const std::vector<POSi>& 
         if(drop_r == bsize.r || !simulate_board.get_puyo(POSs(c, drop_r)).is_colored())
             continue;
 
-        const auto vanish_count = simulate_chain(POSi(c,drop_r), vanish_condition);
+        const auto vanish_count = simulate_chain(player, POSi(c,drop_r));
         max_potential = max(max_potential, vanish_count);
     } 
     for(const auto& pos : deployed_puyos)
         if(simulate_board.in_row(pos.r-1) && !simulate_board.empty(pos+POSi(0,-1)))// 위가 가려진 플레이뿌요 터뜨림
         {
-            const auto vanish_count = simulate_chain(pos, vanish_condition);
+            const auto vanish_count = simulate_chain(player,pos);
             max_potential = max(max_potential, vanish_count);
         }
     return max_potential;
 }
 
-void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuyo& puyo)
+void puyoBotModel2::think_perfect_lets(const puyoPlayer& player)
 {
+    auto& board = player.get_board();
+    auto& puyo = player.get_puyo();
+
     N_count = min(N_count+1,INT_MAX);
     backpropagation(prev_color_puyo_sum);
 
     const auto bsize = board.get_size();
-    const auto condition = board.controll_vanish().get_condition();
+    const auto condition = player.controll_vanish().get_condition();
 
     int all_puyo_sum = 0, color_puyo_sum = 0;
     for(size_t i = 0 ; i < bsize.r ; ++i)
@@ -422,10 +432,10 @@ void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
     PARAM_TYPE max_z_value = -numeric_limits<PARAM_TYPE>::infinity();
     std::array<PARAM_TYPE, COUNT> best_parameters; best_parameters.fill(0);
 
-    const bool fire_ask = get_fire(all_puyo_sum,board.controll_obstuct().get());
+    const bool fire_ask = get_fire(all_puyo_sum,player.controll_obstuct().get());
     bool fire_able = false;
 
-    for(const auto probablity : calc_all_probablities(board))
+    for(const auto& probablity : calc_all_probablities(board))
     {
         const auto[temp_pos1,temp_pos2] = to_coord(probablity,puyo);
         if(!board.in(temp_pos1) || !board.in(temp_pos2))
@@ -455,7 +465,7 @@ void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                 z_value += weights[NAME]*ratio;
             }
             if(max_cluster_size >= condition)
-                z_value -= 100000; //페널티
+                z_value += puyoGameConstant::BOT_PENALTY; //페널티
             if(z_value > max_z_value)
             {
                 max_z_value = z_value;
@@ -463,7 +473,7 @@ void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                 best_parameters = current_parameters; 
             }
 
-            const int potential = get_potential(condition,{pos1,pos2});
+            const int potential = get_potential(player,{pos1,pos2});
             if(potential > max_potential)
                 if(!fire_ask || max_cluster_size >= condition)
                 {
@@ -481,13 +491,13 @@ void puyoBotModel2::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
         const auto NAME = static_cast<ParameterName>(i);
         const PARAM_TYPE old_mean = parameters_mean[i];
         
-        parameters_mean[i] = (parameters_mean[i] * (N_count - 1) + best_parameters[i]) / N_count;
+        parameters_mean[i] = get_new_mean(NAME, best_parameters[i]);
         parameters_stdev[i] = get_new_stdev(NAME, old_mean, best_parameters[i]);
         parameters_sum[i] += get_ratio(NAME, best_parameters[i]);
     }
-    const bool all_clear = max_potential == all_puyo_sum+2;
+    const bool all_clear = max_potential == all_puyo_sum+2; // 플레이뿌요+2
     if(all_clear || fire_able && fire_ask || !fire_able && max_potential >= condition)
-        to_let(best_probablity_fire,const_cast<puyoPlayPuyo&>(puyo));
+        to_let(best_probablity_fire, puyo);
     else
-        to_let(best_probablity_buildup,const_cast<puyoPlayPuyo&>(puyo));
+        to_let(best_probablity_buildup,puyo);
 }

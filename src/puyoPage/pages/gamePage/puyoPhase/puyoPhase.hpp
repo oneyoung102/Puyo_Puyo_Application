@@ -29,10 +29,9 @@ class puyoBoard;
 class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 {
     private :
-        friend puyoMode;
-        
         std::vector<std::unique_ptr<puyoPlayer>> players;
         std::mt19937 gen;
+        std::vector<puyoType> new_type_list;
         std::vector<std::pair<puyoType,puyoType>> new_types;
 
         puyoScoreCalc calc;
@@ -43,21 +42,21 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 
         std::unique_ptr<puyoMode> curr_mode; 
         Mode mode_type;
-        int gravity_value, stay_value, color_count;
+        int gravity_value, stay_value;
 
-        void proceed_play(const std::unique_ptr<puyoPlayer>& player, int& added_score);
-        void proceed_gravity(const std::unique_ptr<puyoPlayer>& player, int& added_score);
-        void proceed_vanish(const std::unique_ptr<puyoPlayer>& player, int& added_score);
-        void manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int& added_score);
+        int proceed_play(const std::unique_ptr<puyoPlayer>& player);
+        int proceed_gravity(const std::unique_ptr<puyoPlayer>& player);
+        int proceed_vanish(const std::unique_ptr<puyoPlayer>& player);
+        void manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int added_score);
         void manage_game_end(const std::unique_ptr<puyoPlayer>& player);
         void proceed_event(const std::unique_ptr<puyoPlayer>& player); // puyoType에서 발생하는 이벤트 처리
         
-        void end_game();////
+        void end_game();
+        bool game_end_asked() const;
     public :
         puyoPhase();
 
         void ask_end_game();
-        bool game_end_asked() const;
         bool game_ended() const;
 
         std::pair<puyoType,puyoType> get_new_puyos(int count);
@@ -76,7 +75,9 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         int get_stay_value() const;
         void set_stay_value(int value);
         int get_color_count() const;
-        void set_color_count(int value);
+        void add_new_type(const puyoType& type);
+        void remove_new_type();
+
         Mode get_mode_type() const;
 
         int get_win_player_num() const;

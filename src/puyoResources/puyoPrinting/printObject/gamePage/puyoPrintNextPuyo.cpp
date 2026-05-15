@@ -24,6 +24,6 @@ void puyoPrintNextPuyo::print(RenderWindow& w)
     const auto[type3,type4] = new_types[new_puyo_count+1];
     const auto pos1 = pos+POSf(((player_num == 0) ? NEXT_PUYO_VIEWER_BREADTH : -NEXT_PUYO_VIEWER_BREADTH),PUYO_SIZE);
     const vector<tuple<puyoType,POSf>> next_puyos = {{type2,pos},{type1,pos+POSf(0,PUYO_SIZE)},{type4,pos1},{type3,pos1+POSf(0,PUYO_SIZE)}};
-    for(const auto [type, screen_pos] : next_puyos)
+    for(const auto& [type, screen_pos] : next_puyos)
         print_puyo(w,type,screen_pos);
 }

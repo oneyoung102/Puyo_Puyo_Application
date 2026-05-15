@@ -1,5 +1,6 @@
 #pragma once
 
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/_puyoType.hpp"
 #include <vector>
 #include <set>
@@ -15,7 +16,9 @@ class puyoBoardScoreControll
     public :
         puyoBoardScoreControll();
 
-        int get_chain_count();
+        int get_drop_score(const std::vector<puyoPuyo>& future_puyos) const;
+
+        int get_chain_count() const;
         void add_chain_count(puyoBoard& board);
         void reset_chain_count();
 

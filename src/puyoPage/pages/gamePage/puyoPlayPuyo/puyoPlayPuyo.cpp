@@ -39,20 +39,24 @@ puyoPlayPuyo::puyoPlayPuyo(POSf spawn_pos, pair<puyoType,puyoType> types, int gr
 }
 
 
-void puyoPlayPuyo::act_let(puyoBoard& board)
+void puyoPlayPuyo::act_let(const puyoBoard& board)
 {
     if(play_puyo[0]->have_act() && !play_puyo[0]->acting() 
     || play_puyo[1]->have_act() && !play_puyo[1]->acting())
     {
-        play_puyo[0]->set_act();
-        play_puyo[1]->set_act();
+        for(auto& puyo : play_puyo)
+            puyo->set_act();
         return;
     }
+    for(const auto& puyo : play_puyo)
+        if(puyo->have_act() && !puyo->decide(board))
+            return;
     for(auto& puyo : play_puyo)
-        puyo->act_let(board);
+        if(puyo->have_act())
+            puyo->act_let();
 }
 
-void puyoPlayPuyo::gravity_let(puyoBoard& board)
+void puyoPlayPuyo::gravity_let(const puyoBoard& board)
 {
     if(sat(board) && stay < stay_value)
     {
@@ -68,6 +72,7 @@ void puyoPlayPuyo::gravity_let(puyoBoard& board)
     {
         gravity[0]->act(*play_puyo[0]);
         gravity[1]->act(*play_puyo[1]);
+        stay = 0;
     }
 }
 
@@ -77,17 +82,6 @@ bool puyoPlayPuyo::dropped(const puyoBoard& board)
     return (!gravity[0]->acting() || !gravity[1]->acting()) || drop_taken;
 }
 
-int puyoPlayPuyo::get_height(const puyoBoard& board)
-{
-    const auto bsize = board.get_size();
-    for(const auto& puyo : play_puyo)
-    {
-        for(int dy = 1 ; dy < bsize.r ; ++dy)
-            if(board.touched(puyo->get_pos()+POSi(0,dy)))
-                return dy-1;
-    }
-    return 0;
-}
 vector<PUYO_INFO> puyoPlayPuyo::to_gravity_puyo(const puyoBoard& board) const
 {
     const auto[pos1,pos2] = get_pos();
@@ -98,14 +92,14 @@ vector<PUYO_INFO> puyoPlayPuyo::to_gravity_puyo(const puyoBoard& board) const
         {pos2, type2, tick}
     };
 }
-const std::unique_ptr<puyoPuyo>& puyoPlayPuyo::get_each(size_t number){return play_puyo[number];}
+const unique_ptr<puyoPuyo>& puyoPlayPuyo::get_each(size_t number){return play_puyo[number];}
 const decltype(puyoPlayPuyo::play_puyo)& puyoPlayPuyo::get(){return play_puyo;}
 
-tuple<POSf,POSf> puyoPlayPuyo::get_pos() const
+pair<POSf,POSf> puyoPlayPuyo::get_pos() const
 {
     return {play_puyo[0]->get_pos(),play_puyo[1]->get_pos()};
 }
-std::pair<puyoType,puyoType> puyoPlayPuyo::get_type() const
+pair<puyoType,puyoType> puyoPlayPuyo::get_type() const
 {
     const auto& type1 = play_puyo[0]->get_type(), &type2 = play_puyo[1]->get_type();
     return {type1,type2};
@@ -123,7 +117,7 @@ bool puyoPlayPuyo::sat(const puyoBoard& board) const
 }
 bool puyoPlayPuyo::moving() const
 {
-    for(auto& puyo : play_puyo)
+    for(const auto& puyo : play_puyo)
         if(puyo->acting())
             return true;
     return false;
@@ -141,7 +135,12 @@ void puyoPlayPuyo::let_fourway(Direction dir)
 }
 void puyoPlayPuyo::let_left(){let_fourway(LEFT);}
 void puyoPlayPuyo::let_right(){let_fourway(RIGHT);}
-void puyoPlayPuyo::let_down(){let_fourway(DOWN);}
+void puyoPlayPuyo::let_down()
+{
+    let_fourway(DOWN);
+    if(!moving())
+        down_taken = true;
+}
 void puyoPlayPuyo::let_turn()
 {
     if(moving())

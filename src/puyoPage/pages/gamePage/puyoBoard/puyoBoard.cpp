@@ -86,19 +86,6 @@ vector<_puyoType::typeState> puyoBoard::update()
     return std::move(states);
 }
 
-puyoBoardEnergyControll& puyoBoard::controll_energy(){return energy_controll;}
-puyoBoardGravityControll& puyoBoard::controll_gravity(){return gravity_controll;}
-puyoBoardScoreControll& puyoBoard::controll_score(){return score_controll;}
-puyoBoardObstructControll& puyoBoard::controll_obstuct(){return obstuct_controll;}
-puyoBoardVanishControll& puyoBoard::controll_vanish(){return vanish_controll;}
-puyoBoardFutureControll& puyoBoard::controll_future(){return future_controll;}
-
-const puyoBoardEnergyControll& puyoBoard::controll_energy() const {return energy_controll;}
-const puyoBoardGravityControll& puyoBoard::controll_gravity() const {return gravity_controll;}
-const puyoBoardScoreControll& puyoBoard::controll_score() const {return score_controll;}
-const puyoBoardObstructControll& puyoBoard::controll_obstuct() const {return obstuct_controll;}
-const puyoBoardVanishControll& puyoBoard::controll_vanish() const {return vanish_controll;}
-const puyoBoardFutureControll& puyoBoard::controll_future() const {return future_controll;}
 
 
 

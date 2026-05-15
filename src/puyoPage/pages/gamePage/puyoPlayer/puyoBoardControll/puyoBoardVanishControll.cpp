@@ -1,7 +1,7 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardVanishControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardVanishControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
 #include <queue>
@@ -13,7 +13,7 @@ using namespace std;
 
 puyoBoardVanishControll::puyoBoardVanishControll(){}
 
-void puyoBoardVanishControll::add(PUYO_INFO puyo)
+void puyoBoardVanishControll::add(const PUYO_INFO& puyo)
 {
     vanish_puyos.push_back(
         puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),
@@ -41,11 +41,10 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         }
 }
 
-void puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo)
+PUYO_INFO puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo)
 {
     const auto [pos,type,tick] = puyo;
     add(puyo);
-    board.controll_energy().add_temp({pos, type, puyoGameConstant::BOARD_FLY_TICK});
     if(type.is_frozen())
     {
         board.ref_puyo(pos).unfreeze();
@@ -53,8 +52,9 @@ void puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const PUYO_I
     }
     else 
         board.remove_puyo(pos);
+    return {pos, type, puyoGameConstant::BOARD_FLY_TICK};
 }
-pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, POSs fire_pos, vector<vector<bool>>& visited)
+pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, POSs fire_pos, vector<vector<bool>>& visited) const
 {
     int other_puyos = 0;
     vector<pair<POSs, puyoType>> stored_puyos;
@@ -78,7 +78,7 @@ pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(con
             ++other_puyos;
             continue;
         }
-        for (const auto dpos: DIR)
+        for (const auto& dpos: DIR)
         {
             const auto npos = pos+dpos;
             if (!board.in(npos))
@@ -90,11 +90,13 @@ pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(con
     }
     return make_pair(stored_puyos.size() - other_puyos, stored_puyos);
 }
-tuple<int, vector<int>, vector<_puyoType::Type>> puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board)
+tuple<int, vector<int>, vector<_puyoType::Type>, vector<PUYO_INFO>> puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board)
 {
-   int puyo_count = 0;
-   vector<int> link_count;
-   vector<_puyoType::Type> color_count;
+    int puyo_count = 0;
+    vector<int> link_count;
+    vector<_puyoType::Type> color_count;
+    vector<PUYO_INFO> temp_energy_puyos;
+
     const auto bsize = board.get_size();
     vector<vector<bool>> visited(bsize.r, vector<bool>(bsize.c, false));
     for (size_t i = 0; i < bsize.r; ++i)
@@ -111,14 +113,14 @@ tuple<int, vector<int>, vector<_puyoType::Type>> puyoBoardVanishControll::to_van
                 puyo_count += color_puyo_count;
                 link_count.push_back(color_puyo_count);
                 color_count.push_back(puyo.get());
-                for(const auto [pos, type] : stored_puyos)
+                for(const auto& [pos, type] : stored_puyos)
                 {
                     const int tick = (type == puyoType(P_OBSTRUCT)) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
-                    to_vanish_puyo_each(board,{pos,type,tick});
+                    temp_energy_puyos.push_back(to_vanish_puyo_each(board,{pos,type,tick}));
                 }
             }
     }
-    return make_tuple(puyo_count, link_count, color_count);
+    return std::move(make_tuple(puyo_count, std::move(link_count), std::move(color_count), std::move(temp_energy_puyos)));
 }
 void puyoBoardVanishControll::set_condition(int amount){condition_for_vanish = amount;}
 int puyoBoardVanishControll::get_condition() const { return condition_for_vanish; }

@@ -14,11 +14,11 @@ class puyoBotModel3 : public puyoBot
         const int& next_puyo_count;
         const int beam_search_select_count;
 
-        int simulate_chain(POSi simul_droos, int vanish_condition);
-        int get_potential(int vanish_condition, const std::vector<POSi>& deployed_puyos);
-        bool fire_able(int vanish_condition, const std::vector<POSi>& deployed_puyos);
-        std::pair<int,PROBABLITY> beam_search(const puyoBoard& board, const puyoPlayPuyo& puyo, const std::vector<std::pair<puyoType,puyoType>>& next_types, int count, const bool fire);
+        int simulate_chain(const puyoPlayer& player, POSi simul_droos);
+        int get_potential(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos);
+        bool fire_able(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos);
+        std::pair<int,PROBABLITY> beam_search(const puyoPlayer& player, const puyoBoard& board, const std::vector<std::pair<puyoType,puyoType>>& next_types, int count, const bool fire);
     public :
         puyoBotModel3(const std::vector<std::pair<puyoType,puyoType>>& new_types, const int& next_puyo_count, POSi bsize, unsigned int act_time_unit = 0);     
-        void think_perfect_lets(const puyoBoard& board, const puyoPlayPuyo& puyo) override;
+        void think_perfect_lets(const puyoPlayer& player) override;
 };

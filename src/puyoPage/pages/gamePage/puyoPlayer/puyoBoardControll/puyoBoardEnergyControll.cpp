@@ -1,4 +1,4 @@
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardEnergyControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardEnergyControll.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFly.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
@@ -11,7 +11,7 @@ using namespace puyoGameConstant;
 puyoBoardEnergyControll::puyoBoardEnergyControll(){};
 
 
-const vector<puyoPuyo> &puyoBoardEnergyControll::get() { return energy_puyos; }
+const vector<puyoPuyo> &puyoBoardEnergyControll::get() const { return energy_puyos; }
 void puyoBoardEnergyControll::fly(puyoBoard& board)
 {
     for (int i = 0; i < energy_puyos.size();)
@@ -43,6 +43,11 @@ void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_
 void puyoBoardEnergyControll::add_temp(const PUYO_INFO& temp_energy_puyo)
 {
     temp_energy_puyos.push_back(temp_energy_puyo);
+}
+void puyoBoardEnergyControll::add_temp(const std::vector<PUYO_INFO>& temp_energy_puyos)
+{
+    for(const auto& temp_energy_puyo : temp_energy_puyos)
+        add_temp(temp_energy_puyo);
 }
 bool puyoBoardEnergyControll::empty_temp() const {return temp_energy_puyos.empty();}
 void puyoBoardEnergyControll::clear_temp() { temp_energy_puyos.clear(); }

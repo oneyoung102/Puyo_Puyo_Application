@@ -1,5 +1,7 @@
 #include "puyoBotModel1.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
+
 
 #include <queue>
 #include <vector>
@@ -11,8 +13,11 @@ puyoBotModel1::puyoBotModel1(POSi bsize, unsigned int init_act_tick)
     : puyoBot(bsize, init_act_tick)
 {}
 
-void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuyo& puyo)
+void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
 {
+    auto& board = player.get_board();
+    auto& puyo = player.get_puyo();
+
     int puyo_count = 0;
     const auto bsize = board.get_size();
     for(size_t i = 0 ; i < bsize.r ; ++i)
@@ -23,13 +28,13 @@ void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                 ++puyo_count;
         }
 
-    const bool fire_chain = get_fire(puyo_count,board.controll_obstuct().get());
+    const bool fire_chain = get_fire(puyo_count,player.controll_obstuct().get());
 
     const auto spawn_pos = board.get_spawn_pos();
     PROBABLITY perfect_probablity(-spawn_pos.x,0);
     int max_cluster_size = 0, max_cluster_size_sum = 0, bottom_y = 0;
 
-    for(const auto probablity : calc_all_probablities(board))
+    for(const auto& probablity : calc_all_probablities(board))
     {
         const auto[temp_pos1,temp_pos2] = to_coord(probablity,puyo);
         if(!board.in(temp_pos1) || !board.in(temp_pos2))
@@ -60,7 +65,7 @@ void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
                         continue;
                     visited[cpos.r][cpos.c] = true;
                     ++temp_cluster_size;
-                    for(const auto dpos : DIR)
+                    for(const auto& dpos : DIR)
                     {
                         const auto npos = cpos+dpos;
                         if(!board.in(npos))
@@ -75,7 +80,7 @@ void puyoBotModel1::think_perfect_lets(const puyoBoard& board, const puyoPlayPuy
             }
             
             const int temp_bottom_y = max(pos1.y,pos2.y);
-            if(cluster_size < board.controll_vanish().get_condition()|| fire_chain)
+            if(cluster_size < player.controll_vanish().get_condition()|| fire_chain)
                 if(max_cluster_size < cluster_size
                 || max_cluster_size == cluster_size && max_cluster_size_sum < cluster_size_sum
                 || max_cluster_size == cluster_size && max_cluster_size_sum == cluster_size_sum &&  bottom_y < temp_bottom_y)

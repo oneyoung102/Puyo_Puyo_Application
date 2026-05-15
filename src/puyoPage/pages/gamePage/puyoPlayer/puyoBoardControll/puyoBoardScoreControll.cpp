@@ -1,4 +1,4 @@
-#include "puyoPage/pages/gamePage/puyoBoard/puyoBoardControll/puyoBoardScoreControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardScoreControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 
 using namespace std;
@@ -10,7 +10,15 @@ puyoBoardScoreControll::puyoBoardScoreControll()
     , color_count(set<_puyoType::Type>())
 {}
 
-int puyoBoardScoreControll::get_chain_count() { return chain_count; }
+ int puyoBoardScoreControll::get_drop_score(const vector<puyoPuyo>& future_puyos) const
+ {
+    int drop_score = 0;
+    for(const auto& future_puyo : future_puyos)
+        drop_score += future_puyo.get_pos().y;
+    return drop_score/max(1,CASTi(future_puyos.size()));
+ }
+
+int puyoBoardScoreControll::get_chain_count() const{ return chain_count; }
 void puyoBoardScoreControll::add_chain_count(puyoBoard& board)
 {
     board.set_signal(puyoBoardSignal::chain);

@@ -14,11 +14,13 @@ using namespace sf;
 using namespace puyoOpeningConstant;
 
 void puyoOpeningPage::let_start(){convert_page = true;}
+void puyoOpeningPage::let_skip(){skip = true;} //인트로 스킵
 
 puyoOpeningPage::puyoOpeningPage(puyoFileSystem& pfs)
     : SEGA_SPRITE(pfs.get_sprite(puyoFileSystem::Image::sega))
     , OPENING_SPRITE(pfs.get_sprite(puyoFileSystem::Image::opening))
     , status(Status::init)
+    , skip(false)
 {}
 puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& window)
 {
@@ -31,11 +33,17 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
         case Status::init :
             pp.add_print_object(make_unique<puyoPrintObject>(SEGA_SPRITE,SEGA_INTRO_TICK));
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::sega_intro));
+            pl.allot_key(Keyboard::Key::Enter,FUNCFY(let_skip));
             status = Status::intro;
             break;
         case Status::intro:
-            if(!pp.object_back_alive())
+            if(!pp.object_back_alive() || skip)
             {
+                if(skip && pp.object_back_alive())
+                {
+                    pp.clear_object_back();
+                    ps.clear_back();
+                }
                 ps.play_music(pfs.get_music(puyoFileSystem::Music::opening_page));
                 pp.add_print_object(make_unique<puyoPrintObject>(OPENING_SPRITE));
                 pp.add_print_text(make_unique<puyoPrintTextFlash>(
@@ -43,10 +51,11 @@ puyoPageSignal puyoOpeningPage::proceed_page(puyoFileSystem& pfs, RenderWindow& 
                     "Press Enter",
                     pfs.get_font(),
                     TEXT_PRESS_ENTER_SIZE,
-                    TEXT_PRESS_ENTER_CYCLE,
+                    TEXT_PRESS_ENTER_CYCLE_TICK,
                     Color::White,
                     Text::Style::Regular));
                 pl.allot_key(Keyboard::Key::Enter,FUNCFY(let_start));
+                skip = false;
                 status = Status::opening;
             }
             break;

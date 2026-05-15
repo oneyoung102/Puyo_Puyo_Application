@@ -89,10 +89,10 @@ puyoFileSystem::puyoFileSystem() : gen(random_device{}())
     getAllSound();
     getAllMusicPath();
 }
-Sprite puyoFileSystem::get_sprite(puyoFileSystem::Image name){return sprites[CASTs(name)];}
-const Font& puyoFileSystem::get_font(){return font;}
+Sprite puyoFileSystem::get_sprite(puyoFileSystem::Image name) const {return sprites[CASTs(name)];}
+const Font& puyoFileSystem::get_font() const {return font;}
 sf::SoundBuffer& puyoFileSystem::get_buffer(puyoFileSystem::Sound name){return buffers[CASTs(name)];}
-const fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name){return musics[CASTs(name)];}
+const fs::path& puyoFileSystem::get_music(puyoFileSystem::Music name) const {return musics[CASTs(name)];}
 const fs::path& puyoFileSystem::get_random_music()
 {
     uniform_int_distribution<> dist(CASTi(Music::game_music1), CASTi(Music::game_music11));
