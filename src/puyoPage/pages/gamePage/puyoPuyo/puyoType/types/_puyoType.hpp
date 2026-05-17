@@ -39,6 +39,7 @@ class _puyoType
 
         Type get() const {return type;}
         bool is_same(const _puyoType& other) const {return this->get() == other.get();}
+        virtual int get_weight() const = 0;
 
         virtual bool is_colored() const = 0;
         virtual bool is_linkable(const _puyoType& other) const = 0; // this -> other 로의 연결 가능 여부
@@ -49,4 +50,8 @@ class _puyoType
         void freeze() {_is_frozen = true;} 
         void unfreeze() {_is_frozen = false;} 
         bool is_frozen() const {return _is_frozen;} 
+
+        virtual void charge() {return;}
+        virtual void uncharge() {return;}
+        virtual bool is_charged() const {return false;}
 };

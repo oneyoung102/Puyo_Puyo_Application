@@ -30,6 +30,7 @@ enum class Mode
     speed,
     bomb,
     frozen,
+    charged,
 };
 
 class puyoPageSignal

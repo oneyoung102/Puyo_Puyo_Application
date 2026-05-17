@@ -14,7 +14,7 @@ class puyoBoardVanishControll
     public :
         puyoBoardVanishControll();
         PUYO_INFO to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo);
-        std::pair<int, std::vector<std::pair<POSs, puyoType>>> fire_cluster(const puyoBoard& board, POSs fire_pos, std::vector<std::vector<bool>>& visited) const;
+        std::tuple<int, int, std::vector<std::pair<POSs, puyoType>>> fire_cluster(const puyoBoard& board, POSs fire_pos, std::vector<std::vector<bool>>& visited) const;
         std::tuple<int, std::vector<int>, std::vector<_puyoType::Type>,std::vector<PUYO_INFO>> to_vanish_puyo(puyoBoard& board);
         void vanish(puyoBoard& board);
 

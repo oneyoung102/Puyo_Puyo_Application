@@ -1,4 +1,5 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
+#include <stdexcept>
 
 using namespace std;
 puyoType::puyoType() : type(nullptr) {}
@@ -36,7 +37,9 @@ bool puyoType::operator==(const puyoType& other) const noexcept
 bool puyoType::operator!=(const puyoType& other) const noexcept {return !(*this == other);}
 
 
-_puyoType::Type puyoType::get() const {return type ? type->get() : _puyoType::Type::obstruct;}
+_puyoType::Type puyoType::get() const {return type ? type->get() : throw runtime_error("puyoType has no type");}
+int puyoType::get_weight() const {return type ? type->get_weight() : 0;}
+
 bool puyoType::is_colored() const {return !empty() && type->is_colored();}
 bool puyoType::is_linkable(const puyoType& other) const {return !empty() && !other.empty() && type->is_linkable(*other.type);}
 bool puyoType::empty() const {return type == nullptr;}
@@ -47,3 +50,7 @@ _puyoType::typeState puyoType::get_state() const { return empty() ? _puyoType::t
 void puyoType::freeze(){ if(!empty()) type->freeze(); }
 void puyoType::unfreeze(){ if(!empty()) type->unfreeze(); }
 bool puyoType::is_frozen() const {return !empty() && type->is_frozen();}
+
+void puyoType::charge(){if(!empty()) type->charge();}
+void puyoType::uncharge(){if(!empty()) type->uncharge();}
+bool puyoType::is_charged() const {return type ? type->is_charged() : false;}

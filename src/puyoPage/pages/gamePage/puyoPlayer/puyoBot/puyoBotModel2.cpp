@@ -332,7 +332,7 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     bool continue_vanish = true;
 
     vector<vector<bool>> temp_visited(bsize.r, vector<bool>(bsize.c, false));
-    const auto [_, initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
+    const auto& [_1,_2,initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
     vanished_puyo += initial_stored.size();
     for(const auto& p : initial_stored)
         board.remove_puyo(p.first);
@@ -362,8 +362,8 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
                 if(type.empty() || visited[r][c] || !type.is_colored())
                     continue;
 
-                const auto [color_puyo_count, stored_puyos] = player.controll_vanish().fire_cluster(board, POSs(c,r), visited);
-                if(color_puyo_count >= player.controll_vanish().get_condition())
+                const auto [color_puyo_count, weight_sum,stored_puyos] = player.controll_vanish().fire_cluster(board, POSs(c,r), visited);
+                if(weight_sum >= player.controll_vanish().get_condition())
                 { 
                     vanished_puyo += stored_puyos.size();
                     for(const auto& p : stored_puyos)

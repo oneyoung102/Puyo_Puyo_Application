@@ -18,8 +18,9 @@ bool puyoPuyoAct::decide(const puyoBoard& board, puyoPuyo& puyo)
     }
     else if(acting())
         return true;
+    else
+        arrive(puyo);
     halt();
-    arrive(puyo);
     return false;
 }
 

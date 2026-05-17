@@ -18,6 +18,7 @@ class puyoType
         bool operator!=(const puyoType& other) const noexcept;
         
         _puyoType::Type get() const;
+        int get_weight() const;
 
         bool is_colored() const;
         bool is_linkable(const puyoType& other) const;
@@ -29,6 +30,10 @@ class puyoType
         void freeze();
         void unfreeze();
         bool is_frozen() const;
+
+        void charge();
+        void uncharge();
+        bool is_charged() const;
 };
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoColor.hpp"

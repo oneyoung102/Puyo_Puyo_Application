@@ -49,7 +49,10 @@ void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos
             break;
         }
         default ://일반 색깔 뿌요
-            print_16x16(w,POSi(0,CASTi(type.get())),screen_pos);
+            if(type.is_charged())
+                print_16x16(w,CHARGED_PUYO_POS+POSi(CASTi(type.get()),0),screen_pos);
+            else 
+                print_16x16(w,POSi(0,CASTi(type.get())),screen_pos);
             break;
     }
 }

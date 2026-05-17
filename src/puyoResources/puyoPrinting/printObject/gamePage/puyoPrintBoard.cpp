@@ -33,13 +33,13 @@ void puyoPrintBoard::print(RenderWindow& w)
                 case _puyoType::Type::yellow :
                 case _puyoType::Type::green :
                 case _puyoType::Type::pupple :
-                    if(!puyo_type.is_frozen()) //의도적으로 break 안 함
+                    if(!puyo_type.is_frozen() && !puyo_type.is_charged()) //의도적으로 break 안 함
                     {
                         int dir = 0;
                         for(size_t i = 0 ; i < DIR.size() ; ++i)
                         {
                             const auto pos = board_pos + DIR[i];
-                            dir += (1<<i)*(board.in(pos) && board.get_puyo(pos) == puyo_type && !board.get_puyo(pos).is_frozen());
+                            dir += (1<<i)*(board.in(pos) && board.get_puyo(pos) == puyo_type && !board.get_puyo(pos).is_frozen() && !board.get_puyo(pos).is_charged());
                         }
                         print_16x16(w,POSi(dir,CASTi(type)),pos+board_pos*PUYO_SIZE);
                         break;

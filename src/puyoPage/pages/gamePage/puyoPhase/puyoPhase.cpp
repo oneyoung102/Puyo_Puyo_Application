@@ -1,5 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeCharged.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeFrozen.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeSpeed.hpp"
 
@@ -127,6 +128,9 @@ void puyoPhase::set_game(Diff diff, Mode mode)
             break;
         case Mode::frozen :
             curr_mode = make_unique<puyoModeFrozen>(get_player_count());
+            break;
+        case Mode::charged :
+            curr_mode = make_unique<puyoModeCharged>(get_player_count());
             break;
         case Mode::NONE : 
             throw runtime_error("curr mode ptr is nullptr");

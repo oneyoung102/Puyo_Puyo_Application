@@ -37,6 +37,8 @@ namespace puyoGameConstant
     constexpr int BOT_PENALTY = -100000;
     constexpr float MIN_LEARNING_RATE = 0.02, MIN_WEIGHT = 0.02;
 
+    constexpr int CHARGED_COLOR_PUYO_WEIGHT = 100;
+
     //delay
     constexpr int PHASE_SET_TICK = 30;
     //난이도
@@ -56,6 +58,8 @@ namespace puyoGameConstant
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
     constexpr int FREEZE_TICK = 550;
     constexpr int PROB_FREEZE_ONCE = 30, PROB_FREEZE_TWICE = 10;
+    constexpr int CHARGE_TICK = 500;
+    constexpr int PROB_CHARGE_ONCE = 50, PROB_CHARGE_TWICE = 20;
 
 
     // printing

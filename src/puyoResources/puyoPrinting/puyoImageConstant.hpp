@@ -14,6 +14,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
         constexpr float FUTURE_PUYO_ALPHA_VALUE = 0.7; //투명도
 
+        constexpr auto CHARGED_PUYO_POS = POSi(0,9);
         constexpr auto DROPPING_PUYO_POS = POSi(4,13);
         constexpr auto GRAVITY_PUYO_POS = POSi(5,11);
         constexpr auto VANISH_SOON_PUYO_POS = POSi(6,10), VANISH_STAY_PUYO_POS = POSi(0,12);

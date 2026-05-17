@@ -54,9 +54,9 @@ PUYO_INFO puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const P
         board.remove_puyo(pos);
     return {pos, type, puyoGameConstant::BOARD_FLY_TICK};
 }
-pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, POSs fire_pos, vector<vector<bool>>& visited) const
+tuple<int,int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, POSs fire_pos, vector<vector<bool>>& visited) const
 {
-    int other_puyos = 0;
+    int color_puyo_count, weight_sum = 0;
     vector<pair<POSs, puyoType>> stored_puyos;
     queue<POSs> coords;
     const puyoType puyo = board.get_puyo(fire_pos);
@@ -73,22 +73,21 @@ pair<int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(con
         const puyoType curr_puyo = board.get_puyo(pos);
         stored_puyos.push_back(make_tuple(pos, curr_puyo));
         
-        if(!curr_puyo.is_colored())
-        {
-            ++other_puyos;
-            continue;
-        }
+        if(curr_puyo.is_colored())
+            ++color_puyo_count;
+        weight_sum += curr_puyo.get_weight();
+
         for (const auto& dpos: DIR)
         {
             const auto npos = pos+dpos;
             if (!board.in(npos))
                 continue;
             const puyoType npuyo = board.get_puyo(npos);
-            if (puyo.is_linkable(npuyo) && !visited[npos.r][npos.c])
+            if (curr_puyo.is_linkable(npuyo) && !visited[npos.r][npos.c])
                 coords.push(npos);
         }
     }
-    return make_pair(stored_puyos.size() - other_puyos, stored_puyos);
+    return make_tuple(color_puyo_count, weight_sum, stored_puyos);
 }
 tuple<int, vector<int>, vector<_puyoType::Type>, vector<PUYO_INFO>> puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board)
 {
@@ -107,8 +106,8 @@ tuple<int, vector<int>, vector<_puyoType::Type>, vector<PUYO_INFO>> puyoBoardVan
             const puyoType puyo = board.get_puyo({j, i});
             if(!puyo.is_colored())
                 continue;
-            auto [color_puyo_count, stored_puyos] = fire_cluster(board,{j, i}, visited);
-            if(color_puyo_count >= condition_for_vanish)
+            const auto& [color_puyo_count, weight_sum, stored_puyos] = fire_cluster(board,{j, i}, visited);
+            if(weight_sum >= condition_for_vanish)
             {
                 puyo_count += color_puyo_count;
                 link_count.push_back(color_puyo_count);

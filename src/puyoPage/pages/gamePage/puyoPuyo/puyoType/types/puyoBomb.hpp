@@ -11,6 +11,8 @@ class puyoBomb : public _puyoType
     public :
         puyoBomb(typeState state, bool is_frozen = false, int bomb_tick_init = 1, int bomb_tick = 0);
         std::unique_ptr<_puyoType> clone() const override;
+        int get_weight() const override;
+
         bool is_colored() const override;
         bool is_linkable(const _puyoType& other) const override;
 
