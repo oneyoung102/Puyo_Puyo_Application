@@ -12,7 +12,7 @@ class puyoBoardFutureControll
         std::vector<puyoPuyo> future_puyos;
     public :
         puyoBoardFutureControll();
-        void update(const puyoBoard& board, puyoPlayPuyo& puyo);
+        void update(const puyoBoard& board, const puyoPlayPuyo& play_puyo);
         void fall(const puyoBoard& board);
 
         const std::vector<puyoPuyo>& get() const;

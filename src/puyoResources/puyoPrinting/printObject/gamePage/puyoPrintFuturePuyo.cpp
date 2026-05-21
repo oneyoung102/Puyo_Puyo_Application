@@ -18,9 +18,6 @@ puyoPrintFuturePuyo::puyoPrintFuturePuyo(const vector<puyoPuyo>& future_puyos, S
 
 void puyoPrintFuturePuyo::print(RenderWindow& w)
 {
-    for(auto&& future_puyo : future_puyos)
-    {
-        const auto puyo = future_puyo.get_type();
-        print_puyo(w,puyo,pos+future_puyo.get_pos()*PUYO_SIZE);
-    }
+    for(const auto& future_puyo : future_puyos)
+        print_puyo(w,future_puyo,pos+future_puyo.get_pos()*PUYO_SIZE);
 }

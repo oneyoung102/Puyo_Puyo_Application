@@ -12,6 +12,7 @@ class puyoPuyoGravity : public puyoPuyoAct
         void arrive(puyoPuyo& puyo) override;
     public :
         puyoPuyoGravity(int amount);
+        std::unique_ptr<puyoPuyoAct> clone() const override;
         bool decide(const puyoBoard& board,puyoPuyo& puyo) override;
         void act(puyoPuyo& puyo) override;
 };

@@ -12,6 +12,7 @@ class puyoPuyoFly : public puyoPuyoAct
         const POSf dpos, from_pos;
         void arrive(puyoPuyo& puyo) override;
     public :
-        puyoPuyoFly(POSf from_pos, POSf to_pos, int amount);
+        puyoPuyoFly(int amount, const POSf& from_pos, const POSf& dpos);
+        std::unique_ptr<puyoPuyoAct> clone() const override;
         void act(puyoPuyo& puyo) override;
 };

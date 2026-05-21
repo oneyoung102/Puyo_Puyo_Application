@@ -11,7 +11,7 @@
 
 using namespace std;
 
-puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick, const std::vector<std::pair<puyoType,puyoType>>& new_types)
+puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick, const std::vector<std::pair<puyoPuyo,puyoPuyo>>& new_types)
     : board(std::move(board))
     , puyoObjectSignal()
     , player_num(player_num)
@@ -45,9 +45,12 @@ puyoPlayPuyo& puyoPlayer::get_puyo() const {return *puyo;}
 const int& puyoPlayer::get_score() const {return score;}
 void puyoPlayer::add_score(int s){score = min(puyoGameConstant::SCORE_UPPER-1,score+s);}
 
-void puyoPlayer::give_new_puyos(pair<puyoType,puyoType> types, int puyo_gravity_value, int puyo_stay_value)
+void puyoPlayer::give_new_puyos(const pair<puyoPuyo,puyoPuyo>& puyos, int puyo_gravity_value, int puyo_stay_value)
 {
-    puyo = std::move(make_unique<puyoPlayPuyo>(board->get_spawn_pos(),types,puyo_gravity_value,puyo_stay_value));
+    auto temp_puyos = puyos;
+    temp_puyos.first.move(board->get_spawn_pos());
+    temp_puyos.second.move(board->get_spawn_pos()-POSi(0,1));
+    puyo = make_unique<puyoPlayPuyo>(std::move(temp_puyos),puyo_gravity_value,puyo_stay_value);
     ++new_puyo_count;
 }
 const int& puyoPlayer::get_new_puyo_count() const {return new_puyo_count;}

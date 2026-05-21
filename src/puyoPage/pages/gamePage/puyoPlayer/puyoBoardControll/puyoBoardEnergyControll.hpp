@@ -7,16 +7,16 @@ class puyoBoard;
 class puyoBoardEnergyControll
 {
     private :
-        std::vector<PUYO_INFO> temp_energy_puyos; 
+        std::vector<puyoPuyo> temp_energy_puyos; 
         std::vector<puyoPuyo> energy_puyos; 
     public :
         puyoBoardEnergyControll();
-        void fly(puyoBoard& board);
+        void fly(const puyoBoard& board);
         void to_energy_puyo(int from_player_num, int to_player_num);// temp_energy_puyo를 energy_puyo로
         const std::vector<puyoPuyo>& get() const;
 
-        void add_temp(const PUYO_INFO& temp_energy_puyo);
-        void add_temp(const std::vector<PUYO_INFO>& temp_energy_puyos);
+        void add_temp(const puyoPuyo& temp_energy_puyo);
+        void add_temp(const std::vector<puyoPuyo>& temp_energy_puyos);
         void clear_temp();
         bool empty_temp() const;
 };

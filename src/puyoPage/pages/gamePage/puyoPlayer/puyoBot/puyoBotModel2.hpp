@@ -46,12 +46,12 @@ class puyoBotModel2 : public puyoBot
         PARAM_TYPE get_new_stdev(ParameterName name, PARAM_TYPE old_mean, PARAM_TYPE x);
         PARAM_TYPE get_bias();
 
-        std::pair<PARAM_TYPE, PARAM_TYPE> get_cluster_sizes(const std::vector<std::pair<POSi,puyoType>>& deployed_puyos);
-        PARAM_TYPE get_column_diversity(const std::vector<POSi>& deployed_puyos);
-        PARAM_TYPE get_row_height(const std::vector<POSi>& deployed_puyos);
-        PARAM_TYPE get_stair_level(const std::vector<std::pair<POSi,puyoType>>& deployed_puyos);
-        PARAM_TYPE get_flatness(const std::vector<POSi>& deployed_puyos);
-        PARAM_TYPE get_isolated(const std::vector<std::pair<POSi,puyoType>>& deployed_puyos);
+        std::pair<PARAM_TYPE, PARAM_TYPE> get_cluster_sizes(const std::vector<puyoPuyo>& deployed_puyos);
+        PARAM_TYPE get_column_diversity(const std::vector<puyoPuyo>& deployed_puyos);
+        PARAM_TYPE get_row_height(const std::vector<puyoPuyo>& deployed_puyos);
+        PARAM_TYPE get_stair_level(const std::vector<puyoPuyo>& deployed_puyos);
+        PARAM_TYPE get_flatness(const std::vector<puyoPuyo>& deployed_puyos);
+        PARAM_TYPE get_isolated(const std::vector<puyoPuyo>& deployed_puyos);
 
         PARAM_TYPE get_expected_mean_score(int color_puyo_sum, int dscore);
         PARAM_TYPE sigmoid(PARAM_TYPE score, PARAM_TYPE expected_min_score);

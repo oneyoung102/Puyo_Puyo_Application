@@ -9,14 +9,12 @@ using namespace std;
 puyoBoardGravityControll::puyoBoardGravityControll()
 {}
 
-void puyoBoardGravityControll::add(const PUYO_INFO& puyo) // std::move
+void puyoBoardGravityControll::add(const puyoPuyo& puyo) // std::move
 {
-    gravity_puyos.push_back(
-        puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),
-        make_unique<puyoPuyoGravity>(std::get<2>(puyo))));
+    gravity_puyos.push_back(puyo);
     gravity_puyos.back().let();    
 }
-void puyoBoardGravityControll::add(const vector<PUYO_INFO>& puyos) // std::move
+void puyoBoardGravityControll::add(const vector<puyoPuyo>& puyos) // std::move
 {
     for(const auto& puyo : puyos)
         add(puyo);
@@ -33,9 +31,9 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
         if(!gravity_puyos[i].acting())
         {
             const auto[x,y] = gravity_puyos[i].get_pos();
-            const auto pos = POSi(round(x), round(y));
+            const auto& pos = POSi(round(x), round(y));
             if(board.in(pos) && board.empty(pos))
-                board.insert_puyo(gravity_puyos[i].get_type(), pos);
+                board.insert_puyo(gravity_puyos[i], pos);
             
             std::swap(gravity_puyos[i],gravity_puyos.back());
             gravity_puyos.pop_back();

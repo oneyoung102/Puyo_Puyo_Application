@@ -1,5 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
+#include <memory>
 #include "puyoPuyoGravity.hpp"
 
 using namespace std;
@@ -8,6 +9,12 @@ using namespace std;
 puyoPuyoGravity::puyoPuyoGravity(int amount)
     : puyoPuyoAct(amount)
 {}
+std::unique_ptr<puyoPuyoAct> puyoPuyoGravity::clone() const
+{
+    auto temp = make_unique<puyoPuyoGravity>(act_count_init);
+    temp->let(act_count);
+    return temp;
+}
 
 bool puyoPuyoGravity::test(const puyoBoard& board, puyoPuyo& puyo)
 {

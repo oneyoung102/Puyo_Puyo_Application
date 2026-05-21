@@ -7,6 +7,7 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFourWayMove.hpp"
 
 #include <cmath>
+#include <memory>
 
 using namespace std;
 
@@ -51,7 +52,7 @@ void puyoPuyoTurn::arrive(puyoPuyo& puyo)
     puyo.move(center.get_pos()+DIR[turn_dir]);
 }
 
-puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, POSf turning)
+puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, const POSf& turning)
     : puyoPuyoAct(amount)
     , rad(-M_PI/2/act_count_init), c(cos(rad)),s(sin(rad))//시계 반대방향
     , center(center)
@@ -63,10 +64,22 @@ puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, POSf turning)
     else if(round(center_y) == round(y))
         turn_dir = (x < center_x) ? DOWN : UP;
 }
+puyoPuyoTurn::puyoPuyoTurn(int amount, puyoPuyo& center, Direction turn_dir)
+: puyoPuyoAct(amount)
+    , rad(-M_PI/2/act_count_init), c(cos(rad)),s(sin(rad))//시계 반대방향
+    , center(center)
+    , turn_dir(turn_dir)
+{}
+std::unique_ptr<puyoPuyoAct> puyoPuyoTurn::clone() const
+{
+    auto temp = make_unique<puyoPuyoTurn>(act_count_init,center,turn_dir);
+    temp->let(act_count);
+    return temp;
+}
 
 void puyoPuyoTurn::act(puyoPuyo& puyo)
 {
-    const POSf dpos = puyo.get_pos()-center.get_pos();
+    const POSf& dpos = puyo.get_pos()-center.get_pos();
     puyo.move(center.get_pos()+POSf(dpos.x*c - dpos.y*s,dpos.x*s + dpos.y*c));
     if(sub_acts[0] && sub_acts[1]) 
     {

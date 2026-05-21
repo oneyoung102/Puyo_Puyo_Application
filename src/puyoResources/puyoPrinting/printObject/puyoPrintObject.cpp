@@ -1,7 +1,6 @@
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
 #include <SFML/Graphics.hpp>
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoTool/puyoCast.hpp"
 
@@ -28,31 +27,31 @@ void puyoPrintObject::print_16x16(RenderWindow& w, POSi img_pos, POSf screen_pos
     sprite.setTextureRect(IntRect({img_pos.x,img_pos.y}, {PUYO_SIZE, PUYO_SIZE})); 
     print_sprite(w,screen_pos);
 }
-void puyoPrintObject::print_puyo(RenderWindow& w, puyoType type, POSf screen_pos)
+void puyoPrintObject::print_puyo(RenderWindow& w, const puyoPuyo& puyo, POSf screen_pos)
 {
-    if(type.empty())
+    if(puyo.empty())
         return;
-    if(type.is_frozen())
+    if(puyo.is_frozen())
     {
         print_16x16(w,FROZEN_PUYO_POS,screen_pos);
         return;
     }
-    switch(type.get())
+    switch(puyo.get_type())
     {
-        case _puyoType::Type::obstruct : 
+        case puyoType::Type::obstruct : 
             print_16x16(w,OBSTRUCT_PUYO_POS,screen_pos);
             break;
-        case _puyoType::Type::bomb :
+        case puyoType::Type::bomb :
         {
-            const int idx = CASTi(type.get_state())-CASTi(_puyoType::typeState::explode_stay1);
+            const int idx = CASTi(puyo.get_type_state())-CASTi(puyoType::typeState::explode_stay1);
             print_16x16(w,BOMB_POS+POSi(idx,0),screen_pos);
             break;
         }
         default ://일반 색깔 뿌요
-            if(type.is_charged())
-                print_16x16(w,CHARGED_PUYO_POS+POSi(CASTi(type.get()),0),screen_pos);
+            if(puyo.is_charged())
+                print_16x16(w,CHARGED_PUYO_POS+POSi(CASTi(puyo.get_type()),0),screen_pos);
             else 
-                print_16x16(w,POSi(0,CASTi(type.get())),screen_pos);
+                print_16x16(w,POSi(0,CASTi(puyo.get_type())),screen_pos);
             break;
     }
 }

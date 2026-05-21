@@ -4,6 +4,7 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardVanishControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
+#include <memory>
 #include <queue>
 #include <utility>
 
@@ -13,11 +14,9 @@ using namespace std;
 
 puyoBoardVanishControll::puyoBoardVanishControll(){}
 
-void puyoBoardVanishControll::add(const PUYO_INFO& puyo)
+void puyoBoardVanishControll::add(const puyoPuyo& puyo)
 {
-    vanish_puyos.push_back(
-        puyoPuyo(std::get<0>(puyo),std::get<1>(puyo),
-        make_unique<puyoPuyoVanish>(std::get<2>(puyo))));
+    vanish_puyos.push_back(puyo);
     vanish_puyos.back().let();
 }
 
@@ -41,25 +40,27 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         }
 }
 
-PUYO_INFO puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const PUYO_INFO& puyo)
+puyoPuyo puyoBoardVanishControll::to_vanish_puyo_each(puyoBoard& board, const POSs& pos)
 {
-    const auto [pos,type,tick] = puyo;
-    add(puyo);
-    if(type.is_frozen())
+    const auto puyo = board.get_puyo(pos);
+    if(puyo.is_frozen())
     {
         board.ref_puyo(pos).unfreeze();
         board.set_signal(puyoBoardSignal::unfreeze);
+        return board.get_puyo(pos);
     }
     else 
+    {
         board.remove_puyo(pos);
-    return {pos, type, puyoGameConstant::BOARD_FLY_TICK};
+        return puyo;
+    }
 }
-tuple<int,int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, POSs fire_pos, vector<vector<bool>>& visited) const
+tuple<int,int,vector<puyoPuyo>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, const POSs& fire_pos, vector<vector<bool>>& visited) const
 {
-    int color_puyo_count, weight_sum = 0;
-    vector<pair<POSs, puyoType>> stored_puyos;
+    int color_puyo_count = 0, weight_sum = 0;
+    vector<puyoPuyo> stored_puyos;
     queue<POSs> coords;
-    const puyoType puyo = board.get_puyo(fire_pos);
+    const auto& puyo = board.get_puyo(fire_pos);
     
     coords.push(fire_pos);
     while(!coords.empty())
@@ -70,31 +71,31 @@ tuple<int,int,vector<pair<POSs, puyoType>>> puyoBoardVanishControll::fire_cluste
             continue;
         visited[pos.r][pos.c] = true;
 
-        const puyoType curr_puyo = board.get_puyo(pos);
-        stored_puyos.push_back(make_tuple(pos, curr_puyo));
+        const auto& curr_puyo = board.get_puyo(pos);
+        stored_puyos.push_back(curr_puyo);
         
         if(curr_puyo.is_colored())
             ++color_puyo_count;
         weight_sum += curr_puyo.get_weight();
 
-        for (const auto& dpos: DIR)
+        for(const auto& dpos: DIR)
         {
             const auto npos = pos+dpos;
             if (!board.in(npos))
                 continue;
-            const puyoType npuyo = board.get_puyo(npos);
+            const auto& npuyo = board.get_puyo(npos);
             if (curr_puyo.is_linkable(npuyo) && !visited[npos.r][npos.c])
                 coords.push(npos);
         }
     }
     return make_tuple(color_puyo_count, weight_sum, stored_puyos);
 }
-tuple<int, vector<int>, vector<_puyoType::Type>, vector<PUYO_INFO>> puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board)
+tuple<int, vector<int>, vector<puyoType::Type>, vector<puyoPuyo>> puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board)
 {
     int puyo_count = 0;
     vector<int> link_count;
-    vector<_puyoType::Type> color_count;
-    vector<PUYO_INFO> temp_energy_puyos;
+    vector<puyoType::Type> color_count;
+    vector<puyoPuyo> temp_energy_puyos;
 
     const auto bsize = board.get_size();
     vector<vector<bool>> visited(bsize.r, vector<bool>(bsize.c, false));
@@ -103,23 +104,27 @@ tuple<int, vector<int>, vector<_puyoType::Type>, vector<PUYO_INFO>> puyoBoardVan
         {
             if(visited[i][j])
                 continue;
-            const puyoType puyo = board.get_puyo({j, i});
-            if(!puyo.is_colored())
+            
+            const auto& curr_puyo = board.get_puyo({j, i});
+            if(!curr_puyo.is_colored())
                 continue;
             const auto& [color_puyo_count, weight_sum, stored_puyos] = fire_cluster(board,{j, i}, visited);
             if(weight_sum >= condition_for_vanish)
             {
                 puyo_count += color_puyo_count;
                 link_count.push_back(color_puyo_count);
-                color_count.push_back(puyo.get());
-                for(const auto& [pos, type] : stored_puyos)
+                color_count.push_back(curr_puyo.get_type());
+                for(auto& puyo : stored_puyos)
                 {
-                    const int tick = (type == puyoType(P_OBSTRUCT)) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
-                    temp_energy_puyos.push_back(to_vanish_puyo_each(board,{pos,type,tick}));
+                    temp_energy_puyos.push_back(to_vanish_puyo_each(board,puyo.get_pos()));
+                    const int tick = puyo.is_same(puyoType::Type::obstruct) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
+                    auto temp_puyo = std::move(puyo);
+                    temp_puyo.set_act(make_unique<puyoPuyoVanish>(tick));
+                    add(temp_puyo);
                 }
             }
     }
-    return std::move(make_tuple(puyo_count, std::move(link_count), std::move(color_count), std::move(temp_energy_puyos)));
+    return make_tuple(puyo_count, link_count, color_count, temp_energy_puyos);
 }
 void puyoBoardVanishControll::set_condition(int amount){condition_for_vanish = amount;}
 int puyoBoardVanishControll::get_condition() const { return condition_for_vanish; }

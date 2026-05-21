@@ -3,6 +3,7 @@
 #include "puyoPuyoFall.hpp"
 #include "puyoTool/puyoCast.hpp"
 #include <cmath>
+#include <memory>
 
 using namespace std;
 
@@ -16,11 +17,17 @@ puyoPuyoFall::puyoPuyoFall(const puyoBoard& board, const puyoPuyo& puyo1, const 
     , puyo2(puyo2)
     , board(board)
 {}
+std::unique_ptr<puyoPuyoAct> puyoPuyoFall::clone() const
+{
+    auto temp = std::move(make_unique<puyoPuyoFall>(board,puyo1,puyo2));
+    temp->let(act_count);
+    return temp;
+}
 
 void puyoPuyoFall::act(puyoPuyo& puyo)
 {
-    const auto pos1 = puyo1.get_pos();
-    const auto bsize = board.get_size();
+    const auto& pos1 = puyo1.get_pos();
+    const auto& bsize = board.get_size();
     for(int y = pos1.y; y < bsize.y; ++y)
         if(board.touched(POSi(round(pos1.x), y+1)))
         {

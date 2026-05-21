@@ -11,5 +11,6 @@ class puyoPuyoVanish : public puyoPuyoAct
         float dist;
     public :
         puyoPuyoVanish(int amount);
+        std::unique_ptr<puyoPuyoAct> clone() const override;
         void act(puyoPuyo& puyo) override;
 };

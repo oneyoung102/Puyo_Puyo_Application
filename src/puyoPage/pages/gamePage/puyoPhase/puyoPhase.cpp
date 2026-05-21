@@ -11,7 +11,7 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/_puyoType.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
@@ -36,7 +36,7 @@ puyoPhase::puyoPhase()
     , win_player_num(NO_WINNER)
 {}
 
-pair<puyoType,puyoType> puyoPhase::get_new_puyos (int count)
+pair<puyoPuyo,puyoPuyo> puyoPhase::get_new_puyos (int count)
 {
     if(new_type_list.empty())
         throw runtime_error("new type list is empty, so can't take new puyos");
@@ -50,8 +50,8 @@ pair<puyoType,puyoType> puyoPhase::get_new_puyos (int count)
     }
     return new_types[count];
 }
-const vector<pair<puyoType,puyoType>>& puyoPhase::get_new_types() const {return new_types;}
-vector<pair<puyoType,puyoType>>& puyoPhase::get_new_types() {return new_types;}
+const vector<pair<puyoPuyo,puyoPuyo>>& puyoPhase::get_new_types() const {return new_types;}
+vector<pair<puyoPuyo,puyoPuyo>>& puyoPhase::get_new_types() {return new_types;}
 
 bool puyoPhase::game_ended() const {return game_end;}
 bool puyoPhase::game_end_asked() const {return game_end_ask;}
@@ -81,11 +81,11 @@ void puyoPhase::set_game(Diff diff, Mode mode)
             break;
     }
 ////// 색 뿌요 중에서 랜덤 선택
-    const int color_variety = CASTi(_puyoType::Type::pupple)-CASTi(_puyoType::Type::red)+1;
+    const int color_variety = CASTi(puyoType::Type::pupple)-CASTi(puyoType::Type::red)+1;
     vector<bool> used(color_variety,false);
-    vector<_puyoType::Type> colors;
-    for(int c = CASTi(_puyoType::Type::red) ; c <= CASTi(_puyoType::Type::pupple) ; ++c)
-        colors.push_back(static_cast<_puyoType::Type>(c));
+    vector<puyoType::Type> colors;
+    for(int c = CASTi(puyoType::Type::red) ; c <= CASTi(puyoType::Type::pupple) ; ++c)
+        colors.push_back(static_cast<puyoType::Type>(c));
     while(color_count > 0)
     {
         uniform_int_distribution<> dist(0,color_variety-1);
@@ -93,7 +93,7 @@ void puyoPhase::set_game(Diff diff, Mode mode)
         if(used[idx])
             continue;
         used[idx] = true;
-        new_type_list.push_back(puyoType(make_unique<puyoColor>(colors[idx])));
+        new_type_list.push_back(puyoPuyo(POSs(),make_unique<puyoColor>(colors[idx])));
         --color_count;
     }
 ////// 처음에 같은 색이 나올 수 없도록 함.
@@ -143,7 +143,7 @@ void puyoPhase::set_game(Diff diff, Mode mode)
 int puyoPhase::proceed_play(const unique_ptr<puyoPlayer>& player)
 {
     int added_score = 0;
-    auto& board = player->get_board();
+    const auto& board = player->get_board();
     auto& cf = player->controll_future();
     auto& puyo = player->get_puyo();
     const int player_num = player->get_player_num();
@@ -244,7 +244,7 @@ void puyoPhase::manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int a
     if(players.size() == 1)
         throw runtime_error("Obstruct puyo spawn is prohibited in Solo");
 
-    auto& board = player->get_board();
+    const auto& board = player->get_board();
     auto& ce = player->controll_energy();
     auto& co = player->controll_obstuct();
     
@@ -272,7 +272,7 @@ void puyoPhase::manage_game_end(const std::unique_ptr<puyoPlayer>& player)
 {
     if(!game_end_asked())
     {
-        if(player->get_score() == SCORE_UPPER-1)
+        if(player->get_score() >= SCORE_UPPER-1)
         {
             ask_end_game();
             set_win_player_num(player->get_player_num());
@@ -293,16 +293,15 @@ void puyoPhase::proceed_event(const unique_ptr<puyoPlayer>& player)
     for(const auto state : board.update())
         switch(state)
         {
-            case _puyoType::typeState::exploded :
+            case puyoType::typeState::exploded :
             {
-                const auto bsize = board.get_size();
+                const auto& bsize = board.get_size();
                 set_signal(puyoModeSignal::bomb_explode);
                 for(size_t i = 0 ; i < bsize.r ; ++i)
                     for(size_t j = 0 ; j < bsize.c ; ++j)
-                        if(!board.empty(POSi(j, i)))
+                        if(!board.empty({j, i}))
                             player->controll_energy().add_temp(
-                        player->controll_vanish().to_vanish_puyo_each(
-                            board,{POSf(j,i),board.get_puyo(POSi(j, i)), puyoGameConstant::BOARD_BASIC_VANISH_TICK}));                                                 
+                            player->controll_vanish().to_vanish_puyo_each(board,{j,i}));                                                 
                 pstate.set_phase(player->get_player_num(),puyoPhaseStatement::Phase::vanish);
                 ask_end_game();
                 set_win_player_num(player->get_opposite());
@@ -317,7 +316,7 @@ void puyoPhase::proceed_game()
 {
     for(const auto& player : players)
     {
-        auto& board = player->get_board();
+        const auto& board = player->get_board();
         const int player_num = player->get_player_num();
 /////////////////봇이라면 행동
         if(player->is_bot())
@@ -372,7 +371,7 @@ void puyoPhase::set_gravity_value(int value){gravity_value = value;}
 int puyoPhase::get_stay_value() const {return stay_value;}
 void puyoPhase::set_stay_value(int value){stay_value = value;}
 int puyoPhase::get_color_count() const {return new_type_list.size();}
-void puyoPhase::add_new_type(const puyoType& type){new_type_list.push_back(type);}
+void puyoPhase::add_new_type(const puyoPuyo& type){new_type_list.push_back(type);}
 void puyoPhase::remove_new_type(){new_type_list.pop_back();}
 
 Mode puyoPhase::get_mode_type() const {return mode_type;}

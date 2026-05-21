@@ -19,19 +19,18 @@ puyoPrintGravityPuyo::puyoPrintGravityPuyo(const vector<puyoPuyo>& gravity_puyos
 
 void puyoPrintGravityPuyo::print(RenderWindow& w)
 {
-    for(auto& gravity_puyo : gravity_puyos)
+    for(const auto& gravity_puyo : gravity_puyos)
     {
-        const auto puyo_type = gravity_puyo.get_type();
-        const auto type = puyo_type.get();
-        const auto screen_pos = pos+gravity_puyo.get_pos()*PUYO_SIZE;
+        const auto& screen_pos = pos+gravity_puyo.get_pos()*PUYO_SIZE;
+        const auto type = gravity_puyo.get_type();
         switch(type)
         {
-            case _puyoType::Type::blue :
-            case _puyoType::Type::red :
-            case _puyoType::Type::yellow :
-            case _puyoType::Type::green :
-            case _puyoType::Type::pupple :
-                if(!puyo_type.is_frozen()) //의도적으로 break 안 함
+            case puyoType::Type::blue :
+            case puyoType::Type::red :
+            case puyoType::Type::yellow :
+            case puyoType::Type::green :
+            case puyoType::Type::pupple :
+                if(!gravity_puyo.is_frozen()) //의도적으로 break 안 함
                 {
                     if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_THRESHOLD)//dropping
                     {
@@ -43,7 +42,7 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
                     break;
                 }
             default :
-                print_puyo(w,puyo_type,screen_pos);
+                print_puyo(w,gravity_puyo,screen_pos);
                 break;
         }
     }

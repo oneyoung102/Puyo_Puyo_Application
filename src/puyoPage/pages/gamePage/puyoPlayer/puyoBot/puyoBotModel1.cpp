@@ -15,51 +15,58 @@ puyoBotModel1::puyoBotModel1(POSi bsize, unsigned int init_act_tick)
 
 void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
 {
-    auto& board = player.get_board();
-    auto& puyo = player.get_puyo();
+    const auto& board = player.get_board();
+    const auto& puyo = player.get_puyo();
 
     int puyo_count = 0;
-    const auto bsize = board.get_size();
+    const auto& bsize = board.get_size();
     for(size_t i = 0 ; i < bsize.r ; ++i)
         for(size_t j = 0 ; j < bsize.c ; ++j)
         {
-            simulate_board.insert_puyo(board.get_puyo({j, i}), POSs(j, i));
-            if(!simulate_board.empty(POSs(j, i)))
+            const auto& pos = POSs(j, i);
+            if(simulate_board.get_puyo(pos) != board.get_puyo(pos))
+                simulate_board.insert_puyo(board.get_puyo(pos));
+            if(!simulate_board.empty(pos))
                 ++puyo_count;
         }
 
     const bool fire_chain = get_fire(puyo_count,player.controll_obstuct().get());
 
-    const auto spawn_pos = board.get_spawn_pos();
+    const auto& spawn_pos = board.get_spawn_pos();
     PROBABLITY perfect_probablity(-spawn_pos.x,0);
     int max_cluster_size = 0, max_cluster_size_sum = 0, bottom_y = 0;
 
     for(const auto& probablity : calc_all_probablities(board))
     {
-        const auto[temp_pos1,temp_pos2] = to_coord(probablity,puyo);
+        const auto& [temp_pos1,temp_pos2] = to_coord(probablity,puyo);
         if(!board.in(temp_pos1) || !board.in(temp_pos2))
             continue;
-        const auto [type1,type2] = puyo.get_type();
-        const auto [pos1,pos2] = simulate_drop({{temp_pos1,type1},{temp_pos2,type2}});
+        auto [puyo1,puyo2] = puyo.get();
+        puyo1.move(temp_pos1);
+        puyo2.move(temp_pos2);
+        
+        const auto& [pos1,pos2] = simulate_drop({puyo1,puyo2});
         if(board.in(pos1) && board.in(pos2))
         {
-            simulate_board.insert_puyo(type1, pos1);
-            simulate_board.insert_puyo(type2, pos2);
+            puyo1.move(pos1);
+            puyo2.move(pos2);
+            simulate_board.insert_puyo(puyo1);
+            simulate_board.insert_puyo(puyo2);
 
             int cluster_size = 0, cluster_size_sum = 0;
             vector<vector<bool>> visited(bsize.r,vector<bool>(bsize.c,false));
-            vector<pair<POSi,puyoType>> changed;
-            changed.push_back({pos1,type1});
-            changed.push_back({pos2,type2});
+            vector<puyoPuyo> changed;
+            changed.push_back(puyo1);
+            changed.push_back(puyo2);
 
-            for(const auto[pos,curr_puyo] : changed)
+            for(const auto& curr_puyo : changed)
             {
                 int temp_cluster_size = 0;
                 queue<POSi> coords;
-                coords.push(pos);
+                coords.push(curr_puyo.get_pos());
                 while(!coords.empty())
                 {
-                    const auto cpos = coords.front();
+                    const auto& cpos = coords.front();
                     coords.pop();
                     if(visited[cpos.r][cpos.c])
                         continue;
@@ -67,10 +74,10 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
                     ++temp_cluster_size;
                     for(const auto& dpos : DIR)
                     {
-                        const auto npos = cpos+dpos;
+                        const auto& npos = cpos+dpos;
                         if(!board.in(npos))
                             continue;
-                        const puyoType npuyo = simulate_board.get_puyo(POSs(npos.c, npos.r));
+                        const auto& npuyo = simulate_board.get_puyo(npos);
                         if(npuyo == curr_puyo && !visited[npos.r][npos.c])
                             coords.push(npos);
                     }
@@ -90,9 +97,9 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
                     perfect_probablity = probablity;
                     bottom_y = temp_bottom_y;
                 }
+            simulate_board.remove_puyo(pos1); //복구
+            simulate_board.remove_puyo(pos2);
         }
-        simulate_board.remove_puyo(pos1); //복구
-        simulate_board.remove_puyo(pos2);
     }
     to_let(perfect_probablity,const_cast<puyoPlayPuyo&>(puyo));
 }

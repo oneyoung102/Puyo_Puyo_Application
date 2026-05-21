@@ -18,6 +18,8 @@ class puyoPuyoTurn : public puyoPuyoAct
         bool test(const puyoBoard& board, puyoPuyo& puyo) override;
         void arrive(puyoPuyo& puyo) override;
     public :
-        puyoPuyoTurn(int amount, puyoPuyo& center, POSf turning);
+        puyoPuyoTurn(int amount, puyoPuyo& center, const POSf& turning);
+        puyoPuyoTurn(int amount, puyoPuyo& center, Direction turn_dir);
+        std::unique_ptr<puyoPuyoAct> clone() const override;
         void act(puyoPuyo& puyo) override;
 };

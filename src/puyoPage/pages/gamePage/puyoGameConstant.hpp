@@ -50,14 +50,14 @@ namespace puyoGameConstant
     constexpr int HARD_DIFF_GRAVITY_TICK = 27, HARD_DIFF_STAY_TICK = 38, HARD_DIFF_COLORS = 5;
     constexpr std::tuple<int,int,int> HARD_DIFF_SETTING = std::make_tuple(HARD_DIFF_GRAVITY_TICK,HARD_DIFF_STAY_TICK,HARD_DIFF_COLORS);
 
-    constexpr int EASY_BOT_INIT_ACT_TICK = 9, NORMAL_BOT_INIT_ACT_TICK = 5, HARD_BOT_INIT_ACT_TICK = 2;
+    constexpr int EASY_BOT_INIT_ACT_TICK = 12, NORMAL_BOT_INIT_ACT_TICK = 9, HARD_BOT_INIT_ACT_TICK = 4;
     //모드
     constexpr int BOMB_VANISH_TICK = 20;
     constexpr int BOMB_MAX_TICK = 3200;//0이면 안 됨
     constexpr float BOMB_UPDATED1 = 0.4, BOMB_UPDATED2 = 0.7, BOMB_UPDATED3 = 0.9;
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
     constexpr int FREEZE_TICK = 550;
-    constexpr int PROB_FREEZE_ONCE = 30, PROB_FREEZE_TWICE = 10;
+    constexpr int PROB_FREEZE_ONCE = 15, PROB_FREEZE_TWICE = 3;
     constexpr int CHARGE_TICK = 500;
     constexpr int PROB_CHARGE_ONCE = 50, PROB_CHARGE_TWICE = 20;
 

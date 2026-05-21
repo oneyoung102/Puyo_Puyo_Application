@@ -29,14 +29,14 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
     private :
         int stay;
         const int gravity_value, stay_value;
-        std::array<std::unique_ptr<puyoPuyo>,2> play_puyo;
+        std::array<puyoPuyo,2> play_puyo;
         std::array<std::unique_ptr<puyoPuyoAct>,2> gravity;
         
         bool down_taken, drop_taken;//명령 접수 여부
 
         void let_fourway(Direction dir);
     public :
-        puyoPlayPuyo(POSf spawn_pos, std::pair<puyoType,puyoType> types, int gravity_value, int stay_value);
+        puyoPlayPuyo(const std::pair<puyoPuyo,puyoPuyo>& types, int gravity_value, int stay_value);
 
         void act_let(const puyoBoard& board);
         void gravity_let(const puyoBoard& board);
@@ -44,11 +44,11 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         bool down();
         bool dropped(const puyoBoard& board);
 
-        std::vector<PUYO_INFO> to_gravity_puyo(const puyoBoard& board) const;
-        const std::unique_ptr<puyoPuyo>& get_each(size_t number);
-        const decltype(play_puyo)& get();
+        std::vector<puyoPuyo> to_gravity_puyo(const puyoBoard& board);
+        const puyoPuyo& get_each(size_t number) const;
+        const decltype(play_puyo)& get() const;
         std::pair<POSf,POSf> get_pos() const;
-        std::pair<puyoType,puyoType> get_type() const;
+        std::pair<puyoType::Type,puyoType::Type> get_type() const;
 
         bool sat(const puyoBoard& board) const; 
         bool moving() const;

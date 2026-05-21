@@ -44,16 +44,16 @@ pair<POSi,POSi> puyoBot::to_coord(PROBABLITY probablity, const puyoPlayPuyo& puy
     return {pos1,pos2};
 }
 
-pair<POSi,POSi> puyoBot::simulate_drop(const vector<pair<POSi,puyoType>>& puyos)
+pair<POSi,POSi> puyoBot::simulate_drop(const vector<puyoPuyo>& puyos)
 {
     auto temp_puyos = puyos;
-    const bool swapped = temp_puyos[0].first.r < temp_puyos[1].first.r;
+    const bool swapped = temp_puyos[0].get_pos().r < temp_puyos[1].get_pos().r;
     if(swapped)
         swap(temp_puyos[0],temp_puyos[1]);
         
     for(int i = 0; i < 2; ++i)
     {
-        auto& [pos, type] = temp_puyos[i];
+        auto pos = temp_puyos[i].get_pos();
         while(pos.r + 1 < simulate_board.get_size().r)
         {
             if(pos.r + 1 >= 0 && !simulate_board.empty(pos+POSi(0,1)))
@@ -61,14 +61,17 @@ pair<POSi,POSi> puyoBot::simulate_drop(const vector<pair<POSi,puyoType>>& puyos)
             ++pos.r;
         }
         if(i == 0 && pos.r >= 0)
-            simulate_board.insert_puyo(type, pos);
+        {
+            temp_puyos[i].move(pos);
+            simulate_board.insert_puyo(temp_puyos[i]);
+        }
     }
-    if(temp_puyos[0].first.r >= 0)
-        simulate_board.remove_puyo(temp_puyos[0].first);
+    if(temp_puyos[0].get_pos().r >= 0)
+        simulate_board.remove_puyo(temp_puyos[0].get_pos());
 
     if(swapped)
         swap(temp_puyos[0],temp_puyos[1]);
-    return make_pair(temp_puyos[0].first,temp_puyos[1].first);
+    return make_pair(temp_puyos[0].get_pos(),temp_puyos[1].get_pos());
 }
 
 void puyoBot::to_let(PROBABLITY perfect_probablity, puyoPlayPuyo& puyo) //명령 벡터 삭제 용이를 위해 거꾸로 명령 푸쉬

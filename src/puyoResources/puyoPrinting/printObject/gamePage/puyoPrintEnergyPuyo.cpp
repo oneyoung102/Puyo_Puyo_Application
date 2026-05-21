@@ -19,17 +19,16 @@ puyoPrintEnergyPuyo::puyoPrintEnergyPuyo(const vector<puyoPuyo>& energy_puyos, S
 
 void puyoPrintEnergyPuyo::print(RenderWindow& w)
 {
-    for(auto& energy_puyo : energy_puyos)
+    for(const auto& energy_puyo : energy_puyos)
     {
-        const auto puyo_type = energy_puyo.get_type();  
-        const auto type = puyo_type.get();
+        const auto type = energy_puyo.get_type();
         switch(type)
         {
-            case _puyoType::Type::blue :
-            case _puyoType::Type::red :
-            case _puyoType::Type::yellow :
-            case _puyoType::Type::green :
-            case _puyoType::Type::pupple :
+            case puyoType::Type::blue :
+            case puyoType::Type::red :
+            case puyoType::Type::yellow :
+            case puyoType::Type::green :
+            case puyoType::Type::pupple :
                 print_16x16(w,ENERGY_PUYO_POS+POSi(CASTi(type),0),pos+energy_puyo.get_pos());
                 break;
             default :

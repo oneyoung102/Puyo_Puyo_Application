@@ -13,5 +13,6 @@ class puyoPuyoFourWayMove : public puyoPuyoAct
         bool test(const puyoBoard& board, puyoPuyo& puyo) override;
     public :
         puyoPuyoFourWayMove(int amount, POSf dpos);
+        std::unique_ptr<puyoPuyoAct> clone() const override;
         void act(puyoPuyo& puyo) override;
 };

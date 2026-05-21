@@ -31,8 +31,8 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
     private :
         std::vector<std::unique_ptr<puyoPlayer>> players;
         std::mt19937 gen;
-        std::vector<puyoType> new_type_list;
-        std::vector<std::pair<puyoType,puyoType>> new_types;
+        std::vector<puyoPuyo> new_type_list;
+        std::vector<std::pair<puyoPuyo,puyoPuyo>> new_types;
 
         puyoScoreCalc calc;
         puyoPhaseStatement pstate;
@@ -59,9 +59,9 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         void ask_end_game();
         bool game_ended() const;
 
-        std::pair<puyoType,puyoType> get_new_puyos(int count);
-        const std::vector<std::pair<puyoType,puyoType>>& get_new_types() const;
-        std::vector<std::pair<puyoType,puyoType>>& get_new_types();
+        std::pair<puyoPuyo,puyoPuyo> get_new_puyos(int count);
+        const std::vector<std::pair<puyoPuyo,puyoPuyo>>& get_new_types() const;
+        std::vector<std::pair<puyoPuyo,puyoPuyo>>& get_new_types();
 
         void set_game(Diff diff, Mode mode);
         void proceed_game();
@@ -75,7 +75,7 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         int get_stay_value() const;
         void set_stay_value(int value);
         int get_color_count() const;
-        void add_new_type(const puyoType& type);
+        void add_new_type(const puyoPuyo& type);
         void remove_new_type();
 
         Mode get_mode_type() const;

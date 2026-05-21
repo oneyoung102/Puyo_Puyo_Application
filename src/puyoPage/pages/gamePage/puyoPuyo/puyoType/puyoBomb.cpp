@@ -1,18 +1,18 @@
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoBomb.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoBomb.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoTool/puyoCast.hpp"
 
 using namespace std;
 
 puyoBomb::puyoBomb(typeState state, bool is_frozen, int bomb_tick_init, int bomb_tick)
-    : _puyoType(Type::bomb,state,is_frozen)
+    : puyoType(Type::bomb,state,is_frozen)
     , bomb_tick(bomb_tick)
     , bomb_tick_init(fmax(bomb_tick_init,1))
 {}
-std::unique_ptr<_puyoType> puyoBomb::clone() const {return std::make_unique<puyoBomb>(state,_is_frozen,bomb_tick_init,bomb_tick);}
+std::unique_ptr<puyoType> puyoBomb::clone() const {return std::make_unique<puyoBomb>(state,_is_frozen,bomb_tick_init,bomb_tick);}
 int puyoBomb::get_weight() const {return 1;}
 bool puyoBomb::is_colored() const {return true;}
-bool puyoBomb::is_linkable(const _puyoType& other) const {return false;}
+bool puyoBomb::is_linkable(const puyoType& other) const {return false;}
 
 void puyoBomb::update()
 {

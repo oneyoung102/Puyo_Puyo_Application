@@ -21,31 +21,30 @@ void puyoPrintBoard::print(RenderWindow& w)
     for(size_t i = 0 ; i < bsize.r ; ++i)
         for(size_t j = 0 ; j < bsize.c ; ++j)
         {
-            const auto board_pos = POSf(j, i);
-            const auto puyo_type = board.get_puyo(board_pos);
-            if(puyo_type.empty())
+            const auto& board_pos = POSf(j, i);
+            const auto& puyo  = board.get_puyo(board_pos);
+            if(puyo.empty())
                 continue;
-            const auto type = puyo_type.get();
-            switch(type)
+            switch(puyo.get_type())
             {
-                case _puyoType::Type::blue :
-                case _puyoType::Type::red :
-                case _puyoType::Type::yellow :
-                case _puyoType::Type::green :
-                case _puyoType::Type::pupple :
-                    if(!puyo_type.is_frozen() && !puyo_type.is_charged()) //의도적으로 break 안 함
+                case puyoType::Type::blue :
+                case puyoType::Type::red :
+                case puyoType::Type::yellow :
+                case puyoType::Type::green :
+                case puyoType::Type::pupple :
+                    if(!puyo.is_frozen() && !puyo.is_charged()) //의도적으로 break 안 함
                     {
                         int dir = 0;
                         for(size_t i = 0 ; i < DIR.size() ; ++i)
                         {
                             const auto pos = board_pos + DIR[i];
-                            dir += (1<<i)*(board.in(pos) && board.get_puyo(pos) == puyo_type && !board.get_puyo(pos).is_frozen() && !board.get_puyo(pos).is_charged());
+                            dir += (1<<i)*(board.in(pos) && board.get_puyo(pos) == puyo && !board.get_puyo(pos).is_frozen() && !board.get_puyo(pos).is_charged());
                         }
-                        print_16x16(w,POSi(dir,CASTi(type)),pos+board_pos*PUYO_SIZE);
+                        print_16x16(w,POSi(dir,CASTi(puyo.get_type())),pos+board_pos*PUYO_SIZE);
                         break;
                     }
                 default :
-                    print_puyo(w,puyo_type,pos+board_pos*PUYO_SIZE);
+                    print_puyo(w,puyo,pos+board_pos*PUYO_SIZE);
                     break;
             }
         }

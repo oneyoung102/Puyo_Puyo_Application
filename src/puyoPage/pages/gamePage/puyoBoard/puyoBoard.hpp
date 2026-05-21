@@ -21,30 +21,32 @@ enum class puyoBoardSignal
 class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 {
     private :
-        std::vector<std::vector<puyoType>> board;
+        std::vector<std::vector<puyoPuyo>> board;
         const POSi size; 
         POSf spawn_pos;
     public :  
         puyoBoard();
 
-        void set_spawn_pos(POSf pos);
+        void set_spawn_pos(const POSf& pos);
         POSf get_spawn_pos() const;
         bool spawn_able() const;
         
         POSi get_size() const;
         bool in_row(int r) const;
         bool in_col(int c) const;
-        bool in(POSi pos) const;
-        bool touched(POSi pos) const;
+        bool in(const POSi& pos) const;
+        bool touched(const POSi& pos) const;
 
-        puyoType get_puyo(POSs pos) const;
-        puyoType& ref_puyo(POSs pos);
-        void insert_puyo(puyoType puyo, POSs pos);
-        void remove_puyo(POSs pos);
+        const puyoPuyo& get_puyo(const POSs& pos) const;
+        puyoPuyo& ref_puyo(const POSs& pos);
+        void insert_puyo(const puyoPuyo& puyo, const POSs& pos);
+        void insert_puyo(const puyoPuyo& puyo);
+        void remove_puyo(const POSs& pos);
         bool empty() const;
-        bool empty(POSs pos) const;
+        bool empty(const POSs& pos) const;
         bool all_cleared();
-        std::vector<_puyoType::typeState> update();
+        std::vector<puyoType::typeState> update();
 
-        std::vector<PUYO_INFO> to_gravity_puyo();
+        std::vector<puyoPuyo> to_gravity_puyo();
+        
 };

@@ -26,7 +26,7 @@ class puyoBot
         std::vector<PROBABLITY> calc_all_probablities(const puyoBoard& board); //{좌우이동, 화전수}
         std::pair<POSi,POSi> to_coord(PROBABLITY probablity, const puyoPlayPuyo& puyo); //가능성을 좌표로 변환
         void to_let(PROBABLITY perfect_probablity, puyoPlayPuyo& puyo);///probablity를 명령으로 변환
-        std::pair<POSi,POSi> simulate_drop(const std::vector<std::pair<POSi,puyoType>>& puyos);
+        std::pair<POSi,POSi> simulate_drop(const std::vector<puyoPuyo>& puyos);
         std::mt19937 gen;
     public :
         puyoBot(POSi bsize, unsigned int init_act_tick = 0);     

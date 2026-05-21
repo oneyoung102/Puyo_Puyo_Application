@@ -12,7 +12,7 @@ puyoBoardEnergyControll::puyoBoardEnergyControll(){};
 
 
 const vector<puyoPuyo> &puyoBoardEnergyControll::get() const { return energy_puyos; }
-void puyoBoardEnergyControll::fly(puyoBoard& board)
+void puyoBoardEnergyControll::fly(const puyoBoard& board)
 {
     for (int i = 0; i < energy_puyos.size();)
         if(!energy_puyos[i].acting())
@@ -30,21 +30,21 @@ void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_
 {
     if(temp_energy_puyos.empty())
         return;
-    for (const auto& [pos, type, tick] : temp_energy_puyos)
+    for (auto& energy_puyo : temp_energy_puyos)
     {
-        const POSf screen_pos = PLAYER_BOARD_POS[from_player_num]+pos*PUYO_SIZE;
-        energy_puyos.push_back(puyoPuyo(screen_pos, type
-                    , make_unique<puyoPuyoFly>(screen_pos,OBSTRUCT_VIEWER_POS[to_player_num], tick)));
+        const POSf& screen_pos = PLAYER_BOARD_POS[from_player_num]+energy_puyo.get_pos()*PUYO_SIZE;
+        energy_puyo.set_act(make_unique<puyoPuyoFly>(BOARD_FLY_TICK,screen_pos,OBSTRUCT_VIEWER_POS[to_player_num]-screen_pos));
+        energy_puyos.push_back(std::move(energy_puyo));
         energy_puyos.back().let();
     }
     temp_energy_puyos.clear();
 }
 
-void puyoBoardEnergyControll::add_temp(const PUYO_INFO& temp_energy_puyo)
+void puyoBoardEnergyControll::add_temp(const puyoPuyo& temp_energy_puyo)
 {
     temp_energy_puyos.push_back(temp_energy_puyo);
 }
-void puyoBoardEnergyControll::add_temp(const std::vector<PUYO_INFO>& temp_energy_puyos)
+void puyoBoardEnergyControll::add_temp(const std::vector<puyoPuyo>& temp_energy_puyos)
 {
     for(const auto& temp_energy_puyo : temp_energy_puyos)
         add_temp(temp_energy_puyo);

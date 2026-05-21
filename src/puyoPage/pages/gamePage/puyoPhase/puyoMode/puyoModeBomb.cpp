@@ -6,6 +6,7 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 #include <random>
 
 using namespace std;
@@ -31,13 +32,13 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlay
             return;
 
         auto& cv = player->controll_vanish();
-        const auto bsize = board.get_size();
+        const auto& bsize = board.get_size();
         for(int r = bsize.r-1 ; r >= 0 ; --r)//효율적으로 아래에서부터 찾음
         {
-            const auto puyo = board.get_puyo(POSs(bomb_c, r));
-            if(puyo != puyoType(P_BOMB(0)))
+            const auto& puyo = board.get_puyo(POSs(bomb_c, r));
+            if(!puyo.is_same(puyoType::Type::bomb))
                 continue;
-            cv.to_vanish_puyo_each(board,{POSf(bomb_c,r),puyo,BOMB_VANISH_TICK});
+            cv.to_vanish_puyo_each(board, POSs(bomb_c,r));
             phase.get_pstate().set_phase(bomb_have_player_num,puyoPhaseStatement::Phase::vanish);
             break;
         }
@@ -55,7 +56,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlay
     {
         std::uniform_int_distribution<> dist(0, board.get_size().c-1);
         bomb_c = dist(gen);
-        player->controll_gravity().add({POSf(bomb_c,OBSTRUCT_PUYO_SPAWN_Y), puyoType(P_BOMB(BOMB_MAX_TICK)), BOARD_FALL_GRAVITY_TICK});
+        player->controll_gravity().add(puyoPuyo(POSf(bomb_c,OBSTRUCT_PUYO_SPAWN_Y), P_BOMB(BOMB_MAX_TICK), std::make_unique<puyoPuyoGravity>(BOARD_FALL_GRAVITY_TICK)));
         bomb_is_spawned = true;
         phase.set_signal(puyoModeSignal::bomb_fused);
         phase.get_pstate().set_phase(bomb_have_player_num,puyoPhaseStatement::Phase::gravity);

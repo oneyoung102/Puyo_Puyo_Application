@@ -14,8 +14,8 @@ class puyoBoardGravityControll
         puyoBoardGravityControll();
 
         void gravity(puyoBoard& board);
-        void add(const PUYO_INFO& puyo);
-        void add(const std::vector<PUYO_INFO>& puyos);
+        void add(const puyoPuyo& puyo);
+        void add(const std::vector<puyoPuyo>& puyos);
         
         const std::vector<puyoPuyo>& get() const;
 

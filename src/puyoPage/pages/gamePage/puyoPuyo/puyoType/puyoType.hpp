@@ -1,50 +1,57 @@
 #pragma once
 
 #include <memory>
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/_puyoType.hpp"
 
 class puyoType
 {
-    private :
-        std::unique_ptr<_puyoType> type;
     public :
-        puyoType();
-        puyoType(std::unique_ptr<_puyoType> type);
-        puyoType(const puyoType& other);
-        puyoType& operator=(const puyoType& other) noexcept;
-        puyoType& operator=(puyoType&& other) noexcept;
+        enum class Type
+        {
+            red,
+            green,
+            blue,
+            yellow,
+            pupple,
+            obstruct,
+            bomb
+        };
+        enum class typeState
+        {
+            none,
+            explode_stay1,
+            explode_stay2,
+            explode_soon1,
+            explode_soon2,
+            exploded,
+        };
+    protected :
+        const Type type;
+        typeState state;
+        bool _is_frozen;
+    public :
+        puyoType(Type type, typeState state = typeState::none, bool _is_frozen = false)
+            : type(type)
+            , state(state)
+            , _is_frozen(_is_frozen)
+        {}
+        virtual ~puyoType() = default;
+        virtual std::unique_ptr<puyoType> clone() const = 0;
 
-        bool operator==(const puyoType& other) const noexcept;
-        bool operator!=(const puyoType& other) const noexcept;
-        
-        _puyoType::Type get() const;
-        int get_weight() const;
+        Type get() const {return type;}
+        bool is_same(const puyoType& other) const {return this->get() == other.get();}
+        virtual int get_weight() const = 0;
 
-        bool is_colored() const;
-        bool is_linkable(const puyoType& other) const;
-        bool empty() const;
+        virtual bool is_colored() const = 0;
+        virtual bool is_linkable(const puyoType& other) const = 0; // this -> other 로의 연결 가능 여부
 
-        void update();
-        _puyoType::typeState get_state() const;
+        virtual void update() {};
+        virtual typeState get_state() const {return state;}
 
-        void freeze();
-        void unfreeze();
-        bool is_frozen() const;
+        void freeze() {_is_frozen = true;} 
+        void unfreeze() {_is_frozen = false;} 
+        bool is_frozen() const {return _is_frozen;} 
 
-        void charge();
-        void uncharge();
-        bool is_charged() const;
+        virtual void charge() {return;}
+        virtual void uncharge() {return;}
+        virtual bool is_charged() const {return false;}
 };
-
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoColor.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoObstruct.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/types/puyoBomb.hpp"
-
-#define P_COLOR(x) std::make_unique<puyoColor>(_puyoType::Type::x)
-#define P_RED = P_COLOR(red)
-#define P_GREEN = P_COLOR(green)
-#define P_BLUE = P_COLOR(blue)
-#define P_YELLOW = P_COLOR(yellow)
-#define P_PUPPLE = P_COLOR(pupple)
-#define P_OBSTRUCT std::make_unique<puyoObstruct>()
-#define P_BOMB(x) std::make_unique<puyoBomb>(_puyoType::typeState::explode_stay1,false,x)

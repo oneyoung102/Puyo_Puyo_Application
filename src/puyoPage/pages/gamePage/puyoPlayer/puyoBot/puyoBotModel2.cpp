@@ -119,21 +119,21 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_bias()
 
 
 
-pair<puyoBotModel2::PARAM_TYPE,puyoBotModel2::PARAM_TYPE> puyoBotModel2::get_cluster_sizes(const vector<pair<POSi,puyoType>>& deployed_puyos)
+pair<puyoBotModel2::PARAM_TYPE,puyoBotModel2::PARAM_TYPE> puyoBotModel2::get_cluster_sizes(const vector<puyoPuyo>& deployed_puyos)
 {
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     vector<vector<bool>> visited(R,vector<bool>(C,false));
 
     int max_cluster_size = 0, cluster_size_sum = 0;
-    for(const auto[pos,type] : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
     {
         int cluster_size = 0;
         queue<POSi> coords;
-        coords.push(pos);
+        coords.push(puyo.get_pos());
         while(!coords.empty())
         {
-            const auto cpos = coords.front();
+            const auto& cpos = coords.front();
             coords.pop();
             if(visited[cpos.r][cpos.c])
                 continue;
@@ -141,11 +141,11 @@ pair<puyoBotModel2::PARAM_TYPE,puyoBotModel2::PARAM_TYPE> puyoBotModel2::get_clu
             ++cluster_size;
             for(const auto& dpos : DIR)
             {
-                const auto npos = cpos+dpos;
+                const auto& npos = cpos+dpos;
                 if(npos.r < 0 || npos.r >= R || npos.c < 0 || npos.c >= C)
                     continue;
-                const puyoType npuyo = simulate_board.get_puyo(POSs(npos.c, npos.r));
-                if(npuyo == type && !visited[npos.r][npos.c])
+                const auto& npuyo = simulate_board.get_puyo(npos);
+                if(npuyo == puyo && !visited[npos.r][npos.c])
                     coords.push(npos);
             }
         }
@@ -154,30 +154,31 @@ pair<puyoBotModel2::PARAM_TYPE,puyoBotModel2::PARAM_TYPE> puyoBotModel2::get_clu
     }
     return {max_cluster_size,cluster_size_sum};
 }
-puyoBotModel2::PARAM_TYPE puyoBotModel2::get_column_diversity(const vector<POSi>& deployed_puyos)
+puyoBotModel2::PARAM_TYPE puyoBotModel2::get_column_diversity(const vector<puyoPuyo>& deployed_puyos)
 {
     PARAM_TYPE diversity = 0;
-    for(const auto& pos : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
     {
+        const auto& pos = puyo.get_pos();
         PARAM_TYPE temp_diversity = 0;
         int count = 0;
         for(int r = simulate_board.get_size().r - 1 ; r > 0  ; --r)
         {
             ++count;
-            const auto type = simulate_board.get_puyo(POSs(pos.c, r-1));
-            if(type.empty())
+            const auto& typuyope = simulate_board.get_puyo(POSs(pos.c, r-1));
+            if(puyo.empty())
                 break;
-            if(simulate_board.get_puyo(POSs(pos.c, r)) != type)
+            if(simulate_board.get_puyo(POSs(pos.c, r)) != puyo)
                 ++temp_diversity;
         }      
         diversity += temp_diversity/count; 
     }
     return diversity; // 두 뿌요의 열 다양성 평균
 }
-puyoBotModel2::PARAM_TYPE puyoBotModel2::get_row_height(const vector<POSi>& deployed_puyos)
+puyoBotModel2::PARAM_TYPE puyoBotModel2::get_row_height(const vector<puyoPuyo>& deployed_puyos)
 {
     int row_height_sum = 2; // 두 뿌요가 배치됨으로써 높이가 2 높아짐
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     for(size_t c = 0 ; c < C ; ++c)
         for(size_t r = 0 ; r <= R ; ++r)
@@ -186,36 +187,36 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_row_height(const vector<POSi>& depl
                 row_height_sum += r;
                 break;
             }
-    return (deployed_puyos[0].r+deployed_puyos[1].r)/CASTf(row_height_sum);
+    return (deployed_puyos[0].get_pos().r+deployed_puyos[1].get_pos().r)/CASTf(row_height_sum);
 }
-puyoBotModel2::PARAM_TYPE puyoBotModel2::get_stair_level(const vector<pair<POSi,puyoType>>& deployed_puyos)
+puyoBotModel2::PARAM_TYPE puyoBotModel2::get_stair_level(const vector<puyoPuyo>& deployed_puyos)
 {
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     PARAM_TYPE stair_level = 0.0;
-    for(const auto[pos,type] : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
         for(const auto& dpos : STAIR_DIR)
         {
-            const auto npos = pos+dpos;
+            const auto& npos = puyo.get_pos()+dpos;
             if(npos.r < 0 || npos.r >= R || npos.c < 0 || npos.c >= C)
                 continue;
-            if(simulate_board.get_puyo(POSs(npos.c, npos.r)) == type)
+            if(simulate_board.get_puyo(npos) == puyo)
                 ++stair_level;
         }
     return stair_level;
 }
-puyoBotModel2::PARAM_TYPE puyoBotModel2::get_flatness(const vector<POSi>& deployed_puyos)
+puyoBotModel2::PARAM_TYPE puyoBotModel2::get_flatness(const vector<puyoPuyo>& deployed_puyos)
 {
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     PARAM_TYPE flatness = 0.0;
-    for(const auto& pos : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
     {
         int count = 2; // LEFT,RIGHT 두 방향
         PARAM_TYPE several_flatness = 0.0;
         for(const auto& dpos : decltype(DIR)({DIR[LEFT],DIR[RIGHT]}))
         {
-            const auto c = pos.c+dpos.c;
+            const auto c = puyo.get_pos().c+dpos.c;
             if(0 > c || c >= C)
             {
                 --count;
@@ -224,7 +225,7 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_flatness(const vector<POSi>& deploy
             for(size_t r = 0 ; r <= R ; ++r)
                 if(r == R || !simulate_board.get_puyo(POSs(c, r)).empty())
                 {
-                    several_flatness += fabs(static_cast<PARAM_TYPE>(r)-pos.r);
+                    several_flatness += fabs(static_cast<PARAM_TYPE>(r)-puyo.get_pos().r);
                     break;
                 }
         }
@@ -232,26 +233,26 @@ puyoBotModel2::PARAM_TYPE puyoBotModel2::get_flatness(const vector<POSi>& deploy
     }
     return flatness;
 }
-puyoBotModel2::PARAM_TYPE puyoBotModel2::get_isolated(const vector<pair<POSi,puyoType>>& deployed_puyos)
+puyoBotModel2::PARAM_TYPE puyoBotModel2::get_isolated(const vector<puyoPuyo>& deployed_puyos)
 {
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     PARAM_TYPE isolated = 0.0;
-    for(const auto[pos,type] : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
     {
         PARAM_TYPE temp_isolated = 0.0;
         int count = DIR.size();
         for(const auto& dpos : DIR)
         {
-            const auto npos = pos+dpos;
+            const auto& npos = puyo.get_pos()+dpos;
             if(npos.r < 0 || npos.r >= R || npos.c < 0 || npos.c >= C)
             {
                 ++temp_isolated;
                 continue;
             }
-            if(simulate_board.get_puyo(POSs(npos.c, npos.r)).empty())
+            if(simulate_board.get_puyo(npos).empty())
                 --count;
-            else if(simulate_board.get_puyo(POSs(npos.c, npos.r)) != type)
+            else if(simulate_board.get_puyo(npos) != puyo)
                 ++temp_isolated;
         }
             isolated += temp_isolated/count;
@@ -324,9 +325,9 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
 {
     const POSf bsize = simulate_board.get_size();
     puyoBoard board;
-    for(int r = 0; r < bsize.r; ++r)
-        for(int c = 0; c < bsize.c; ++c)
-            board.insert_puyo(simulate_board.get_puyo(POSs(c, r)), POSs(c, r));
+    for(size_t r = 0; r < bsize.r; ++r)
+        for(size_t c = 0; c < bsize.c; ++c)
+            board.insert_puyo(simulate_board.get_puyo(POSs(c, r)));
 
     int vanished_puyo = 0;
     bool continue_vanish = true;
@@ -335,7 +336,7 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     const auto& [_1,_2,initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
     vanished_puyo += initial_stored.size();
     for(const auto& p : initial_stored)
-        board.remove_puyo(p.first);
+        board.remove_puyo(p.get_pos());
     
     while(continue_vanish)
     {
@@ -347,7 +348,7 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
                 {
                     if(write_idx != read_idx)
                     {
-                        board.insert_puyo(board.get_puyo(POSs(c,read_idx)), POSs(c, write_idx));
+                        board.insert_puyo(board.get_puyo(POSs(c,read_idx)),POSs(c,write_idx));
                         board.remove_puyo(POSs(c, read_idx));
                     }
                     --write_idx;
@@ -358,16 +359,16 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
         for(size_t r = 0; r < bsize.r; ++r)
             for(size_t c = 0; c < bsize.c; ++c)
             {
-                const puyoType type = board.get_puyo(POSs(c,r));
-                if(type.empty() || visited[r][c] || !type.is_colored())
+                const auto& puyo = board.get_puyo(POSs(c,r));
+                if(puyo.empty() || visited[r][c] || !puyo.is_colored())
                     continue;
 
-                const auto [color_puyo_count, weight_sum,stored_puyos] = player.controll_vanish().fire_cluster(board, POSs(c,r), visited);
+                const auto& [color_puyo_count, weight_sum,stored_puyos] = player.controll_vanish().fire_cluster(board, POSs(c,r), visited);
                 if(weight_sum >= player.controll_vanish().get_condition())
                 { 
                     vanished_puyo += stored_puyos.size();
                     for(const auto& p : stored_puyos)
-                        board.remove_puyo(p.first);
+                        board.remove_puyo(p.get_pos());
                     continue_vanish = true;
                 }
             }
@@ -377,7 +378,7 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
 
 int puyoBotModel2::get_potential(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos)
 {
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     int max_potential = 0;
 
     for(size_t c = 0; c < bsize.c; ++c)
@@ -402,21 +403,22 @@ int puyoBotModel2::get_potential(const puyoPlayer& player, const std::vector<POS
 
 void puyoBotModel2::think_perfect_lets(const puyoPlayer& player)
 {
-    auto& board = player.get_board();
-    auto& puyo = player.get_puyo();
+    const auto& board = player.get_board();
+    const auto& puyo = player.get_puyo();
 
     N_count = min(N_count+1,INT_MAX);
     backpropagation(prev_color_puyo_sum);
 
-    const auto bsize = board.get_size();
+    const auto& bsize = board.get_size();
     const auto condition = player.controll_vanish().get_condition();
 
     int all_puyo_sum = 0, color_puyo_sum = 0;
     for(size_t i = 0 ; i < bsize.r ; ++i)
         for(size_t j = 0 ; j < bsize.c ; ++j)
         {
-            const auto pos = POSs(j, i);
-            simulate_board.insert_puyo(board.get_puyo(pos), pos);
+            const auto& pos = POSs(j, i);
+            if(simulate_board.get_puyo(pos) != board.get_puyo(pos))
+                simulate_board.insert_puyo(board.get_puyo(pos));
             if(!simulate_board.empty(pos))
             {
                 ++all_puyo_sum;
@@ -426,7 +428,7 @@ void puyoBotModel2::think_perfect_lets(const puyoPlayer& player)
         }
     prev_color_puyo_sum = color_puyo_sum;
 
-    const auto spawn_pos = board.get_spawn_pos();
+    const auto& spawn_pos = board.get_spawn_pos();
     PROBABLITY best_probablity_fire(-spawn_pos.x,0), best_probablity_buildup(-spawn_pos.x,0);
     int max_potential = 0;
     PARAM_TYPE max_z_value = -numeric_limits<PARAM_TYPE>::infinity();
@@ -437,27 +439,32 @@ void puyoBotModel2::think_perfect_lets(const puyoPlayer& player)
 
     for(const auto& probablity : calc_all_probablities(board))
     {
-        const auto[temp_pos1,temp_pos2] = to_coord(probablity,puyo);
+        const auto& [temp_pos1,temp_pos2] = to_coord(probablity,puyo);
         if(!board.in(temp_pos1) || !board.in(temp_pos2))
             continue;
-        const auto [type1,type2] = puyo.get_type();
-        const auto [pos1,pos2] = simulate_drop({{temp_pos1,type1},{temp_pos2,type2}});
+        auto [puyo1,puyo2] = puyo.get();
+        puyo1.move(temp_pos1);
+        puyo2.move(temp_pos2);
+
+        const auto& [pos1,pos2] = simulate_drop({puyo1,puyo2});
         if(board.in(pos1) && board.in(pos2))
         {
-            simulate_board.insert_puyo(type1, pos1);
-            simulate_board.insert_puyo(type2, pos2);
+            puyo1.move(pos1);
+            puyo2.move(pos2);
+            simulate_board.insert_puyo(puyo1);
+            simulate_board.insert_puyo(puyo2);
 
             array<PARAM_TYPE, COUNT> current_parameters;
             PARAM_TYPE z_value = 0.0;
 
-            const auto [max_cluster_size, cluster_size_sum] = get_cluster_sizes({{pos1,type1},{pos2,type2}});
+            const auto [max_cluster_size, cluster_size_sum] = get_cluster_sizes({puyo1,puyo2});
             current_parameters[ParameterName::max_cluster_size] = max_cluster_size;
             current_parameters[ParameterName::cluster_size_sum] = cluster_size_sum;
-            current_parameters[ParameterName::column_diversity] = get_column_diversity({pos1,pos2});
-            current_parameters[ParameterName::row_height] = get_row_height({pos1,pos2});
-            current_parameters[ParameterName::stair_level] = get_stair_level({{pos1,type1},{pos2,type2}});
-            current_parameters[ParameterName::flatness] = get_flatness({pos1,pos2});
-            current_parameters[ParameterName::isolated] = get_isolated({{pos1,type1},{pos2,type2}});   
+            current_parameters[ParameterName::column_diversity] = get_column_diversity({puyo1,puyo2});
+            current_parameters[ParameterName::row_height] = get_row_height({puyo1,puyo2});
+            current_parameters[ParameterName::stair_level] = get_stair_level({puyo1,puyo2});
+            current_parameters[ParameterName::flatness] = get_flatness({puyo1,puyo2});
+            current_parameters[ParameterName::isolated] = get_isolated({puyo1,puyo2});   
             for(size_t i = 0 ; i < COUNT ; ++i)
             {
                 const auto NAME = static_cast<ParameterName>(i);
@@ -497,7 +504,7 @@ void puyoBotModel2::think_perfect_lets(const puyoPlayer& player)
     }
     const bool all_clear = max_potential == all_puyo_sum+2; // 플레이뿌요+2
     if(all_clear || fire_able && fire_ask || !fire_able && max_potential >= condition)
-        to_let(best_probablity_fire, puyo);
+        to_let(best_probablity_fire, const_cast<puyoPlayPuyo&>(puyo));
     else
-        to_let(best_probablity_buildup,puyo);
+        to_let(best_probablity_buildup,const_cast<puyoPlayPuyo&>(puyo));
 }

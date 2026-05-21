@@ -1,5 +1,7 @@
 #include "puyoPage/puyoPageManager/puyoPageManager.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <stdexcept>
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace sf;
@@ -14,7 +16,16 @@ int main()
     window.setFramerateLimit(120); 
     while(window.isOpen())
     {
-        page.show_page(window);
+        try
+        {
+            page.show_page(window);
+        }
+        catch(const std::runtime_error& e)
+        {
+            std::cerr << e.what() << std::endl;
+            window.close();
+            break;
+        }
     }
     return 0;
 }

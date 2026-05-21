@@ -1,8 +1,7 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardObstructControll.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
-
-#include <utility>
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 
 using namespace std;
 using namespace puyoGameConstant;
@@ -17,7 +16,7 @@ void puyoBoardObstructControll::add(int count)
 {
     obstruct_puyo = min(max(0, obstruct_puyo + count), OBSTRUCT_VIEWER_UNIT.back() * OBSTRUCT_VIEWER_UPPER);
 }
-std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
+std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
 {
     if(obstruct_puyo_for_dropping <= 0)
         return {};
@@ -30,19 +29,19 @@ std::vector<PUYO_INFO> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boa
     
     const auto bsize = board.get_size();
     vector<int> obstruct_puyo_height(bsize.c, 0);
-    vector<PUYO_INFO> gravity_puyos;
+    vector<puyoPuyo> gravity_puyos;
     for(int i = bsize.r-1; ; --i)
         for(size_t j = 0; j < bsize.c ; ++j)
             if(!board.in_row(i) || board.empty(POSi(j, i)))
             {
-                gravity_puyos.push_back({POSf(j,-obstruct_puyo_height[j] + OBSTRUCT_PUYO_SPAWN_Y), puyoType(P_OBSTRUCT), BOARD_FALL_GRAVITY_TICK});
+                gravity_puyos.push_back(puyoPuyo(POSf(j,-obstruct_puyo_height[j]+OBSTRUCT_PUYO_SPAWN_Y), P_OBSTRUCT, make_unique<puyoPuyoGravity>(BOARD_FALL_GRAVITY_TICK)));
                 ++obstruct_puyo_height[j];
                 --obstruct_puyo;
                 --obstruct_puyo_for_dropping;
                 if(obstruct_puyo_for_dropping <= 0)
-                    return std::move(gravity_puyos);
+                    return gravity_puyos;
             }
-    return std::move(gravity_puyos);
+    return gravity_puyos;
 }
 bool puyoBoardObstructControll::empty() const { return obstruct_puyo == 0; }
 const int &puyoBoardObstructControll::get() const { return obstruct_puyo; }

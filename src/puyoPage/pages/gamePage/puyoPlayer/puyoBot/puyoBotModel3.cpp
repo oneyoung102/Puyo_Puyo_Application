@@ -8,7 +8,7 @@
 using namespace std;
 
 
-puyoBotModel3::puyoBotModel3(const std::vector<std::pair<puyoType,puyoType>>& new_types, const int& next_puyo_count, POSi bsize, unsigned int init_act_tick)
+puyoBotModel3::puyoBotModel3(const std::vector<std::pair<puyoPuyo,puyoPuyo>>& new_types, const int& next_puyo_count, POSi bsize, unsigned int init_act_tick)
     : puyoBot(bsize,init_act_tick)
     , new_types(new_types)
     , next_puyo_count(next_puyo_count)
@@ -21,16 +21,16 @@ int puyoBotModel3::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     puyoBoard board;
     for(size_t r = 0; r < bsize.r; ++r)
         for(size_t c = 0; c < bsize.c; ++c)
-            board.insert_puyo(simulate_board.get_puyo({c, r}), {c, r});
+            board.insert_puyo(simulate_board.get_puyo({c, r}));
  
     int vanished_puyo = 0;
     bool continue_vanish = true;
 
     vector<vector<bool>> temp_visited(bsize.r, vector<bool>(bsize.c, false));
-    const auto [_1, _2, initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
+    const auto& [_1, _2, initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
     vanished_puyo += initial_stored.size();
     for(const auto& p : initial_stored)
-        board.remove_puyo(p.first);
+        board.remove_puyo(p.get_pos());
     
     while(continue_vanish)
     {
@@ -56,8 +56,8 @@ int puyoBotModel3::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
         for(size_t r = 0; r < bsize.r; ++r)
             for(size_t c = 0; c < bsize.c; ++c)
             {
-                const puyoType type = board.get_puyo(POSs(c,r));
-                if(type.empty() || visited[r][c] || !type.is_colored())
+                const auto& puyo = board.get_puyo(POSs(c,r));
+                if(puyo.empty() || visited[r][c] || !puyo.is_colored())
                     continue;
 
                 const auto [color_puyo_count, weight_sum, stored_puyos] = player.controll_vanish().fire_cluster(board, POSs(c,r), visited);
@@ -65,7 +65,7 @@ int puyoBotModel3::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
                 { 
                     vanished_puyo += stored_puyos.size();
                     for(const auto& p : stored_puyos)
-                        board.remove_puyo(p.first);
+                        board.remove_puyo(p.get_pos());
                     continue_vanish = true;
                 }
             }
@@ -73,7 +73,7 @@ int puyoBotModel3::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     return vanished_puyo;
 }
 
-int puyoBotModel3::get_potential(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos)
+int puyoBotModel3::get_potential(const puyoPlayer& player, const std::vector<puyoPuyo>& deployed_puyos)
 {
     const auto bsize = simulate_board.get_size();
     int max_potential = 0;
@@ -89,59 +89,65 @@ int puyoBotModel3::get_potential(const puyoPlayer& player, const std::vector<POS
         const auto vanish_count = simulate_chain(player, pos);
         max_potential = max(max_potential, vanish_count);
     } 
-    for(const auto& pos : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
+    {
+        const auto& pos = puyo.get_pos();
         if(simulate_board.in_row(pos.r-1) && !simulate_board.empty(pos+POSi(0,-1)))// 위가 가려진 플레이뿌요 터뜨림
         {
             const auto vanish_count = simulate_chain(player, pos);
             max_potential = max(max_potential, vanish_count);
         }
+    }
     return max_potential;
 }
 
-bool puyoBotModel3::fire_able(const puyoPlayer& player, const std::vector<POSi>& deployed_puyos)
+bool puyoBotModel3::fire_able(const puyoPlayer& player, const std::vector<puyoPuyo>& deployed_puyos)
 {
-    const auto bsize = simulate_board.get_size();
+    const auto& bsize = simulate_board.get_size();
     const int R = bsize.r, C = bsize.c;
     vector<vector<bool>> visited(R,vector<bool>(C,false));
     int max_cluster_size = 0; 
-    for(const auto& pos : deployed_puyos)
+    for(const auto& puyo : deployed_puyos)
     {
-        const auto[cluster_size, _1,_2] = player.controll_vanish().fire_cluster(simulate_board, pos, visited);
+        const auto&[cluster_size, _1,_2] = player.controll_vanish().fire_cluster(simulate_board, puyo.get_pos(), visited);
         max_cluster_size = max(max_cluster_size,cluster_size);   
     }
     return max_cluster_size >= player.controll_vanish().get_condition();
 }
 
-pair<int,puyoBotModel3::PROBABLITY> puyoBotModel3::beam_search(const puyoPlayer& player, const puyoBoard& board, const vector<pair<puyoType,puyoType>>& next_types, int count, const bool fire)
+pair<int,puyoBotModel3::PROBABLITY> puyoBotModel3::beam_search(const puyoPlayer& player, const puyoBoard& board, const vector<pair<puyoPuyo,puyoPuyo>>& next_types, int count, const bool fire)
 {
     const bool first_turn = count == 0, last_turn = count == puyoGameConstant::DISPLAYED_NEXT_PUYO_COUNT;
 
     PROBABLITY best_probablity;
     int max_potential = INT_MIN;
-    using PROB_TYPE = tuple<int,PROBABLITY,vector<pair<POSi,puyoType>>>; // {potential, probablity, {{pos,type}...}}
+    using PROB_TYPE = tuple<int,PROBABLITY,vector<puyoPuyo>>; // {potential, probablity, puyoPuyo...}
     vector<PROB_TYPE> best_probablities;
 
     for(const auto& probablity : calc_all_probablities(board))
     {
-        const auto[temp_pos1,temp_pos2] = to_coord(probablity,player.get_puyo());
+        const auto& [temp_pos1,temp_pos2] = to_coord(probablity,player.get_puyo());
         if(!board.in(temp_pos1) || !board.in(temp_pos2))
             continue;
-        const auto [type1,type2] = next_types[count];
-        const auto [pos1,pos2] = simulate_drop({{temp_pos1,type1},{temp_pos2,type2}});
+        auto [puyo1,puyo2] = next_types[count];
+        puyo1.move(temp_pos1);
+        puyo2.move(temp_pos2);
+        const auto& [pos1,pos2] = simulate_drop({puyo1,puyo2});
         if(!board.in(pos1) || !board.in(pos2))
             continue;
-
-        simulate_board.insert_puyo(type1, pos1);
-        simulate_board.insert_puyo(type2, pos2);
+        puyo1.move(pos1);
+        puyo2.move(pos2);
+        simulate_board.insert_puyo(puyo1);
+        simulate_board.insert_puyo(puyo2);
 
         int potential = 0;
         if(first_turn)
         {
-            const bool fire_able = this->fire_able(player,{pos1,pos2});
+            const bool fire_able = this->fire_able(player,{puyo1,puyo2});
             if(fire && !fire_able || !fire && fire_able)
                 potential += puyoGameConstant::BOT_PENALTY;
         }
-        potential += get_potential(player,{pos1,pos2});
+        potential += get_potential(player,{puyo1,puyo2});
         if(last_turn)
         {
             if(potential > max_potential)
@@ -151,7 +157,7 @@ pair<int,puyoBotModel3::PROBABLITY> puyoBotModel3::beam_search(const puyoPlayer&
             }
         }
         else
-            best_probablities.push_back({potential, probablity, {{pos1,type1},{pos2,type2}}});
+            best_probablities.push_back({potential, probablity, {puyo1,puyo2}});
 
         simulate_board.remove_puyo(pos1);//복구
         simulate_board.remove_puyo(pos2);
@@ -167,13 +173,13 @@ pair<int,puyoBotModel3::PROBABLITY> puyoBotModel3::beam_search(const puyoPlayer&
         best_probablities.resize(beam_search_select_count);
     for(auto& probablity : best_probablities)
     {
-        for(const auto& [pos,type] : get<2>(probablity))
-            simulate_board.insert_puyo(type, pos);
+        for(const auto& puyo : get<2>(probablity))
+            simulate_board.insert_puyo(puyo);
 
         get<0>(probablity) += beam_search(player,simulate_board,next_types,count+1,fire).first;
 
-        for(const auto& [pos,type] : get<2>(probablity))
-            simulate_board.remove_puyo(pos);
+        for(const auto& puyo : get<2>(probablity))
+            simulate_board.remove_puyo(puyo.get_pos());
     }
 
     const auto& best_of_best = *max_element(best_probablities.begin(),best_probablities.end(),[](const PROB_TYPE& x, const PROB_TYPE& y){
@@ -184,24 +190,24 @@ pair<int,puyoBotModel3::PROBABLITY> puyoBotModel3::beam_search(const puyoPlayer&
 
 void puyoBotModel3::think_perfect_lets(const puyoPlayer& player)
 {
-    auto& board = player.get_board();
-    auto& puyo = player.get_puyo();
+    const auto& board = player.get_board();
+    const auto& puyo = player.get_puyo();
 
-    const auto bsize = board.get_size();
+    const auto& bsize = board.get_size();
     
     int all_puyo_sum = 0;
     for(size_t i = 0 ; i < bsize.r ; ++i)
         for(size_t j = 0 ; j < bsize.c ; ++j)
         {
-            const auto pos = POSs(j, i);
-            simulate_board.insert_puyo(board.get_puyo(pos), pos);
+            const auto& pos = POSs(j, i);
+            if(simulate_board.get_puyo(pos) != board.get_puyo(pos))
+                simulate_board.insert_puyo(board.get_puyo(pos), pos);
             if(!simulate_board.empty(pos))
                 ++all_puyo_sum;
         }
     if(new_types.empty())
         return;
     const bool fire = get_fire(all_puyo_sum,player.controll_obstuct().get());
-    decltype(new_types) next_types = {puyo.get_type(),new_types[next_puyo_count],new_types[next_puyo_count+1]};
-    const PROBABLITY best_probablity = beam_search(player,board,next_types,0,fire).second;
-    to_let(best_probablity,puyo);
+    const PROBABLITY& best_probablity = beam_search(player,board,{puyo.get(),new_types[next_puyo_count],new_types[next_puyo_count+1]},0,fire).second;
+    to_let(best_probablity,const_cast<puyoPlayPuyo&>(puyo));
 }

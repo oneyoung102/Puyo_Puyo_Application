@@ -1,6 +1,7 @@
 #include "puyoPuyoAct.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoTool/puyoCast.hpp"
+#include <stdexcept>
 
 void puyoPuyoAct::arrive(puyoPuyo& puyo)
 {
@@ -23,18 +24,22 @@ bool puyoPuyoAct::decide(const puyoBoard& board, puyoPuyo& puyo)
     halt();
     return false;
 }
-
-bool puyoPuyoAct::acting(){return halted < act_count && act_count < act_count_init;}
 puyoPuyoAct::puyoPuyoAct(int amount)
     : act_count_init(amount)
     , halted(-1)
     , act_count(halted)
 {}
-void puyoPuyoAct::let()
+
+void puyoPuyoAct::let(int amount)
 {
     if(!acting())
-        act_count = 0;
+    {
+        if(amount < halted)
+            throw std::runtime_error("When letting, act count is smaller than 'halted'");
+        act_count = amount;
+    }
 }
+bool puyoPuyoAct::acting() const {return halted < act_count && act_count < act_count_init;}
 void puyoPuyoAct::halt(){act_count = halted;}
-float puyoPuyoAct::get_state(){return CASTf(act_count)/act_count_init;}
-int puyoPuyoAct::get_act_count_init(){return act_count_init;}
+float puyoPuyoAct::get_state() const {return CASTf(act_count)/act_count_init;}
+int puyoPuyoAct::get_act_count_init() const {return act_count_init;}
