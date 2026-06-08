@@ -327,7 +327,7 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     puyoBoard board;
     for(size_t r = 0; r < bsize.r; ++r)
         for(size_t c = 0; c < bsize.c; ++c)
-            board.insert_puyo(simulate_board.get_puyo(POSs(c, r)));
+            board.insert_puyo(simulate_board.get_puyo({c, r}));
 
     int vanished_puyo = 0;
     bool continue_vanish = true;
@@ -335,8 +335,8 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     vector<vector<bool>> temp_visited(bsize.r, vector<bool>(bsize.c, false));
     const auto& [_1,_2,initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
     vanished_puyo += initial_stored.size();
-    for(const auto& p : initial_stored)
-        board.remove_puyo(p.get_pos());
+    for(const auto& pos : initial_stored)
+        board.remove_puyo(pos);
     
     while(continue_vanish)
     {
@@ -367,8 +367,8 @@ int puyoBotModel2::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
                 if(weight_sum >= player.controll_vanish().get_condition())
                 { 
                     vanished_puyo += stored_puyos.size();
-                    for(const auto& p : stored_puyos)
-                        board.remove_puyo(p.get_pos());
+                    for(const auto& pos : stored_puyos)
+                        board.remove_puyo(pos);
                     continue_vanish = true;
                 }
             }

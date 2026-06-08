@@ -7,6 +7,7 @@
 #include "puyoResources/puyoPrinting/printButton/puyoPrintButton.hpp"
 #include "puyoResources/puyoPrinting/printButton/puyoPrintDialButton.hpp"
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
+#include "puyoResources/puyoPrinting/printText/puyoPrintTextZoom.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 
 using namespace std;
@@ -16,10 +17,10 @@ using namespace puyoOptionConstant;
 
 puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     : puyoPage()
-    , button_cursor(puyoButtonCursor<2, 2, buttonName>({{buttonName::diff_dial, buttonName::mode_dial},
+    , button_cursor(decltype(button_cursor)({{buttonName::diff_dial, buttonName::mode_dial},
                                                                     {buttonName::back, buttonName::ready}}))
-    ,  diff_dial_button_cursor(puyoButtonCursor<1, 3, Diff>({{Diff::easy, Diff::normal, Diff::hard}}))
-    ,  mode_dial_button_cursor(puyoButtonCursor<1, 5, Mode>({{Mode::basic,Mode::speed,Mode::bomb,Mode::frozen, Mode::charged}}))
+    ,  diff_dial_button_cursor(decltype(diff_dial_button_cursor)({{Diff::easy, Diff::normal, Diff::hard}},true))
+    ,  mode_dial_button_cursor(decltype(mode_dial_button_cursor)({{Mode::basic,Mode::speed,Mode::bomb,Mode::frozen, Mode::charged}},true))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),puyoImageConstant::PRINT_IMMORTAL));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::option_page));
@@ -112,6 +113,13 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     pl.allot_key(Keyboard::Key::Up,FUNCFY(button_cursor.let_choose_up));
     pl.allot_key(Keyboard::Key::Down,FUNCFY(button_cursor.let_choose_down));
     pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
+    pp.add_print_text(make_unique<puyoPrintText>(
+        TEXT_KEY_NOTICE_POS,
+        "Arrows : Move, Enter : Select",
+        pfs.get_font(),
+        TEXT_KEY_NOTICE_SIZE,
+        Color::White,
+        Text::Style::Regular));
 }
 puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &window) {
     puyoPageSignal signal;
@@ -141,11 +149,25 @@ puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &wi
                     pl.allot_key(Keyboard::Key::Left, FUNCFY(diff_dial_button_cursor.let_choose_left));
                     pl.allot_key(Keyboard::Key::Right, FUNCFY(diff_dial_button_cursor.let_choose_right));
                     pl.allot_key(Keyboard::Key::Enter, FUNCFY(diff_dial_button_cursor.let_select));
+                    pp.add_print_text(make_unique<puyoPrintTextZoom>(
+                        DIFF_DIAL_BUTTON_POS+TEXT_SELECT_COMPEL_POS,
+                        "Select Difficulty!",
+                        pfs.get_font(),
+                        TEXT_SELECT_COMPEL_SIZE,
+                        TEXT_SELECT_COMPEL_TICK,
+                        Color::Green));
                     break;
                 case buttonName::mode_dial:
                     pl.allot_key(Keyboard::Key::Left, FUNCFY(mode_dial_button_cursor.let_choose_left));
                     pl.allot_key(Keyboard::Key::Right, FUNCFY(mode_dial_button_cursor.let_choose_right));
                     pl.allot_key(Keyboard::Key::Enter, FUNCFY(mode_dial_button_cursor.let_select));
+                    pp.add_print_text(make_unique<puyoPrintTextZoom>(
+                        MODE_DIAL_BUTTON_POS+TEXT_SELECT_COMPEL_POS,
+                        "Select Mode!",
+                        pfs.get_font(),
+                        TEXT_SELECT_COMPEL_SIZE,
+                        TEXT_SELECT_COMPEL_TICK,
+                        Color::Green));
                     break;
                 case buttonName::NONE:
                     break;
@@ -161,6 +183,7 @@ puyoPageSignal puyoOptionPage::proceed_page(puyoFileSystem &pfs,RenderWindow &wi
             pl.allot_key(Keyboard::Key::Down, FUNCFY(button_cursor.let_choose_down));
             pl.allot_key(Keyboard::Key::Enter, FUNCFY(button_cursor.let_select));
             ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cancel));
+            pp.clear_text_back();
         }
     }
     else if (ps.sounds_empty())

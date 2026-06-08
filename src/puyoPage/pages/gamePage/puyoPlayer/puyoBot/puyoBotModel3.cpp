@@ -29,8 +29,8 @@ int puyoBotModel3::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
     vector<vector<bool>> temp_visited(bsize.r, vector<bool>(bsize.c, false));
     const auto& [_1, _2, initial_stored] = player.controll_vanish().fire_cluster(board, simul_drop_pos, temp_visited);
     vanished_puyo += initial_stored.size();
-    for(const auto& p : initial_stored)
-        board.remove_puyo(p.get_pos());
+    for(const auto& pos : initial_stored)
+        board.remove_puyo(pos);
     
     while(continue_vanish)
     {
@@ -64,8 +64,8 @@ int puyoBotModel3::simulate_chain(const puyoPlayer& player, POSi simul_drop_pos)
                 if(weight_sum >= player.controll_vanish().get_condition())
                 { 
                     vanished_puyo += stored_puyos.size();
-                    for(const auto& p : stored_puyos)
-                        board.remove_puyo(p.get_pos());
+                    for(const auto& pos : stored_puyos)
+                        board.remove_puyo(pos);
                     continue_vanish = true;
                 }
             }
@@ -201,7 +201,7 @@ void puyoBotModel3::think_perfect_lets(const puyoPlayer& player)
         {
             const auto& pos = POSs(j, i);
             if(simulate_board.get_puyo(pos) != board.get_puyo(pos))
-                simulate_board.insert_puyo(board.get_puyo(pos), pos);
+                simulate_board.insert_puyo(board.get_puyo(pos));
             if(!simulate_board.empty(pos))
                 ++all_puyo_sum;
         }

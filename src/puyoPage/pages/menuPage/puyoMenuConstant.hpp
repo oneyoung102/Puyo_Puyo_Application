@@ -10,6 +10,9 @@ namespace puyoMenuConstant
     constexpr int TEXT_ARCADE_SIZE = 58;
     constexpr int TEXT_ARCADE_CYCLE_TICK = 23;
 
+    constexpr POSf TEXT_KEY_NOTICE_POS = POSf(510,424);
+    constexpr int TEXT_KEY_NOTICE_SIZE = 23;
+
     constexpr POSf SOLO_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(-170,23);
     constexpr POSf DUEL_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(0,23);
     constexpr POSf BOT_BUTTON_POS = puyoImageConstant::SCREEN_CENTER+POSf(170,23);

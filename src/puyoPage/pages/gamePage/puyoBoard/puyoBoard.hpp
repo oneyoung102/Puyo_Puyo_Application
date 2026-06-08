@@ -39,6 +39,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 
         const puyoPuyo& get_puyo(const POSs& pos) const;
         puyoPuyo& ref_puyo(const POSs& pos);
+        
         void insert_puyo(const puyoPuyo& puyo, const POSs& pos);
         void insert_puyo(const puyoPuyo& puyo);
         void remove_puyo(const POSs& pos);
@@ -48,5 +49,6 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         std::vector<puyoType::typeState> update();
 
         std::vector<puyoPuyo> to_gravity_puyo();
+        puyoPuyo to_vanish_puyo(const POSs& pos);
         
 };

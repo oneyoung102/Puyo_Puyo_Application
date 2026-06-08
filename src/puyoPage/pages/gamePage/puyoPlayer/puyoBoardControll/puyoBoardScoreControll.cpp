@@ -10,11 +10,15 @@ puyoBoardScoreControll::puyoBoardScoreControll()
     , color_count(set<puyoType::Type>())
 {}
 
- int puyoBoardScoreControll::get_drop_score(const vector<puyoPuyo>& future_puyos) const
+ int puyoBoardScoreControll::get_drop_score(const vector<puyoPuyo>& future_puyos, const puyoPlayPuyo& play_puyo) const
  {
     int drop_score = 0;
     for(const auto& future_puyo : future_puyos)
         drop_score += future_puyo.get_pos().y;
+
+    const auto& [pos1,pos2] = play_puyo.get_pos();
+    drop_score -= pos1.y + pos2.y;
+    
     return drop_score/max(1,CASTi(future_puyos.size()));
  }
 
@@ -31,7 +35,7 @@ void puyoBoardScoreControll::add_puyo_count(int count){puyo_count += count;}
 
 vector<int> puyoBoardScoreControll::get_link_count(){return exchange(link_count,{});}
 void puyoBoardScoreControll::add_link_count(int count){link_count.push_back(count);}
-void puyoBoardScoreControll::add_link_count(const vector<int>& counts){link_count.insert(link_count.end(), counts.begin(), counts.end());}
+void puyoBoardScoreControll::add_link_count(vector<int>&& counts){link_count.insert(link_count.end(), counts.begin(), counts.end());}
 
 int puyoBoardScoreControll::get_color_count()
 {
@@ -40,4 +44,4 @@ int puyoBoardScoreControll::get_color_count()
     return temp;
 }
 void puyoBoardScoreControll::add_color_count(puyoType::Type type){color_count.insert(type);}
-void puyoBoardScoreControll::add_color_count(const vector<puyoType::Type>& types){color_count.insert(types.begin(), types.end());}
+void puyoBoardScoreControll::add_color_count(vector<puyoType::Type>&& types){color_count.insert(types.begin(), types.end());}

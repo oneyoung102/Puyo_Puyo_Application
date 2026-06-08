@@ -136,7 +136,7 @@ void puyoPlayPuyo::let_right(){let_fourway(RIGHT);}
 void puyoPlayPuyo::let_down()
 {
     let_fourway(DOWN);
-    if(!moving())
+    if(moving())
         down_taken = true;
 }
 void puyoPlayPuyo::let_turn()

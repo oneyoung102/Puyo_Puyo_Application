@@ -12,11 +12,11 @@ class puyoBoardEnergyControll
     public :
         puyoBoardEnergyControll();
         void fly(const puyoBoard& board);
-        void to_energy_puyo(int from_player_num, int to_player_num);// temp_energy_puyo를 energy_puyo로
+        void spawn(int from_player_num, int to_player_num);// temp_energy_puyo를 energy_puyo로
         const std::vector<puyoPuyo>& get() const;
 
-        void add_temp(const puyoPuyo& temp_energy_puyo);
-        void add_temp(const std::vector<puyoPuyo>& temp_energy_puyos);
-        void clear_temp();
-        bool empty_temp() const;
+        void add(puyoPuyo&& temp_energy_puyo);
+        void add(std::vector<puyoPuyo>&& temp_energy_puyos);
+        void clear();
+        bool empty() const;
 };

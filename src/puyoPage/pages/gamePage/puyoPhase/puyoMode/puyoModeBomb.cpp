@@ -38,7 +38,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlay
             const auto& puyo = board.get_puyo(POSs(bomb_c, r));
             if(!puyo.is_same(puyoType::Type::bomb))
                 continue;
-            cv.to_vanish_puyo_each(board, POSs(bomb_c,r));
+            cv.add(board.to_vanish_puyo(POSs(bomb_c,r)));
             phase.get_pstate().set_phase(bomb_have_player_num,puyoPhaseStatement::Phase::vanish);
             break;
         }
@@ -48,15 +48,15 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlay
             return;
         const int opposite = player->get_opposite();
         phase.get_players()[opposite]
-        ->controll_obstuct()
-        .add(player->controll_obstuct().get()); // 상대에게 넘길 방해 뿌요 두 배
-            bomb_have_player_num = opposite;
+            ->controll_obstuct()
+            .add(player->controll_obstuct().get_opp()); // 상대에게 넘길 방해 뿌요 두 배
+        bomb_have_player_num = opposite;
     }
     else if(phase.get_pstate().is_phase(bomb_have_player_num, puyoPhaseStatement::Phase::play))//폭탄 소환
     {
         std::uniform_int_distribution<> dist(0, board.get_size().c-1);
         bomb_c = dist(gen);
-        player->controll_gravity().add(puyoPuyo(POSf(bomb_c,OBSTRUCT_PUYO_SPAWN_Y), P_BOMB(BOMB_MAX_TICK), std::make_unique<puyoPuyoGravity>(BOARD_FALL_GRAVITY_TICK)));
+        player->controll_gravity().add(puyoPuyo(POSf(bomb_c,OBSTRUCT_PUYO_SPAWN_Y), P_BOMB(BOMB_MAX_TICK), std::make_unique<puyoPuyoGravity>(PLAYPUYO_DROP_GRAVITY_TICK)));
         bomb_is_spawned = true;
         phase.set_signal(puyoModeSignal::bomb_fused);
         phase.get_pstate().set_phase(bomb_have_player_num,puyoPhaseStatement::Phase::gravity);

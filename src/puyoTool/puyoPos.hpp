@@ -40,6 +40,18 @@ class POS
                 throw std::runtime_error("POS zero division is impossible");
             return POS(x / other.x, y / other.y);
         }
+        constexpr POS operator%(T num) const
+        {
+            if(num == 0)
+                throw std::runtime_error("POS zero division is impossible");
+            return POS(x % num, y % num);
+        }
+        constexpr POS operator%(const POS& other) const
+        {
+            if(other.x == 0 || other.y == 0)
+                throw std::runtime_error("POS zero division is impossible");
+            return POS(x % other.x, y % other.y);
+        }
         constexpr POS operator+=(const POS& other)
         {
             this->x += other.x;
@@ -64,6 +76,14 @@ class POS
                 throw std::runtime_error("POS zero division is impossible");
             this->x /= num;
             this->y /= num;
+            return *this;
+        }
+        constexpr POS operator%=(T num) const
+        {
+            if(num == 0)
+                throw std::runtime_error("POS zero division is impossible");
+            this->x %= num;
+            this->y %= num;
             return *this;
         }
         constexpr bool operator==(const POS& other) const { return other.x == this->x && other.y == this->y; }

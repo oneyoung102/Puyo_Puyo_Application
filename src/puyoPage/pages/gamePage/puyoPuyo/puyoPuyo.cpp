@@ -20,7 +20,7 @@ puyoPuyo::puyoPuyo(const puyoPuyo& other)
 }
 puyoPuyo::puyoPuyo(puyoPuyo&& other)
 {
-    this->pos = other.pos;
+    this->pos = std::move(other.pos);
     if(!other.empty())
         this->type = std::move(other.type);
     if(other.have_act())
@@ -48,7 +48,7 @@ puyoPuyo& puyoPuyo::operator=(puyoPuyo&& other) noexcept
 {
     if(this != &other)
     {
-        this->pos = other.pos;
+        this->pos = std::move(other.pos);
         if(other.empty())
             type = nullptr;
         else

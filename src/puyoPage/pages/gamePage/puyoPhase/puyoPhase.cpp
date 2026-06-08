@@ -110,7 +110,7 @@ void puyoPhase::set_game(Diff diff, Mode mode)
         player->get_board().set_spawn_pos(PLAYPUYO_IN_BOARD_SPAWN_POS);
         player->controll_vanish().set_condition(PUYO_VANISH_CONDITION);
         player->give_new_puyos(get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
-        player->controll_future().update(player->get_board(),player->get_puyo());
+        player->controll_future().spawn(player->get_board(),player->get_puyo());
     }
     pstate = puyoPhaseStatement(players.size());
 //////모드
@@ -156,14 +156,14 @@ int puyoPhase::proceed_play(const unique_ptr<puyoPlayer>& player)
         ++added_score;
     else if(puyo.dropped(board))
     {
-        added_score += player->controll_score().get_drop_score(cf.get());
+        added_score += player->controll_score().get_drop_score(cf.get(),puyo);
 
         auto& co = player->controll_obstuct();
         auto& cg = player->controll_gravity();
         cg.add(puyo.to_gravity_puyo(board));
         player->give_new_puyos(this->get_new_puyos(player->get_new_puyo_count()),gravity_value,stay_value);
         
-        cf.update(board,player->get_puyo());
+        cf.spawn(board,player->get_puyo());
         player->signal_puyo_drop();
         co.approve_spawn();
         pstate.set_phase(player_num,puyoPhaseStatement::Phase::gravity);
@@ -182,11 +182,11 @@ int puyoPhase::proceed_gravity(const unique_ptr<puyoPlayer>& player)
     {             
         auto& cv = player->controll_vanish();
         auto& cs = player->controll_score();
-        const auto& [puyo_count, link_count, color_count, temp_energy_puyos] = cv.to_vanish_puyo(board); 
+        auto [puyo_count, link_count, color_count, temp_energy_puyos] = cv.to_vanish_puyo(board); 
         cs.add_puyo_count(puyo_count);
-        cs.add_link_count(link_count);
-        cs.add_color_count(color_count);
-        player->controll_energy().add_temp(temp_energy_puyos);
+        cs.add_link_count(std::move(link_count));
+        cs.add_color_count(std::move(color_count));
+        player->controll_energy().add(std::move(temp_energy_puyos));
         if(cv.empty()) //파괴할 뿌요가 없으면
         {
             auto& co = player->controll_obstuct();
@@ -258,7 +258,7 @@ void puyoPhase::manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int a
             const int opp = calc.get_opposite_obstruct_puyo_count(co.get(),co.get_opp());
 
             const int to_player_num = (co.get() > 0) ? player_num : opposite;
-            ce.to_energy_puyo(player_num,to_player_num);//에너지 뿌요 생성
+            ce.spawn(player_num,to_player_num);//에너지 뿌요 생성
 
             co.add(-co.get_opp());
             co.clear_opp();
@@ -266,7 +266,7 @@ void puyoPhase::manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int a
         }
     } 
     else
-        ce.clear_temp(); 
+        ce.clear(); 
 }
 void puyoPhase::manage_game_end(const std::unique_ptr<puyoPlayer>& player)
 {
@@ -300,8 +300,7 @@ void puyoPhase::proceed_event(const unique_ptr<puyoPlayer>& player)
                 for(size_t i = 0 ; i < bsize.r ; ++i)
                     for(size_t j = 0 ; j < bsize.c ; ++j)
                         if(!board.empty({j, i}))
-                            player->controll_energy().add_temp(
-                            player->controll_vanish().to_vanish_puyo_each(board,{j,i}));                                                 
+                            player->controll_vanish().add(board.to_vanish_puyo({j,i}));                                                 
                 pstate.set_phase(player->get_player_num(),puyoPhaseStatement::Phase::vanish);
                 ask_end_game();
                 set_win_player_num(player->get_opposite());
@@ -348,7 +347,7 @@ void puyoPhase::proceed_game()
         if(get_player_count() == 2)
             manage_obstruct(player,added_score);
         else
-            player->controll_energy().clear_temp(); 
+            player->controll_energy().clear(); 
 /////////게임 종료
         manage_game_end(player);
         if(game_ended())

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>
+#include <cstdlib>
 
 template <typename T>
 inline constexpr int CASTi(T x) { return static_cast<int>(x); }

@@ -21,7 +21,7 @@ namespace puyoGameConstant
     constexpr int BOARD_OBSTRUCT_VANISH_TICK = 12;
     constexpr int BOARD_FLY_TICK = 39;
 
-    constexpr POSf PLAYPUYO_IN_BOARD_SPAWN_POS = POSf(2,-1);
+    constexpr auto PLAYPUYO_IN_BOARD_SPAWN_POS = POSf(2,0);
 
     constexpr float OBSTRUCT_PUYO_SPAWN_Y = -2;
 

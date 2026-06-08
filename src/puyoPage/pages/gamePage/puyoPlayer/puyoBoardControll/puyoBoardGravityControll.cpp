@@ -9,15 +9,15 @@ using namespace std;
 puyoBoardGravityControll::puyoBoardGravityControll()
 {}
 
-void puyoBoardGravityControll::add(const puyoPuyo& puyo) // std::move
+void puyoBoardGravityControll::add(puyoPuyo&& puyo)
 {
-    gravity_puyos.push_back(puyo);
+    gravity_puyos.push_back(std::move(puyo));
     gravity_puyos.back().let();    
 }
-void puyoBoardGravityControll::add(const vector<puyoPuyo>& puyos) // std::move
+void puyoBoardGravityControll::add(vector<puyoPuyo>&& puyos)
 {
-    for(const auto& puyo : puyos)
-        add(puyo);
+    for(auto& puyo : puyos)
+        add(std::move(puyo));
 }
 const vector<puyoPuyo>& puyoBoardGravityControll::get() const { return gravity_puyos;}
 

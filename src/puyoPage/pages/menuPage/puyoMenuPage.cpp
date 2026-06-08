@@ -5,6 +5,7 @@
 #include "puyoMenuPage.hpp"
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
+#include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
 
 #include "puyoResources/puyoPrinting/printButton/puyoPrintButton.hpp"
@@ -17,9 +18,9 @@ using namespace sf;
 using namespace puyoMenuConstant;
 
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
-    : button_cursor(puyoButtonCursor<1,3,Arcade>({{Arcade::solo,Arcade::duel,Arcade::bot}}))
+    : button_cursor(decltype(button_cursor)({{Arcade::solo,Arcade::duel,Arcade::bot}}))
 {
-    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),-1));
+    pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back)));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
 
     pp.add_print_text(make_unique<puyoPrintTextZoom>(
@@ -53,6 +54,13 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
     pl.allot_key(Keyboard::Key::Left,FUNCFY(button_cursor.let_choose_left));
     pl.allot_key(Keyboard::Key::Right,FUNCFY(button_cursor.let_choose_right));
     pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
+    pp.add_print_text(make_unique<puyoPrintText>(
+        TEXT_KEY_NOTICE_POS,
+        "Arrows : Move, Enter : Select",
+        pfs.get_font(),
+        TEXT_KEY_NOTICE_SIZE,
+        Color::White,
+        Text::Style::Regular));
 }
 puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& window)
 {

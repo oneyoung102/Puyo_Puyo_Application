@@ -26,7 +26,7 @@ void puyoBoardEnergyControll::fly(const puyoBoard& board)
             ++i;
         }
 }
-void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_num)
+void puyoBoardEnergyControll::spawn(int from_player_num, int to_player_num)
 {
     if(temp_energy_puyos.empty())
         return;
@@ -40,14 +40,14 @@ void puyoBoardEnergyControll::to_energy_puyo(int from_player_num, int to_player_
     temp_energy_puyos.clear();
 }
 
-void puyoBoardEnergyControll::add_temp(const puyoPuyo& temp_energy_puyo)
+void puyoBoardEnergyControll::add(puyoPuyo&& temp_energy_puyo)
 {
-    temp_energy_puyos.push_back(temp_energy_puyo);
+    temp_energy_puyos.push_back(std::move(temp_energy_puyo));
 }
-void puyoBoardEnergyControll::add_temp(const std::vector<puyoPuyo>& temp_energy_puyos)
+void puyoBoardEnergyControll::add(std::vector<puyoPuyo>&& temp_energy_puyos)
 {
-    for(const auto& temp_energy_puyo : temp_energy_puyos)
-        add_temp(temp_energy_puyo);
+    for(auto& temp_energy_puyo : temp_energy_puyos)
+        add(std::move(temp_energy_puyo));
 }
-bool puyoBoardEnergyControll::empty_temp() const {return temp_energy_puyos.empty();}
-void puyoBoardEnergyControll::clear_temp() { temp_energy_puyos.clear(); }
+bool puyoBoardEnergyControll::empty() const {return temp_energy_puyos.empty();}
+void puyoBoardEnergyControll::clear() { temp_energy_puyos.clear(); }

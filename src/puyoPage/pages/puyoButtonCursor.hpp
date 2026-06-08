@@ -23,45 +23,45 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         std::array<std::array<std::pair<buttonName,bool>,C>,R> selected;
         POSi cursor;
 
+        const bool cyclic;
 
-        void move_cursor(POSi amount)
+        void move_cursor(const POSi& amount)
         {
             selected[cursor.r][cursor.c].second = false;
-            if(selected[cursor.r+amount.r][cursor.c+amount.c].first != buttonName::NONE)
-                cursor += amount;
-            else
+            cursor += amount;
+            cursor = (POSi(C,R)+cursor)%POSi(C,R);
+
+            std::vector<std::vector<bool>> visited(R,std::vector<bool>(C,false));
+            std::queue<POSi> coords;
+            auto temp_cursor = cursor;
+            while(POSi() <= temp_cursor && temp_cursor < POSi(C,R))
             {
-                std::vector<std::vector<bool>> visited(R,std::vector<bool>(C,false));
-                std::queue<POSi> coords;
-                auto temp_cursor = cursor;
-                while(POSi() <= temp_cursor && temp_cursor < POSi(C,R))
+                coords.push(temp_cursor);
+                temp_cursor += amount;
+            }
+            while(!coords.empty())
+            {
+                const auto pos = coords.front();
+                coords.pop();
+                visited[pos.r][pos.c] = true;
+                if(selected[pos.r][pos.c].first != buttonName::NONE)
                 {
-                    coords.push(temp_cursor);
-                    temp_cursor += amount;
+                    cursor = pos;
+                    break;
                 }
-                while(!coords.empty())
+                for(const auto& dpos : DIR)
                 {
-                    const auto pos = coords.front();
-                    coords.pop();
-                    visited[pos.r][pos.c] = true;
-                    if(selected[pos.r][pos.c].first != buttonName::NONE)
-                    {
-                        cursor = pos;
-                        break;
-                    }
-                    for(const auto& dpos : DIR)
-                    {
-                        const auto npos = pos+dpos;
-                        if(POSi() <= npos && npos < POSi(C,R) && selected[npos.r][npos.c].first != buttonName::NONE && !visited[npos.r][npos.c])
-                            coords.push(npos);
-                    }
+                    const auto npos = pos+dpos;
+                    if(POSi() <= npos && npos < POSi(C,R) && selected[npos.r][npos.c].first != buttonName::NONE && !visited[npos.r][npos.c])
+                        coords.push(npos);
                 }
             }
             selected[cursor.r][cursor.c].second = true;
             set_signal(puyoButtonCursorSignal::cursor);
         }
     public :
-        puyoButtonCursor(const std::vector<std::vector<buttonName>>& allocated)
+        puyoButtonCursor(const std::vector<std::vector<buttonName>>& allocated, bool cyclic = false)
+            : cyclic(cyclic)
         {
             if(allocated.empty() || allocated.size() != R || allocated[0].size() != C)
                 throw std::runtime_error("Button allocated vector is not matched with buttonCursor template variable");
@@ -82,22 +82,22 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         void let_select(){set_signal(puyoButtonCursorSignal::select);}
         void let_choose_left() 
         {
-            if(cursor.c > 0)
+            if(cursor.c > 0 || cyclic && cursor.c == 0)
                 move_cursor(DIR[LEFT]);
         }
         void let_choose_right()
         {
-            if(cursor.c < C-1)
+            if(cursor.c < C-1 || cyclic && cursor.c == C-1)
                 move_cursor(DIR[RIGHT]);
         }
         void let_choose_up()
         {
-            if(cursor.r > 0)
+            if(cursor.r > 0 || cyclic && cursor.r == 0)
                 move_cursor(DIR[UP]);
         }
         void let_choose_down()
         {
-            if(cursor.r < R-1)
+            if(cursor.r < R-1 || cyclic && cursor.r == R-1)
                 move_cursor(DIR[DOWN]);
         }
         const bool& get_select_status(buttonName type) const

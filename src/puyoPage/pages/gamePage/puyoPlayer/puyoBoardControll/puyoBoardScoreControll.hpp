@@ -1,5 +1,6 @@
 #pragma once
 
+#include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include <vector>
@@ -10,13 +11,13 @@ class puyoBoard;
 class puyoBoardScoreControll
 {
     private :
-        int puyo_count, chain_count;//점수 계산용 
-        std::vector<int> link_count;//점수 계산용 
-        std::set<puyoType::Type> color_count;//점수 계산용 
+        int puyo_count, chain_count;
+        std::vector<int> link_count;
+        std::set<puyoType::Type> color_count;
     public :
         puyoBoardScoreControll();
 
-        int get_drop_score(const std::vector<puyoPuyo>& future_puyos) const;
+        int get_drop_score(const std::vector<puyoPuyo>& future_puyos, const puyoPlayPuyo& play_puyo) const;
 
         int get_chain_count() const;
         void add_chain_count(puyoBoard& board);
@@ -27,9 +28,9 @@ class puyoBoardScoreControll
 
         std::vector<int> get_link_count();
         void add_link_count(int count);
-        void add_link_count(const std::vector<int>& counts);
+        void add_link_count(std::vector<int>&& counts);
 
         int get_color_count();
         void add_color_count(puyoType::Type type);
-        void add_color_count(const std::vector<puyoType::Type>& types);
+        void add_color_count(std::vector<puyoType::Type>&& types);
 };
