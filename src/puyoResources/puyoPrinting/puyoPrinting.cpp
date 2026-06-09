@@ -1,13 +1,19 @@
 #include <SFML/Graphics.hpp>
 
 #include "puyoPrinting.hpp"
+#include "puyoResources/puyoFileSystem.hpp"
 #include <vector>
 
 using namespace std;
 using namespace sf;
 
 
-puyoPrinting::puyoPrinting(){}
+puyoPrinting::puyoPrinting()
+{
+    if(!shader.loadFromFile(puyoFileSystem::getFolderPath("Data")/"brightness.txt", sf::Shader::Type::Fragment))
+        throw runtime_error("file for shading doesn't exist");
+    shader.setUniform("brightness", puyoImageConstant::BRIGHTNESS);
+}
 
 void puyoPrinting::print_all_objects(RenderWindow& window)
 {
@@ -42,7 +48,7 @@ void puyoPrinting::print_all_buttons(RenderWindow& window)
     for(int i = 0 ; i < print_buttons.size() ; )
         if(print_buttons[i]->alive())
         {
-            print_buttons[i]->print(window);
+            print_buttons[i]->print(window, shader);
             ++i;
         }
         else

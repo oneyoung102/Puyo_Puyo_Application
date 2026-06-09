@@ -36,6 +36,9 @@ void puyoPrintObject::print_puyo(RenderWindow& w, const puyoPuyo& puyo, const PO
     }
     switch(puyo.get_type())
     {
+        case puyoType::Type::wall : 
+            print_16x16(w,WALL_PUYO_POS,screen_pos);
+            break;
         case puyoType::Type::obstruct : 
             print_16x16(w,OBSTRUCT_PUYO_POS,screen_pos);
             break;

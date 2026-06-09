@@ -31,6 +31,7 @@ enum class Mode
     bomb,
     frozen,
     charged,
+    blocks,
 };
 
 class puyoPageSignal

@@ -19,5 +19,5 @@ class puyoPrintButton
         ~puyoPrintButton() = default;
         bool alive();
         bool is_immortal();
-        virtual void print(sf::RenderWindow& w);
+        virtual void print(sf::RenderWindow& w, const sf::Shader& shader);
 };

@@ -31,6 +31,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
         constexpr auto BOMB_POS = POSi(12,15); //이미지 위치 ..12~15
         constexpr auto FROZEN_PUYO_POS = POSi(13,9); //13~15
+        constexpr auto WALL_PUYO_POS = POSi(11,9);
 
     //puyo_num.png
         constexpr auto NUM_SIZE = POSi(18,29);
@@ -38,5 +39,6 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         constexpr int TEXT_ZOOM_SIZE_PROP = 30, TEXT_ZOOM_CYCLE_PROP = 15;
     //button
         constexpr int TEXT_SIZE_IN_BUTTON = 31;//5글자 기준 기본 텍스트 사이즈
+    constexpr float BRIGHTNESS = 0.15;
     constexpr int PRINT_IMMORTAL = -1;
 };

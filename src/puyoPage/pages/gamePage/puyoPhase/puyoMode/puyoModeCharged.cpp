@@ -8,26 +8,23 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoModeCharged::puyoModeCharged(int play_count)
-    : time(max(play_count,0),0)
-    , gen(random_device{}())
-{}
+puyoModeCharged::puyoModeCharged(const std::vector<std::unique_ptr<puyoPlayer>>& players)
+    : gen(random_device{}())
+{
+    for(const auto& player : players)
+        player->controll_vanish().set_condition(CHARGED_COLOR_PUYO_WEIGHT+1); //차지 뿌요 혼자 터지는 걸 방지를 위해 +1
+}
 void puyoModeCharged::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlayer>& player)
 {
-    player->controll_vanish().set_condition(CHARGED_COLOR_PUYO_WEIGHT+1); //차지 뿌요 혼자 터지는 걸 방지
-
-    const int player_num = player->get_player_num();
-    ++time[player_num];
-    if(time[player_num] < CHARGE_TICK)
+    auto& new_types = phase.get_new_types()[player->get_new_puyo_count()+DISPLAYED_NEXT_PUYO_COUNT-1];
+    if(new_types.first.is_charged() || new_types.second.is_charged())
         return;
-    time[player_num] = 0;
-
-    if(phase.get_new_types().back().first == phase.get_new_types().back().second)
+    if(player->get_new_puyo_count()%CHARGE_CYCLE != 0)
         return;
     uniform_int_distribution<> dist(0,99);
     const int prob = dist(gen);
-    if(prob < PROB_CHARGE_ONCE)  
-        phase.get_new_types().back().first.charge();
-    if(PROB_CHARGE_ONCE-PROB_CHARGE_TWICE <= prob && prob < 2*PROB_CHARGE_ONCE-PROB_CHARGE_TWICE)
-        phase.get_new_types().back().second.charge();
+    if(prob < 50)  
+        new_types.first.charge();
+    else
+        new_types.second.charge();
 }

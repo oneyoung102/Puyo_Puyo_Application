@@ -20,7 +20,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
     , button_cursor(decltype(button_cursor)({{buttonName::diff_dial, buttonName::mode_dial},
                                                                     {buttonName::back, buttonName::ready}}))
     ,  diff_dial_button_cursor(decltype(diff_dial_button_cursor)({{Diff::easy, Diff::normal, Diff::hard}},true))
-    ,  mode_dial_button_cursor(decltype(mode_dial_button_cursor)({{Mode::basic,Mode::speed,Mode::bomb,Mode::frozen, Mode::charged}},true))
+    ,  mode_dial_button_cursor(decltype(mode_dial_button_cursor)({{Mode::basic,Mode::speed,Mode::bomb,Mode::frozen, Mode::charged, Mode::blocks}},true))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back),puyoImageConstant::PRINT_IMMORTAL));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::option_page));
@@ -69,7 +69,7 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         pfs.get_font(),
         MODE_DIAL_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintDialButton>(//임시
-        pfs.get_sprite(puyoFileSystem::Image::basic_button),
+        pfs.get_sprite(puyoFileSystem::Image::bomb_button),
         mode_dial_button_cursor.get_select_status(Mode::bomb),
         button_cursor.get_select_status(buttonName::mode_dial),
         MODE_DIAL_BUTTON_POS,
@@ -90,6 +90,14 @@ puyoOptionPage::puyoOptionPage(puyoFileSystem &pfs)
         button_cursor.get_select_status(buttonName::mode_dial),
         MODE_DIAL_BUTTON_POS,
         "Charged",
+        pfs.get_font(),
+        MODE_DIAL_BUTTON_SCALE));
+    pp.add_print_button(make_unique<puyoPrintDialButton>(//임시
+        pfs.get_sprite(puyoFileSystem::Image::basic_button),
+        mode_dial_button_cursor.get_select_status(Mode::blocks),
+        button_cursor.get_select_status(buttonName::mode_dial),
+        MODE_DIAL_BUTTON_POS,
+        "Blocks",
         pfs.get_font(),
         MODE_DIAL_BUTTON_SCALE));
 

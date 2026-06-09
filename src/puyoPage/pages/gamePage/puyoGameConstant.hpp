@@ -58,8 +58,7 @@ namespace puyoGameConstant
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
     constexpr int FREEZE_TICK = 550;
     constexpr int PROB_FREEZE_ONCE = 15, PROB_FREEZE_TWICE = 3;
-    constexpr int CHARGE_TICK = 500;
-    constexpr int PROB_CHARGE_ONCE = 50, PROB_CHARGE_TWICE = 20;
+    constexpr int CHARGE_CYCLE = 4;//4개 뉴뿌요마다 차지
 
 
     // printing

@@ -1,4 +1,5 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBlocks.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeCharged.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeFrozen.hpp"
@@ -130,7 +131,10 @@ void puyoPhase::set_game(Diff diff, Mode mode)
             curr_mode = make_unique<puyoModeFrozen>(get_player_count());
             break;
         case Mode::charged :
-            curr_mode = make_unique<puyoModeCharged>(get_player_count());
+            curr_mode = make_unique<puyoModeCharged>(get_players());
+            break;
+        case Mode::blocks :
+            curr_mode = make_unique<puyoModeBlocks>(get_players());
             break;
         case Mode::NONE : 
             throw runtime_error("curr mode ptr is nullptr");
@@ -258,7 +262,7 @@ void puyoPhase::manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int a
             const int opp = calc.get_opposite_obstruct_puyo_count(co.get(),co.get_opp());
 
             const int to_player_num = (co.get() > 0) ? player_num : opposite;
-            ce.spawn(player_num,to_player_num);//에너지 뿌요 생성
+            ce.spawn(player_num, to_player_num);//에너지 뿌요 생성
 
             co.add(-co.get_opp());
             co.clear_opp();

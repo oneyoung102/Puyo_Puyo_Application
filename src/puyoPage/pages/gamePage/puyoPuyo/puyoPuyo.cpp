@@ -77,6 +77,7 @@ int puyoPuyo::get_weight() const {return type ? type->get_weight() : 0;}
 
 bool puyoPuyo::is_colored() const {return !empty() && type->is_colored();}
 bool puyoPuyo::is_linkable(const puyoPuyo& other) const {return !empty() && !other.empty() && type->is_linkable(*other.type);}
+bool puyoPuyo::is_gravityable() const {return !empty() && type->is_gravityable();}
 bool puyoPuyo::empty() const {return type == nullptr;}
 
 void puyoPuyo::update(){ if(!empty()) type->update();}

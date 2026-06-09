@@ -30,6 +30,7 @@ class puyoPuyo
 
         bool is_colored() const;
         bool is_linkable(const puyoPuyo& other) const;
+        bool is_gravityable() const;
         bool empty() const;
 
         void update();
@@ -65,6 +66,7 @@ class puyoPuyo
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoColor.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoObstruct.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoBomb.hpp"
+#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoWall.hpp"
 
 #define P_COLOR(x) std::make_unique<puyoColor>(puyoType::Type::x)
 #define P_RED = P_COLOR(red)
@@ -74,3 +76,4 @@ class puyoPuyo
 #define P_PUPPLE = P_COLOR(pupple)
 #define P_OBSTRUCT std::make_unique<puyoObstruct>()
 #define P_BOMB(x) std::make_unique<puyoBomb>(puyoType::typeState::explode_stay1,false,x)
+#define P_WALL std::make_unique<puyoWall>()

@@ -14,6 +14,7 @@ class puyoPrinting
         std::vector<std::unique_ptr<puyoPrintObject>> print_objects;
         std::vector<std::unique_ptr<puyoPrintText>> print_texts;
         std::vector<std::unique_ptr<puyoPrintButton>> print_buttons;
+        sf::Shader shader;
     public :
         puyoPrinting();
         void print_all_objects(sf::RenderWindow& window);

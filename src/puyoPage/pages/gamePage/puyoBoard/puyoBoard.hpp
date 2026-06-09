@@ -39,11 +39,11 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 
         const puyoPuyo& get_puyo(const POSs& pos) const;
         puyoPuyo& ref_puyo(const POSs& pos);
+        puyoPuyo& operator[](const POSs& pos);
         
         void insert_puyo(const puyoPuyo& puyo, const POSs& pos);
         void insert_puyo(const puyoPuyo& puyo);
         void remove_puyo(const POSs& pos);
-        bool empty() const;
         bool empty(const POSs& pos) const;
         bool all_cleared();
         std::vector<puyoType::typeState> update();

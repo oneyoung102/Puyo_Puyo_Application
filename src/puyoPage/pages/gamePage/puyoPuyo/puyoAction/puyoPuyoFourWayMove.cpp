@@ -11,7 +11,8 @@ using namespace std;
 bool puyoPuyoFourWayMove::test(const puyoBoard& board, puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
-    return !board.touched(POSi(round(x), ceil(y))+dpos) && !board.touched(POSi(round(x), floor(y))+dpos);
+    constexpr float EPSILON = 0.01f;
+    return !board.touched(POSi(round(x), floor(y + EPSILON))+dpos) && !board.touched(POSi(round(x), ceil(y - EPSILON))+dpos);
 }
 
 puyoPuyoFourWayMove::puyoPuyoFourWayMove(int amount, POSf dpos)

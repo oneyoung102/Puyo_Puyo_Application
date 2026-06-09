@@ -14,20 +14,22 @@ using namespace std;
 bool puyoPuyoTurn::test(const puyoBoard& board, puyoPuyo& puyo)
 {
     const auto[x,y] = puyo.get_pos();
+    constexpr float EPSILON = 0.01f;
+    const int fy = floor(y + EPSILON), cy = ceil(y - EPSILON);
     bool turn_able = false;
     switch(turn_dir)
     {
         case Direction::LEFT : 
-            turn_able = !board.touched(POSi(x-1, y)) && !board.touched(POSi(x-1, ceil(y))) && !board.touched(POSi(x-1, ceil(y)+1));
+            turn_able = !board.touched(POSi(round(x-1), fy)) && !board.touched(POSi(round(x-1), cy)) && !board.touched(POSi(round(x-1), cy+1));
             break;
         case Direction::RIGHT :
-            turn_able = !board.touched(POSi(x+1, y)) && !board.touched(POSi(x+1, ceil(y))) && !board.touched(POSi(x+1, ceil(y)-1));
+            turn_able = !board.touched(POSi(round(x+1), fy)) && !board.touched(POSi(round(x+1), cy)) && !board.touched(POSi(round(x+1), cy-1));
             break;
         case Direction::UP :
-            turn_able = !board.touched(POSi(x, y-1)) && !board.touched(POSi(x, ceil(y)-1)) && !board.touched(POSi(x-1, ceil(y)-1));
+            turn_able = !board.touched(POSi(round(x), fy-1)) && !board.touched(POSi(round(x), cy-1)) && !board.touched(POSi(round(x-1), cy-1));
             break;
         case Direction::DOWN :
-            turn_able = !board.touched(POSi(x, y+1)) && !board.touched(POSi(x, ceil(y)+1)) && !board.touched(POSi(x+1, ceil(y)+1));
+            turn_able = !board.touched(POSi(round(x), fy+1)) && !board.touched(POSi(round(x), cy+1)) && !board.touched(POSi(round(x+1), cy+1));
             break;
     }
     if(turn_able)

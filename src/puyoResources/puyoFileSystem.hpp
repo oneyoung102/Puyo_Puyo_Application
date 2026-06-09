@@ -48,6 +48,7 @@ class puyoFileSystem
             hard_button,
             basic_button,//모드
             speed_button,
+            bomb_button
         };
         enum class Sound{//사운드 명
             sega_intro = 0,

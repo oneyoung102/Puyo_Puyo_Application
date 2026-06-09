@@ -13,7 +13,8 @@ class puyoType
             yellow,
             pupple,
             obstruct,
-            bomb
+            bomb,
+            wall
         };
         enum class typeState
         {
@@ -43,13 +44,14 @@ class puyoType
 
         virtual bool is_colored() const = 0;
         virtual bool is_linkable(const puyoType& other) const = 0; // this -> other 로의 연결 가능 여부
+        virtual bool is_gravityable() const {return true;}
 
         virtual void update() {};
         virtual typeState get_state() const {return state;}
 
-        void freeze() {_is_frozen = true;} 
-        void unfreeze() {_is_frozen = false;} 
-        bool is_frozen() const {return _is_frozen;} 
+        virtual void freeze() {_is_frozen = true;} 
+        virtual void unfreeze() {_is_frozen = false;} 
+        virtual bool is_frozen() const {return _is_frozen;} 
 
         virtual void charge() {return;}
         virtual void uncharge() {return;}

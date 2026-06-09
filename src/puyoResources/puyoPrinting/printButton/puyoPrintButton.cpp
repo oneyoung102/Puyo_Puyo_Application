@@ -28,10 +28,6 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, c
         bounds0.position.y + bounds0.size.y / 2.f
     });
     text.setPosition(Vector2f(pos.x,pos.y));
-
-    const auto [X,Y] = sprite.getTexture().getSize();
-    img_pos = POSf(X,ceil(Y/2.0));
-    sprite.setTextureRect(IntRect({0,0}, {img_pos.x,img_pos.y}));
     
     auto bounds1 = sprite.getLocalBounds();
     sprite.setOrigin({
@@ -44,13 +40,12 @@ puyoPrintButton::puyoPrintButton(sf::Sprite s, const bool& selected, POSf pos, c
 bool puyoPrintButton::alive(){return life != 0;}
 bool puyoPrintButton::is_immortal(){return life == puyoImageConstant::PRINT_IMMORTAL;}
 
-void puyoPrintButton::print(RenderWindow& window)
+void puyoPrintButton::print(RenderWindow& window, const Shader& shader)
 {
-    if(selected)
-        sprite.setTextureRect(IntRect({0,img_pos.y}, {img_pos.x, img_pos.y}));
-    else
-        sprite.setTextureRect(IntRect({0, 0}, {img_pos.x, img_pos.y}));
-    window.draw(sprite);
+    if(selected) 
+        window.draw(sprite,&shader);
+    else 
+        window.draw(sprite);
     window.draw(text);
     if(alive())
         --life;
