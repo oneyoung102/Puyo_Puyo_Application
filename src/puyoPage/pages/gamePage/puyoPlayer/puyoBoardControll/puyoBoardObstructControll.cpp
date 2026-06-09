@@ -28,14 +28,24 @@ std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boar
         board.set_signal(puyoBoardSignal::less_obsp_dropped);
     
     const auto bsize = board.get_size();
-    vector<int> obstruct_puyo_height(bsize.c, 0);
-    vector<puyoPuyo> gravity_puyos;
-    for(int i = bsize.r-1; ; --i)
-        for(size_t j = 0; j < bsize.c ; ++j)
-            if(!board.in_row(i) || board.empty(POSi(j, i)))
+    vector<int> obstruct_puyo_height(bsize.c, 0), floor_height(bsize.c,bsize.r);
+    for(size_t c = 0; c < bsize.c ; ++c)
+        for(size_t r = 0 ; r < bsize.r ; ++r)
+        {
+            const auto& puyo = board.get_puyo({c,r});
+            if(!puyo.empty() && !puyo.is_gravityable())
             {
-                gravity_puyos.push_back(puyoPuyo(POSf(j,-obstruct_puyo_height[j]+OBSTRUCT_PUYO_SPAWN_Y), P_OBSTRUCT, make_unique<puyoPuyoGravity>(BOARD_FALL_GRAVITY_TICK)));
-                ++obstruct_puyo_height[j];
+                floor_height[c] = r;
+                break;
+            }
+        }
+    vector<puyoPuyo> gravity_puyos;
+    for(int r = bsize.r-1; ; --r)
+        for(size_t c = 0; c < bsize.c ; ++c)
+            if(!board.in_row(r) || board.empty(POSi(c, r)) && r < floor_height[c])
+            {
+                gravity_puyos.push_back(puyoPuyo(POSf(c,-obstruct_puyo_height[c]+OBSTRUCT_PUYO_SPAWN_Y), P_OBSTRUCT, make_unique<puyoPuyoGravity>(BOARD_FALL_GRAVITY_TICK)));
+                ++obstruct_puyo_height[c];
                 --obstruct_puyo;
                 --obstruct_puyo_for_dropping;
                 if(obstruct_puyo_for_dropping <= 0)

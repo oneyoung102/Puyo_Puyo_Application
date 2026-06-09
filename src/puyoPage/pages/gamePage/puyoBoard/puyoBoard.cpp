@@ -52,9 +52,9 @@ void puyoBoard::remove_puyo(const POSs& pos){board[pos.r][pos.c] = puyoPuyo(pos)
 bool puyoBoard::empty(const POSs& pos) const {return board[pos.r][pos.c].empty();}
 bool puyoBoard::all_cleared()
 {
-    for(size_t r = size.r-1 ; r >= 0 ; --r)
+    for(int r = size.r-1 ; r >= 0 ; --r)
         for(const auto& puyo : board[r])
-            if(!puyo.empty() && !puyo.is_same(puyoType::Type::bomb) && !puyo.is_same(puyoType::Type::wall))
+            if(!puyo.empty() && !puyo.is_same(puyoType::Type::bomb) && puyo.is_gravityable())
                 return false;
     set_signal(puyoBoardSignal::all_cleared);
     return true;
