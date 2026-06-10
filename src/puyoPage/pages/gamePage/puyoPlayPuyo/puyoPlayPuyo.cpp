@@ -11,7 +11,6 @@
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 
-#include <utility>
 #include <memory>
 
 
@@ -44,6 +43,7 @@ void puyoPlayPuyo::act_let(const puyoBoard& board)
     {
         for(auto& puyo : play_puyo)
             puyo.set_act();
+        down_taken = false;
         return;
     }
     for(auto& puyo : play_puyo)
@@ -74,8 +74,8 @@ void puyoPlayPuyo::gravity_let(const puyoBoard& board)
     }
 }
 
-bool puyoPlayPuyo::down(){return exchange(down_taken,false);}
-bool puyoPlayPuyo::dropped(const puyoBoard& board)
+bool puyoPlayPuyo::down() const {return down_taken;}
+bool puyoPlayPuyo::dropped() const
 {
     return (!gravity[0]->acting() || !gravity[1]->acting()) || drop_taken;
 }

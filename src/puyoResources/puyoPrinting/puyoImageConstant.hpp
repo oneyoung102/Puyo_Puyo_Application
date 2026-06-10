@@ -35,6 +35,7 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
 
     //puyo_num.png
         constexpr auto NUM_SIZE = POSi(18,29);
+        constexpr int SCORE_INCREMENT_DELTA = 11;
     //Text
         constexpr int TEXT_ZOOM_SIZE_PROP = 30, TEXT_ZOOM_CYCLE_PROP = 15;
     //button

@@ -20,7 +20,7 @@ class puyoBoardScoreControll
         int get_drop_score(const std::vector<puyoPuyo>& future_puyos, const puyoPlayPuyo& play_puyo) const;
 
         int get_chain_count() const;
-        void add_chain_count(puyoBoard& board);
+        void add_chain_count();
         void reset_chain_count();
 
         int get_puyo_count();

@@ -17,10 +17,10 @@ class puyoBoardObstructControll
         
         const int& get() const;
 
-        void add_opp(int count);
-        int get_opp() const;
-        bool empty_opp() const;
-        void clear_opp();
+        void add_opposite(int count);
+        int get_opposite() const;
+        bool empty_opposite() const;
+        void clear_opposite();
 
         void approve_spawn();
         void disapprove_spawn();

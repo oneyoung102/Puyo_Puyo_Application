@@ -56,10 +56,10 @@ std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boar
 bool puyoBoardObstructControll::empty() const { return obstruct_puyo == 0; }
 const int &puyoBoardObstructControll::get() const { return obstruct_puyo; }
 
-void puyoBoardObstructControll::add_opp(int count){opposite_obstruct_puyo += count;}
-int puyoBoardObstructControll::get_opp() const {return opposite_obstruct_puyo;}
-bool puyoBoardObstructControll::empty_opp() const { return opposite_obstruct_puyo == 0;}
-void puyoBoardObstructControll::clear_opp(){opposite_obstruct_puyo = 0;}
+void puyoBoardObstructControll::add_opposite(int count){opposite_obstruct_puyo += count;}
+int puyoBoardObstructControll::get_opposite() const {return opposite_obstruct_puyo;}
+bool puyoBoardObstructControll::empty_opposite() const { return opposite_obstruct_puyo == 0;}
+void puyoBoardObstructControll::clear_opposite(){opposite_obstruct_puyo = 0;}
 
 void puyoBoardObstructControll::approve_spawn() {approvement_spawn = true;}
 void puyoBoardObstructControll::disapprove_spawn() {approvement_spawn = false;}

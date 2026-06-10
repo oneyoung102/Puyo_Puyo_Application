@@ -42,7 +42,7 @@ class puyoType
         bool is_same(const puyoType& other) const {return this->get() == other.get();}
         virtual int get_weight() const = 0;
 
-        virtual bool is_colored() const = 0;
+        virtual bool is_colored() const {return false;}
         virtual bool is_linkable(const puyoType& other) const = 0; // this -> other 로의 연결 가능 여부
         virtual bool is_gravityable() const {return true;}
 

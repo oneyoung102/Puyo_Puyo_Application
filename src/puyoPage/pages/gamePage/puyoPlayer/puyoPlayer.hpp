@@ -63,8 +63,6 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         std::function<void()> get_let_turn();
         std::function<void()> get_let_drop();
 
-        void signal_puyo_drop();
-
         bool is_bot() const;
         void act_bot_let() const;
 
@@ -74,11 +72,18 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         puyoBoardObstructControll& controll_obstuct();
         puyoBoardVanishControll& controll_vanish();
         puyoBoardFutureControll& controll_future();
-
         const puyoBoardEnergyControll& controll_energy() const;
         const puyoBoardGravityControll& controll_gravity() const;
         const puyoBoardScoreControll& controll_score() const;
         const puyoBoardObstructControll& controll_obstuct() const;
         const puyoBoardVanishControll& controll_vanish() const;
         const puyoBoardFutureControll& controll_future() const;
+
+        void act_play_puyo();
+        int do_after_puyo_dropped(std::pair<puyoPuyo,puyoPuyo>&& new_puyos, int gravity_value, int stay_value);
+        bool act_gravity_puyos();
+        bool test_and_prepare_vanish();
+        bool act_vanish_puyos();
+        bool test_and_prepare_gravity();
+        bool test_spawn_obstruct_puyo(int obstruct_puyo_for_dropping);
 };

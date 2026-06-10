@@ -11,7 +11,6 @@ puyoBomb::puyoBomb(typeState state, bool is_frozen, int bomb_tick_init, int bomb
 {}
 std::unique_ptr<puyoType> puyoBomb::clone() const {return std::make_unique<puyoBomb>(state,_is_frozen,bomb_tick_init,bomb_tick);}
 int puyoBomb::get_weight() const {return 1;}
-bool puyoBomb::is_colored() const {return true;}
 bool puyoBomb::is_linkable(const puyoType& other) const {return false;}
 
 void puyoBomb::update()

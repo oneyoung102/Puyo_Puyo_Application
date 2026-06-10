@@ -9,6 +9,5 @@ class puyoObstruct : public puyoType
         puyoObstruct(bool is_frozen = false);
         std::unique_ptr<puyoType> clone() const override;
         int get_weight() const override;
-        bool is_colored() const override;
         bool is_linkable(const puyoType& other) const override;
 };

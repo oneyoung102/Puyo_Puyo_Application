@@ -25,7 +25,7 @@ void puyoPrintScore::print_num(RenderWindow& w, int img_x, POSf screen_pos)
 
 void puyoPrintScore::print(RenderWindow& w)
 {
-    from_score = min(from_score+10,to_score);
+    from_score = min(from_score+SCORE_INCREMENT_DELTA,to_score);
     int decimal = puyoGameConstant::SCORE_UPPER/10;
     for(float px = pos.x ; decimal != 0 ; decimal /= 10)
     {

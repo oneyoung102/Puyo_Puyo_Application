@@ -41,8 +41,8 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         void act_let(const puyoBoard& board);
         void gravity_let(const puyoBoard& board);
         
-        bool down();
-        bool dropped(const puyoBoard& board);
+        bool down() const;
+        bool dropped() const;
 
         std::vector<puyoPuyo> to_gravity_puyo(const puyoBoard& board);
         const puyoPuyo& get_each(size_t number) const;

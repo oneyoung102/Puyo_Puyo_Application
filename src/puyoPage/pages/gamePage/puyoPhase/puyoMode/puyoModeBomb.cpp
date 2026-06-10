@@ -49,7 +49,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlay
         const int opposite = player->get_opposite();
         phase.get_players()[opposite]
             ->controll_obstuct()
-            .add(player->controll_obstuct().get_opp()); // 상대에게 넘길 방해 뿌요 두 배
+            .add(player->controll_obstuct().get_opposite()); // 상대에게 넘길 방해 뿌요 두 배
         bomb_have_player_num = opposite;
     }
     else if(phase.get_pstate().is_phase(bomb_have_player_num, puyoPhaseStatement::Phase::play))//폭탄 소환

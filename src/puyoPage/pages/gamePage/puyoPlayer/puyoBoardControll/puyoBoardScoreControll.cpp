@@ -23,11 +23,7 @@ puyoBoardScoreControll::puyoBoardScoreControll()
  }
 
 int puyoBoardScoreControll::get_chain_count() const{ return chain_count; }
-void puyoBoardScoreControll::add_chain_count(puyoBoard& board)
-{
-    board.set_signal(puyoBoardSignal::chain);
-    ++chain_count;
-}
+void puyoBoardScoreControll::add_chain_count() {++chain_count;}
 void puyoBoardScoreControll::reset_chain_count() { chain_count = 0; }
 
 int puyoBoardScoreControll::get_puyo_count() { return exchange(puyo_count, 0); }
