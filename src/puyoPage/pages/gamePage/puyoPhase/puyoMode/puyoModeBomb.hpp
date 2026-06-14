@@ -13,5 +13,5 @@ class puyoModeBomb : public puyoMode
         std::mt19937 gen;
     public :
         puyoModeBomb(int player_count);
-        void proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlayer>& player) override;
+        void proceed_mode(puyoPhase& phase, puyoPlayer& player) override;
 };

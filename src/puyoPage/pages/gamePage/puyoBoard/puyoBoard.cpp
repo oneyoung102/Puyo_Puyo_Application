@@ -6,6 +6,7 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 using namespace std;
 
@@ -45,8 +46,19 @@ void puyoBoard::insert_puyo(const puyoPuyo& puyo, const POSs& pos)
 void puyoBoard::insert_puyo(const puyoPuyo& puyo)
 {
     const auto [c, r] = puyo.get_pos();
+    board[CASTs(r)][CASTs(c)] = puyo;
+}
+void puyoBoard::insert_puyo(puyoPuyo&& puyo, const POSs& pos)
+{
+    board[pos.r][pos.c] = std::move(puyo);
+    board[pos.r][pos.c].move(pos);
+}
+void puyoBoard::insert_puyo(puyoPuyo&& puyo)
+{
+    const auto [c, r] = puyo.get_pos();
     board[CASTs(r)][CASTs(c)] = std::move(puyo);
 }
+
 void puyoBoard::remove_puyo(const POSs& pos){board[pos.r][pos.c] = puyoPuyo(pos);}
 
 bool puyoBoard::empty(const POSs& pos) const {return board[pos.r][pos.c].empty();}
@@ -56,7 +68,7 @@ bool puyoBoard::all_cleared()
         for(const auto& puyo : board[r])
             if(!puyo.empty() && !puyo.is_same(puyoType::Type::bomb) && puyo.is_gravityable())
                 return false;
-    set_signal(puyoBoardSignal::all_cleared);
+    signal(puyoBoardSignal::all_cleared);
     return true;
 }
 
@@ -95,7 +107,7 @@ puyoPuyo puyoBoard::to_vanish_puyo(const POSs& pos)
         auto vanish_puyo = puyo;
         vanish_puyo.set_act(make_unique<puyoPuyoVanish>(tick));
         puyo.unfreeze();
-        set_signal(puyoBoardSignal::unfreeze);
+        signal(puyoBoardSignal::unfreeze);
         return vanish_puyo;
     }
     else

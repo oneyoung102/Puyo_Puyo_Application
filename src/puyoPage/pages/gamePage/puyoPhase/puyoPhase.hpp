@@ -9,9 +9,9 @@
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoMode.hpp"
-#include "puyoPage/puyoObjectSignal.hpp"
+#include "puyoPage/puyoObjectSignal/puyoObjectSignal.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoScoreCalc.hpp"
-#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseStatement.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseController.hpp"
 
 enum class puyoModeSignal
 {
@@ -29,13 +29,13 @@ class puyoBoard;
 class puyoPhase : public puyoObjectSignal<puyoModeSignal>
 {
     private :
-        std::vector<std::unique_ptr<puyoPlayer>> players;
+        std::vector<puyoPlayer> players;
         std::mt19937 gen;
         std::vector<puyoPuyo> new_type_list;
         std::vector<std::pair<puyoPuyo,puyoPuyo>> new_types;
 
         puyoScoreCalc calc;
-        puyoPhaseStatement pstate;
+        puyoPhaseController phase_controll;
 
         bool game_end, game_end_ask;
         int win_player_num;
@@ -44,12 +44,12 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         Mode mode_type;
         int gravity_value, stay_value;
 
-        int proceed_play(const std::unique_ptr<puyoPlayer>& player);
-        int proceed_gravity(const std::unique_ptr<puyoPlayer>& player);
-        int proceed_vanish(const std::unique_ptr<puyoPlayer>& player);
-        void manage_obstruct(const std::unique_ptr<puyoPlayer>& player, int added_score);
-        void manage_game_end(const std::unique_ptr<puyoPlayer>& player);
-        void proceed_event(const std::unique_ptr<puyoPlayer>& player); // puyoType에서 발생하는 이벤트 처리
+        int proceed_play(puyoPlayer& player);
+        int proceed_gravity(puyoPlayer& player);
+        int proceed_vanish(puyoPlayer& player);
+        void manage_obstruct(puyoPlayer& player, int added_score);
+        void manage_game_end(puyoPlayer& player);
+        void proceed_event(puyoPlayer& player); // puyoType에서 발생하는 이벤트 처리
         
         void end_game();
         bool game_end_asked() const;
@@ -67,8 +67,8 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         void proceed_game();
 
         int get_player_count() const;
-        const std::vector<std::unique_ptr<puyoPlayer>>& get_players() const;
-        void add_player(std::unique_ptr<puyoPlayer>&& player);
+        std::vector<puyoPlayer>& get_players();
+        void add_player(puyoPlayer&& player);
         
         int get_gravity_value() const;
         void set_gravity_value(int value);
@@ -83,5 +83,5 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         int get_win_player_num() const;
         void set_win_player_num(int num);
 
-        puyoPhaseStatement& get_pstate();
+        puyoPhaseController& controll_phase();
 };

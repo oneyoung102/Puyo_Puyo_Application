@@ -7,8 +7,6 @@
 
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 
-#include <functional>
-
 using namespace std;
 
 puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick, const std::vector<std::pair<puyoPuyo,puyoPuyo>>& new_types)
@@ -45,21 +43,20 @@ puyoPlayPuyo& puyoPlayer::get_puyo() const {return *puyo;}
 const int& puyoPlayer::get_score() const {return score;}
 void puyoPlayer::add_score(int s){score = min(puyoGameConstant::SCORE_UPPER-1,score+s);}
 
-void puyoPlayer::give_new_puyos(const pair<puyoPuyo,puyoPuyo>& puyos, int puyo_gravity_value, int puyo_stay_value)
+void puyoPlayer::give_new_puyos(pair<puyoPuyo,puyoPuyo>&& puyos, int puyo_gravity_value, int puyo_stay_value)
 {
-    auto temp_puyos = puyos;
-    temp_puyos.first.move(board->get_spawn_pos());
-    temp_puyos.second.move(board->get_spawn_pos()-POSi(0,1));
-    puyo = make_unique<puyoPlayPuyo>(std::move(temp_puyos),puyo_gravity_value,puyo_stay_value);
+    puyos.first.move(board->get_spawn_pos());
+    puyos.second.move(board->get_spawn_pos()-POSi(0,1));
+    puyo = make_unique<puyoPlayPuyo>(std::move(puyos),puyo_gravity_value,puyo_stay_value);
     ++new_puyo_count;
 }
 const int& puyoPlayer::get_new_puyo_count() const {return new_puyo_count;}
 
-function<void()> puyoPlayer::get_let_left(){return [this](){ if(puyo) get_puyo().let_left(); };}
-function<void()> puyoPlayer::get_let_right(){return [this](){ if(puyo) get_puyo().let_right(); };}
-function<void()> puyoPlayer::get_let_down(){return [this](){ if(puyo) get_puyo().let_down(); };}
-function<void()> puyoPlayer::get_let_turn(){return [this](){ if(puyo) get_puyo().let_turn(); };}
-function<void()> puyoPlayer::get_let_drop(){return [this](){ if(puyo) get_puyo().let_drop(); };}
+function<void()> puyoPlayer::get_let_left() const {return [this](){ if(puyo) get_puyo().let_left(); };}
+function<void()> puyoPlayer::get_let_right() const {return [this](){ if(puyo) get_puyo().let_right(); };}
+function<void()> puyoPlayer::get_let_down()const {return [this](){ if(puyo) get_puyo().let_down(); };}
+function<void()> puyoPlayer::get_let_turn()const {return [this](){ if(puyo) get_puyo().let_turn(); };}
+function<void()> puyoPlayer::get_let_drop()const {return [this](){ if(puyo) get_puyo().let_drop(); };}
 
 bool puyoPlayer::is_bot() const {return player_is_bot;}
 void puyoPlayer::act_bot_let() const
@@ -82,60 +79,3 @@ const puyoBoardScoreControll& puyoPlayer::controll_score() const {return score_c
 const puyoBoardObstructControll& puyoPlayer::controll_obstuct() const {return obstuct_controll;}
 const puyoBoardVanishControll& puyoPlayer::controll_vanish() const {return vanish_controll;}
 const puyoBoardFutureControll& puyoPlayer::controll_future() const {return future_controll;}
-
-void puyoPlayer::act_play_puyo()
-{
-    future_controll.fall(*board);
-    puyo->gravity_let(*board);
-    puyo->act_let(*board);
-}
-int puyoPlayer::do_after_puyo_dropped(pair<puyoPuyo,puyoPuyo>&& new_puyos, int gravity_value, int stay_value)
-{
-    const int added_score =  score_controll.get_drop_score(future_controll.get(),*puyo);
-
-    gravity_controll.add(puyo->to_gravity_puyo(*board));
-    give_new_puyos(new_puyos,gravity_value,stay_value);
-    
-    future_controll.spawn(*board,*puyo);
-    obstuct_controll.approve_spawn();
-
-    set_signal(puyoPlayerSignal::puyo_dropped);//모든 proceed 메서드 내부 구현들을 플레이어 쪽으로 옮긴 후에 시그널 추가
-
-    return added_score;
-}
-bool puyoPlayer::act_gravity_puyos()
-{
-    gravity_controll.gravity(*board);
-    return gravity_controll.empty();
-}
-bool puyoPlayer::test_and_prepare_vanish()
-{
-    auto [puyo_count, link_count, color_count, temp_energy_puyos] = vanish_controll.to_vanish_puyo(*board); 
-    auto& cs = score_controll;
-    cs.add_puyo_count(puyo_count);
-    cs.add_link_count(std::move(link_count));
-    cs.add_color_count(std::move(color_count));
-    energy_controll.add(std::move(temp_energy_puyos));
-    
-    return vanish_controll.empty();
-}
-bool puyoPlayer::act_vanish_puyos()
-{
-    vanish_controll.vanish(*board);
-    return vanish_controll.empty();
-}
-bool puyoPlayer::test_and_prepare_gravity()
-{
-    gravity_controll.add(board->to_gravity_puyo());
-    return gravity_controll.empty();
-}
-bool puyoPlayer::test_spawn_obstruct_puyo(int obstruct_puyo_for_dropping)
-{
-    if(obstuct_controll.spawn_approved())
-    {
-        gravity_controll.add(obstuct_controll.to_gravity_puyo(*board,obstruct_puyo_for_dropping));
-        obstuct_controll.disapprove_spawn();
-        return true;
-    }
-    return false;
-}

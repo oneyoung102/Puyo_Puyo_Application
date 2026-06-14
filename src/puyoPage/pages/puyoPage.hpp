@@ -6,7 +6,7 @@
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
 #include "puyoResources/puyoSounding/puyoSounding.hpp"
-#include "puyoPage/puyoLet.hpp"
+#include "puyoPage/puyoKeyBoard/puyoLet.hpp"
 
 class puyoPage
 {

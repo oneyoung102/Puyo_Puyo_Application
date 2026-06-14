@@ -7,7 +7,7 @@ class puyoBoard;
 class puyoBoardObstructControll
 {
     private :
-        int obstruct_puyo, opposite_obstruct_puyo;
+        int obstruct_puyo, accumulated_score;
         bool approvement_spawn;
     public :
         puyoBoardObstructControll();
@@ -17,10 +17,9 @@ class puyoBoardObstructControll
         
         const int& get() const;
 
-        void add_opposite(int count);
-        int get_opposite() const;
-        bool empty_opposite() const;
-        void clear_opposite();
+        void accumulate_score(int score);
+        int get_accumulated_score() const;
+        void clear_accumulated_score();
 
         void approve_spawn();
         void disapprove_spawn();

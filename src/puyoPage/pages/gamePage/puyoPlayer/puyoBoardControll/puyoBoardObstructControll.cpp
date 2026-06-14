@@ -8,7 +8,7 @@ using namespace puyoGameConstant;
 
 puyoBoardObstructControll::puyoBoardObstructControll()
     : obstruct_puyo(0)
-    , opposite_obstruct_puyo(0)
+    , accumulated_score(0)
     , approvement_spawn(false)
 {}
 
@@ -21,11 +21,11 @@ std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boar
     if(obstruct_puyo_for_dropping <= 0)
         return {};
     if(obstruct_puyo_for_dropping >= OBSTRUCT_PUYO_MANY)
-        board.set_signal(puyoBoardSignal::many_obsp_dropped);
+        board.signal(puyoBoardSignal::many_obsp_dropped);
     else if(obstruct_puyo_for_dropping >= OBSTRUCT_PUYO_MID)
-        board.set_signal(puyoBoardSignal::mid_obsp_dropped);
+        board.signal(puyoBoardSignal::mid_obsp_dropped);
     else
-        board.set_signal(puyoBoardSignal::less_obsp_dropped);
+        board.signal(puyoBoardSignal::less_obsp_dropped);
     
     const auto bsize = board.get_size();
     vector<int> obstruct_puyo_height(bsize.c, 0), floor_height(bsize.c,bsize.r);
@@ -56,10 +56,9 @@ std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boar
 bool puyoBoardObstructControll::empty() const { return obstruct_puyo == 0; }
 const int &puyoBoardObstructControll::get() const { return obstruct_puyo; }
 
-void puyoBoardObstructControll::add_opposite(int count){opposite_obstruct_puyo += count;}
-int puyoBoardObstructControll::get_opposite() const {return opposite_obstruct_puyo;}
-bool puyoBoardObstructControll::empty_opposite() const { return opposite_obstruct_puyo == 0;}
-void puyoBoardObstructControll::clear_opposite(){opposite_obstruct_puyo = 0;}
+void puyoBoardObstructControll::accumulate_score(int score){accumulated_score += score;}
+int puyoBoardObstructControll::get_accumulated_score() const {return accumulated_score;}
+void puyoBoardObstructControll::clear_accumulated_score(){accumulated_score = 0;}
 
 void puyoBoardObstructControll::approve_spawn() {approvement_spawn = true;}
 void puyoBoardObstructControll::disapprove_spawn() {approvement_spawn = false;}

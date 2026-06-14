@@ -2,7 +2,7 @@
 
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
-#include "puyoPage/puyoObjectSignal.hpp"
+#include "puyoPage/puyoObjectSignal/puyoObjectSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
 
@@ -54,14 +54,14 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         const int& get_score() const;
         void add_score(int s);
 
-        void give_new_puyos(const std::pair<puyoPuyo,puyoPuyo>& puyos, int puyo_gravity_value, int puyo_stay_value);
+        void give_new_puyos(std::pair<puyoPuyo,puyoPuyo>&& puyos, int puyo_gravity_value, int puyo_stay_value);
         const int& get_new_puyo_count() const;
 
-        std::function<void()> get_let_left();
-        std::function<void()> get_let_right();
-        std::function<void()> get_let_down();
-        std::function<void()> get_let_turn();
-        std::function<void()> get_let_drop();
+        std::function<void()> get_let_left() const;
+        std::function<void()> get_let_right() const;
+        std::function<void()> get_let_down() const;
+        std::function<void()> get_let_turn() const;
+        std::function<void()> get_let_drop() const;
 
         bool is_bot() const;
         void act_bot_let() const;
@@ -78,12 +78,4 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
         const puyoBoardObstructControll& controll_obstuct() const;
         const puyoBoardVanishControll& controll_vanish() const;
         const puyoBoardFutureControll& controll_future() const;
-
-        void act_play_puyo();
-        int do_after_puyo_dropped(std::pair<puyoPuyo,puyoPuyo>&& new_puyos, int gravity_value, int stay_value);
-        bool act_gravity_puyos();
-        bool test_and_prepare_vanish();
-        bool act_vanish_puyos();
-        bool test_and_prepare_gravity();
-        bool test_spawn_obstruct_puyo(int obstruct_puyo_for_dropping);
 };

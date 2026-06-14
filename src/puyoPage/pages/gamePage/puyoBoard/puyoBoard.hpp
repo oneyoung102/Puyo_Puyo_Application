@@ -4,7 +4,7 @@
 
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
-#include "puyoPage/puyoObjectSignal.hpp"
+#include "puyoPage/puyoObjectSignal/puyoObjectSignal.hpp"
 
 enum class puyoBoardSignal
 {
@@ -43,6 +43,9 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         
         void insert_puyo(const puyoPuyo& puyo, const POSs& pos);
         void insert_puyo(const puyoPuyo& puyo);
+        void insert_puyo(puyoPuyo&& puyo, const POSs& pos);
+        void insert_puyo(puyoPuyo&& puyo);
+
         void remove_puyo(const POSs& pos);
         bool empty(const POSs& pos) const;
         bool all_cleared();

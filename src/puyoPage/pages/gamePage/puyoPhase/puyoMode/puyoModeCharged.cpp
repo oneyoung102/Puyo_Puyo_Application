@@ -8,18 +8,18 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoModeCharged::puyoModeCharged(const std::vector<std::unique_ptr<puyoPlayer>>& players)
+puyoModeCharged::puyoModeCharged(std::vector<puyoPlayer>& players)
     : gen(random_device{}())
 {
-    for(const auto& player : players)
-        player->controll_vanish().set_condition(CHARGED_COLOR_PUYO_WEIGHT+1); //차지 뿌요 혼자 터지는 걸 방지를 위해 +1
+    for(auto& player : players)
+        player.controll_vanish().set_condition(CHARGED_COLOR_PUYO_WEIGHT+1); //차지 뿌요 혼자 터지는 걸 방지를 위해 +1
 }
-void puyoModeCharged::proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlayer>& player)
+void puyoModeCharged::proceed_mode(puyoPhase& phase, puyoPlayer& player)
 {
-    auto& new_types = phase.get_new_types()[player->get_new_puyo_count()+DISPLAYED_NEXT_PUYO_COUNT-1];
+    auto& new_types = phase.get_new_types()[player.get_new_puyo_count()+DISPLAYED_NEXT_PUYO_COUNT-1];
     if(new_types.first.is_charged() || new_types.second.is_charged())
         return;
-    if(player->get_new_puyo_count()%CHARGE_CYCLE != 0)
+    if(player.get_new_puyo_count()%CHARGE_CYCLE != 0)
         return;
     uniform_int_distribution<> dist(0,99);
     const int prob = dist(gen);

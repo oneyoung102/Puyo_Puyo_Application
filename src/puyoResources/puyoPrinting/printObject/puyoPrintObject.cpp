@@ -6,16 +6,17 @@
 using namespace puyoImageConstant;
 using namespace sf;
 
-puyoPrintObject::puyoPrintObject(Sprite s, const POSf& pos, int life) : sprite(s)
-{
-    this->life = life; // life == -1 일 때는 영생
-    this->pos = pos;
-}
-puyoPrintObject::puyoPrintObject(Sprite s, int life) : sprite(s)
-{
-    this->life = life; // life == -1 일 때는 영생
-    pos = POSf();
-}
+puyoPrintObject::puyoPrintObject(Sprite s, const POSf& pos, int life)
+    : sprite(s)
+    , pos(pos)
+    , life(life) // life == -1 일 때는 영생
+{}
+
+puyoPrintObject::puyoPrintObject(Sprite s, int life)
+    : sprite(s)
+    , pos()
+    , life(life) // life == -1 일 때는 영생
+{}
 
 bool puyoPrintObject::alive() const {return life != 0;}
 bool puyoPrintObject::is_immortal() const {return life == PRINT_IMMORTAL;}

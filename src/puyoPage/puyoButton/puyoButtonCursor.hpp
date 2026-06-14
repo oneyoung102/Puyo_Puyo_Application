@@ -5,7 +5,7 @@
 #include <queue>
 #include <array>
 #include <utility>
-#include "puyoPage/puyoObjectSignal.hpp"
+#include "puyoPage/puyoObjectSignal/puyoObjectSignal.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include "puyoTool/puyoDir.hpp"
 
@@ -57,10 +57,10 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
                 }
             }
             selected[cursor.r][cursor.c].second = true;
-            set_signal(puyoButtonCursorSignal::cursor);
+            signal(puyoButtonCursorSignal::cursor);
         }
     public :
-        puyoButtonCursor(const std::vector<std::vector<buttonName>>& allocated, bool cyclic = false)
+        puyoButtonCursor(std::vector<std::vector<buttonName>>&& allocated, bool cyclic = false)
             : cyclic(cyclic)
         {
             if(allocated.empty() || allocated.size() != R || allocated[0].size() != C)
@@ -79,7 +79,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             if(!init_found)   
                 throw std::runtime_error("Button allocated vector has no button.(only has NONE)");
         }
-        void let_select(){set_signal(puyoButtonCursorSignal::select);}
+        void let_select(){signal(puyoButtonCursorSignal::select);}
         void let_choose_left() 
         {
             if(cursor.c > 0 || cyclic && cursor.c == 0)

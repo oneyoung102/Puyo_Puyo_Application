@@ -1,5 +1,5 @@
 #include "puyoPage/pages/puyoPage.hpp"
-#include "puyoPage/puyoLet.hpp"
+#include "puyoPage/puyoKeyBoard/puyoLet.hpp"
 
 puyoPage::puyoPage()
     : convert_page(false)

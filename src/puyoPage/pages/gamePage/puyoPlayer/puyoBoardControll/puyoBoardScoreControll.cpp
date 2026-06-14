@@ -1,5 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardScoreControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 using namespace std;
 

@@ -31,7 +31,7 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         {
             std::swap(vanish_puyos[i], vanish_puyos.back());
             vanish_puyos.pop_back();
-            board.set_signal(puyoBoardSignal::vanished);
+            board.signal(puyoBoardSignal::vanished);
         }
         else
         {

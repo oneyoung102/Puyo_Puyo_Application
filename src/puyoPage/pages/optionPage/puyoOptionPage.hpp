@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "puyoPage/pages/puyoButtonCursor.hpp"
+#include "puyoPage/puyoButton/puyoButton.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoPage/pages/puyoPage.hpp"
 
@@ -18,9 +18,9 @@ class puyoOptionPage : public puyoPage
             back,
             ready,
         };
-        puyoButtonCursor<2,2,buttonName> button_cursor;
-        puyoButtonCursor<1,3,Diff> diff_dial_button_cursor;
-        puyoButtonCursor<1,6,Mode> mode_dial_button_cursor;
+        puyoButton<2,2,buttonName> buttons;
+        puyoButton<1,3,Diff> dials_diff;
+        puyoButton<1,6,Mode> dials_mode;
     public :
         puyoOptionPage(puyoFileSystem& pfs);
         puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window);

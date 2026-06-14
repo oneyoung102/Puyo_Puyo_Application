@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "puyoPage/pages/menuPage/puyoMenuConstant.hpp"
-#include "puyoPage/pages/puyoButtonCursor.hpp"
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 #include "puyoMenuPage.hpp"
 #include "puyoResources/puyoPrinting/printObject/puyoPrintObject.hpp"
@@ -18,7 +17,7 @@ using namespace sf;
 using namespace puyoMenuConstant;
 
 puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
-    : button_cursor(decltype(button_cursor)({{Arcade::solo,Arcade::duel,Arcade::bot}}))
+    : buttons(decltype(buttons)({{Arcade::solo,Arcade::duel,Arcade::bot}}))
 {
     pp.add_print_object(make_unique<puyoPrintObject>(pfs.get_sprite(puyoFileSystem::Image::basic_back)));
     ps.play_music(pfs.get_music(puyoFileSystem::Music::menu_page));
@@ -32,28 +31,28 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         Color::Green));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(Arcade::solo),
+        buttons.cursor.get_select_status(Arcade::solo),
         SOLO_BUTTON_POS,
         "Solo",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(Arcade::duel),
+        buttons.cursor.get_select_status(Arcade::duel),
         DUEL_BUTTON_POS,
         "Duel",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));
     pp.add_print_button(make_unique<puyoPrintButton>(
         pfs.get_sprite(puyoFileSystem::Image::button),
-        button_cursor.get_select_status(Arcade::bot),
+        buttons.cursor.get_select_status(Arcade::bot),
         BOT_BUTTON_POS,
         "Bot",
         pfs.get_font(),
         DIFF_BUTTON_SCALE));
-    pl.allot_key(Keyboard::Key::Left,FUNCFY(button_cursor.let_choose_left));
-    pl.allot_key(Keyboard::Key::Right,FUNCFY(button_cursor.let_choose_right));
-    pl.allot_key(Keyboard::Key::Enter,FUNCFY(button_cursor.let_select));
+    pl.allot_key(Keyboard::Key::Left,FUNCFY(buttons.cursor.let_choose_left));
+    pl.allot_key(Keyboard::Key::Right,FUNCFY(buttons.cursor.let_choose_right));
+    pl.allot_key(Keyboard::Key::Enter,FUNCFY(buttons.cursor.let_select));
     pp.add_print_text(make_unique<puyoPrintText>(
         TEXT_KEY_NOTICE_POS,
         "Arrows : Move, Enter : Select",
@@ -61,6 +60,8 @@ puyoMenuPage::puyoMenuPage(puyoFileSystem& pfs)
         TEXT_KEY_NOTICE_SIZE,
         Color::White,
         Text::Style::Regular));
+    
+    buttons.set_executes(ps, pl);
 }
 puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& window)
 {
@@ -69,21 +70,14 @@ puyoPageSignal puyoMenuPage::proceed_page(puyoFileSystem& pfs,RenderWindow& wind
     pp.print_all_buttons(window);
     pp.print_all_texts(window);
     ps.manage_all_sounds();
-    if(button_cursor.get_signal(puyoButtonCursorSignal::cursor))
-        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cursor));
+    buttons.receive_signals(pfs);
+
     if(!convert_page)
-    {
-        convert_page = button_cursor.get_signal(puyoButtonCursorSignal::select);
-        if(convert_page)
-        {
-            ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::select));
-            pl.clear();
-        }
-    }
+        convert_page = buttons.selected();
     else if(ps.sounds_empty())
     {
         signal.next_page = Page::option;
-        signal.arcade = button_cursor.get_selected_button();
+        signal.arcade = buttons.cursor.get_selected_button();
     }
     return signal;
 }

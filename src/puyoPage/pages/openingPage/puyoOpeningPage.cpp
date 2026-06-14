@@ -7,7 +7,7 @@
 #include "puyoResources/puyoPrinting/printText/puyoPrintTextFlash.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoPrinting/puyoPrinting.hpp"
-#include "puyoPage/puyoLet.hpp"
+#include "puyoPage/puyoKeyBoard/puyoLet.hpp"
 
 using namespace std;
 using namespace sf;

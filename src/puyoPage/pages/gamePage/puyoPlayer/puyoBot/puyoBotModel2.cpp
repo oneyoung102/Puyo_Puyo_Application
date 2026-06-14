@@ -3,8 +3,8 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayPuyo/puyoPlayPuyo.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
+#include "puyoTool/puyoCast.hpp"
 
 #include <climits>
 #include <iostream>

@@ -9,6 +9,6 @@ class puyoModeCharged : public puyoMode
     private :
         std::mt19937 gen;
     public :
-        puyoModeCharged(const std::vector<std::unique_ptr<puyoPlayer>>& players);
-        void proceed_mode(puyoPhase& phase, const std::unique_ptr<puyoPlayer>& player) override;
+        puyoModeCharged(std::vector<puyoPlayer>& players);
+        void proceed_mode(puyoPhase& phase, puyoPlayer& player) override;
 };

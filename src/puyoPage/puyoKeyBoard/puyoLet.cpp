@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#include "puyoPage/puyoLet.hpp"
+#include "puyoPage/puyoKeyBoard/puyoLet.hpp"
 
 using namespace std;
 using namespace sf;
