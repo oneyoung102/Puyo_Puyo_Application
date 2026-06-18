@@ -1,7 +1,6 @@
 #pragma once
 
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoMode.hpp"
-#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardVanishControll.hpp"
 #include <random>
 
 class puyoModeCharged : public puyoMode

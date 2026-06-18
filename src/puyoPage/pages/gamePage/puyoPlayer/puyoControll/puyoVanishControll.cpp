@@ -1,10 +1,8 @@
-#include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
-#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardVanishControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoVanishControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoVanish.hpp"
-#include <memory>
 #include <queue>
 #include <utility>
 
@@ -12,19 +10,19 @@
 
 using namespace std;
 
-puyoBoardVanishControll::puyoBoardVanishControll(){}
+puyoVanishControll::puyoVanishControll(){}
 
-void puyoBoardVanishControll::add(puyoPuyo&& puyo)
+void puyoVanishControll::add(puyoPuyo&& puyo)
 {
     vanish_puyos.push_back(std::move(puyo));
     vanish_puyos.back().let();
 }
 
 
-const vector<puyoPuyo> &puyoBoardVanishControll::get() const { return vanish_puyos; }
-bool puyoBoardVanishControll::empty() const { return vanish_puyos.empty(); }
+const vector<puyoPuyo> &puyoVanishControll::get() const { return vanish_puyos; }
+bool puyoVanishControll::empty() const { return vanish_puyos.empty(); }
 
-void puyoBoardVanishControll::vanish(puyoBoard& board)
+void puyoVanishControll::vanish(puyoBoard& board)
 {
     for(int i = 0; i < vanish_puyos.size();)
         if(!vanish_puyos[i].acting())
@@ -40,7 +38,7 @@ void puyoBoardVanishControll::vanish(puyoBoard& board)
         }
 }
 
-tuple<int,int,vector<POSs>> puyoBoardVanishControll::fire_cluster(const puyoBoard& board, const POSs& fire_pos, vector<vector<bool>>& visited) const
+tuple<int,int,vector<POSs>> puyoVanishControll::fire_cluster(const puyoBoard& board, const POSs& fire_pos, vector<vector<bool>>& visited) const
 {
     int color_puyo_count = 0, weight_sum = 0;
     vector<POSs> stored_puyos;
@@ -75,7 +73,7 @@ tuple<int,int,vector<POSs>> puyoBoardVanishControll::fire_cluster(const puyoBoar
     }
     return make_tuple(color_puyo_count, weight_sum, stored_puyos);
 }
-tuple<int, vector<int>, vector<puyoType::Type>, vector<puyoPuyo>> puyoBoardVanishControll::to_vanish_puyo(puyoBoard& board)
+tuple<int, vector<int>, vector<puyoType::Type>, vector<puyoPuyo>> puyoVanishControll::to_vanish_puyo(puyoBoard& board)
 {
     int puyo_count = 0;
     vector<int> link_count;
@@ -109,5 +107,5 @@ tuple<int, vector<int>, vector<puyoType::Type>, vector<puyoPuyo>> puyoBoardVanis
     }
     return make_tuple(puyo_count, link_count, color_count, temp_energy_puyos);
 }
-void puyoBoardVanishControll::set_condition(int amount){condition_for_vanish = amount;}
-int puyoBoardVanishControll::get_condition() const { return condition_for_vanish; }
+void puyoVanishControll::set_condition(int amount){condition_for_vanish = amount;}
+int puyoVanishControll::get_condition() const { return condition_for_vanish; }

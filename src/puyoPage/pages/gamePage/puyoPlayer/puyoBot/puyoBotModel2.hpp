@@ -1,7 +1,6 @@
 #pragma once
 
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoTool/puyoPos.hpp"
 #include <vector>
 #include <utility>

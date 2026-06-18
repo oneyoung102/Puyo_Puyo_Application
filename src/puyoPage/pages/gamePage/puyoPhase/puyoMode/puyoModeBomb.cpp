@@ -1,6 +1,6 @@
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.hpp"
 
-#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseController.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoPhaseControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhase.hpp"
@@ -39,7 +39,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             if(!puyo.is_same(puyoType::Type::bomb))
                 continue;
             cv.add(board.to_vanish_puyo(POSs(bomb_c,r)));
-            phase.controll_phase().set_phase(bomb_have_player_num,puyoPhaseController::Phase::vanish);
+            phase.controll_phase().set_phase(bomb_have_player_num,puyoPhaseControll::Phase::vanish);
             break;
         }
         bomb_is_spawned = false;
@@ -52,13 +52,13 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
             .add(player.controll_obstuct().get_accumulated_score()); // 상대에게 넘길 방해 뿌요 두 배
         bomb_have_player_num = opposite;
     }
-    else if(phase.controll_phase().is_phase(bomb_have_player_num, puyoPhaseController::Phase::play))//폭탄 소환
+    else if(phase.controll_phase().is_phase(bomb_have_player_num, puyoPhaseControll::Phase::play))//폭탄 소환
     {
         std::uniform_int_distribution<> dist(0, board.get_size().c-1);
         bomb_c = dist(gen);
         player.controll_gravity().add(puyoPuyo(POSf(bomb_c,OBSTRUCT_PUYO_SPAWN_Y), P_BOMB(BOMB_MAX_TICK), std::make_unique<puyoPuyoGravity>(PLAYPUYO_DROP_GRAVITY_TICK)));
         bomb_is_spawned = true;
         phase.signal(puyoModeSignal::bomb_fused);
-        phase.controll_phase().set_phase(bomb_have_player_num,puyoPhaseController::Phase::gravity);
+        phase.controll_phase().set_phase(bomb_have_player_num,puyoPhaseControll::Phase::gravity);
     }
 }

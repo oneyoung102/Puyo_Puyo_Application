@@ -1,5 +1,5 @@
 #include <vector>
-#include "puyoPage/pages/gamePage/puyoPhase/puyoScoreCalc.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoScoreCalc.hpp"
 #include "puyoTool/puyoCast.hpp"
 
 using namespace std;

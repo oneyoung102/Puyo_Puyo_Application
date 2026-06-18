@@ -1,4 +1,4 @@
-#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardObstructControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoObstructControll.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
@@ -6,17 +6,17 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoBoardObstructControll::puyoBoardObstructControll()
+puyoObstructControll::puyoObstructControll()
     : obstruct_puyo(0)
     , accumulated_score(0)
     , approvement_spawn(false)
 {}
 
-void puyoBoardObstructControll::add(int count)
+void puyoObstructControll::add(int count)
 {
     obstruct_puyo = min(max(0, obstruct_puyo + count), OBSTRUCT_VIEWER_UNIT.back() * OBSTRUCT_VIEWER_UPPER);
 }
-std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
+std::vector<puyoPuyo> puyoObstructControll::to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping)
 {
     if(obstruct_puyo_for_dropping <= 0)
         return {};
@@ -53,13 +53,13 @@ std::vector<puyoPuyo> puyoBoardObstructControll::to_gravity_puyo(puyoBoard& boar
             }
     return gravity_puyos;
 }
-bool puyoBoardObstructControll::empty() const { return obstruct_puyo == 0; }
-const int &puyoBoardObstructControll::get() const { return obstruct_puyo; }
+bool puyoObstructControll::empty() const { return obstruct_puyo == 0; }
+const int &puyoObstructControll::get() const { return obstruct_puyo; }
 
-void puyoBoardObstructControll::accumulate_score(int score){accumulated_score += score;}
-int puyoBoardObstructControll::get_accumulated_score() const {return accumulated_score;}
-void puyoBoardObstructControll::clear_accumulated_score(){accumulated_score = 0;}
+void puyoObstructControll::accumulate_score(int score){accumulated_score += score;}
+int puyoObstructControll::get_accumulated_score() const {return accumulated_score;}
+void puyoObstructControll::clear_accumulated_score(){accumulated_score = 0;}
 
-void puyoBoardObstructControll::approve_spawn() {approvement_spawn = true;}
-void puyoBoardObstructControll::disapprove_spawn() {approvement_spawn = false;}
-bool puyoBoardObstructControll::spawn_approved() const  {return approvement_spawn;}
+void puyoObstructControll::approve_spawn() {approvement_spawn = true;}
+void puyoObstructControll::disapprove_spawn() {approvement_spawn = false;}
+bool puyoObstructControll::spawn_approved() const  {return approvement_spawn;}

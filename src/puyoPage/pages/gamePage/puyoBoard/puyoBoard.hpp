@@ -39,7 +39,7 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
 
         const puyoPuyo& get_puyo(const POSs& pos) const;
         puyoPuyo& ref_puyo(const POSs& pos);
-        puyoPuyo& operator[](const POSs& pos);
+        puyoPuyo& operator[](const POSs& pos) = delete;
         
         void insert_puyo(const puyoPuyo& puyo, const POSs& pos);
         void insert_puyo(const puyoPuyo& puyo);

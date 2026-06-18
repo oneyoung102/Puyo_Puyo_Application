@@ -17,10 +17,14 @@ class puyoObjectSignalReceiver // FUNC : function, T : enum (last element : COUN
         void execute(puyoObjectSignal<T>& object_signal, ARGS ... args)
         {
             while(!object_signal.signal_empty())
-                executes[CASTs(object_signal.give_signal())](args ...);
+            {
+                const auto idx = CASTs(object_signal.give_signal());
+                if(executes[idx])
+                    executes[idx](args ...);
+            }
         }
         void add_execute(T signal, FUNC&& execute)
         {
-            executes[CASTs(signal)] = execute;
+            executes[CASTs(signal)] = std::move(execute);
         }
 };

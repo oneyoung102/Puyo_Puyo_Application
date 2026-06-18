@@ -5,13 +5,13 @@
 
 class puyoBoard;
 
-class puyoBoardVanishControll
+class puyoVanishControll
 {
     private :
         int condition_for_vanish;
         std::vector<puyoPuyo> vanish_puyos;
     public :
-        puyoBoardVanishControll();
+        puyoVanishControll();
         void add(puyoPuyo&& puyo);
         
         std::tuple<int, int, std::vector<POSs>> fire_cluster(const puyoBoard& board, const POSs& fire_pos, std::vector<std::vector<bool>>& visited) const;

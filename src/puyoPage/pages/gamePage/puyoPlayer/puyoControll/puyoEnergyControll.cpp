@@ -1,4 +1,4 @@
-#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardEnergyControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoEnergyControll.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoFly.hpp"
 #include "puyoResources/puyoPrinting/puyoImageConstant.hpp"
@@ -8,11 +8,11 @@ using namespace std;
 using namespace puyoImageConstant;
 using namespace puyoGameConstant;
 
-puyoBoardEnergyControll::puyoBoardEnergyControll(){};
+puyoEnergyControll::puyoEnergyControll(){};
 
 
-const vector<puyoPuyo> &puyoBoardEnergyControll::get() const { return energy_puyos; }
-void puyoBoardEnergyControll::fly(const puyoBoard& board)
+const vector<puyoPuyo> &puyoEnergyControll::get() const { return energy_puyos; }
+void puyoEnergyControll::fly(const puyoBoard& board)
 {
     for (int i = 0; i < energy_puyos.size();)
         if(!energy_puyos[i].acting())
@@ -26,7 +26,7 @@ void puyoBoardEnergyControll::fly(const puyoBoard& board)
             ++i;
         }
 }
-void puyoBoardEnergyControll::spawn(int from_player_num, int to_player_num)
+void puyoEnergyControll::spawn(int from_player_num, int to_player_num)
 {
     if(temp_energy_puyos.empty())
         return;
@@ -40,14 +40,14 @@ void puyoBoardEnergyControll::spawn(int from_player_num, int to_player_num)
     temp_energy_puyos.clear();
 }
 
-void puyoBoardEnergyControll::add(puyoPuyo&& temp_energy_puyo)
+void puyoEnergyControll::add(puyoPuyo&& temp_energy_puyo)
 {
     temp_energy_puyos.push_back(std::move(temp_energy_puyo));
 }
-void puyoBoardEnergyControll::add(std::vector<puyoPuyo>&& temp_energy_puyos)
+void puyoEnergyControll::add(std::vector<puyoPuyo>&& temp_energy_puyos)
 {
     for(auto& temp_energy_puyo : temp_energy_puyos)
         add(std::move(temp_energy_puyo));
 }
-bool puyoBoardEnergyControll::empty() const {return temp_energy_puyos.empty();}
-void puyoBoardEnergyControll::clear() { temp_energy_puyos.clear(); }
+bool puyoEnergyControll::empty() const {return temp_energy_puyos.empty();}
+void puyoEnergyControll::clear() { temp_energy_puyos.clear(); }

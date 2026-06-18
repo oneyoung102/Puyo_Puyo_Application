@@ -4,13 +4,13 @@
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.hpp"
 class puyoBoard;
 
-class puyoBoardEnergyControll
+class puyoEnergyControll
 {
     private :
         std::vector<puyoPuyo> temp_energy_puyos; 
         std::vector<puyoPuyo> energy_puyos; 
     public :
-        puyoBoardEnergyControll();
+        puyoEnergyControll();
         void fly(const puyoBoard& board);
         void spawn(int from_player_num, int to_player_num);// temp_energy_puyo를 energy_puyo로
         const std::vector<puyoPuyo>& get() const;

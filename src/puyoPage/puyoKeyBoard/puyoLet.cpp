@@ -23,7 +23,7 @@ void puyoLet::act_keyboard_let(const optional<Event>& event)
             func();
     }
 }
-void puyoLet::allot_key(Keyboard::Key key, function<void()> func){key_allot[static_cast<size_t>(key)] = func;}
+void puyoLet::allot_key(Keyboard::Key key, function<void()>&& func){key_allot[static_cast<size_t>(key)] = std::move(func);}
 void puyoLet::clear()
 {
     key_allot.fill(nullptr);

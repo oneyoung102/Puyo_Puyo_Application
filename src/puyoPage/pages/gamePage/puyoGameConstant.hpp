@@ -44,20 +44,20 @@ namespace puyoGameConstant
     //난이도
     constexpr int PUYO_VANISH_CONDITION = 4;
     constexpr int EASY_DIFF_GRAVITY_TICK = 43, EASY_DIFF_STAY_TICK = 77, EASY_DIFF_COLORS = 3;
-    constexpr std::tuple<int,int,int> EASY_DIFF_SETTING = std::make_tuple(EASY_DIFF_GRAVITY_TICK,EASY_DIFF_STAY_TICK,EASY_DIFF_COLORS); // gravity,stay,colors
+    constexpr auto EASY_DIFF_SETTING = std::make_tuple(EASY_DIFF_GRAVITY_TICK,EASY_DIFF_STAY_TICK,EASY_DIFF_COLORS); // gravity,stay,colors
     constexpr int NORMAL_DIFF_GRAVITY_TICK = 36, NORMAL_DIFF_STAY_TICK = 57, NORMAL_DIFF_COLORS = 4;
-    constexpr std::tuple<int,int,int> NORMAL_DIFF_SETTING = std::make_tuple(NORMAL_DIFF_GRAVITY_TICK,NORMAL_DIFF_STAY_TICK,NORMAL_DIFF_COLORS);
+    constexpr auto NORMAL_DIFF_SETTING = std::make_tuple(NORMAL_DIFF_GRAVITY_TICK,NORMAL_DIFF_STAY_TICK,NORMAL_DIFF_COLORS);
     constexpr int HARD_DIFF_GRAVITY_TICK = 27, HARD_DIFF_STAY_TICK = 38, HARD_DIFF_COLORS = 5;
-    constexpr std::tuple<int,int,int> HARD_DIFF_SETTING = std::make_tuple(HARD_DIFF_GRAVITY_TICK,HARD_DIFF_STAY_TICK,HARD_DIFF_COLORS);
+    constexpr auto HARD_DIFF_SETTING = std::make_tuple(HARD_DIFF_GRAVITY_TICK,HARD_DIFF_STAY_TICK,HARD_DIFF_COLORS);
 
-    constexpr int EASY_BOT_INIT_ACT_TICK = 12, NORMAL_BOT_INIT_ACT_TICK = 9, HARD_BOT_INIT_ACT_TICK = 4;
+    constexpr int EASY_BOT_INIT_ACT_TICK = 16, NORMAL_BOT_INIT_ACT_TICK = 12, HARD_BOT_INIT_ACT_TICK = 4;
     //모드
     constexpr int BOMB_VANISH_TICK = 20;
     constexpr int BOMB_MAX_TICK = 3200;//0이면 안 됨
     constexpr float BOMB_UPDATED1 = 0.4, BOMB_UPDATED2 = 0.7, BOMB_UPDATED3 = 0.9;
     constexpr int BOMB_DISSOLVE_CHAIN = 3;
-    constexpr int FREEZE_TICK = 550;
-    constexpr int PROB_FREEZE_ONCE = 15, PROB_FREEZE_TWICE = 3;
+    constexpr int FREEZE_TICK = 650;
+    constexpr int PROB_FREEZE_ONCE = 12, PROB_FREEZE_TWICE = 2;
     constexpr int CHARGE_CYCLE = 4;//4개 뉴뿌요마다 차지
 
 

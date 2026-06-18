@@ -8,14 +8,14 @@
 
 class puyoBoard;
 
-class puyoBoardScoreControll
+class puyoScoreControll
 {
     private :
         int puyo_count, chain_count;
         std::vector<int> link_count;
         std::set<puyoType::Type> color_count;
     public :
-        puyoBoardScoreControll();
+        puyoScoreControll();
 
         int get_drop_score(const std::vector<puyoPuyo>& future_puyos, const puyoPlayPuyo& play_puyo) const;
 

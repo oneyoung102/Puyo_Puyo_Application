@@ -28,12 +28,12 @@ class puyoType
     protected :
         const Type type;
         typeState state;
-        bool _is_frozen;
+        bool __is_frozen;
     public :
         puyoType(Type type, typeState state = typeState::none, bool _is_frozen = false)
             : type(type)
             , state(state)
-            , _is_frozen(_is_frozen)
+            , __is_frozen(_is_frozen)
         {}
         virtual ~puyoType() = default;
         virtual std::unique_ptr<puyoType> clone() const = 0;
@@ -49,9 +49,9 @@ class puyoType
         virtual void update() {};
         virtual typeState get_state() const {return state;}
 
-        virtual void freeze() {_is_frozen = true;} 
-        virtual void unfreeze() {_is_frozen = false;} 
-        virtual bool is_frozen() const {return _is_frozen;} 
+        virtual void freeze() {__is_frozen = true;} 
+        virtual void unfreeze() {__is_frozen = false;} 
+        virtual bool is_frozen() const {return __is_frozen;} 
 
         virtual void charge() {return;}
         virtual void uncharge() {return;}

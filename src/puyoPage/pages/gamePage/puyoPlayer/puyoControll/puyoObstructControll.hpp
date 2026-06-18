@@ -4,13 +4,13 @@
 #include <vector>
 class puyoBoard;
 
-class puyoBoardObstructControll
+class puyoObstructControll
 {
     private :
         int obstruct_puyo, accumulated_score;
         bool approvement_spawn;
     public :
-        puyoBoardObstructControll();
+        puyoObstructControll();
         void add(int count);
         std::vector<puyoPuyo> to_gravity_puyo(puyoBoard& board, int obstruct_puyo_for_dropping);
         bool empty() const;

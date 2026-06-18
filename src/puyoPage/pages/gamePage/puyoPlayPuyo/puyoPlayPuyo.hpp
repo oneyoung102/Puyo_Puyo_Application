@@ -24,19 +24,21 @@ enum class puyoPlayPuyoSignal
     COUNT
 };
 
+using PLAYPUYO = std::array<puyoPuyo,2>;
+
 class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어가 움직이는 뿌요
 {
     private :
         int stay;
         const int gravity_value, stay_value;
-        std::array<puyoPuyo,2> play_puyo;
+        PLAYPUYO play_puyo;
         std::array<std::unique_ptr<puyoPuyoAct>,2> gravity;
         
         bool down_taken, drop_taken;//명령 접수 여부
 
         void let_fourway(Direction dir);
     public :
-        puyoPlayPuyo(const std::pair<puyoPuyo,puyoPuyo>& types, int gravity_value, int stay_value);
+        puyoPlayPuyo(PLAYPUYO&& play_puyo, int gravity_value, int stay_value);
 
         void act_let(const puyoBoard& board);
         void gravity_let(const puyoBoard& board);

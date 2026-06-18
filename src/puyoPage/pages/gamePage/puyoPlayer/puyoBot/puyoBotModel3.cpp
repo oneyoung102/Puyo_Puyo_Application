@@ -1,16 +1,14 @@
 #include "puyoBotModel3.hpp"
 #include "puyoPage/pages/gamePage/puyoGameConstant.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoPlayer.hpp"
-#include "puyoPage/pages/gamePage/puyoPlayer/puyoBot/puyoBot.hpp"
-#include "puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoType.hpp"
 #include <climits>
 
 using namespace std;
 
 
-puyoBotModel3::puyoBotModel3(const std::vector<std::pair<puyoPuyo,puyoPuyo>>& new_types, const int& next_puyo_count, POSi bsize, unsigned int init_act_tick)
+puyoBotModel3::puyoBotModel3(decltype(new_puyos)& new_types, const int& next_puyo_count, POSi bsize, unsigned int init_act_tick)
     : puyoBot(bsize,init_act_tick)
-    , new_types(new_types)
+    , new_puyos(new_types)
     , next_puyo_count(next_puyo_count)
     , beam_search_select_count(3)
 {}
@@ -205,9 +203,11 @@ void puyoBotModel3::think_perfect_lets(const puyoPlayer& player)
             if(!simulate_board.empty(pos))
                 ++all_puyo_sum;
         }
-    if(new_types.empty())
+    if(new_puyos.empty())
         return;
     const bool fire = get_fire(all_puyo_sum,player.controll_obstuct().get());
-    const PROBABLITY& best_probablity = beam_search(player,board,{puyo.get(),new_types[next_puyo_count],new_types[next_puyo_count+1]},0,fire).second;
+    const PROBABLITY& best_probablity = beam_search(player,board,
+        {puyo.get(),new_puyos.view(next_puyo_count),new_puyos.view(next_puyo_count+1)}
+        ,0,fire).second;
     to_let(best_probablity,const_cast<puyoPlayPuyo&>(puyo));
 }

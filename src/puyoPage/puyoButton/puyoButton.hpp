@@ -5,6 +5,7 @@
 #include "puyoPage/puyoObjectSignal/puyoObjectSignalReceiver.hpp"
 #include "puyoResources/puyoFileSystem.hpp"
 #include "puyoResources/puyoSounding/puyoSounding.hpp"
+#include <functional>
 
 template<size_t R, size_t C, class buttonName>
 class puyoButton
@@ -25,10 +26,16 @@ class puyoButton
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::cursor));
             });
             signal_receiver.add_execute(puyoButtonCursorSignal::select, [&ps,&pl,this](puyoFileSystem& pfs){
+                if(!ps.sounds_empty())
+                    ps.clear_back();
                 ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::select));
                 pl.clear();
                 __selected = true;
             });
+        }
+        void add_executes(puyoButtonCursorSignal signal, std::function<void(puyoFileSystem&)>&& func)
+        {
+            signal_receiver.add_execute(signal, std::move(func));
         }
         void receive_signals(puyoFileSystem& pfs)
         {

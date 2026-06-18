@@ -9,7 +9,7 @@
 
 using namespace std;
 
-puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick, const std::vector<std::pair<puyoPuyo,puyoPuyo>>& new_types)
+puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool player_is_bot, int model, unsigned int init_act_tick, const puyoForwardVector<PLAYPUYO>& new_types)
     : board(std::move(board))
     , puyoObjectSignal()
     , player_num(player_num)
@@ -43,10 +43,10 @@ puyoPlayPuyo& puyoPlayer::get_puyo() const {return *puyo;}
 const int& puyoPlayer::get_score() const {return score;}
 void puyoPlayer::add_score(int s){score = min(puyoGameConstant::SCORE_UPPER-1,score+s);}
 
-void puyoPlayer::give_new_puyos(pair<puyoPuyo,puyoPuyo>&& puyos, int puyo_gravity_value, int puyo_stay_value)
+void puyoPlayer::give_new_puyos(PLAYPUYO&& puyos, int puyo_gravity_value, int puyo_stay_value)
 {
-    puyos.first.move(board->get_spawn_pos());
-    puyos.second.move(board->get_spawn_pos()-POSi(0,1));
+    puyos[0].move(board->get_spawn_pos());
+    puyos[1].move(board->get_spawn_pos()-POSi(0,1));
     puyo = make_unique<puyoPlayPuyo>(std::move(puyos),puyo_gravity_value,puyo_stay_value);
     ++new_puyo_count;
 }
@@ -67,15 +67,15 @@ void puyoPlayer::act_bot_let() const
         bot_model->let_bot_act();
 }
 
-puyoBoardEnergyControll& puyoPlayer::controll_energy(){return energy_controll;}
-puyoBoardGravityControll& puyoPlayer::controll_gravity(){return gravity_controll;}
-puyoBoardScoreControll& puyoPlayer::controll_score(){return score_controll;}
-puyoBoardObstructControll& puyoPlayer::controll_obstuct(){return obstuct_controll;}
-puyoBoardVanishControll& puyoPlayer::controll_vanish(){return vanish_controll;}
-puyoBoardFutureControll& puyoPlayer::controll_future(){return future_controll;}
-const puyoBoardEnergyControll& puyoPlayer::controll_energy() const {return energy_controll;}
-const puyoBoardGravityControll& puyoPlayer::controll_gravity() const {return gravity_controll;}
-const puyoBoardScoreControll& puyoPlayer::controll_score() const {return score_controll;}
-const puyoBoardObstructControll& puyoPlayer::controll_obstuct() const {return obstuct_controll;}
-const puyoBoardVanishControll& puyoPlayer::controll_vanish() const {return vanish_controll;}
-const puyoBoardFutureControll& puyoPlayer::controll_future() const {return future_controll;}
+puyoEnergyControll& puyoPlayer::controll_energy(){return energy_controll;}
+puyoGravityControll& puyoPlayer::controll_gravity(){return gravity_controll;}
+puyoScoreControll& puyoPlayer::controll_score(){return score_controll;}
+puyoObstructControll& puyoPlayer::controll_obstuct(){return obstuct_controll;}
+puyoVanishControll& puyoPlayer::controll_vanish(){return vanish_controll;}
+puyoFutureControll& puyoPlayer::controll_future(){return future_controll;}
+const puyoEnergyControll& puyoPlayer::controll_energy() const {return energy_controll;}
+const puyoGravityControll& puyoPlayer::controll_gravity() const {return gravity_controll;}
+const puyoScoreControll& puyoPlayer::controll_score() const {return score_controll;}
+const puyoObstructControll& puyoPlayer::controll_obstuct() const {return obstuct_controll;}
+const puyoVanishControll& puyoPlayer::controll_vanish() const {return vanish_controll;}
+const puyoFutureControll& puyoPlayer::controll_future() const {return future_controll;}

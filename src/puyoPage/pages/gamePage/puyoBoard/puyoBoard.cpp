@@ -34,34 +34,34 @@ bool puyoBoard::touched(const POSi& pos) const
         || pos.r < 0 && !in_col(pos.c);
 }
 
-const puyoPuyo& puyoBoard::get_puyo(const POSs& pos) const {return board[pos.r][pos.c];}
-puyoPuyo& puyoBoard::ref_puyo(const POSs& pos) { return board[pos.r][pos.c]; }
-puyoPuyo& puyoBoard::operator[](const POSs& pos) { return board[pos.r][pos.c]; }
+const puyoPuyo& puyoBoard::get_puyo(const POSs& pos) const {return board.at(pos.r).at(pos.c);}
+puyoPuyo& puyoBoard::ref_puyo(const POSs& pos){ return board.at(pos.r).at(pos.c); }
+//puyoPuyo& puyoBoard::operator[](const POSs& pos) { return board.at(pos.r).at(pos.c); }
 
 void puyoBoard::insert_puyo(const puyoPuyo& puyo, const POSs& pos)
 {
-    board[pos.r][pos.c] = puyo;
-    board[pos.r][pos.c].move(pos);
+    board.at(pos.r).at(pos.c) = puyo;
+    board.at(pos.r).at(pos.c).move(pos);
 }
 void puyoBoard::insert_puyo(const puyoPuyo& puyo)
 {
     const auto [c, r] = puyo.get_pos();
-    board[CASTs(r)][CASTs(c)] = puyo;
+    board.at(CASTs(r)).at(CASTs(c)) = puyo;
 }
 void puyoBoard::insert_puyo(puyoPuyo&& puyo, const POSs& pos)
 {
-    board[pos.r][pos.c] = std::move(puyo);
-    board[pos.r][pos.c].move(pos);
+    board.at(pos.r).at(pos.c) = std::move(puyo);
+    board.at(pos.r).at(pos.c).move(pos);
 }
 void puyoBoard::insert_puyo(puyoPuyo&& puyo)
 {
     const auto [c, r] = puyo.get_pos();
-    board[CASTs(r)][CASTs(c)] = std::move(puyo);
+    board.at(CASTs(r)).at(CASTs(c)) = std::move(puyo);
 }
 
-void puyoBoard::remove_puyo(const POSs& pos){board[pos.r][pos.c] = puyoPuyo(pos);}
+void puyoBoard::remove_puyo(const POSs& pos){board.at(pos.r).at(pos.c) = puyoPuyo(pos);}
 
-bool puyoBoard::empty(const POSs& pos) const {return board[pos.r][pos.c].empty();}
+bool puyoBoard::empty(const POSs& pos) const {return board.at(pos.r).at(pos.c).empty();}
 bool puyoBoard::all_cleared()
 {
     for(int r = size.r-1 ; r >= 0 ; --r)

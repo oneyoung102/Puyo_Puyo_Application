@@ -33,7 +33,7 @@ enum class Mode
     charged,
     blocks,
 };
-
+//..... 위에 열거형 수정
 class puyoPageSignal
 {
     public :

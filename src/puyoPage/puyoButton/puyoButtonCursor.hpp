@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 #include <queue>
 #include <array>
@@ -15,6 +16,12 @@ enum class puyoButtonCursorSignal
     cursor,
     COUNT
 };
+
+template<class T, class P = void>
+class has_NONE : std::false_type {};
+template<class T>
+class has_NONE<T, std::void_t<decltype(T::NONE)>> : std::true_type {};
+
 
 template<size_t R, size_t C, class buttonName>
 class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // buttonName에 NONE이 원소로 있어야 함
@@ -31,7 +38,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             cursor += amount;
             cursor = (POSi(C,R)+cursor)%POSi(C,R);
 
-            std::vector<std::vector<bool>> visited(R,std::vector<bool>(C,false));
+            std::array<std::array<bool,C>,R> visited{{false}};
             std::queue<POSi> coords;
             auto temp_cursor = cursor;
             while(POSi() <= temp_cursor && temp_cursor < POSi(C,R))
@@ -63,6 +70,8 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
         puyoButtonCursor(std::vector<std::vector<buttonName>>&& allocated, bool cyclic = false)
             : cyclic(cyclic)
         {
+            static_assert(has_NONE<buttonName>::value, "buttonName must have NONE value.");
+            
             if(allocated.empty() || allocated.size() != R || allocated[0].size() != C)
                 throw std::runtime_error("Button allocated vector is not matched with buttonCursor template variable");
             bool init_found = false;

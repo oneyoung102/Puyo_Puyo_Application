@@ -6,12 +6,12 @@
 
 class puyoBoard;
 
-class puyoBoardGravityControll
+class puyoGravityControll
 {
     private :
         std::vector<puyoPuyo> gravity_puyos;
     public :
-        puyoBoardGravityControll();
+        puyoGravityControll();
 
         void gravity(puyoBoard& board);
         void add(puyoPuyo&& puyo);

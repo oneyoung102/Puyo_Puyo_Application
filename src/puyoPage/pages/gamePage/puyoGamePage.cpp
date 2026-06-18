@@ -55,24 +55,11 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     // auto bot = make_unique<puyoPlayer>(0, make_unique<puyoBoard>(),true,1,NORMAL_BOT_INIT_ACT_TICK);
     // phase.add_player(std::move(bot));
     phase.add_player(puyoPlayer(0, make_unique<puyoBoard>()));
-    const auto& player0 = phase.get_players().back();
-    pl.allot_key(Keyboard::Key::A,player0.get_let_left());
-    pl.allot_key(Keyboard::Key::S,player0.get_let_down());
-    pl.allot_key(Keyboard::Key::D,player0.get_let_right());
-    pl.allot_key(Keyboard::Key::W,player0.get_let_turn());
-    pl.allot_key(Keyboard::Key::LShift,player0.get_let_drop());
     switch(arcade)
     {   
         case Arcade::duel :
         {
             phase.add_player(puyoPlayer(1, make_unique<puyoBoard>()));
-            const auto& player1 = phase.get_players().back();
-            pl.allot_key(Keyboard::Key::Left,player1.get_let_left());
-            pl.allot_key(Keyboard::Key::Down,player1.get_let_down());
-            pl.allot_key(Keyboard::Key::Right,player1.get_let_right());
-            pl.allot_key(Keyboard::Key::Up,player1.get_let_turn());
-            pl.allot_key(Keyboard::Key::RShift,player1.get_let_drop());
-            
             break;
         }
         case Arcade::bot :
@@ -98,6 +85,22 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         default :
             break;
     };
+    /////키할당
+    const auto& p0 = phase.get_players()[0];
+    pl.allot_key(Keyboard::Key::A,p0.get_let_left());
+    pl.allot_key(Keyboard::Key::S,p0.get_let_down());
+    pl.allot_key(Keyboard::Key::D,p0.get_let_right());
+    pl.allot_key(Keyboard::Key::W,p0.get_let_turn());
+    pl.allot_key(Keyboard::Key::LShift,p0.get_let_drop());
+    if(arcade == Arcade::duel)
+    {
+        const auto& p1 = phase.get_players()[1];
+        pl.allot_key(Keyboard::Key::Left,p1.get_let_left());
+        pl.allot_key(Keyboard::Key::Down,p1.get_let_down());
+        pl.allot_key(Keyboard::Key::Right,p1.get_let_right());
+        pl.allot_key(Keyboard::Key::Up,p1.get_let_turn());
+        pl.allot_key(Keyboard::Key::RShift,p1.get_let_drop());
+    }
     phase.set_game(diff,mode);
 
 ////////////////////////////////////////////////출력 객체
@@ -116,7 +119,7 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
         pp.add_print_object(make_unique<puyoPrintEnergyPuyo>(player.controll_energy().get(),PUYO_SPRITE));
         pp.add_print_object(make_unique<puyoPrintPlayPuyo>(player,PUYO_SPRITE,board_print_pos));
 
-        pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player.get_new_puyo_count(),phase.get_new_types(),PUYO_SPRITE,NEXT_PUYO_VIEWER_POS[player_num]));
+        pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player.get_new_puyo_count(),phase.get_new_puyos(),PUYO_SPRITE,NEXT_PUYO_VIEWER_POS[player_num]));
         pp.add_print_object(make_unique<puyoPrintScore>(player_num,player.get_score(),NUM_SPRITE,SCORE_POS[player_num]));
     }
     pp.add_print_object(make_unique<puyoPrintScreenhead>(BOARD_SPRITE));

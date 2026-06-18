@@ -12,7 +12,7 @@ puyoColor::puyoColor(Type color, bool is_frozen, bool charged)
 {}
 const vector<puyoType::Type> puyoColor::links = {puyoType::Type::obstruct};
 
-std::unique_ptr<puyoType> puyoColor::clone() const {return std::make_unique<puyoColor>(this->type,_is_frozen,charged);}
+std::unique_ptr<puyoType> puyoColor::clone() const {return std::make_unique<puyoColor>(this->type,__is_frozen,charged);}
 int puyoColor::get_weight() const {return charged ? puyoGameConstant::CHARGED_COLOR_PUYO_WEIGHT : 1;}
 bool puyoColor::is_colored() const {return true;}
 

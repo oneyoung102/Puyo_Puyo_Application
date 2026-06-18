@@ -6,12 +6,12 @@
 class puyoBoard;
 class puyoPlayPuyo;
 
-class puyoBoardFutureControll
+class puyoFutureControll
 {
     private :
         std::vector<puyoPuyo> future_puyos;
     public :
-        puyoBoardFutureControll();
+        puyoFutureControll();
         void spawn(const puyoBoard& board, const puyoPlayPuyo& play_puyo);
         void fall(const puyoBoard& board);
 

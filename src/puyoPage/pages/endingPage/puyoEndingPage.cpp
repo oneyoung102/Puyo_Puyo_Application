@@ -104,14 +104,7 @@ puyoPageSignal puyoEndingPage::proceed_page(puyoFileSystem& pfs, RenderWindow& w
             break;
     }
     if(!convert_page)
-    {
         convert_page = buttons.selected();
-        if(convert_page)
-        {
-            if(!ps.sounds_empty())
-                ps.clear_back();
-        }
-    }
     else if(ps.sounds_empty())
     {
         signal.win_player_num = puyoGameConstant::NO_WINNER;

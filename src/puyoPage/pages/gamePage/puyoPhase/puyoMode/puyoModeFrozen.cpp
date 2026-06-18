@@ -42,7 +42,7 @@ void puyoModeFrozen::proceed_mode(puyoPhase& phase, puyoPlayer& player)
     uniform_int_distribution<> dist(0,99);
     const int prob = dist(gen);
     if(prob < PROB_FREEZE_ONCE)  
-        phase.get_new_types().back().first.freeze();
+        phase.get_new_puyos().back()[0].freeze();
     if(PROB_FREEZE_ONCE-PROB_FREEZE_TWICE <= prob && prob < 2*PROB_FREEZE_ONCE-PROB_FREEZE_TWICE)
-        phase.get_new_types().back().second.freeze();
+        phase.get_new_puyos().back()[1].freeze();
 }

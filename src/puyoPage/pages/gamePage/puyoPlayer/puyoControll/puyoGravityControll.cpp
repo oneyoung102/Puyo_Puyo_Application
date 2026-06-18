@@ -1,4 +1,4 @@
-#include "puyoPage/pages/gamePage/puyoPlayer/puyoBoardControll/puyoBoardGravityControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoGravityControll.hpp"
 #include "puyoPage/pages/gamePage/puyoBoard/puyoBoard.hpp"
 #include "puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.hpp"
 
@@ -6,22 +6,22 @@
 
 using namespace std;
 
-puyoBoardGravityControll::puyoBoardGravityControll()
+puyoGravityControll::puyoGravityControll()
 {}
 
-void puyoBoardGravityControll::add(puyoPuyo&& puyo)
+void puyoGravityControll::add(puyoPuyo&& puyo)
 {
     gravity_puyos.push_back(std::move(puyo));
     gravity_puyos.back().let();    
 }
-void puyoBoardGravityControll::add(vector<puyoPuyo>&& puyos)
+void puyoGravityControll::add(vector<puyoPuyo>&& puyos)
 {
     for(auto& puyo : puyos)
         add(std::move(puyo));
 }
-const vector<puyoPuyo>& puyoBoardGravityControll::get() const { return gravity_puyos;}
+const vector<puyoPuyo>& puyoGravityControll::get() const { return gravity_puyos;}
 
-void puyoBoardGravityControll::gravity(puyoBoard& board)
+void puyoGravityControll::gravity(puyoBoard& board)
 {
     for(size_t i = 0 ; i < gravity_puyos.size(); )
     {
@@ -43,4 +43,4 @@ void puyoBoardGravityControll::gravity(puyoBoard& board)
     }
 }
 
-bool puyoBoardGravityControll::empty() const { return gravity_puyos.empty(); }
+bool puyoGravityControll::empty() const { return gravity_puyos.empty(); }

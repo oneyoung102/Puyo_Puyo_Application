@@ -1,25 +1,25 @@
-#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseController.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoPhaseControll.hpp"
 #include <cmath>
 #include <vector>
 
 using namespace std;
 
 
-puyoPhaseController::puyoPhaseController(size_t player_count)
+puyoPhaseControll::puyoPhaseControll(size_t player_count)
     : curr_phases(player_count,Phase::play)
     , delay_times(player_count,0)
 {}
 
-puyoPhaseController::Phase puyoPhaseController::get_phase(int player_num) const {return curr_phases[player_num];}
-void puyoPhaseController::set_phase(int player_num, Phase phase){curr_phases[player_num] = phase;}
-bool puyoPhaseController::is_phase(int player_num, Phase phase) const {return curr_phases[player_num] == phase;}
+puyoPhaseControll::Phase puyoPhaseControll::get_phase(int player_num) const {return curr_phases[player_num];}
+void puyoPhaseControll::set_phase(int player_num, Phase phase){curr_phases[player_num] = phase;}
+bool puyoPhaseControll::is_phase(int player_num, Phase phase) const {return curr_phases[player_num] == phase;}
 
-void puyoPhaseController::delay(int player_num, int time){delay_times[player_num] += time;}
-void puyoPhaseController::wait(int player_num){delay_times[player_num] = fmax(delay_times[player_num]-1,0);}
-bool puyoPhaseController::delayed(int player_num) const{return delay_times[player_num] > 0;}
+void puyoPhaseControll::delay(int player_num, int time){delay_times[player_num] += time;}
+void puyoPhaseControll::wait(int player_num){delay_times[player_num] = fmax(delay_times[player_num]-1,0);}
+bool puyoPhaseControll::delayed(int player_num) const{return delay_times[player_num] > 0;}
 
 
-void puyoPhaseController::act_play_puyo(puyoPlayer& player)
+void puyoPhaseControll::act_play_puyo(puyoPlayer& player)
 {
     const auto& board = player.get_board();
     auto& puyo = player.get_puyo();
@@ -28,7 +28,7 @@ void puyoPhaseController::act_play_puyo(puyoPlayer& player)
     puyo.gravity_let(board);
     puyo.act_let(board);
 }
-int puyoPhaseController::do_after_puyo_dropped(puyoPlayer& player, pair<puyoPuyo,puyoPuyo>&& new_puyos, int gravity_value, int stay_value)
+int puyoPhaseControll::do_after_puyo_dropped(puyoPlayer& player, PLAYPUYO&& new_puyos, int gravity_value, int stay_value)
 {
     const auto& board = player.get_board();
     auto& cg = player.controll_gravity();
@@ -47,14 +47,14 @@ int puyoPhaseController::do_after_puyo_dropped(puyoPlayer& player, pair<puyoPuyo
 
     return added_score;
 }
-bool puyoPhaseController::act_gravity_puyos(puyoPlayer& player)
+bool puyoPhaseControll::act_gravity_puyos(puyoPlayer& player)
 {
     auto& cg = player.controll_gravity();
 
     cg.gravity(player.get_board());
     return cg.empty();
 }
-bool puyoPhaseController::test_and_prepare_vanish(puyoPlayer& player)
+bool puyoPhaseControll::test_and_prepare_vanish(puyoPlayer& player)
 {
     auto& cv = player.controll_vanish();
     auto& cs = player.controll_score();
@@ -67,7 +67,7 @@ bool puyoPhaseController::test_and_prepare_vanish(puyoPlayer& player)
     
     return cv.empty();
 }
-bool puyoPhaseController::act_vanish_puyos(puyoPlayer& player)
+bool puyoPhaseControll::act_vanish_puyos(puyoPlayer& player)
 {
     auto& board = player.get_board();
     auto& cv = player.controll_vanish();
@@ -75,14 +75,14 @@ bool puyoPhaseController::act_vanish_puyos(puyoPlayer& player)
     cv.vanish(board);
     return cv.empty();
 }
-bool puyoPhaseController::test_and_prepare_gravity(puyoPlayer& player)
+bool puyoPhaseControll::test_and_prepare_gravity(puyoPlayer& player)
 {
     auto& cg = player.controll_gravity();
 
     cg.add(player.get_board().to_gravity_puyo());
     return cg.empty();
 }
-bool puyoPhaseController::test_spawn_obstruct_puyo(puyoPlayer& player, int obstruct_puyo_for_dropping)
+bool puyoPhaseControll::test_spawn_obstruct_puyo(puyoPlayer& player, int obstruct_puyo_for_dropping)
 {
     auto& co = player.controll_obstuct();
 
@@ -93,4 +93,12 @@ bool puyoPhaseController::test_spawn_obstruct_puyo(puyoPlayer& player, int obstr
         return true;
     }
     return false;
+}
+void puyoPhaseControll::reset_all_chain(puyoPlayer& player)
+{
+    if(is_phase(player.get_player_num(), puyoPhaseControll::Phase::play))
+    {
+        player.controll_obstuct().clear_accumulated_score();
+        player.controll_score().reset_chain_count();
+    }
 }

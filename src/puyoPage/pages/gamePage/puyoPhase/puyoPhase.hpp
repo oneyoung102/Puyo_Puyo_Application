@@ -9,9 +9,9 @@
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoMode.hpp"
-#include "puyoPage/puyoObjectSignal/puyoObjectSignal.hpp"
-#include "puyoPage/pages/gamePage/puyoPhase/puyoScoreCalc.hpp"
-#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseController.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoScoreCalc.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoPhaseControll.hpp"
+#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoForwardVector.hpp"
 
 enum class puyoModeSignal
 {
@@ -31,11 +31,11 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
     private :
         std::vector<puyoPlayer> players;
         std::mt19937 gen;
-        std::vector<puyoPuyo> new_type_list;
-        std::vector<std::pair<puyoPuyo,puyoPuyo>> new_types;
+        std::vector<puyoPuyo> new_puyo_pool; //새로운 뿌요들의 후보
+        puyoForwardVector<PLAYPUYO> new_puyos;
 
         puyoScoreCalc calc;
-        puyoPhaseController phase_controll;
+        puyoPhaseControll phase_controll;
 
         bool game_end, game_end_ask;
         int win_player_num;
@@ -43,6 +43,9 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         std::unique_ptr<puyoMode> curr_mode; 
         Mode mode_type;
         int gravity_value, stay_value;
+
+        void create_new_playpuyo(int count);
+        PLAYPUYO get_new_playpuyo(int count);
 
         int proceed_play(puyoPlayer& player);
         int proceed_gravity(puyoPlayer& player);
@@ -59,9 +62,8 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         void ask_end_game();
         bool game_ended() const;
 
-        std::pair<puyoPuyo,puyoPuyo> get_new_puyos(int count);
-        const std::vector<std::pair<puyoPuyo,puyoPuyo>>& get_new_types() const;
-        std::vector<std::pair<puyoPuyo,puyoPuyo>>& get_new_types();
+        const decltype(new_puyos)& get_new_puyos() const;
+        decltype(new_puyos)& get_new_puyos();
 
         void set_game(Diff diff, Mode mode);
         void proceed_game();
@@ -83,5 +85,5 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         int get_win_player_num() const;
         void set_win_player_num(int num);
 
-        puyoPhaseController& controll_phase();
+        puyoPhaseControll& controll_phase();
 };

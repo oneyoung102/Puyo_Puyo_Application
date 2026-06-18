@@ -17,22 +17,20 @@
 using namespace std;
 using namespace puyoGameConstant;
 
-puyoPlayPuyo::puyoPlayPuyo(const pair<puyoPuyo,puyoPuyo>& types, int gravity_value, int stay_value)
+puyoPlayPuyo::puyoPlayPuyo(PLAYPUYO&& play_puyo, int gravity_value, int stay_value)
     : puyoObjectSignal()
     , gravity_value(gravity_value)
     , stay_value(stay_value)
     , stay(0)
     , down_taken(false)
     , drop_taken(false)
+    , play_puyo(std::move(play_puyo))
 {
     for(size_t i = 0 ; i < 2 ; ++i)
     {
         gravity[i] = make_unique<puyoPuyoGravity>(gravity_value);
         gravity[i]->let();
     }
-
-    play_puyo[0] = types.first;
-    play_puyo[1] = types.second;
 }
 
 

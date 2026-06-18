@@ -16,15 +16,16 @@ puyoModeCharged::puyoModeCharged(std::vector<puyoPlayer>& players)
 }
 void puyoModeCharged::proceed_mode(puyoPhase& phase, puyoPlayer& player)
 {
-    auto& new_types = phase.get_new_types()[player.get_new_puyo_count()+DISPLAYED_NEXT_PUYO_COUNT-1];
-    if(new_types.first.is_charged() || new_types.second.is_charged())
+    const int puyo_count = player.get_new_puyo_count();
+    auto& new_types = phase.get_new_puyos().refer(puyo_count+DISPLAYED_NEXT_PUYO_COUNT-1);
+    if(new_types[0].is_charged() || new_types[1].is_charged())
         return;
-    if(player.get_new_puyo_count()%CHARGE_CYCLE != 0)
+    if(puyo_count%CHARGE_CYCLE != 0)
         return;
     uniform_int_distribution<> dist(0,99);
     const int prob = dist(gen);
     if(prob < 50)  
-        new_types.first.charge();
+        new_types[0].charge();
     else
-        new_types.second.charge();
+        new_types[1].charge();
 }
