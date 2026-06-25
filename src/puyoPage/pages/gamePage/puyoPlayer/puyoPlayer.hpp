@@ -14,7 +14,6 @@
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoFutureControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoObstructControll.hpp"
 
-#include <utility>
 #include <functional>
 #include <memory>
 
@@ -49,14 +48,14 @@ class puyoPlayer : public puyoObjectSignal<puyoPlayerSignal>
 
         int get_player_num() const;
         int get_opposite() const;
-        puyoBoard& get_board() const;
-        puyoPlayPuyo& get_puyo() const;
+        puyoBoard& refer_board() const;
+        puyoPlayPuyo& refer_puyo() const;
 
-        const int& get_score() const;
+        const int& view_score() const;
         void add_score(int s);
 
         void give_new_puyos(PLAYPUYO&& puyos, int puyo_gravity_value, int puyo_stay_value);
-        const int& get_new_puyo_count() const;
+        const int& view_new_puyo_count() const;
 
         std::function<void()> get_let_left() const;
         std::function<void()> get_let_right() const;

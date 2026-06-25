@@ -15,8 +15,8 @@ puyoBotModel1::puyoBotModel1(POSi bsize, unsigned int init_act_tick)
 
 void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
 {
-    const auto& board = player.get_board();
-    const auto& puyo = player.get_puyo();
+    const auto& board = player.refer_board();
+    const auto& puyo = player.refer_puyo();
 
     int puyo_count = 0;
     const auto& bsize = board.get_size();
@@ -24,8 +24,8 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
         for(size_t j = 0 ; j < bsize.c ; ++j)
         {
             const auto& pos = POSs(j, i);
-            if(simulate_board.get_puyo(pos) != board.get_puyo(pos))
-                simulate_board.insert_puyo(board.get_puyo(pos));
+            if(simulate_board.view(pos) != board.view(pos))
+                simulate_board.insert(board.view(pos));
             if(!simulate_board.empty(pos))
                 ++puyo_count;
         }
@@ -41,7 +41,7 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
         const auto& [temp_pos1,temp_pos2] = to_coord(probablity,puyo);
         if(!board.in(temp_pos1) || !board.in(temp_pos2))
             continue;
-        auto [puyo1,puyo2] = puyo.get();
+        auto [puyo1,puyo2] = puyo.view();
         puyo1.move(temp_pos1);
         puyo2.move(temp_pos2);
         
@@ -50,8 +50,8 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
         {
             puyo1.move(pos1);
             puyo2.move(pos2);
-            simulate_board.insert_puyo(puyo1);
-            simulate_board.insert_puyo(puyo2);
+            simulate_board.insert(puyo1);
+            simulate_board.insert(puyo2);
 
             int cluster_size = 0, cluster_size_sum = 0;
             vector<vector<bool>> visited(bsize.r,vector<bool>(bsize.c,false));
@@ -77,7 +77,7 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
                         const auto& npos = cpos+dpos;
                         if(!board.in(npos))
                             continue;
-                        const auto& npuyo = simulate_board.get_puyo(npos);
+                        const auto& npuyo = simulate_board.view(npos);
                         if(npuyo == curr_puyo && !visited[npos.r][npos.c])
                             coords.push(npos);
                     }
@@ -97,8 +97,8 @@ void puyoBotModel1::think_perfect_lets(const puyoPlayer& player)
                     perfect_probablity = probablity;
                     bottom_y = temp_bottom_y;
                 }
-            simulate_board.remove_puyo(pos1); //복구
-            simulate_board.remove_puyo(pos2);
+            simulate_board.remove(pos1); //복구
+            simulate_board.remove(pos2);
         }
     }
     to_let(perfect_probablity,const_cast<puyoPlayPuyo&>(puyo));

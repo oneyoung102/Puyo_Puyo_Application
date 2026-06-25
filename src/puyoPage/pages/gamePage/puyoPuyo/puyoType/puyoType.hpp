@@ -11,12 +11,19 @@ class puyoType
             green,
             blue,
             yellow,
-            pupple,
+            purple,
             obstruct,
             bomb,
-            wall
+            wall,
+            water,
+            seed_daisy,
+            seed_flame,
+            seed_shield,
+            flower_daisy,
+            flower_flame,
+            flower_shield,
         };
-        enum class typeState
+        enum class State
         {
             none,
             explode_stay1,
@@ -24,13 +31,16 @@ class puyoType
             explode_soon1,
             explode_soon2,
             exploded,
+            can_water,
+            flower_blooming,
+            flower_faded,
         };
     protected :
-        const Type type;
-        typeState state;
+        Type type;
+        State state;
         bool __is_frozen;
     public :
-        puyoType(Type type, typeState state = typeState::none, bool _is_frozen = false)
+        puyoType(Type type, State state = State::none, bool _is_frozen = false)
             : type(type)
             , state(state)
             , __is_frozen(_is_frozen)
@@ -47,7 +57,7 @@ class puyoType
         virtual bool is_gravityable() const {return true;}
 
         virtual void update() {};
-        virtual typeState get_state() const {return state;}
+        virtual State get_state() const {return state;}
 
         virtual void freeze() {__is_frozen = true;} 
         virtual void unfreeze() {__is_frozen = false;} 
@@ -56,4 +66,7 @@ class puyoType
         virtual void charge() {return;}
         virtual void uncharge() {return;}
         virtual bool is_charged() const {return false;}
+
+        virtual bool is_seed() const {return false;}
+        virtual void bloom() {};
 };

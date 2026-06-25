@@ -25,7 +25,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
     if(bomb_have_player_num != player.get_player_num())
         return;
 
-    auto& board = player.get_board();
+    auto& board = player.refer_board();
     if(bomb_is_spawned)
     { 
         if(player.controll_score().get_chain_count() < BOMB_DISSOLVE_CHAIN)// 폭탄 해체
@@ -35,7 +35,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
         const auto& bsize = board.get_size();
         for(int r = bsize.r-1 ; r >= 0 ; --r)//효율적으로 아래에서부터 찾음
         {
-            const auto& puyo = board.get_puyo(POSs(bomb_c, r));
+            const auto& puyo = board.view(POSs(bomb_c, r));
             if(!puyo.is_same(puyoType::Type::bomb))
                 continue;
             cv.add(board.to_vanish_puyo(POSs(bomb_c,r)));
@@ -47,7 +47,7 @@ void puyoModeBomb::proceed_mode(puyoPhase& phase, puyoPlayer& player)
         if(phase.get_player_count() == 1)//2인 플레이일 때만 넘김
             return;
         const int opposite = player.get_opposite();
-        phase.get_players()[opposite]
+        phase.refer_players()[opposite]
             .controll_obstuct()
             .add(player.controll_obstuct().get_accumulated_score()); // 상대에게 넘길 방해 뿌요 두 배
         bomb_have_player_num = opposite;

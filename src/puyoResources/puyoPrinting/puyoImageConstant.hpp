@@ -15,8 +15,8 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         constexpr float FUTURE_PUYO_ALPHA_VALUE = 0.7; //투명도
 
         constexpr auto CHARGED_PUYO_POS = POSi(0,9);
-        constexpr auto DROPPING_PUYO_POS = POSi(4,13);
-        constexpr auto GRAVITY_PUYO_POS = POSi(5,11);
+        constexpr auto DROPPING_PUYO_POS = POSi(0,13);
+        constexpr auto GRAVITY_PUYO_POS = POSi(0,11);
         constexpr auto VANISH_SOON_PUYO_POS = POSi(6,10), VANISH_STAY_PUYO_POS = POSi(0,12);
         constexpr auto VANISH_OTHER_POS = POSi(5,10);//이미지 위치 
 
@@ -32,6 +32,8 @@ namespace puyoImageConstant//화면을 구성하는 이미지 크기와 관련�
         constexpr auto BOMB_POS = POSi(12,15); //이미지 위치 ..12~15
         constexpr auto FROZEN_PUYO_POS = POSi(13,9); //13~15
         constexpr auto WALL_PUYO_POS = POSi(11,9);
+        constexpr auto WATER_PUYO_POS = POSi(5,13); //물방울
+        constexpr auto FLOWER_PUYO_POS = POSi(6,13); // 씨앗,꽃 .. x = 6~11
 
     //puyo_num.png
         constexpr auto NUM_SIZE = POSi(18,29);

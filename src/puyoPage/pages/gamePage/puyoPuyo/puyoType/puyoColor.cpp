@@ -5,9 +5,9 @@ using namespace std;
 
 puyoColor::puyoColor(Type color, bool is_frozen, bool charged)
     : puyoType(
-        Type::red <= color && color <= Type::pupple
+        Type::red <= color && color <= Type::purple
         ? color
-        : throw runtime_error("Invalid color"), typeState::none,is_frozen)
+        : throw runtime_error("Invalid color"), State::none,is_frozen)
     , charged(charged)
 {}
 const vector<puyoType::Type> puyoColor::links = {puyoType::Type::obstruct};

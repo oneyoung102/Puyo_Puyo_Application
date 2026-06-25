@@ -37,6 +37,20 @@ void puyoPrintObject::print_puyo(RenderWindow& w, const puyoPuyo& puyo, const PO
     }
     switch(puyo.get_type())
     {
+        case puyoType::Type::seed_daisy : 
+        case puyoType::Type::seed_flame : 
+        case puyoType::Type::seed_shield : 
+        case puyoType::Type::flower_daisy : 
+        case puyoType::Type::flower_flame : 
+        case puyoType::Type::flower_shield : 
+        {
+            const int idx = CASTi(puyo.get_type())-CASTi(puyoType::Type::seed_daisy);
+            print_16x16(w,FLOWER_PUYO_POS+POSi(idx,0),screen_pos);
+            break;
+        }
+        case puyoType::Type::water : 
+            print_16x16(w,WATER_PUYO_POS,screen_pos);
+            break;
         case puyoType::Type::wall : 
             print_16x16(w,WALL_PUYO_POS,screen_pos);
             break;
@@ -45,7 +59,7 @@ void puyoPrintObject::print_puyo(RenderWindow& w, const puyoPuyo& puyo, const PO
             break;
         case puyoType::Type::bomb :
         {
-            const int idx = CASTi(puyo.get_type_state())-CASTi(puyoType::typeState::explode_stay1);
+            const int idx = CASTi(puyo.get_type_state())-CASTi(puyoType::State::explode_stay1);
             print_16x16(w,BOMB_POS+POSi(idx,0),screen_pos);
             break;
         }

@@ -37,6 +37,7 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         bool down_taken, drop_taken;//명령 접수 여부
 
         void let_fourway(Direction dir);
+        void arrive();
     public :
         puyoPlayPuyo(PLAYPUYO&& play_puyo, int gravity_value, int stay_value);
 
@@ -47,8 +48,8 @@ class puyoPlayPuyo : public puyoObjectSignal<puyoPlayPuyoSignal>//플레이어�
         bool dropped() const;
 
         std::vector<puyoPuyo> to_gravity_puyo(const puyoBoard& board);
-        const puyoPuyo& get_each(size_t number) const;
-        const decltype(play_puyo)& get() const;
+        const puyoPuyo& view_each(size_t number) const;
+        const PLAYPUYO& view() const;
         std::pair<POSf,POSf> get_pos() const;
         std::pair<puyoType::Type,puyoType::Type> get_type() const;
 

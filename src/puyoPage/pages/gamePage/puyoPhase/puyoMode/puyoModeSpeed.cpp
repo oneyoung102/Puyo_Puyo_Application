@@ -12,7 +12,7 @@ void puyoModeSpeed::proceed_mode(puyoPhase& phase, puyoPlayer& player)
 {
     if(gravity_init - gravity_delta <= gravity_min)
         return;
-    if(player.get_puyo().dropped())
+    if(player.refer_puyo().dropped())
     {
         phase.set_gravity_value(gravity_init -= gravity_delta);
         phase.signal(puyoModeSignal::speed_up);

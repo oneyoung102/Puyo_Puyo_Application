@@ -51,6 +51,11 @@ bool puyoPuyoTurn::test(const puyoBoard& board, puyoPuyo& puyo)
 
 void puyoPuyoTurn::arrive(puyoPuyo& puyo)
 {
+    if(sub_acts[0] && sub_acts[1])
+    {
+        const auto[cx, cy] = center.get_pos();
+        center.move({round(cx), round(cy)});
+    }
     puyo.move(center.get_pos()+DIR[turn_dir]);
 }
 

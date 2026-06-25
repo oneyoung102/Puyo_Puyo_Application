@@ -49,82 +49,47 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     , COUNT_DOWN_BACK_SPRITE(pfs.get_sprite(puyoFileSystem::Image::black_back))
     , skip(false)
     , status(Status::init)
+    , phase(puyoPhase(arcade, diff, mode))
 {
-
-////////Arcade
-    // auto bot = make_unique<puyoPlayer>(0, make_unique<puyoBoard>(),true,1,NORMAL_BOT_INIT_ACT_TICK);
-    // phase.add_player(std::move(bot));
-    phase.add_player(puyoPlayer(0, make_unique<puyoBoard>()));
-    switch(arcade)
-    {   
-        case Arcade::duel :
-        {
-            phase.add_player(puyoPlayer(1, make_unique<puyoBoard>()));
-            break;
-        }
-        case Arcade::bot :
-        {
-            unsigned int init_act_tick = 0;
-            switch(diff)
-            {
-                case Diff::easy : 
-                    init_act_tick = EASY_BOT_INIT_ACT_TICK;
-                    break;
-                case Diff::normal :
-                    init_act_tick = NORMAL_BOT_INIT_ACT_TICK;
-                    break;
-                case Diff::hard :
-                    init_act_tick = HARD_BOT_INIT_ACT_TICK;
-                    break;
-                default : 
-                    break;
-            }
-            phase.add_player(puyoPlayer(1, make_unique<puyoBoard>(),true,2,init_act_tick));
-            break;
-        }
-        default :
-            break;
-    };
     /////키할당
-    const auto& p0 = phase.get_players()[0];
+    const auto& p0 = phase.view_players()[0];
     pl.allot_key(Keyboard::Key::A,p0.get_let_left());
     pl.allot_key(Keyboard::Key::S,p0.get_let_down());
     pl.allot_key(Keyboard::Key::D,p0.get_let_right());
     pl.allot_key(Keyboard::Key::W,p0.get_let_turn());
     pl.allot_key(Keyboard::Key::LShift,p0.get_let_drop());
-    if(arcade == Arcade::duel)
+    if(arcade == Arcade::duel && phase.get_player_count() == 2)
     {
-        const auto& p1 = phase.get_players()[1];
+        const auto& p1 = phase.view_players()[1];
         pl.allot_key(Keyboard::Key::Left,p1.get_let_left());
         pl.allot_key(Keyboard::Key::Down,p1.get_let_down());
         pl.allot_key(Keyboard::Key::Right,p1.get_let_right());
         pl.allot_key(Keyboard::Key::Up,p1.get_let_turn());
         pl.allot_key(Keyboard::Key::RShift,p1.get_let_drop());
     }
-    phase.set_game(diff,mode);
-
+    
 ////////////////////////////////////////////////출력 객체
     pp.add_print_object(make_unique<puyoPrintScreen>(phase.get_player_count(),BOARD_SPRITE));
-    for(const auto& player : phase.get_players())
+    for(const auto& player : phase.view_players())
     {
-        auto& board = player.get_board();
+        auto& board = player.refer_board();
         const int player_num = player.get_player_num();
         const POSf board_print_pos = PLAYER_BOARD_POS[player_num]+POSf(0,PUYO_SIZE*(BOARD_HEIGHT - board.get_size().y));
 
         pp.add_print_object(make_unique<puyoPrintSpawnspot>(player_num,PUYO_SPRITE,board.get_spawn_pos()));
         pp.add_print_object(make_unique<puyoPrintBoard>(board,PUYO_SPRITE,board_print_pos));
-        pp.add_print_object(make_unique<puyoPrintFuturePuyo>(player.controll_future().get(),PUYO_SPRITE,board_print_pos));
-        pp.add_print_object(make_unique<puyoPrintVanishPuyo>(player.controll_vanish().get(),PUYO_SPRITE,board_print_pos));
-        pp.add_print_object(make_unique<puyoPrintGravityPuyo>(player.controll_gravity().get(),PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintFuturePuyo>(player.controll_future().view(),PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintVanishPuyo>(player.controll_vanish().view(),PUYO_SPRITE,board_print_pos));
+        pp.add_print_object(make_unique<puyoPrintGravityPuyo>(player.controll_gravity().view(),PUYO_SPRITE,board_print_pos));
         pp.add_print_object(make_unique<puyoPrintEnergyPuyo>(player.controll_energy().get(),PUYO_SPRITE));
         pp.add_print_object(make_unique<puyoPrintPlayPuyo>(player,PUYO_SPRITE,board_print_pos));
 
-        pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player.get_new_puyo_count(),phase.get_new_puyos(),PUYO_SPRITE,NEXT_PUYO_VIEWER_POS[player_num]));
-        pp.add_print_object(make_unique<puyoPrintScore>(player_num,player.get_score(),NUM_SPRITE,SCORE_POS[player_num]));
+        pp.add_print_object(make_unique<puyoPrintNextPuyo>(player_num,player.view_new_puyo_count(),phase.get_new_puyos(),PUYO_SPRITE,NEXT_PUYO_VIEWER_POS[player_num]));
+        pp.add_print_object(make_unique<puyoPrintScore>(player_num,player.view_score(),NUM_SPRITE,SCORE_POS[player_num]));
     }
     pp.add_print_object(make_unique<puyoPrintScreenhead>(BOARD_SPRITE));
     pp.add_print_object(make_unique<puyoPrintScreenbar>(phase.get_player_count(),BOARD_SPRITE));
-    for(const auto& player : phase.get_players())
+    for(const auto& player : phase.view_players())
     {
         const int player_num = player.get_player_num();
         pp.add_print_object(make_unique<puyoPrintObstructViewer>(player.controll_obstuct().get(),PUYO_SPRITE,OBSTRUCT_VIEWER_POS[player_num]));
@@ -180,16 +145,24 @@ puyoGamePage::puyoGamePage(puyoFileSystem& pfs, Arcade arcade, Diff diff, Mode m
     modeSignalReceiver.add_execute(puyoModeSignal::freeze, [this](puyoFileSystem& pfs){
         ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::freeze));
     });
+    modeSignalReceiver.add_execute(puyoModeSignal::flower_fading, [this](puyoFileSystem& pfs){
+        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::flower_fading));
+    });
+    modeSignalReceiver.add_execute(puyoModeSignal::watering, [this](puyoFileSystem& pfs){
+        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::watering));
+    });
+    modeSignalReceiver.add_execute(puyoModeSignal::puyo_burned, [this](puyoFileSystem& pfs){
+        ps.play_sound(pfs.get_buffer(puyoFileSystem::Sound::puyo_burned));
+    });
 }
 
 void puyoGamePage::receive_signals(puyoFileSystem& pfs)
 {
-
-    for(auto& player : phase.get_players())
+    for(const auto& player : phase.view_players())
     {
-        boardSignalReceiver.execute(player.get_board(),pfs,player);
-        puyoSignalReceiver.execute(player.get_puyo(),pfs);
-        playerSignalReceiver.execute(player,pfs);
+        boardSignalReceiver.execute(player.refer_board(),pfs,player);
+        puyoSignalReceiver.execute(player.refer_puyo(),pfs);
+        playerSignalReceiver.execute(const_cast<puyoPlayer&>(player),pfs);
     }
     modeSignalReceiver.execute(phase,pfs);
 }

@@ -81,7 +81,7 @@ bool puyoPuyo::is_gravityable() const {return !empty() && type->is_gravityable()
 bool puyoPuyo::empty() const {return type == nullptr;}
 
 void puyoPuyo::update(){ if(!empty()) type->update();}
-puyoType::typeState puyoPuyo::get_type_state() const { return empty() ? puyoType::typeState::none : type->get_state();}
+puyoType::State puyoPuyo::get_type_state() const { return empty() ? puyoType::State::none : type->get_state();}
 
 void puyoPuyo::freeze(){ if(!empty()) type->freeze(); }
 void puyoPuyo::unfreeze(){ if(!empty()) type->unfreeze(); }
@@ -89,30 +89,33 @@ bool puyoPuyo::is_frozen() const {return !empty() && type->is_frozen();}
 
 void puyoPuyo::charge(){if(!empty()) type->charge();}
 void puyoPuyo::uncharge(){if(!empty()) type->uncharge();}
-bool puyoPuyo::is_charged() const {return type ? type->is_charged() : false;}
+bool puyoPuyo::is_charged() const {return !empty() && type->is_charged();}
+
+bool puyoPuyo::is_seed() const {return !empty() && type->is_seed();}
+void puyoPuyo::bloom() {if(!empty()) type->bloom();}
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////
 void puyoPuyo::move(const POSf& to_pos) {pos = to_pos;}
 
-POSf const puyoPuyo::get_pos() const {return pos;}
+POSf puyoPuyo::get_pos() const {return pos;}
 
-int const puyoPuyo::get_tick() const
+int puyoPuyo::get_tick() const
 {
     if(act)
         return act->get_act_count_init();
     return -1;
 }
-float const puyoPuyo::get_act_state() const
+float puyoPuyo::get_act_state() const
 {
     if(act)
         return act->get_state();
     return -1.0;
 }
 
-bool const puyoPuyo::acting() const {return act && act->acting();}
+bool puyoPuyo::acting() const {return act && act->acting();}
+bool puyoPuyo::halted() const {return act && act->halted();}
 bool puyoPuyo::have_act() const {return act != nullptr;}
 
 bool puyoPuyo::decide(const puyoBoard& board){return act && act->decide(board,*this);}

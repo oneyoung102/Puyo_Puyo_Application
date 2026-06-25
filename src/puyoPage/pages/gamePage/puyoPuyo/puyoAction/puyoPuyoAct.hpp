@@ -7,7 +7,7 @@ class puyoPuyo;
 class puyoPuyoAct
 {
     protected :
-        const int act_count_init, halted;
+        const int act_count_init, __halted;
         int act_count;
 
         virtual bool test(const puyoBoard& board, puyoPuyo& puyo);
@@ -21,6 +21,7 @@ class puyoPuyoAct
         virtual void act(puyoPuyo& puyo) = 0;
               
         bool acting() const;
+        bool halted() const;
         void let(int amount = 0);
         void halt();
         float get_state() const;

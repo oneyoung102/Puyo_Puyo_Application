@@ -53,13 +53,13 @@
 
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoPhase.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoPhaseControll.cpp",
-                "src/puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoScoreCalc.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBasic.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeSpeed.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBomb.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeFrozen.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeCharged.cpp",
                 "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeBlocks.cpp",
+                "src/puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoModeGarden.cpp",
 
                 "src/puyoPage/pages/gamePage/puyoBoard/puyoBoard.cpp",
 
@@ -79,6 +79,8 @@
                 "src/puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoObstruct.cpp",
                 "src/puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoBomb.cpp",
                 "src/puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoWall.cpp",
+                "src/puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoWater.cpp",
+                "src/puyoPage/pages/gamePage/puyoPuyo/puyoType/puyoFlower.cpp",
                 "src/puyoPage/pages/gamePage/puyoPuyo/puyoPuyo.cpp",
                 "src/puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoAct.cpp",
                 "src/puyoPage/pages/gamePage/puyoPuyo/puyoAction/puyoPuyoGravity.cpp",

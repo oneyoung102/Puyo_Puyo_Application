@@ -5,9 +5,9 @@
 #include <type_traits>
 
 template<class T, class P = void>
-class has_COUNT : std::false_type {};
+class has_COUNT : public std::false_type {};
 template<class T>
-class has_COUNT<T, std::void_t<decltype(T::COUNT)>> : std::true_type {};
+class has_COUNT<T, std::void_t<decltype(T::COUNT)>> : public std::true_type {};
 
 template<class T>
 class puyoObjectSignal //T : enum (last element : COUNT)

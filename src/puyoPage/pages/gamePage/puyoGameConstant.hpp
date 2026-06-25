@@ -16,9 +16,9 @@ namespace puyoGameConstant
     constexpr int GRAVITY_TICK_THRESHOLD = 5; // 빠르고 느림을 구분
 
     constexpr int BOARD_FALL_GRAVITY_TICK = 6;
-    constexpr int BOARD_BASIC_VANISH_TICK = 37;
+    constexpr int BOARD_COLOR_VANISH_TICK = 37;
     constexpr float VANISH_SOON_PROP = 0.85, VANISH_STAY_PROP = 0.7;
-    constexpr int BOARD_OBSTRUCT_VANISH_TICK = 12;
+    constexpr int BOARD_OTHER_VANISH_TICK = 12;
     constexpr int BOARD_FLY_TICK = 39;
 
     constexpr auto PLAYPUYO_IN_BOARD_SPAWN_POS = POSf(2,0);
@@ -41,7 +41,7 @@ namespace puyoGameConstant
 
     //delay
     constexpr int PHASE_SET_TICK = 30;
-    //난이도
+    //밸런스
     constexpr int PUYO_VANISH_CONDITION = 4;
     constexpr int EASY_DIFF_GRAVITY_TICK = 43, EASY_DIFF_STAY_TICK = 77, EASY_DIFF_COLORS = 3;
     constexpr auto EASY_DIFF_SETTING = std::make_tuple(EASY_DIFF_GRAVITY_TICK,EASY_DIFF_STAY_TICK,EASY_DIFF_COLORS); // gravity,stay,colors
@@ -50,7 +50,12 @@ namespace puyoGameConstant
     constexpr int HARD_DIFF_GRAVITY_TICK = 27, HARD_DIFF_STAY_TICK = 38, HARD_DIFF_COLORS = 5;
     constexpr auto HARD_DIFF_SETTING = std::make_tuple(HARD_DIFF_GRAVITY_TICK,HARD_DIFF_STAY_TICK,HARD_DIFF_COLORS);
 
-    constexpr int EASY_BOT_INIT_ACT_TICK = 16, NORMAL_BOT_INIT_ACT_TICK = 12, HARD_BOT_INIT_ACT_TICK = 4;
+    constexpr int BASIC_OBSTRCUT_RATE = 70, BASIC_ALL_CLEARED_OBSTRUCT_PUYO = 30;
+    constexpr std::array<int,20> CHAIN_BONUS = {0,0,8,16,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512};
+    constexpr std::array<int,12> LINK_BONUS = {0,0,0,0,0,2,3,4,5,6,7,10};// 11개 이상은 항상 10
+    constexpr std::array<int,4> COLOR_BONUS = {2,4,6,8};
+
+    constexpr int EASY_BOT_INIT_ACT_TICK = 20, NORMAL_BOT_INIT_ACT_TICK = 16, HARD_BOT_INIT_ACT_TICK = 10;
     //모드
     constexpr int BOMB_VANISH_TICK = 20;
     constexpr int BOMB_MAX_TICK = 3200;//0이면 안 됨
@@ -59,6 +64,10 @@ namespace puyoGameConstant
     constexpr int FREEZE_TICK = 650;
     constexpr int PROB_FREEZE_ONCE = 12, PROB_FREEZE_TWICE = 2;
     constexpr int CHARGE_CYCLE = 4;//4개 뉴뿌요마다 차지
+    constexpr int SEED_CYCLE = 10, MAX_SEED_GAP = 2;
+    constexpr int MIN_SEED_COUNT = 1, MAX_SEED_COUNT = 2;
+    constexpr int WATERING_RANGE = 1, FLOWER_FLAME_HEIGHT = BOARD_BASIC_SIZE.y, FLOWER_DAISY_OBSTRUCT_RATE = 35;
+    constexpr int FLOWER_DAISY_TICK = 2100, FLOWER_FLAME_TICK = 1800, FLOWER_SHILED_TICK = 2300;
 
 
     // printing

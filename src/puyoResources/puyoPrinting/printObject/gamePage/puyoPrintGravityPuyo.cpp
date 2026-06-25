@@ -29,7 +29,7 @@ void puyoPrintGravityPuyo::print(RenderWindow& w)
             case puyoType::Type::red :
             case puyoType::Type::yellow :
             case puyoType::Type::green :
-            case puyoType::Type::pupple :
+            case puyoType::Type::purple :
                 if(!gravity_puyo.is_frozen()) //의도적으로 break 안 함
                 {
                     if(gravity_puyo.get_tick() <= puyoGameConstant::GRAVITY_TICK_THRESHOLD)//dropping

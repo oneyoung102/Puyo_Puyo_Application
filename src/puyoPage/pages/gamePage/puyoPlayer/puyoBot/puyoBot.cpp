@@ -62,10 +62,10 @@ pair<POSi,POSi> puyoBot::simulate_drop(const vector<puyoPuyo>& puyos)
         }
         temp_puyos[i].move(pos);
         if(i == 0 && pos.r >= 0)
-            simulate_board.insert_puyo(temp_puyos[i]);//가상으로 떨어뜨림
+            simulate_board.insert(temp_puyos[i]);//가상으로 떨어뜨림
     }
     if(temp_puyos[0].get_pos().r >= 0)
-        simulate_board.remove_puyo(temp_puyos[0].get_pos()); //가상으로 떨어뜨린 거 복구s
+        simulate_board.remove(temp_puyos[0].get_pos()); //가상으로 떨어뜨린 거 복구s
 
     if(swapped)
         swap(temp_puyos[0],temp_puyos[1]);

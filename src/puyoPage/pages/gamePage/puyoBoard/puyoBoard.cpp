@@ -34,32 +34,32 @@ bool puyoBoard::touched(const POSi& pos) const
         || pos.r < 0 && !in_col(pos.c);
 }
 
-const puyoPuyo& puyoBoard::get_puyo(const POSs& pos) const {return board.at(pos.r).at(pos.c);}
-puyoPuyo& puyoBoard::ref_puyo(const POSs& pos){ return board.at(pos.r).at(pos.c); }
+const puyoPuyo& puyoBoard::view(const POSs& pos) const {return board.at(pos.r).at(pos.c);}
+puyoPuyo& puyoBoard::refer(const POSs& pos){ return board.at(pos.r).at(pos.c); }
 //puyoPuyo& puyoBoard::operator[](const POSs& pos) { return board.at(pos.r).at(pos.c); }
 
-void puyoBoard::insert_puyo(const puyoPuyo& puyo, const POSs& pos)
+void puyoBoard::insert(const puyoPuyo& puyo, const POSs& pos)
 {
     board.at(pos.r).at(pos.c) = puyo;
     board.at(pos.r).at(pos.c).move(pos);
 }
-void puyoBoard::insert_puyo(const puyoPuyo& puyo)
+void puyoBoard::insert(const puyoPuyo& puyo)
 {
     const auto [c, r] = puyo.get_pos();
     board.at(CASTs(r)).at(CASTs(c)) = puyo;
 }
-void puyoBoard::insert_puyo(puyoPuyo&& puyo, const POSs& pos)
+void puyoBoard::insert(puyoPuyo&& puyo, const POSs& pos)
 {
     board.at(pos.r).at(pos.c) = std::move(puyo);
     board.at(pos.r).at(pos.c).move(pos);
 }
-void puyoBoard::insert_puyo(puyoPuyo&& puyo)
+void puyoBoard::insert(puyoPuyo&& puyo)
 {
     const auto [c, r] = puyo.get_pos();
     board.at(CASTs(r)).at(CASTs(c)) = std::move(puyo);
 }
 
-void puyoBoard::remove_puyo(const POSs& pos){board.at(pos.r).at(pos.c) = puyoPuyo(pos);}
+void puyoBoard::remove(const POSs& pos){board.at(pos.r).at(pos.c) = puyoPuyo(pos);}
 
 bool puyoBoard::empty(const POSs& pos) const {return board.at(pos.r).at(pos.c).empty();}
 bool puyoBoard::all_cleared()
@@ -81,7 +81,7 @@ vector<puyoPuyo> puyoBoard::to_gravity_puyo()
         for(int i = size.r - 1; i >= 0; --i)
         {
             const auto& pos = POSi(j, i);
-            auto& puyo = ref_puyo(pos);
+            auto& puyo = refer(pos);
             if(empty(pos))
                 floating = true;
             else if(!puyo.is_gravityable())
@@ -90,7 +90,7 @@ vector<puyoPuyo> puyoBoard::to_gravity_puyo()
             {
                 puyo.set_act(make_unique<puyoPuyoGravity>(puyoGameConstant::BOARD_FALL_GRAVITY_TICK));
                 gravity_puyos.push_back(std::move(puyo));
-                remove_puyo(pos);
+                remove(pos);
                 continue;
             }
         }
@@ -99,8 +99,8 @@ vector<puyoPuyo> puyoBoard::to_gravity_puyo()
 }
 puyoPuyo puyoBoard::to_vanish_puyo(const POSs& pos)
 {
-    auto& puyo = ref_puyo(pos);
-    const int tick = puyo.is_same(puyoType::Type::obstruct) ? puyoGameConstant::BOARD_OBSTRUCT_VANISH_TICK : puyoGameConstant::BOARD_BASIC_VANISH_TICK;
+    auto& puyo = refer(pos);
+    const int tick = puyo.is_colored() ? puyoGameConstant::BOARD_COLOR_VANISH_TICK : puyoGameConstant::BOARD_OTHER_VANISH_TICK;
 
     if(puyo.is_frozen())
     {
@@ -113,25 +113,26 @@ puyoPuyo puyoBoard::to_vanish_puyo(const POSs& pos)
     else
     {
         auto vanish_puyo = std::move(puyo);
-        remove_puyo(pos);
+        remove(pos);
         vanish_puyo.set_act(make_unique<puyoPuyoVanish>(tick));
         return vanish_puyo;
     }
 }
 
-vector<puyoType::typeState> puyoBoard::update()
+vector<pair<puyoType::State,POSs>> puyoBoard::update()
 {
-    vector<puyoType::typeState> states;
+    vector<pair<puyoType::State,POSs>> states;
     for(size_t c = 0; c < size.c; ++c)
         for(int r = size.r - 1; r >= 0; --r)
         {
-            auto& puyo = ref_puyo(POSs(c, r));
+            auto pos = POSs(c, r);
+            auto& puyo = refer(pos);
             if(puyo.empty())
                 break;
             puyo.update();
-            if(puyo.get_type_state() == puyoType::typeState::none)
+            if(puyo.get_type_state() == puyoType::State::none)
                 continue;
-            states.push_back(puyo.get_type_state());
+            states.push_back({puyo.get_type_state(),std::move(pos)});
         }
     return states;
 }

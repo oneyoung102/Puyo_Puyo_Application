@@ -75,6 +75,9 @@ class puyoFileSystem
             bomb_explode,
             unfreeze,
             freeze,
+            flower_fading,
+            watering,
+            puyo_burned,
             //게임 종료 후 사운드
             victory,
             lose,

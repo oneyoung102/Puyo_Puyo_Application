@@ -16,8 +16,8 @@ puyoModeCharged::puyoModeCharged(std::vector<puyoPlayer>& players)
 }
 void puyoModeCharged::proceed_mode(puyoPhase& phase, puyoPlayer& player)
 {
-    const int puyo_count = player.get_new_puyo_count();
-    auto& new_types = phase.get_new_puyos().refer(puyo_count+DISPLAYED_NEXT_PUYO_COUNT-1);
+    const int puyo_count = player.view_new_puyo_count();
+    auto& new_types = phase.get_new_puyos().back();
     if(new_types[0].is_charged() || new_types[1].is_charged())
         return;
     if(puyo_count%CHARGE_CYCLE != 0)

@@ -21,8 +21,8 @@ bool puyoPhaseControll::delayed(int player_num) const{return delay_times[player_
 
 void puyoPhaseControll::act_play_puyo(puyoPlayer& player)
 {
-    const auto& board = player.get_board();
-    auto& puyo = player.get_puyo();
+    const auto& board = player.refer_board();
+    auto& puyo = player.refer_puyo();
 
     player.controll_future().fall(board);
     puyo.gravity_let(board);
@@ -30,17 +30,17 @@ void puyoPhaseControll::act_play_puyo(puyoPlayer& player)
 }
 int puyoPhaseControll::do_after_puyo_dropped(puyoPlayer& player, PLAYPUYO&& new_puyos, int gravity_value, int stay_value)
 {
-    const auto& board = player.get_board();
+    const auto& board = player.refer_board();
     auto& cg = player.controll_gravity();
     auto& cf = player.controll_future();
     auto& co = player.controll_obstuct();
 
-    const int added_score = player.controll_score().get_drop_score(cf.get(),player.get_puyo());
+    const int added_score = player.controll_score().get_drop_score(cf.view(),player.refer_puyo());
 
-    cg.add(player.get_puyo().to_gravity_puyo(board));
+    cg.add(player.refer_puyo().to_gravity_puyo(board));
     player.give_new_puyos(std::move(new_puyos),gravity_value,stay_value);
     
-    cf.spawn(board,player.get_puyo());
+    cf.spawn(board,player.refer_puyo());
     co.approve_spawn();
 
     player.signal(puyoPlayerSignal::puyo_dropped);
@@ -51,7 +51,7 @@ bool puyoPhaseControll::act_gravity_puyos(puyoPlayer& player)
 {
     auto& cg = player.controll_gravity();
 
-    cg.gravity(player.get_board());
+    cg.gravity(player.refer_board());
     return cg.empty();
 }
 bool puyoPhaseControll::test_and_prepare_vanish(puyoPlayer& player)
@@ -59,7 +59,7 @@ bool puyoPhaseControll::test_and_prepare_vanish(puyoPlayer& player)
     auto& cv = player.controll_vanish();
     auto& cs = player.controll_score();
 
-    auto [puyo_count, link_count, color_count, temp_energy_puyos] = cv.to_vanish_puyo(player.get_board()); 
+    auto [puyo_count, link_count, color_count, temp_energy_puyos] = cv.to_vanish_puyo(player.refer_board()); 
     cs.add_puyo_count(puyo_count);
     cs.add_link_count(std::move(link_count));
     cs.add_color_count(std::move(color_count));
@@ -69,7 +69,7 @@ bool puyoPhaseControll::test_and_prepare_vanish(puyoPlayer& player)
 }
 bool puyoPhaseControll::act_vanish_puyos(puyoPlayer& player)
 {
-    auto& board = player.get_board();
+    auto& board = player.refer_board();
     auto& cv = player.controll_vanish();
 
     cv.vanish(board);
@@ -79,7 +79,7 @@ bool puyoPhaseControll::test_and_prepare_gravity(puyoPlayer& player)
 {
     auto& cg = player.controll_gravity();
 
-    cg.add(player.get_board().to_gravity_puyo());
+    cg.add(player.refer_board().to_gravity_puyo());
     return cg.empty();
 }
 bool puyoPhaseControll::test_spawn_obstruct_puyo(puyoPlayer& player, int obstruct_puyo_for_dropping)
@@ -88,7 +88,7 @@ bool puyoPhaseControll::test_spawn_obstruct_puyo(puyoPlayer& player, int obstruc
 
     if(co.spawn_approved())
     {
-        player.controll_gravity().add(co.to_gravity_puyo(player.get_board(),obstruct_puyo_for_dropping));
+        player.controll_gravity().add(co.to_gravity_puyo(player.refer_board(),obstruct_puyo_for_dropping));
         co.disapprove_spawn();
         return true;
     }

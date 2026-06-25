@@ -17,7 +17,7 @@ class puyoGravityControll
         void add(puyoPuyo&& puyo);
         void add(std::vector<puyoPuyo>&& puyos);
 
-        const std::vector<puyoPuyo>& get() const;
+        const std::vector<puyoPuyo>& view() const;
 
         bool empty() const;
 };

@@ -18,9 +18,9 @@ enum class puyoButtonCursorSignal
 };
 
 template<class T, class P = void>
-class has_NONE : std::false_type {};
+class has_NONE : public std::false_type {};
 template<class T>
-class has_NONE<T, std::void_t<decltype(T::NONE)>> : std::true_type {};
+class has_NONE<T, std::void_t<decltype(T::NONE)>> : public std::true_type {};
 
 
 template<size_t R, size_t C, class buttonName>
@@ -74,6 +74,7 @@ class puyoButtonCursor : public puyoObjectSignal<puyoButtonCursorSignal> // butt
             
             if(allocated.empty() || allocated.size() != R || allocated[0].size() != C)
                 throw std::runtime_error("Button allocated vector is not matched with buttonCursor template variable");
+            
             bool init_found = false;
             for(size_t i = 0 ; i < R ; ++i)
                 for(size_t j = 0 ; j < C ; ++j)

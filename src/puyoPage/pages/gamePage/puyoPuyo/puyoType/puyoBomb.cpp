@@ -4,7 +4,7 @@
 
 using namespace std;
 
-puyoBomb::puyoBomb(typeState state, bool is_frozen, int bomb_tick_init, int bomb_tick)
+puyoBomb::puyoBomb(State state, bool is_frozen, int bomb_tick_init, int bomb_tick)
     : puyoType(Type::bomb,state,is_frozen)
     , bomb_tick(bomb_tick)
     , bomb_tick_init(fmax(bomb_tick_init,1))
@@ -18,13 +18,13 @@ void puyoBomb::update()
     ++bomb_tick;
     const float prop = CASTf(bomb_tick)/bomb_tick_init;
     if(prop < puyoGameConstant::BOMB_UPDATED1)
-        state = typeState::explode_stay1;
+        state = State::explode_stay1;
     else if(prop < puyoGameConstant::BOMB_UPDATED2)
-        state = typeState::explode_stay2;
+        state = State::explode_stay2;
     else if(prop < puyoGameConstant::BOMB_UPDATED3)
-        state = typeState::explode_soon1;
+        state = State::explode_soon1;
     else if(prop < 1)
-        state = typeState::explode_soon2;
+        state = State::explode_soon2;
     else
-        state = typeState::exploded;
+        state = State::exploded;
 }

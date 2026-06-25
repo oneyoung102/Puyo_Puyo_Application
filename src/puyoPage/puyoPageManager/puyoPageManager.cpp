@@ -57,7 +57,7 @@ void puyoPageManager::show_page(RenderWindow& window)
     {
         if (event->is<Event::Closed>())
             window.close();
-        curr_page->get_let().act_keyboard_let(event);
+        curr_page->refer_let().act_keyboard_let(event);
     }
     window.clear();
     signal = curr_page->proceed_page(pfs, window);

@@ -32,7 +32,7 @@ std::vector<puyoPuyo> puyoObstructControll::to_gravity_puyo(puyoBoard& board, in
     for(size_t c = 0; c < bsize.c ; ++c)
         for(size_t r = 0 ; r < bsize.r ; ++r)
         {
-            const auto& puyo = board.get_puyo({c,r});
+            const auto& puyo = board.view({c,r});
             if(!puyo.empty() && !puyo.is_gravityable())
             {
                 floor_height[c] = r;

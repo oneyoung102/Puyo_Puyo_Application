@@ -28,7 +28,7 @@ void puyoPrintEnergyPuyo::print(RenderWindow& w)
             case puyoType::Type::red :
             case puyoType::Type::yellow :
             case puyoType::Type::green :
-            case puyoType::Type::pupple :
+            case puyoType::Type::purple :
                 print_16x16(w,ENERGY_PUYO_POS+POSi(CASTi(type),0),pos+energy_puyo.get_pos());
                 break;
             default :

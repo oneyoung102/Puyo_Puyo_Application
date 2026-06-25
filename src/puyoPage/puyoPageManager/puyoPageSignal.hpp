@@ -32,6 +32,7 @@ enum class Mode
     frozen,
     charged,
     blocks,
+    garden
 };
 //..... 위에 열거형 수정
 class puyoPageSignal

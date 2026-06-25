@@ -15,6 +15,6 @@ class puyoFutureControll
         void spawn(const puyoBoard& board, const puyoPlayPuyo& play_puyo);
         void fall(const puyoBoard& board);
 
-        const std::vector<puyoPuyo>& get() const;
+        const std::vector<puyoPuyo>& view() const;
         
 };

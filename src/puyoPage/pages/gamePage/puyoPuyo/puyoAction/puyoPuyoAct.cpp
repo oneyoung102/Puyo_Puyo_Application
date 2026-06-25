@@ -26,20 +26,21 @@ bool puyoPuyoAct::decide(const puyoBoard& board, puyoPuyo& puyo)
 }
 puyoPuyoAct::puyoPuyoAct(int amount)
     : act_count_init(amount)
-    , halted(-1)
-    , act_count(halted)
+    , __halted(-1)
+    , act_count(__halted)
 {}
 
 void puyoPuyoAct::let(int amount)
 {
     if(!acting())
     {
-        if(amount < halted)
+        if(amount < __halted)
             throw std::runtime_error("When letting, act count is smaller than 'halted'");
         act_count = amount;
     }
 }
-bool puyoPuyoAct::acting() const {return halted < act_count && act_count < act_count_init;}
-void puyoPuyoAct::halt(){act_count = halted;}
+bool puyoPuyoAct::acting() const {return __halted < act_count && act_count < act_count_init;}
+bool puyoPuyoAct::halted() const {return act_count == __halted;}
+void puyoPuyoAct::halt(){act_count = __halted;}
 float puyoPuyoAct::get_state() const {return CASTf(act_count)/act_count_init;}
 int puyoPuyoAct::get_act_count_init() const {return act_count_init;}

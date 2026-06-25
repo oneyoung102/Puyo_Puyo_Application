@@ -14,9 +14,9 @@ puyoPrintPlayPuyo::puyoPrintPlayPuyo(const puyoPlayer& player, Sprite puyo, POSf
 
 void puyoPrintPlayPuyo::print(RenderWindow& w)
 {
-    const auto& play_puyo = player.get_puyo();
+    const auto& play_puyo = player.refer_puyo();
     const auto& [pos1,pos2] = play_puyo.get_pos();
-    const auto& [puyo1,puyo2] = play_puyo.get();
+    const auto& [puyo1,puyo2] = play_puyo.view();
     print_puyo(w,puyo1,pos+pos1*PUYO_SIZE);
     print_puyo(w,puyo2,pos+pos2*PUYO_SIZE);
 }

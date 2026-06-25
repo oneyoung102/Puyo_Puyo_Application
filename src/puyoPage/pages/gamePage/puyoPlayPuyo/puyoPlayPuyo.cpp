@@ -33,20 +33,33 @@ puyoPlayPuyo::puyoPlayPuyo(PLAYPUYO&& play_puyo, int gravity_value, int stay_val
     }
 }
 
+void puyoPlayPuyo::arrive()
+{
+    for(auto& puyo : play_puyo)
+    {
+        const auto[x,y] = puyo.get_pos();
+        puyo.move({round(x),round(y)});
+    }
+}
 
 void puyoPlayPuyo::act_let(const puyoBoard& board)
 {
-    if(play_puyo[0].have_act() && !play_puyo[0].acting() 
-    || play_puyo[1].have_act() && !play_puyo[1].acting())
+    if(play_puyo[0].have_act() && play_puyo[0].halted() 
+    || play_puyo[1].have_act() && play_puyo[1].halted())
     {
         for(auto& puyo : play_puyo)
             puyo.set_act();
         down_taken = false;
         return;
     }
+
+    bool can_act = true;
     for(auto& puyo : play_puyo)
         if(puyo.have_act() && !puyo.decide(board))
-            return;
+            can_act = false;
+    if(!can_act)
+        return;
+
     for(auto& puyo : play_puyo)
         if(puyo.have_act())
             puyo.only_act_let();
@@ -57,11 +70,7 @@ void puyoPlayPuyo::gravity_let(const puyoBoard& board)
     if(sat(board) && stay < stay_value)
     {
         if(stay == 0)
-            for(size_t i = 0 ; i < 2 ; ++i)
-            {
-                const auto[x,y] = play_puyo[i].get_pos();
-                play_puyo[i].move({round(x),round(y)});
-            }
+            arrive();
         ++stay;
     }
     else if(gravity[0]->decide(board, play_puyo[0]) && gravity[1]->decide(board, play_puyo[1]))
@@ -75,21 +84,24 @@ void puyoPlayPuyo::gravity_let(const puyoBoard& board)
 bool puyoPlayPuyo::down() const {return down_taken;}
 bool puyoPlayPuyo::dropped() const
 {
+    if(moving())
+        return false;
     return (!gravity[0]->acting() || !gravity[1]->acting()) || drop_taken;
 }
 
 vector<puyoPuyo> puyoPlayPuyo::to_gravity_puyo(const puyoBoard& board)
 {
     const int tick = sat(board) ? BOARD_FALL_GRAVITY_TICK : PLAYPUYO_DROP_GRAVITY_TICK;
-    play_puyo[0].set_act(make_unique<puyoPuyoGravity>(tick));
-    play_puyo[1].set_act(make_unique<puyoPuyoGravity>(tick));
     vector<puyoPuyo> temp_play_puyo;
-    temp_play_puyo.push_back(std::move(play_puyo[0]));
-    temp_play_puyo.push_back(std::move(play_puyo[1]));
+    for(auto& puyo : play_puyo)
+    {
+        puyo.set_act(make_unique<puyoPuyoGravity>(tick));
+        temp_play_puyo.push_back(std::move(puyo));
+    }
     return temp_play_puyo;
 }
-const puyoPuyo& puyoPlayPuyo::get_each(size_t number) const {return play_puyo[number];}
-const decltype(puyoPlayPuyo::play_puyo)& puyoPlayPuyo::get() const {return play_puyo;}
+const puyoPuyo& puyoPlayPuyo::view_each(size_t number) const {return play_puyo[number];}
+const decltype(puyoPlayPuyo::play_puyo)& puyoPlayPuyo::view() const {return play_puyo;}
 
 pair<POSf,POSf> puyoPlayPuyo::get_pos() const
 {
@@ -103,7 +115,7 @@ pair<puyoType::Type,puyoType::Type> puyoPlayPuyo::get_type() const
 
 bool puyoPlayPuyo::sat(const puyoBoard& board) const
 {
-    for(auto& puyo : play_puyo)
+    for(const auto& puyo : play_puyo)
     {
         const auto[x,y] = puyo.get_pos();
         if(board.touched(POSi(round(x), floor(y)+1)))
@@ -146,8 +158,7 @@ void puyoPlayPuyo::let_turn()
 }
 void puyoPlayPuyo::let_drop()
 {
-    if(moving()
-)
+    if(moving())
         return;
     drop_taken = true;
 }

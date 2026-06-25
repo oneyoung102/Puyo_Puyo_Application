@@ -19,5 +19,5 @@ class puyoPage
         puyoPage();
         virtual ~puyoPage() = default;
         virtual puyoPageSignal proceed_page(puyoFileSystem& pfs, sf::RenderWindow& window) = 0;
-        puyoLet& get_let();
+        puyoLet& refer_let();
 };

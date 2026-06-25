@@ -9,13 +9,17 @@ class puyoForwardVector
     private :
         size_t left_ptr, right_ptr;
         std::vector<T> vec;
+        const int pointer_count;
 
         inline size_t relative_index(size_t idx) const {return idx-left_ptr;}
         
     public :
-        puyoForwardVector()
+        puyoForwardVector(int pointer_count = 2)
             : right_ptr(0), left_ptr(0)
             , vec(std::vector<T>())
+            , pointer_count(0 < pointer_count && pointer_count <= 2
+                            ? pointer_count
+                            : throw std::runtime_error("pointer_count of puyoForwardVector is not between 0 and 2"))
         {}
 
         inline bool accessable(size_t idx) const {return idx >= left_ptr && relative_index(idx) < vec.size();}
@@ -26,6 +30,15 @@ class puyoForwardVector
                 throw std::runtime_error("out of ranges of puyoForwardVector");
 
             const size_t new_ptr = relative_index(idx);
+            if(pointer_count == 1)
+            {
+                ++right_ptr;
+                ++left_ptr;
+                T element = std::move(vec[new_ptr]);
+                vec.erase(vec.begin());
+                return element;
+            }
+
             if(idx == right_ptr)
             {
                 ++right_ptr;
@@ -70,6 +83,6 @@ class puyoForwardVector
         }
 
         inline size_t size() const {return vec.size();}
-
         inline size_t get_start_point() const {return left_ptr;}
+        inline size_t get_end_point() const {return right_ptr;}
 };

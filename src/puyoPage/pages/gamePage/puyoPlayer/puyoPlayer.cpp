@@ -37,10 +37,10 @@ puyoPlayer::puyoPlayer(int player_num, unique_ptr<puyoBoard>&& board, bool playe
 
 int puyoPlayer::get_player_num() const {return player_num;}
 int puyoPlayer::get_opposite() const {return player_num^1;};
-puyoBoard& puyoPlayer::get_board() const {return *board;}
-puyoPlayPuyo& puyoPlayer::get_puyo() const {return *puyo;}
+puyoBoard& puyoPlayer::refer_board() const {return *board;}
+puyoPlayPuyo& puyoPlayer::refer_puyo() const {return *puyo;}
 
-const int& puyoPlayer::get_score() const {return score;}
+const int& puyoPlayer::view_score() const {return score;}
 void puyoPlayer::add_score(int s){score = min(puyoGameConstant::SCORE_UPPER-1,score+s);}
 
 void puyoPlayer::give_new_puyos(PLAYPUYO&& puyos, int puyo_gravity_value, int puyo_stay_value)
@@ -50,13 +50,13 @@ void puyoPlayer::give_new_puyos(PLAYPUYO&& puyos, int puyo_gravity_value, int pu
     puyo = make_unique<puyoPlayPuyo>(std::move(puyos),puyo_gravity_value,puyo_stay_value);
     ++new_puyo_count;
 }
-const int& puyoPlayer::get_new_puyo_count() const {return new_puyo_count;}
+const int& puyoPlayer::view_new_puyo_count() const {return new_puyo_count;}
 
-function<void()> puyoPlayer::get_let_left() const {return [this](){ if(puyo) get_puyo().let_left(); };}
-function<void()> puyoPlayer::get_let_right() const {return [this](){ if(puyo) get_puyo().let_right(); };}
-function<void()> puyoPlayer::get_let_down()const {return [this](){ if(puyo) get_puyo().let_down(); };}
-function<void()> puyoPlayer::get_let_turn()const {return [this](){ if(puyo) get_puyo().let_turn(); };}
-function<void()> puyoPlayer::get_let_drop()const {return [this](){ if(puyo) get_puyo().let_drop(); };}
+function<void()> puyoPlayer::get_let_left() const {return [this](){ if(puyo) refer_puyo().let_left(); };}
+function<void()> puyoPlayer::get_let_right() const {return [this](){ if(puyo) refer_puyo().let_right(); };}
+function<void()> puyoPlayer::get_let_down()const {return [this](){ if(puyo) refer_puyo().let_down(); };}
+function<void()> puyoPlayer::get_let_turn()const {return [this](){ if(puyo) refer_puyo().let_turn(); };}
+function<void()> puyoPlayer::get_let_drop()const {return [this](){ if(puyo) refer_puyo().let_drop(); };}
 
 bool puyoPlayer::is_bot() const {return player_is_bot;}
 void puyoPlayer::act_bot_let() const

@@ -57,7 +57,7 @@ puyoModeBlocks::puyoModeBlocks(const std::vector<puyoPlayer>& players)
     : gen(random_device()())
 {
     if(map_datas.empty())
-        loadMapData(puyoFileSystem::getFolderPath("Data")/"puyoBlocksModeMapData.txt", players.front().get_board().get_size());
+        loadMapData(puyoFileSystem::getFolderPath("Data")/"puyoBlocksModeMapData.txt", players.front().refer_board().get_size());
     if(map_datas.empty())
         throw runtime_error("After loading, MapData is empty.");
 
@@ -70,12 +70,12 @@ puyoModeBlocks::puyoModeBlocks(const std::vector<puyoPlayer>& players)
 
     for(const auto& player : players)
     {
-        auto& board = player.get_board();
+        auto& board = player.refer_board();
         const auto& map_data = map_datas[map_data_idx].second;
         for(size_t r = 0 ; r < map_data.size() ; ++r)
             for(size_t c = 0 ; c < map_data[0].size() ; ++c)
                 if(map_data[r][c])
-                    board.insert_puyo(puyoPuyo(POSi(c,r),P_WALL));
+                    board.insert(puyoPuyo(POSi(c,r),P_WALL));
     }
 }
 void puyoModeBlocks::proceed_mode(puyoPhase& phase, puyoPlayer& player){}

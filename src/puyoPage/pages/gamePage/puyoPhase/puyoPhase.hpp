@@ -9,7 +9,7 @@
 #include "puyoPage/puyoPageManager/puyoPageSignal.hpp"
 
 #include "puyoPage/pages/gamePage/puyoPhase/puyoMode/puyoMode.hpp"
-#include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoScoreCalc.hpp"
+#include "puyoPage/pages/gamePage/puyoPlayer/puyoControll/puyoScoreControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoPhaseControll.hpp"
 #include "puyoPage/pages/gamePage/puyoPhase/puyoPhaseAsset/puyoForwardVector.hpp"
 
@@ -19,6 +19,9 @@ enum class puyoModeSignal
     bomb_fused,//폭탄 모드
     bomb_explode,
     freeze,//프로즌 모드
+    flower_fading,
+    watering,
+    puyo_burned,
     COUNT
 };
  
@@ -34,7 +37,6 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         std::vector<puyoPuyo> new_puyo_pool; //새로운 뿌요들의 후보
         puyoForwardVector<PLAYPUYO> new_puyos;
 
-        puyoScoreCalc calc;
         puyoPhaseControll phase_controll;
 
         bool game_end, game_end_ask;
@@ -50,14 +52,14 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         int proceed_play(puyoPlayer& player);
         int proceed_gravity(puyoPlayer& player);
         int proceed_vanish(puyoPlayer& player);
-        void manage_obstruct(puyoPlayer& player, int added_score);
+        void manage_chain(puyoPlayer& player, int added_score);
         void manage_game_end(puyoPlayer& player);
         void proceed_event(puyoPlayer& player); // puyoType에서 발생하는 이벤트 처리
         
         void end_game();
         bool game_end_asked() const;
     public :
-        puyoPhase();
+        puyoPhase(Arcade arcade, Diff diff, Mode mode);
 
         void ask_end_game();
         bool game_ended() const;
@@ -65,11 +67,11 @@ class puyoPhase : public puyoObjectSignal<puyoModeSignal>
         const decltype(new_puyos)& get_new_puyos() const;
         decltype(new_puyos)& get_new_puyos();
 
-        void set_game(Diff diff, Mode mode);
         void proceed_game();
 
         int get_player_count() const;
-        std::vector<puyoPlayer>& get_players();
+        const std::vector<puyoPlayer>& view_players() const;
+        std::vector<puyoPlayer>& refer_players();
         void add_player(puyoPlayer&& player);
         
         int get_gravity_value() const;

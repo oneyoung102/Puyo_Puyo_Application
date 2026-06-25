@@ -19,7 +19,7 @@ void puyoGravityControll::add(vector<puyoPuyo>&& puyos)
     for(auto& puyo : puyos)
         add(std::move(puyo));
 }
-const vector<puyoPuyo>& puyoGravityControll::get() const { return gravity_puyos;}
+const vector<puyoPuyo>& puyoGravityControll::view() const { return gravity_puyos;}
 
 void puyoGravityControll::gravity(puyoBoard& board)
 {
@@ -33,7 +33,7 @@ void puyoGravityControll::gravity(puyoBoard& board)
             const auto[x,y] = gravity_puyos[i].get_pos();
             const auto& pos = POSi(round(x), round(y));
             if(board.in(pos) && board.empty(pos))
-                board.insert_puyo(gravity_puyos[i], pos);
+                board.insert(gravity_puyos[i], pos);
             
             std::swap(gravity_puyos[i],gravity_puyos.back());
             gravity_puyos.pop_back();

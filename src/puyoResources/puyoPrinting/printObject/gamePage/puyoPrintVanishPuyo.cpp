@@ -35,11 +35,11 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
         const auto type = vanish_puyo.get_type();
         switch(type)
         {
-            case puyoType::Type::obstruct :
-            case puyoType::Type::bomb :
-                print_16x16(w,VANISH_OTHER_POS,screen_pos);
-                break;
-            default : //색 뿌요
+            case puyoType::Type::red :
+            case puyoType::Type::blue :
+            case puyoType::Type::yellow :
+            case puyoType::Type::green :
+            case puyoType::Type::purple :
             {
                 const float prop = vanish_puyo.get_act_state();
                 if(prop <= puyoGameConstant::VANISH_STAY_PROP)
@@ -50,6 +50,9 @@ void puyoPrintVanishPuyo::print(RenderWindow& w)
                     print_16x16(w,VANISH_SOON_PUYO_POS+POSi(2*CASTi(type)+1,0),screen_pos);
                 break;
             }
+            default:
+                print_16x16(w,VANISH_OTHER_POS,screen_pos);
+                break;
         }
     }
 }

@@ -19,7 +19,7 @@ void puyoVanishControll::add(puyoPuyo&& puyo)
 }
 
 
-const vector<puyoPuyo> &puyoVanishControll::get() const { return vanish_puyos; }
+const vector<puyoPuyo> &puyoVanishControll::view() const { return vanish_puyos; }
 bool puyoVanishControll::empty() const { return vanish_puyos.empty(); }
 
 void puyoVanishControll::vanish(puyoBoard& board)
@@ -43,7 +43,7 @@ tuple<int,int,vector<POSs>> puyoVanishControll::fire_cluster(const puyoBoard& bo
     int color_puyo_count = 0, weight_sum = 0;
     vector<POSs> stored_puyos;
     queue<POSs> coords;
-    const auto& puyo = board.get_puyo(fire_pos);
+    const auto& puyo = board.view(fire_pos);
     
     coords.push(fire_pos);
     while(!coords.empty())
@@ -54,7 +54,7 @@ tuple<int,int,vector<POSs>> puyoVanishControll::fire_cluster(const puyoBoard& bo
             continue;
         visited[pos.r][pos.c] = true;
 
-        const auto& curr_puyo = board.get_puyo(pos);
+        const auto& curr_puyo = board.view(pos);
         stored_puyos.push_back(pos);
         
         if(curr_puyo.is_colored())
@@ -66,7 +66,7 @@ tuple<int,int,vector<POSs>> puyoVanishControll::fire_cluster(const puyoBoard& bo
             const auto& npos = pos+dpos;
             if (!board.in(npos))
                 continue;
-            const auto& npuyo = board.get_puyo(npos);
+            const auto& npuyo = board.view(npos);
             if (curr_puyo.is_linkable(npuyo) && !visited[npos.r][npos.c])
                 coords.push(npos);
         }
@@ -88,7 +88,7 @@ tuple<int, vector<int>, vector<puyoType::Type>, vector<puyoPuyo>> puyoVanishCont
             if(visited[i][j])
                 continue;
             
-            const auto& curr_puyo = board.get_puyo({j, i});
+            const auto& curr_puyo = board.view({j, i});
             if(!curr_puyo.is_colored())
                 continue;
             const auto& [color_puyo_count, weight_sum, stored_puyos] = fire_cluster(board,{j, i}, visited);

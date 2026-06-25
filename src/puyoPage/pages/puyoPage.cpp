@@ -4,4 +4,4 @@
 puyoPage::puyoPage()
     : convert_page(false)
 {}
-puyoLet& puyoPage::get_let(){return pl;}
+puyoLet& puyoPage::refer_let(){return pl;}

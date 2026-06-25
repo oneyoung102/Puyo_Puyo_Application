@@ -21,6 +21,6 @@ class puyoVanishControll
         void set_condition(int amount);
         int get_condition() const;
 
-        const std::vector<puyoPuyo>& get() const;
+        const std::vector<puyoPuyo>& view() const;
         bool empty() const;
 };

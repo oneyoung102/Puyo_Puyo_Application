@@ -37,19 +37,19 @@ class puyoBoard : public puyoObjectSignal<puyoBoardSignal>
         bool in(const POSi& pos) const;
         bool touched(const POSi& pos) const;
 
-        const puyoPuyo& get_puyo(const POSs& pos) const;
-        puyoPuyo& ref_puyo(const POSs& pos);
+        const puyoPuyo& view(const POSs& pos) const;
+        puyoPuyo& refer(const POSs& pos);
         puyoPuyo& operator[](const POSs& pos) = delete;
         
-        void insert_puyo(const puyoPuyo& puyo, const POSs& pos);
-        void insert_puyo(const puyoPuyo& puyo);
-        void insert_puyo(puyoPuyo&& puyo, const POSs& pos);
-        void insert_puyo(puyoPuyo&& puyo);
+        void insert(const puyoPuyo& puyo, const POSs& pos);
+        void insert(const puyoPuyo& puyo);
+        void insert(puyoPuyo&& puyo, const POSs& pos);
+        void insert(puyoPuyo&& puyo);
 
-        void remove_puyo(const POSs& pos);
+        void remove(const POSs& pos);
         bool empty(const POSs& pos) const;
         bool all_cleared();
-        std::vector<puyoType::typeState> update();
+        std::vector<std::pair<puyoType::State,POSs>> update();
 
         std::vector<puyoPuyo> to_gravity_puyo();
         puyoPuyo to_vanish_puyo(const POSs& pos);

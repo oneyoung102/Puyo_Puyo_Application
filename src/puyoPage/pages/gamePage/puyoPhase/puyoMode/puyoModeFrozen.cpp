@@ -20,7 +20,7 @@ void puyoModeFrozen::proceed_mode(puyoPhase& phase, puyoPlayer& player)
         return;
     time[player_num] = 0;
     
-    auto& board = player.get_board();
+    auto& board = player.refer_board();
     const auto bsize = board.get_size();
     for(int r = bsize.r-1 ; r >= 0 ; --r)
     {
@@ -28,13 +28,13 @@ void puyoModeFrozen::proceed_mode(puyoPhase& phase, puyoPlayer& player)
         for(int c = 0 ; c < bsize.c ; ++c)
         {
             const auto pos = POSs(c,r);
-            if(!board.empty(pos) && !board.get_puyo(pos).is_frozen())
+            if(!board.empty(pos) && !board.view(pos).is_frozen())
                 freeze_able_col.push_back(c);
         }
         if(freeze_able_col.empty())
             continue;
         uniform_int_distribution<> dist(0,freeze_able_col.size()-1);
-        board.ref_puyo(POSs(freeze_able_col[dist(gen)],r)).freeze();
+        board.refer(POSs(freeze_able_col[dist(gen)],r)).freeze();
         phase.signal(puyoModeSignal::freeze);
         break;
     }
